@@ -1,1 +1,33 @@
-<p>navbar works!</p>
+<div class="navbar">
+    <div class="logo">
+        <h2>Nexus</h2>
+    </div>
+
+    <div class="search-bar">
+        <input type="search">
+    </div>
+
+    <div class="right-nav">
+        <div class="icon">
+            <div class="img-wrapper">
+                <img [src]="icons.like" alt="like">
+            </div>
+        </div>
+
+        <div class="icon">
+            <div class="img-wrapper">
+                @if (buy > 0) {<span class="badge">{{buy}}</span>}
+                <img [src]="icons.shopping" alt="shopping">
+            </div>
+        </div>
+
+        <div class="icon">
+            <div class="img-wrapper">
+                @if (notification > 0) {<span class="badge">{{notification}}</span>}
+                <img [src]="icons.notification" alt="notification">
+            </div>
+        </div>
+
+        <button class="sign-in-btn">Sign In</button>
+    </div>
+</div>

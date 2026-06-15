@@ -6,4 +6,13 @@ import { Component } from '@angular/core';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
-export class Navbar {}
+export class Navbar {
+  icons = {
+      shopping: 'icons/icons8-buying-96.png',
+      like: 'icons/icons8-heart 100.png',
+      notification: 'icons/icons8-notification-96.png',
+      search: 'icons/icons8-search-96.png'
+  };
+  notification = 3;
+  buy = 0;
+}
