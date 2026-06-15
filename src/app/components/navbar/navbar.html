@@ -1,33 +1,38 @@
 <div class="navbar">
-    <div class="logo">
-        <h2>Nexus</h2>
+  <div class="logo">
+    <h2>Nexus</h2>
+  </div>
+
+  <div class="search-bar">
+    <input type="search" placeholder="Search products..." />
+  </div>
+
+  <div class="right-nav">
+
+    <!-- Like -->
+    <div class="icon">
+      <img class="icon-img" [src]="icons.like" alt="like" />
     </div>
 
-    <div class="search-bar">
-        <input type="search">
+    <!-- Cart -->
+    <div class="icon">
+        @if(buy > 0){<span class="badge">{{ buy }}</span>}
+      <img class="icon-img" [src]="icons.shopping" alt="shopping" />
     </div>
 
-    <div class="right-nav">
-        <div class="icon">
-            <div class="img-wrapper">
-                <img [src]="icons.like" alt="like">
-            </div>
-        </div>
-
-        <div class="icon">
-            <div class="img-wrapper">
-                @if (buy > 0) {<span class="badge">{{buy}}</span>}
-                <img [src]="icons.shopping" alt="shopping">
-            </div>
-        </div>
-
-        <div class="icon">
-            <div class="img-wrapper">
-                @if (notification > 0) {<span class="badge">{{notification}}</span>}
-                <img [src]="icons.notification" alt="notification">
-            </div>
-        </div>
-
-        <button class="sign-in-btn">Sign In</button>
+    <!-- Notifications -->
+    <div class="icon">
+        @if (notification > 0) {
+            <span class="badge">
+                {{ notification }}
+            </span>
+        }
+      
+      <img class="icon-img" [src]="icons.notification" alt="notification" />
     </div>
+
+    <!-- Sign In -->
+    <button class="sign-in-btn">Sign In</button>
+
+  </div>
 </div>
