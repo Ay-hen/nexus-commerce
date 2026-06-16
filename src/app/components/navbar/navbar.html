@@ -3,36 +3,36 @@
     <h2>Nexus</h2>
   </div>
 
-  <div class="search-bar">
-    <input type="search" placeholder="Search products..." />
-  </div>
+  <ul class="nav-links">
+    <li class="active"><a href="#">Home</a></li>
+    <li><a href="#">Shop</a></li>
+    <li class="has-dropdown">
+      <a href="#">Categories <span class="chevron">&#9662;</span></a>
+    </li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
 
   <div class="right-nav">
-
-    <!-- Like -->
-    <div class="icon">
-      <img class="icon-img" [src]="icons.like" alt="like" />
+    <!-- Search -->
+    <div class="icon" title="Search">
+      <img class="icon-img" [src]="icons.search" alt="search" />
     </div>
+
+    <!-- Account -->
+    <!-- <div class="icon" title="Account">
+      <img class="icon-img" [src]="icons.user" alt="account" />
+    </div> -->
 
     <!-- Cart -->
     <div class="icon">
-        @if(buy > 0){<span class="badge">{{ buy }}</span>}
+      @if (buy > 0) {
+        <span class="badge">{{ buy }}</span>
+      }
       <img class="icon-img" [src]="icons.shopping" alt="shopping" />
-    </div>
-
-    <!-- Notifications -->
-    <div class="icon">
-        @if (notification > 0) {
-            <span class="badge">
-                {{ notification }}
-            </span>
-        }
-      
-      <img class="icon-img" [src]="icons.notification" alt="notification" />
     </div>
 
     <!-- Sign In -->
     <button class="sign-in-btn">Sign In</button>
-
   </div>
 </div>

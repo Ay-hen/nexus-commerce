@@ -1,7 +1,259 @@
-.container {
-    min-height: 100vh;
-    background-image: url('/background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+/* PAGE */
+.page-wrapper {
+  min-height: 100vh;
+  background: #f5f5f3;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+
+  /* your store photo goes here */
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 42%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 0 0 4rem;
+  top: -60px;
+}
+
+.hero-image {
+  flex: 1;
+}
+
+.hero-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #02040f;
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #002642;
+  margin-bottom: 1rem;
+}
+
+.hero-sub {
+  font-size: 0.88rem;
+  color: #02040f;
+  line-height: 1.6;
+  max-width: 260px;
+  margin-bottom: 2rem;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.btn-primary {
+  height: 46px;
+  padding: 0 1.5rem;
+  background: #02040f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.btn-secondary {
+  height: 46px;
+  padding: 0 1.5rem;
+  background: transparent;
+  color: #02040f;
+  border: 1.5px solid #02040f;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* ─── TRUST BAR ─── */
+.trust-bar {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 4rem;
+
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+
+  z-index: 10;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.trust-icon {
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+}
+
+.trust-text strong {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.trust-text span {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* ─── CATEGORIES ─── */
+.categories-section {
+  padding: 2.5rem 4rem 3rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.section-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0a0a0a;
+}
+
+.view-all {
+  font-size: 0.82rem;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.cat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem 1rem 3rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+  transition: border 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.cat-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.cat-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.25rem;
+}
+
+.cat-desc {
+  font-size: 0.73rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+.cat-arrow {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 14px;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  transition: border-color 0.2s;
+
+  .cat-card:hover & {
+    border-color: #999;
+  }
 }
