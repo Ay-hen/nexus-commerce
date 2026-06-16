@@ -45,4 +45,31 @@ export class Home {
     }
   ];
 
+  popular = [
+    {
+      name: 'MacBook Pro M3',
+      stars: 4.8,
+      price: 1999,
+      isNew: true,
+      picture: '/products/macbook pro 13.png',
+      likedBy: 513
+    },
+    {
+      name: 'AirPods Pro',
+      stars: 4.7,
+      price: 249,
+      isNew: false,
+      picture: '/products/airpods pro.png',
+      likedBy: 1200
+    },
+    {
+      name: 'Apple Watch',
+      stars: 4.6,
+      price: 399,
+      isNew: false,
+      picture: '/products/appel watch.png',
+      likedBy: 860
+    }
+  ];
+
 }
