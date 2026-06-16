@@ -17,7 +17,7 @@
 
     <!-- right side: your background image fills this naturally -->
     <div class="hero-image"></div>
-    
+
     <!-- TRUST BAR -->
     <div class="trust-bar">
       <div class="trust-item">
@@ -60,18 +60,20 @@
         <p class="section-eyebrow">Shop by Category</p>
         <h2 class="section-title">Explore Top Categories</h2>
       </div>
-      <a class="view-all" href="#">View All Categories &rarr;</a>
+      <a class="view-all" href="#">View All Categories</a>
     </div>
 
     <div class="categories-grid">
-      @for (cat of categories; track cat.name) {
-        <div class="cat-card">
-          <img class="cat-img" [src]="cat.image" [alt]="cat.name" />
-          <p class="cat-name">{{ cat.name }}</p>
-          <p class="cat-desc">{{ cat.desc }}</p>
-          <div class="cat-arrow">&#8594;</div>
-        </div>
-      }
+        @for (cat of categories; track cat.name) {
+            <div class="cat-card">
+            <img class="cat-img" [src]="cat.image" [alt]="cat.name" />
+            <div class="cat-info">
+                    <p class="cat-name">{{ cat.name }}</p>
+                    <p class="cat-desc">{{ cat.desc }}</p>
+            </div>
+            <div class="cat-arrow"><img src="icons/arrow.png" alt="see more"></div>
+            </div>
+        }
     </div>
   </section>
 </div>

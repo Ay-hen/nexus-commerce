@@ -153,7 +153,7 @@
 
 .trust-text span {
   font-size: 0.75rem;
-  color: #888;
+  color: #001d3d;
 }
 
 /* ─── CATEGORIES ─── */
@@ -185,16 +185,17 @@
 
 .view-all {
   font-size: 0.82rem;
-  color: #333;
+  color: #003566;
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: #000;
+    color: #002642;
   }
 }
+
 
 .categories-grid {
   display: grid;
@@ -205,10 +206,22 @@
 .cat-card {
   background: #fff;
   border-radius: 12px;
-  padding: 1.25rem 1rem 3rem;
+
+  padding: 2rem 0.4rem;
+  //width: 13.2rem;
+
   cursor: pointer;
+
   border: 1px solid transparent;
+
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
   transition: border 0.2s, box-shadow 0.2s;
 
   &:hover {
@@ -218,25 +231,38 @@
 }
 
 .cat-img {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
-  margin-bottom: 0.75rem;
-  display: block;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.cat-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 1rem; 
+  padding-bottom:0.6rem;
 }
 
 .cat-name {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: #111;
   margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+ 
+.cat-desc {
+  font-size: 0.6rem;
+  color: #070707;
+  line-height: 1.4; 
 }
 
-.cat-desc {
-  font-size: 0.73rem;
-  color: #888;
-  line-height: 1.4;
-}
+
+
 
 .cat-arrow {
   width: 28px;
@@ -256,4 +282,36 @@
   .cat-card:hover & {
     border-color: #999;
   }
+}
+
+.cat-arrow {
+  width: 30px;
+  height: 30px;
+
+  border: 1px solid #ddd;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+
+  background: #fff;
+
+  transition: all 0.2s ease;
+}
+
+.cat-arrow img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
+}
+
+.cat-card:hover .cat-arrow {
+  border-color: #999;
+  transform: translateX(2px);
 }
