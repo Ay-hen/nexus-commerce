@@ -62,22 +62,8 @@ export class Home implements AfterViewInit, OnDestroy {
       picture: '/products/airpods pro.png',
       likedBy: 1200
     },
-    {
-      name: 'AirPods Pro',
-      stars: 4.7,
-      price: 249,
-      isNew: false,
-      picture: '/products/airpods pro.png',
-      likedBy: 1200
-    },
-    {
-      name: 'AirPods Pro',
-      stars: 4.7,
-      price: 249,
-      isNew: false,
-      picture: '/products/airpods pro.png',
-      likedBy: 1200
-    },
+    
+    
     {
       name: 'Apple Watch',
       stars: 4.6,
