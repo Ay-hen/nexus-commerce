@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
 
@@ -9,7 +9,7 @@ import { Navbar } from '../navbar/navbar';
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements AfterViewInit, OnDestroy {
 
   icons = {
     shield: '/icons/shield.png',
@@ -63,6 +63,22 @@ export class Home {
       likedBy: 1200
     },
     {
+      name: 'AirPods Pro',
+      stars: 4.7,
+      price: 249,
+      isNew: false,
+      picture: '/products/airpods pro.png',
+      likedBy: 1200
+    },
+    {
+      name: 'AirPods Pro',
+      stars: 4.7,
+      price: 249,
+      isNew: false,
+      picture: '/products/airpods pro.png',
+      likedBy: 1200
+    },
+    {
       name: 'Apple Watch',
       stars: 4.6,
       price: 399,
@@ -72,4 +88,73 @@ export class Home {
     }
   ];
 
+
+
+@ViewChild('popularGrid') popularGrid!: ElementRef;
+
+  showLeft = false;
+  showRight = false;
+
+
+  updateArrows() {
+    const el = this.popularGrid.nativeElement;
+
+    this.showLeft = el.scrollLeft > 0;
+
+    this.showRight = el.scrollLeft + el.clientWidth < el.scrollWidth;
+  }
+
+  scrollLeft() {
+  const el = this.popularGrid.nativeElement;
+  el.scrollBy({ left: -400, behavior: 'smooth' });
+
+  setTimeout(() => this.updateArrows(), 300);
+}
+
+scrollRight() {
+  const el = this.popularGrid.nativeElement;
+  el.scrollBy({ left: 400, behavior: 'smooth' });
+
+  setTimeout(() => this.updateArrows(), 300);
+}
+
+  onScroll() {
+  this.updateArrows();
+}
+
+  private intervalId: any;
+
+  ngAfterViewInit() {
+    this.startAutoScroll();
+  }
+
+  startAutoScroll() {
+    const el = this.popularGrid.nativeElement;
+
+    this.intervalId = setInterval(() => {
+      const maxScroll = el.scrollWidth - el.clientWidth;
+
+      if (el.scrollLeft >= maxScroll - 10) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        el.scrollBy({ left: 320, behavior: 'smooth' });
+      }
+    }, 2500); // every 2.5s
+  }
+
+  isPaused = false;
+
+pauseScroll() {
+  this.isPaused = true;
+}
+
+resumeScroll() {
+  this.isPaused = false;
+}
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
+  }
+
+  displayedPopular = [...this.popular, ...this.popular];
 }

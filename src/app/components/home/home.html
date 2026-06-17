@@ -78,41 +78,45 @@
   </section>
   
   <!-- Popular -->
-  <section class="popular-section">
-    <div class="section-header">
-        <div>
-            <p class="section-eyebrow">Discover What Customers Love Most</p>
-            <h2 class="section-title">Popular This Week</h2>
-        </div>
-        <a class="view-all" href="#">View All</a>
+<section class="popular-section">
+  <div class="section-header">
+    <div>
+      <p class="section-eyebrow">Discover What Customers Love Most</p>
+      <h2 class="section-title">Popular This Week</h2>
     </div>
-    <div class="popular-grid">
-        @for (item of popular; track item.name) {
-            <div class="product-card">
+    <a class="view-all" href="#">View All</a>
+  </div>
 
-            <div class="product-img">
-                <img [src]="item.picture" [alt]="item.name" />
-            </div>
+  <div class="popular-wrapper">
 
-            <div class="product-info">
-                <p class="product-name">{{ item.name }}</p>
-
-                <p class="product-price">
-                ${{ item.price }}
-                </p>
-
-                <div class="product-meta">
-                <span>{{ item.stars }}<img src="/icons/stars.png"> </span>
-                <span>{{ item.likedBy }} likes</span>
-                </div>
-
-                <button class="add-cart-btn">
-                Add to Cart
-                </button>
-            </div>
-
-            </div>
+    <div class="popular-track" [class.paused]="isPaused">
+    
+    @for (item of displayedPopular; track $index) {
+      <div class="product-card">
+        @if (item.isNew) {
+          <span class="new">New</span>
         }
+
+        <div class="product-img">
+          <img [src]="item.picture" [alt]="item.name" />
         </div>
-  </section>
+
+        <div class="product-info">
+          <p class="product-name">{{ item.name }}</p>
+          <p class="product-price">${{ item.price }}</p>
+
+          <div class="product-meta">
+            <span>{{ item.stars }} <img src="/icons/stars.png" /></span>
+            <span>{{ item.likedBy }} likes</span>
+          </div>
+
+          <button class="add-cart-btn">Add to Cart</button>
+        </div>
+      </div>
+    }
+      
+    </div>
+
+  </div>
+</section>
 </div>
