@@ -1,4 +1,6 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
+import {
+  Component, signal, computed, OnInit, OnDestroy, inject, HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,12 +60,21 @@ export interface Review {
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
-export class ProductDetails implements OnInit {
+export class ProductDetails implements OnInit, OnDestroy {
 
-  private route = inject(ActivatedRoute);
+  private route  = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // ── All products (in a real app this would come from a service/API) ─────────
+  // ── Loading state ───────────────────────────────────────────────────────────
+  // True while a product is being "fetched". Drives skeleton UI everywhere.
+  loading = signal(true);
+
+  // Minimum time the skeleton stays visible so it doesn't just flash on fast
+  // loads (real APIs would replace this with the actual request latency).
+  private readonly SIMULATED_LOAD_MS = 700;
+  private loadToken = 0;
+
+  // ── All products data ────────────────────────────────────────────────────────
   private allProducts: ProductDetail[] = [
     {
       id: 1,
@@ -105,7 +116,7 @@ export class ProductDetails implements OnInit {
       bgColor: '#f0eef8',
       images: ['/products/appel watch.png'],
       colors: [
-        { label: 'Midnight', hex: '#1a1a1a' },
+        { label: 'Midnight',  hex: '#1a1a1a' },
         { label: 'Starlight', hex: '#e8e3d8' },
       ],
       category: 'Watches',
@@ -141,7 +152,7 @@ export class ProductDetails implements OnInit {
       images: ['/products/macbook pro 13.png'],
       colors: [
         { label: 'Space Gray', hex: '#5f5f5f' },
-        { label: 'Silver', hex: '#e3e3e3' },
+        { label: 'Silver',     hex: '#e3e3e3' },
       ],
       category: 'Electronics',
     },
@@ -160,7 +171,7 @@ export class ProductDetails implements OnInit {
       images: ['/products/phone.png'],
       colors: [
         { label: 'Titanium Black', hex: '#2b2b2b' },
-        { label: 'Titanium Gray', hex: '#8a8a8a' },
+        { label: 'Titanium Gray',  hex: '#8a8a8a' },
       ],
       category: 'Electronics',
     },
@@ -185,85 +196,107 @@ export class ProductDetails implements OnInit {
     },
   ];
 
-  // ── Active product, resolved from the route param ────────────────────────────
+  // ── Active product ───────────────────────────────────────────────────────────
   product!: ProductDetail;
 
   // ── Gallery ─────────────────────────────────────────────────────────────────
   activeImageIndex = signal(0);
-  activeImage = computed(() => this.product.images[this.activeImageIndex()]);
+  isFading         = signal(false);
 
-  selectImage(i: number) { this.activeImageIndex.set(i); }
+  activeImage = computed(() => this.product?.images[this.activeImageIndex()] ?? '');
 
-  // ── Colour & Quantity ────────────────────────────────────────────────────────
-  selectedColor = signal<ProductColor>(this.allProducts[0].colors[0]);
-  quantity      = signal(1);
-  isWishlisted  = signal(false);
+  selectImage(i: number) {
+    if (i === this.activeImageIndex()) return;
+    this.isFading.set(true);
+    setTimeout(() => {
+      this.activeImageIndex.set(i);
+      this.isFading.set(false);
+    }, 180);
+  }
 
-  selectColor(c: ProductColor) { this.selectedColor.set(c); }
+  // ── Colour ───────────────────────────────────────────────────────────────────
+  selectedColor = signal<ProductColor>({ label: '', hex: '' });
+
+  selectColor(c: ProductColor) {
+    this.selectedColor.set(c);
+  }
+
+  // ── Quantity ─────────────────────────────────────────────────────────────────
+  quantity = signal(1);
 
   decreaseQty() { if (this.quantity() > 1) this.quantity.update(n => n - 1); }
   increaseQty() {
     if (this.quantity() < this.product.stock) this.quantity.update(n => n + 1);
   }
 
+  // ── Wishlist + Cart ──────────────────────────────────────────────────────────
+  isWishlisted = signal(false);
+  cartAdded    = signal(false);
+
   toggleWishlist() { this.isWishlisted.update(v => !v); }
 
   addToCart() {
-    console.log('Added to cart:', {
-      product: this.product.id,
-      color: this.selectedColor().label,
-      qty: this.quantity(),
+    if (this.cartAdded()) return;
+    this.cartAdded.set(true);
+    setTimeout(() => this.cartAdded.set(false), 2500);
+  }
+
+  buyNow() {
+    // In a real app, go to checkout with this item pre-loaded
+    this.router.navigate(['/checkout'], {
+      queryParams: { productId: this.product.id, qty: this.quantity() },
     });
   }
 
-  // ── Related products ────────────────────────────────────────────────────────
+  // ── Sticky bar (show after scrolling past the CTA area) ──────────────────────
+  stickyBarVisible = signal(false);
+
+  @HostListener('window:scroll')
+  onScroll() {
+    this.stickyBarVisible.set(window.scrollY > 480);
+  }
+
+  // ── Related products ─────────────────────────────────────────────────────────
   related: RelatedProduct[] = [];
 
   private buildRelated() {
-    this.related = this.allProducts
+    const sameCategory = this.allProducts
       .filter(p => p.id !== this.product.id && p.category === this.product.category)
-      .slice(0, 4)
-      .map(p => ({
-        id: p.id,
-        brand: p.brand,
-        name: p.name,
-        price: p.price,
-        originalPrice: p.originalPrice,
-        rating: p.rating,
-        reviewCount: p.reviewCount,
-        badge: p.badge,
-        discount: p.discount,
-        image: p.images[0],
-        bgColor: p.bgColor,
-      }));
+      .slice(0, 4);
 
-    // Fall back to other categories if fewer than 4 matches
-    if (this.related.length < 4) {
-      const extras = this.allProducts
-        .filter(p => p.id !== this.product.id && !this.related.some(r => r.id === p.id))
-        .slice(0, 4 - this.related.length)
-        .map(p => ({
-          id: p.id,
-          brand: p.brand,
-          name: p.name,
-          price: p.price,
-          originalPrice: p.originalPrice,
-          rating: p.rating,
-          reviewCount: p.reviewCount,
-          badge: p.badge,
-          discount: p.discount,
-          image: p.images[0],
-          bgColor: p.bgColor,
-        }));
-      this.related = [...this.related, ...extras];
-    }
+    const extras = this.allProducts
+      .filter(p => p.id !== this.product.id && !sameCategory.some(r => r.id === p.id))
+      .slice(0, 4 - sameCategory.length);
+
+    this.related = [...sameCategory, ...extras].map(p => ({
+      id: p.id,
+      brand: p.brand,
+      name: p.name,
+      price: p.price,
+      originalPrice: p.originalPrice,
+      rating: p.rating,
+      reviewCount: p.reviewCount,
+      badge: p.badge,
+      discount: p.discount,
+      image: p.images[0],
+      bgColor: p.bgColor,
+    }));
   }
 
+  /**
+   * Navigating to a related product should feel like a fresh page load:
+   * scroll to top, show skeletons, then populate with the new product's data.
+   * We navigate via the Router so the URL/history updates correctly; the
+   * actual reload-and-skeleton behavior is driven by the paramMap subscription
+   * in ngOnInit, which calls loadProduct() whenever the :id changes.
+   */
   goToProduct(id: number) {
+    if (this.product && id === this.product.id) return;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.router.navigate(['/products', id]);
   }
 
-  // ── Reviews ─────────────────────────────────────────────────────────────────
+  // ── Reviews ──────────────────────────────────────────────────────────────────
   reviews: Review[] = [
     {
       id: 1,
@@ -271,7 +304,7 @@ export class ProductDetails implements OnInit {
       avatar: 'AM',
       rating: 5,
       date: 'May 18, 2025',
-      title: 'Best headphones I\'ve ever owned',
+      title: "Best headphones I've ever owned",
       body: 'The noise cancellation is absolutely incredible. I use these daily on my commute and they block out everything. Sound quality is warm and detailed without being overly bass-heavy. Battery easily lasts a full work week.',
       helpful: 42,
       verified: true,
@@ -319,83 +352,107 @@ export class ProductDetails implements OnInit {
     { stars: 1, pct: 2  },
   ];
 
-  // New-review form
-  newReview = {
-    author: '',
-    title: '',
-    body: '',
-    rating: 0,
-  };
-  hoverRating  = signal(0);
-  submitted    = signal(false);
+  newReview = { author: '', title: '', body: '', rating: 0 };
+  hoverRating    = signal(0);
+  submitted      = signal(false);
   showAllReviews = signal(false);
+
+  starLabels = ['Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 
   visibleReviews = computed(() =>
     this.showAllReviews() ? this.reviews : this.reviews.slice(0, 2)
   );
 
-  setNewRating(r: number)  { this.newReview.rating = r; }
-  setHoverRating(r: number){ this.hoverRating.set(r); }
-  clearHover()             { this.hoverRating.set(0); }
+  setNewRating(r: number)   { this.newReview.rating = r; }
+  setHoverRating(r: number) { this.hoverRating.set(r); }
+  clearHover()              { this.hoverRating.set(0); }
 
   submitReview() {
     if (!this.newReview.author || !this.newReview.body || !this.newReview.rating) return;
-
     this.reviews.unshift({
       id: Date.now(),
       author: this.newReview.author,
-      avatar: this.newReview.author.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+      avatar: this.newReview.author
+        .split(' ')
+        .map(w => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase(),
       rating: this.newReview.rating,
-      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+      date: new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+      }),
       title: this.newReview.title || 'My Review',
       body: this.newReview.body,
       helpful: 0,
       verified: false,
     });
-
     this.newReview = { author: '', title: '', body: '', rating: 0 };
     this.submitted.set(true);
-    setTimeout(() => this.submitted.set(false), 3000);
+    setTimeout(() => this.submitted.set(false), 4000);
   }
 
   markHelpful(review: Review) { review.helpful++; }
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
+  // ── Helpers ──────────────────────────────────────────────────────────────────
   getStars(rating: number): ('full' | 'half' | 'empty')[] {
     return Array.from({ length: 5 }, (_, i) => {
       const pos = i + 1;
-      if (rating >= pos)       return 'full';
+      if (rating >= pos) return 'full';
       if (rating >= pos - 0.5) return 'half';
       return 'empty';
     });
   }
 
+  // ── Load logic ────────────────────────────────────────────────────────────────
   private loadProduct(id: number) {
-    const found = this.allProducts.find(p => p.id === id);
-    this.product = found ?? this.allProducts[0];
+    // Invalidate any in-flight simulated load so a rapid second navigation
+    // (e.g. clicking through several related products quickly) can't let an
+    // older timeout overwrite newer data.
+    const token = ++this.loadToken;
 
-    // Reset per-product UI state
+    this.loading.set(true);
+
+    // Reset interactive state immediately so stale values never show once
+    // the skeleton clears, even before the new product data has arrived.
     this.activeImageIndex.set(0);
-    this.selectedColor.set(this.product.colors[0]);
+    this.isFading.set(false);
     this.quantity.set(1);
     this.isWishlisted.set(false);
+    this.cartAdded.set(false);
     this.showAllReviews.set(false);
+    this.stickyBarVisible.set(false);
 
-    this.buildRelated();
+    setTimeout(() => {
+      if (token !== this.loadToken) return; // a newer load superseded this one
+
+      const found = this.allProducts.find(p => p.id === id);
+      this.product = found ?? this.allProducts[0];
+
+      this.selectedColor.set(this.product.colors[0] ?? { label: '', hex: '' });
+      this.buildRelated();
+
+      this.loading.set(false);
+    }, this.SIMULATED_LOAD_MS);
   }
 
+  // ── Lifecycle ─────────────────────────────────────────────────────────────────
+  private routeSub: any;
+
   ngOnInit() {
-    // Run on initial load
     const initialId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProduct(initialId);
 
-    // Re-run whenever the :id param changes, e.g. clicking a related product
-    this.route.paramMap.subscribe(params => {
+    this.routeSub = this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
       if (id && (!this.product || id !== this.product.id)) {
         this.loadProduct(id);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.routeSub?.unsubscribe();
   }
 }
