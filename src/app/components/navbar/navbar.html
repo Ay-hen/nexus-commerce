@@ -4,13 +4,22 @@
   </div>
 
   <ul class="nav-links">
-    <li class="active"><a href="#">Home</a></li>
-    <li class="has-dropdown">
-      <a href="#">Categories</a>
-    </li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
+  <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <a routerLink="/home">Home</a>
+  </li>
+
+  <li routerLinkActive="active">
+    <a routerLink="/categories">Categories</a>
+  </li>
+
+  <li routerLinkActive="active">
+    <a routerLink="/products">Products</a>
+  </li>
+
+  <li routerLinkActive="active">
+    <a routerLink="/contact">Contact</a>
+  </li>
+</ul>
 
   <div class="right-nav">
     <!-- Like -->
