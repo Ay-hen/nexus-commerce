@@ -1,0 +1,1000 @@
+// ─────────────────────────────────────────────────────────────────────────
+// Product Details — design tokens
+// ─────────────────────────────────────────────────────────────────────────
+$color-bg:           #f7f8fa;
+$color-surface:      #ffffff;
+$color-border:       #e7e9ee;
+$color-text:         #16181d;
+$color-text-muted:   #6b7280;
+$color-text-subtle:  #9ca3af;
+
+$color-primary:      #2952e3;
+$color-primary-dark: #1f3fc0;
+
+$color-success:      #16a34a;
+$color-success-bg:   #ecfdf3;
+
+$color-sale:         #e23d3d;
+$color-sale-bg:      #fdecec;
+
+$color-star:         #f59e0b;
+$color-star-empty:   #e5e7eb;
+
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  16px;
+$radius-pill: 999px;
+
+$shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+$shadow-md: 0 4px 12px rgba(16, 24, 40, 0.06);
+$shadow-lg: 0 12px 28px rgba(16, 24, 40, 0.08);
+
+$font-base: 15px;
+
+// ─────────────────────────────────────────────────────────────────────────
+// Page shell
+// ─────────────────────────────────────────────────────────────────────────
+.pd-page {
+  background: $color-bg;
+  color: $color-text;
+  font-size: $font-base;
+  line-height: 1.5;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
+
+  @media (max-width: 900px) {
+    padding: 20px 16px 64px;
+  }
+}
+
+.back-bar {
+  margin-bottom: 20px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: $color-text-muted;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: $color-text;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Main layout: gallery + info
+// ─────────────────────────────────────────────────────────────────────────
+.pd-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+// ── Gallery ──────────────────────────────────────────────────────────────
+.pd-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-image {
+  position: relative;
+  border-radius: $radius-lg;
+  aspect-ratio: 1 / 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .hero-img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 24px rgba(0, 0, 0, 0.12));
+  }
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: $color-surface;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text;
+  cursor: pointer;
+  box-shadow: $shadow-md;
+  transition: transform 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    transform: scale(1.06);
+  }
+
+  &.liked {
+    color: $color-sale;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+}
+
+.thumbnails {
+  display: flex;
+  gap: 12px;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: $radius-md;
+  border: 2px solid transparent;
+  background: $color-surface;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &.active {
+    border-color: $color-primary;
+  }
+
+  &:not(.active):hover {
+    border-color: $color-border;
+  }
+}
+
+// ── Info panel ───────────────────────────────────────────────────────────
+.pd-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-brand {
+  color: $color-text-muted;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.product-name {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating-text {
+  font-size: 14px;
+  color: $color-text-muted;
+}
+
+.view-reviews {
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.price-current {
+  font-size: 30px;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.price-original {
+  font-size: 16px;
+  color: $color-text-subtle;
+  text-decoration: line-through;
+}
+
+.price-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-sale;
+  background: $color-sale-bg;
+  border-radius: $radius-pill;
+  padding: 3px 9px;
+}
+
+// ── Option groups (color / qty) ─────────────────────────────────────────
+.option-group {
+  margin-bottom: 22px;
+}
+
+.option-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.color-swatches {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid $color-surface;
+  outline: 2px solid transparent;
+  cursor: pointer;
+  transition: outline-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.selected {
+    outline-color: $color-primary;
+  }
+}
+
+.selected-color-label {
+  font-size: 13px;
+  color: $color-text-muted;
+}
+
+.qty-stock-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.qty-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-surface;
+  border: none;
+  cursor: pointer;
+  color: $color-text;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: $color-bg;
+  }
+
+  &:disabled {
+    color: $color-text-subtle;
+    cursor: not-allowed;
+  }
+}
+
+.qty-value {
+  width: 48px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.stock-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-success;
+}
+
+.stock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $color-success;
+}
+
+// ── CTAs ─────────────────────────────────────────────────────────────────
+.cta-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.btn-cart {
+  flex: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+
+  &:hover {
+    background: $color-primary-dark;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+.btn-wishlist {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: $color-surface;
+  color: $color-text;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 20px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: $color-text-subtle;
+  }
+
+  &.active {
+    color: $color-sale;
+    border-color: $color-sale-bg;
+    background: $color-sale-bg;
+  }
+}
+
+// ── Perks card ───────────────────────────────────────────────────────────
+.perks-card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 4px 20px;
+}
+
+.perk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.perk-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: $color-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-muted;
+}
+
+.perk-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 13px;
+    color: $color-text-muted;
+  }
+}
+
+.perk-divider {
+  height: 1px;
+  background: $color-border;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Related products
+// ─────────────────────────────────────────────────────────────────────────
+.related-section {
+  margin-top: 64px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.related-card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.related-img-wrap {
+  position: relative;
+  aspect-ratio: 1 / 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.related-img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.related-body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px 16px;
+}
+
+.related-info {
+  min-width: 0;
+}
+
+.related-brand {
+  font-size: 12px;
+  color: $color-text-muted;
+  margin: 0 0 2px;
+}
+
+.related-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.related-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.related-review-count {
+  font-size: 12px;
+  color: $color-text-subtle;
+  margin-left: 2px;
+}
+
+.related-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.related-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.related-original {
+  font-size: 12px;
+  color: $color-text-subtle;
+  text-decoration: line-through;
+}
+
+.related-cart-btn {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: $color-bg;
+  color: $color-text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $color-primary;
+    color: #fff;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Badges (shared: hero image + related cards)
+// ─────────────────────────────────────────────────────────────────────────
+.badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 5px 10px;
+  border-radius: $radius-pill;
+  z-index: 1;
+}
+
+.badge--new {
+  background: $color-primary;
+  color: #fff;
+}
+
+.badge--sale {
+  background: $color-sale;
+  color: #fff;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Reviews
+// ─────────────────────────────────────────────────────────────────────────
+.reviews-section {
+  margin-top: 64px;
+}
+
+.reviews-summary {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 28px;
+  margin-bottom: 32px;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.summary-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  border-right: 1px solid $color-border;
+
+  @media (max-width: 700px) {
+    border-right: none;
+    border-bottom: 1px solid $color-border;
+    padding-bottom: 16px;
+  }
+}
+
+.big-score {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.summary-stars {
+  display: flex;
+  gap: 3px;
+}
+
+.summary-count {
+  font-size: 13px;
+  color: $color-text-muted;
+}
+
+.summary-bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar-label {
+  font-size: 13px;
+  color: $color-text-muted;
+}
+
+.bar-track {
+  height: 8px;
+  border-radius: $radius-pill;
+  background: $color-star-empty;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: $color-star;
+  border-radius: $radius-pill;
+}
+
+.bar-pct {
+  font-size: 13px;
+  color: $color-text-muted;
+  text-align: right;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.review-card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  padding: 20px;
+}
+
+.review-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $color-primary;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.review-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.review-author-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.review-author {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $color-success;
+  background: $color-success-bg;
+  border-radius: $radius-pill;
+  padding: 2px 8px;
+}
+
+.review-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.review-date {
+  font-size: 12px;
+  color: $color-text-subtle;
+  margin-left: 4px;
+}
+
+.review-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.review-body {
+  font-size: 14px;
+  color: $color-text-muted;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.review-footer {
+  display: flex;
+}
+
+.helpful-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $color-text-muted;
+  background: $color-bg;
+  border: none;
+  border-radius: $radius-sm;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $color-border;
+    color: $color-text;
+  }
+}
+
+.show-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-text;
+  padding: 12px;
+  cursor: pointer;
+  margin-bottom: 40px;
+  transition: background 0.15s ease;
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background: $color-bg;
+  }
+}
+
+// ── Write a review ──────────────────────────────────────────────────────
+.write-review {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: 28px;
+}
+
+.write-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 18px;
+}
+
+.submit-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: $color-success-bg;
+  color: $color-success;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: $radius-sm;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-text-muted;
+}
+
+.star-picker {
+  display: flex;
+  gap: 4px;
+}
+
+.pick-star {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+  transition: transform 0.1s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.form-input,
+.form-textarea {
+  font: inherit;
+  font-size: 14px;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  padding: 11px 14px;
+  background: $color-bg;
+  color: $color-text;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    background: $color-surface;
+  }
+
+  &::placeholder {
+    color: $color-text-subtle;
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submit-review-btn {
+  align-self: flex-start;
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -1,6 +1,8 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from "../navbar/navbar";
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Navbar } from '../navbar/navbar';
 
 export interface Product {
   id: number;
@@ -16,6 +18,7 @@ export interface Product {
   bgColor: string;
   liked: boolean;
   category: string;
+  addedToCart?: boolean;
 }
 
 type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'Newest' | 'Top Rated';
@@ -23,20 +26,46 @@ type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'New
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
-export class Products {
-
+export class Products implements OnInit {
+  // ── Constants ──────────────────────────────────────────────────────────────
   categories = ['All', 'Electronics', 'Fashion', 'Gaming', 'Shoes', 'Watches'];
-  sortOptions: SortOption[] = ['Popular', 'Price: Low to High', 'Price: High to Low', 'Newest', 'Top Rated'];
+  sortOptions: SortOption[] = [
+    'Popular',
+    'Price: Low to High',
+    'Price: High to Low',
+    'Newest',
+    'Top Rated',
+  ];
+  skeletonItems = [1, 2, 3, 4];
+  maxPossiblePrice = 2500;
 
-  activeCategory = signal('All');
-  activeSort = signal<SortOption>('Popular');
-  visibleCount = signal(4);
-  sortDropdownOpen = signal(false);
+  // ── State signals ───────────────────────────────────────────────────────────
+  activeCategory  = signal<string>('All');
+  activeSort      = signal<SortOption>('Popular');
+  visibleCount    = signal(6);
+  sortDropdownOpen  = signal(false);
+  priceFilterOpen   = signal(false);
+  ratingFilterOpen  = signal(false);
+  maxPrice          = signal(this.maxPossiblePrice);
+  minRating         = signal(0);
+  isLoading         = signal(false);
+  searchQuery       = '';
 
+  // ── Derived ─────────────────────────────────────────────────────────────────
+  priceFilterActive = computed(() => this.maxPrice() < this.maxPossiblePrice);
+
+  hasActiveFilters = computed(() =>
+    this.activeCategory() !== 'All' ||
+    this.priceFilterActive() ||
+    this.minRating() > 0 ||
+    !!this.searchQuery
+  );
+
+  // ── Data ────────────────────────────────────────────────────────────────────
   allProducts: Product[] = [
     {
       id: 1,
@@ -130,11 +159,33 @@ export class Products {
     },
   ];
 
+  // ── Computed lists ───────────────────────────────────────────────────────────
   filteredProducts = computed(() => {
-    let list = this.activeCategory() === 'All'
-      ? [...this.allProducts]
-      : this.allProducts.filter(p => p.category === this.activeCategory());
+    let list = [...this.allProducts];
 
+    // Category
+    if (this.activeCategory() !== 'All') {
+      list = list.filter(p => p.category === this.activeCategory());
+    }
+    // Price
+    if (this.priceFilterActive()) {
+      list = list.filter(p => p.price <= this.maxPrice());
+    }
+    // Rating
+    if (this.minRating() > 0) {
+      list = list.filter(p => p.rating >= this.minRating());
+    }
+    // Search
+    if (this.searchQuery.trim()) {
+      const q = this.searchQuery.toLowerCase();
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.brand.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q)
+      );
+    }
+
+    // Sort
     switch (this.activeSort()) {
       case 'Price: Low to High':
         list.sort((a, b) => a.price - b.price);
@@ -146,7 +197,10 @@ export class Products {
         list.sort((a, b) => b.rating - a.rating);
         break;
       case 'Newest':
-        list = list.filter(p => p.badge === 'new').concat(list.filter(p => p.badge !== 'new'));
+        list = [
+          ...list.filter(p => p.badge === 'new'),
+          ...list.filter(p => p.badge !== 'new'),
+        ];
         break;
       default:
         list.sort((a, b) => b.reviewCount - a.reviewCount);
@@ -163,36 +217,121 @@ export class Products {
     this.visibleCount() < this.filteredProducts().length
   );
 
+  // ── Actions ─────────────────────────────────────────────────────────────────
   setCategory(cat: string) {
     this.activeCategory.set(cat);
-    this.visibleCount.set(4);
+    this.visibleCount.set(6);
+    this.closeAllDropdowns();
   }
 
   setSort(option: SortOption) {
     this.activeSort.set(option);
     this.sortDropdownOpen.set(false);
-    this.visibleCount.set(4);
+    this.visibleCount.set(6);
   }
 
   toggleSort() {
-    this.sortDropdownOpen.update(v => !v);
+    const open = this.sortDropdownOpen();
+    this.closeAllDropdowns();
+    this.sortDropdownOpen.set(!open);
+  }
+
+  togglePriceFilter() {
+    const open = this.priceFilterOpen();
+    this.closeAllDropdowns();
+    this.priceFilterOpen.set(!open);
+  }
+
+  toggleRatingFilter() {
+    const open = this.ratingFilterOpen();
+    this.closeAllDropdowns();
+    this.ratingFilterOpen.set(!open);
+  }
+
+  onPriceChange(event: Event) {
+    const val = +(event.target as HTMLInputElement).value;
+    this.maxPrice.set(val);
+    this.visibleCount.set(6);
+  }
+
+  resetPrice() {
+    this.maxPrice.set(this.maxPossiblePrice);
+    this.visibleCount.set(6);
+  }
+
+  setRating(r: number) {
+    this.minRating.set(r);
+    this.visibleCount.set(6);
+    this.ratingFilterOpen.set(false);
+  }
+
+  onSearch() {
+    this.visibleCount.set(6);
+  }
+
+  clearSearch() {
+    this.searchQuery = '';
+    this.visibleCount.set(6);
+  }
+
+  clearAllFilters() {
+    this.activeCategory.set('All');
+    this.maxPrice.set(this.maxPossiblePrice);
+    this.minRating.set(0);
+    this.searchQuery = '';
+    this.visibleCount.set(6);
+    this.closeAllDropdowns();
   }
 
   loadMore() {
-    this.visibleCount.update(n => n + 4);
+    this.visibleCount.update(n => n + 6);
   }
 
-  toggleLike(product: Product) {
+  toggleLike(product: Product, event: Event) {
+    event.stopPropagation();
     product.liked = !product.liked;
   }
 
+  addToCart(product: Product, event: Event) {
+    event.stopPropagation();
+    product.addedToCart = true;
+    setTimeout(() => (product.addedToCart = false), 2000);
+  }
+
+  openProduct(product: Product) {
+    this.router.navigate(['/products', product.id]);
+  }
+
+  onPageClick() {
+    this.closeAllDropdowns();
+  }
+
+  private closeAllDropdowns() {
+    this.sortDropdownOpen.set(false);
+    this.priceFilterOpen.set(false);
+    this.ratingFilterOpen.set(false);
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
   getStars(rating: number): ('full' | 'half' | 'empty')[] {
-    const stars: ('full' | 'half' | 'empty')[] = [];
-    for (let i = 1; i <= 5; i++) {
-      if (rating >= i) stars.push('full');
-      else if (rating >= i - 0.5) stars.push('half');
-      else stars.push('empty');
-    }
-    return stars;
+    return Array.from({ length: 5 }, (_, i) => {
+      const pos = i + 1;
+      if (rating >= pos) return 'full';
+      if (rating >= pos - 0.5) return 'half';
+      return 'empty';
+    });
+  }
+
+  getMiniStars(threshold: number): ('full' | 'empty')[] {
+    return Array.from({ length: 5 }, (_, i) => (i < Math.floor(threshold) ? 'full' : 'empty'));
+  }
+
+  // ── Lifecycle ────────────────────────────────────────────────────────────────
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    // Simulate a brief loading state on first mount
+    this.isLoading.set(true);
+    setTimeout(() => this.isLoading.set(false), 600);
   }
 }
