@@ -8,7 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export interface ProductColor {
   label: string;
   hex: string;
+  images?: string[]; // optional: per-color image set. Falls back to product.images if omitted.
 }
+
 
 export interface ProductDetail {
   id: number;
@@ -133,8 +135,34 @@ export class ProductDetails implements OnInit, OnDestroy {
       badge: 'new',
       stock: 25,
       bgColor: '#eef8f2',
-      images: ['/products/airpods pro.png'],
-      colors: [{ label: 'White', hex: '#f5f5f5' }],
+      images: [
+        '/products/airpods pro w1.png',
+        '/products/airpods pro w2.png',
+        '/products/airpods pro w3.png',
+        '/products/airpods pro b1.png',
+        '/products/airpods pro b2.png',
+        '/products/airpods pro b3.png'
+      ],
+      colors: [
+        {
+          label: 'White',
+          hex: '#f5f5f5',
+          images: [
+            '/products/airpods pro w1.png',
+            '/products/airpods pro w2.png',
+            '/products/airpods pro w3.png'
+          ]
+        },
+        {
+          label: 'Black',
+          hex: '#000000',
+          images: [
+            '/products/airpods pro b1.png',
+            '/products/airpods pro b2.png',
+            '/products/airpods pro b3.png'
+          ]
+        }
+      ],
       category: 'Electronics',
     },
     {
@@ -168,10 +196,15 @@ export class ProductDetails implements OnInit, OnDestroy {
       badge: 'sale',
       stock: 14,
       bgColor: '#f0f8fe',
-      images: ['/products/phone.png'],
+      images: ['/products/samsung galxy s24 ultra silver.png'],
       colors: [
-        { label: 'Titanium Black', hex: '#2b2b2b' },
-        { label: 'Titanium Gray',  hex: '#8a8a8a' },
+        {
+          label: 'Silver',
+          hex: '#f4ffc5',
+          images: [
+            '/products/samsung galxy s24 ultra silver.png',
+          ]
+        }
       ],
       category: 'Electronics',
     },
@@ -203,7 +236,15 @@ export class ProductDetails implements OnInit, OnDestroy {
   activeImageIndex = signal(0);
   isFading         = signal(false);
 
-  activeImage = computed(() => this.product?.images[this.activeImageIndex()] ?? '');
+  // The image set currently on display. If the selected color defines its own
+  // `images`, use those; otherwise fall back to the product's default images.
+  // This is what actually makes color selection swap the gallery photos.
+  galleryImages = computed(() => {
+    const colorImages = this.selectedColor()?.images;
+    return (colorImages && colorImages.length > 0) ? colorImages : (this.product?.images ?? []);
+  });
+
+  activeImage = computed(() => this.galleryImages()[this.activeImageIndex()] ?? '');
 
   selectImage(i: number) {
     if (i === this.activeImageIndex()) return;
@@ -215,10 +256,22 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   // ── Colour ───────────────────────────────────────────────────────────────────
-  selectedColor = signal<ProductColor>({ label: '', hex: '' });
+  selectedColor = signal<ProductColor>({
+    label: '',
+    hex: '',
+    images: []
+  });
 
   selectColor(c: ProductColor) {
+    if (this.selectedColor().label === c.label) return;
     this.selectedColor.set(c);
+    // Reset back to the first photo of the newly selected color's gallery,
+    // with the same fade transition used for thumbnail clicks.
+    this.isFading.set(true);
+    setTimeout(() => {
+      this.activeImageIndex.set(0);
+      this.isFading.set(false);
+    }, 180);
   }
 
   // ── Quantity ─────────────────────────────────────────────────────────────────
@@ -429,12 +482,14 @@ export class ProductDetails implements OnInit, OnDestroy {
       const found = this.allProducts.find(p => p.id === id);
       this.product = found ?? this.allProducts[0];
 
-      this.selectedColor.set(this.product.colors[0] ?? { label: '', hex: '' });
+      this.selectedColor.set(this.product.colors[0] ?? { label: '', hex: '', images: [] });
       this.buildRelated();
 
       this.loading.set(false);
     }, this.SIMULATED_LOAD_MS);
   }
+
+
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────────
   private routeSub: any;

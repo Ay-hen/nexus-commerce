@@ -138,7 +138,7 @@
         <!-- Thumbnails -->
         @if (product.images.length > 1) {
           <div class="thumbnails" role="group" aria-label="Product image thumbnails">
-            @for (img of product.images; track $index) {
+            @for (img of galleryImages(); track $index) {
               <button
                 class="thumb"
                 [class.active]="activeImageIndex() === $index"
