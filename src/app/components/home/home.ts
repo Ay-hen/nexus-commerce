@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -143,4 +144,10 @@ resumeScroll() {
   }
 
   displayedPopular = [...this.popular, ...this.popular];
+
+  constructor(private router: Router) {}
+
+  shopNow(): void {
+    this.router.navigate(['/products']);
+  }
 }
