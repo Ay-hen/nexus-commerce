@@ -5,7 +5,7 @@
   margin-top: 5rem;
   position: relative;
   overflow: hidden;
-  height: 90vh;
+  min-height: 400px;
 }
 
 /* subtle glow effect */
@@ -204,7 +204,26 @@
   }
 }
 
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
 
-/*
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 
-*/
+.footer-logo {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+
+  background: linear-gradient(90deg, #ffffff, #9ca3af);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
