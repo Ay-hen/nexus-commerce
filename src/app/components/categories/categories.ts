@@ -110,7 +110,7 @@ export class Categories implements OnInit, OnDestroy {
       id: 5,
       name: 'Shoes',
       desc: 'Comfort meets iconic design',
-      image: '/products/shoes.png',
+      image: '/categories/shoes.png',
       icon: '👟',
       productCount: 112,
       accentColor: '#fff3ee',
