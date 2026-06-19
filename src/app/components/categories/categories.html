@@ -81,17 +81,17 @@
     <div class="cat-hero__visual" aria-hidden="true">
       <div class="floating-cards">
         <div class="fc fc--1">
-          <span class="fc__icon">⚡</span>
+          <span class="fc__icon"><img src="/icons/electronics.png" alt=""></span>
           <span class="fc__name">Electronics</span>
           <span class="fc__count">248 items</span>
         </div>
         <div class="fc fc--2">
-          <span class="fc__icon">👗</span>
+          <span class="fc__icon"><img src="/icons/fashion.png" alt=""></span>
           <span class="fc__name">Fashion</span>
           <span class="fc__count">183 items</span>
         </div>
         <div class="fc fc--3">
-          <span class="fc__icon">🎮</span>
+          <span class="fc__icon"><img src="/icons/controller.png" alt=""></span>
           <span class="fc__name">Gaming</span>
           <span class="fc__count">97 items</span>
         </div>
@@ -109,7 +109,7 @@
     <div class="ticker-track" [class.paused]="tickerPaused()">
       @for (item of tickerItems; track trackByIndex($index)) {
         <div class="ticker-chip">
-          <span class="ticker-chip__icon">{{ item.icon }}</span>
+          <span class="ticker-chip__icon"><img [src]="item.icon" alt=""></span>
           <span class="ticker-chip__name">{{ item.name }}</span>
           <span class="ticker-chip__dot"></span>
         </div>
@@ -202,7 +202,7 @@
                   height="180"
                 />
                 <div class="feat-card__icon-bubble" aria-hidden="true">
-                  {{ cat.icon }}
+                  <img [src]="cat.icon" alt="">
                 </div>
               </div>
 

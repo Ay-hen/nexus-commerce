@@ -428,10 +428,10 @@ $ease-out:      cubic-bezier(.0,.0,.2,1);
 .ticker-wrap {
   width: 100%;
   overflow: hidden;
-  background: $ink;
+  background: $border-subtle; // ← updated: light ground so black-fill icons show clearly
   padding: 0.7rem 0;
-  border-top: 1px solid rgba(255,255,255,.06);
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
 }
 
 .ticker-track {
@@ -449,21 +449,22 @@ $ease-out:      cubic-bezier(.0,.0,.2,1);
   align-items: center;
   gap: 0.5rem;
   padding: 0 2rem;
-  color: rgba(255,255,255,.85);
+  color: $ink-mid; // ← updated: dark text reads on light bg
   font-size: 0.8rem;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.ticker-chip__icon {
-  font-size: 0.95rem;
+.ticker-chip__icon img{
+  height: 32px;
+  width: 32px;
 }
 
 .ticker-chip__dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,.3);
+  background: $border; // ← updated: visible separator on light bg
   margin-left: 1.5rem;
 }
 
@@ -549,6 +550,11 @@ $ease-out:      cubic-bezier(.0,.0,.2,1);
   justify-content: center;
   font-size: 1.1rem;
   box-shadow: $shadow-sm;
+
+  img{
+    height: 24px;
+    width: 24px;
+  }
 }
 
 // Card body
