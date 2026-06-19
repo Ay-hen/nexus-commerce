@@ -1,0 +1,997 @@
+// ─── Design Tokens (mirrored from products.scss & home.scss) ─────────────────
+$canvas:        #FAFAF9;
+$surface:       #FFFFFF;
+$ink:           #0A0A0B;
+$ink-mid:       #6B7280;
+$ink-light:     #9CA3AF;
+$border:        #E5E7EB;
+$border-subtle: #F3F4F6;
+
+$accent:        #002642;
+$accent-blue:   #0066FF;
+$accent-bg:     #EFF5FF;
+
+$sale-red:      #FF3B30;
+$new-green:     #00C06B;
+$star:          #F59E0B;
+
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     16px;
+$radius-xl:     20px;
+$radius-pill:   999px;
+
+$shadow-xs:     0 1px 2px rgba(0,0,0,.05);
+$shadow-sm:     0 2px 6px rgba(0,0,0,.06);
+$shadow-md:     0 4px 16px rgba(0,0,0,.08);
+$shadow-lg:     0 8px 32px rgba(0,0,0,.10);
+$shadow-xl:     0 16px 48px rgba(0,0,0,.14);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-out:      cubic-bezier(.0,.0,.2,1);
+
+// ─── Keyframes ────────────────────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);   }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes float-1 {
+  0%, 100% { transform: translateY(0px) rotate(-2deg); }
+  50%      { transform: translateY(-12px) rotate(0deg); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translateY(0px) rotate(2deg); }
+  50%      { transform: translateY(-8px) rotate(-1deg); }
+}
+
+@keyframes float-3 {
+  0%, 100% { transform: translateY(-4px) rotate(1deg); }
+  50%      { transform: translateY(6px) rotate(-2deg); }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.4; }
+  50%      { transform: scale(1.1); opacity: 0.6; }
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba($new-green, .5); }
+  70%  { box-shadow: 0 0 0 6px rgba($new-green, 0); }
+  100% { box-shadow: 0 0 0 0 rgba($new-green, 0); }
+}
+
+// ─── Page Wrapper ─────────────────────────────────────────────────────────────
+.cat-page {
+  min-height: 100vh;
+  background: $canvas;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding-bottom: 6rem;
+  color: $ink;
+}
+
+// ─── Shared section layout ────────────────────────────────────────────────────
+.section {
+  padding: 3.5rem 0;
+
+  &__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 4rem;
+
+    @media (max-width: 768px) { padding: 0 1.25rem; }
+  }
+}
+
+// ─── Section header (matches home exactly) ────────────────────────────────────
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.section-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.view-all {
+  font-size: 0.82rem;
+  color: #003566;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
+  flex-shrink: 0;
+
+  &:hover { color: $accent; }
+}
+
+// ─── HERO ─────────────────────────────────────────────────────────────────────
+.cat-hero {
+  position: relative;
+  background: $surface;
+  border-bottom: 1px solid $border;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 480px;
+  padding: 0;
+}
+
+// Decorative orbs
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: orb-pulse 6s ease-in-out infinite;
+}
+
+.orb--1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(0,102,255,.06) 0%, transparent 70%);
+  top: -120px;
+  right: 30%;
+  animation-delay: 0s;
+}
+
+.orb--2 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(0,192,107,.07) 0%, transparent 70%);
+  bottom: -80px;
+  left: 20%;
+  animation-delay: 2s;
+}
+
+.orb--3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(245,158,11,.06) 0%, transparent 70%);
+  top: 40px;
+  right: 10%;
+  animation-delay: 4s;
+}
+
+.cat-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 4rem 4rem;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fade-up .55s $ease both;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    padding: 3rem 1.25rem;
+  }
+}
+
+// Breadcrumb (matches products.scss exactly)
+.bc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.bc__link {
+  color: $ink-mid;
+  text-decoration: none;
+  transition: color .15s $ease;
+  &:hover { color: $ink; }
+}
+
+.bc__sep { color: $border; }
+
+.bc__current {
+  color: $ink;
+  font-weight: 500;
+}
+
+// Hero copy — matching home.scss class names & scale
+.hero-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #02040f;
+  margin: 0;
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: $accent;
+  margin: 0;
+
+  @media (max-width: 768px) { font-size: 2rem; }
+}
+
+.hero-title__accent {
+  color: $accent-blue;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: $accent-blue;
+    border-radius: $radius-pill;
+    opacity: 0.3;
+  }
+}
+
+.hero-sub {
+  font-size: 0.88rem;
+  color: #02040f;
+  line-height: 1.65;
+  max-width: 380px;
+  margin: 0;
+}
+
+// Stats strip
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-stat__val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $ink;
+  letter-spacing: -.02em;
+}
+
+.hero-stat__lbl {
+  font-size: 0.7rem;
+  color: $ink-light;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+// Hero search — matching products search but hero-scale
+.hero-search {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  transition: box-shadow .2s $ease;
+  border-radius: $radius-pill;
+
+  &.focused {
+    box-shadow: 0 0 0 4px rgba($accent-blue, .12);
+  }
+}
+
+.hero-search__icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $ink-light;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-search__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px 0 44px;
+  background: $canvas;
+  border: 1.5px solid $border;
+  border-radius: $radius-pill;
+  font: inherit;
+  font-size: 0.88rem;
+  color: $ink;
+  transition: border-color .15s $ease;
+  box-sizing: border-box;
+
+  &::placeholder { color: $ink-light; }
+
+  &:focus {
+    outline: none;
+    border-color: $accent-blue;
+    background: $surface;
+  }
+
+  &::-webkit-search-cancel-button { display: none; }
+}
+
+.hero-search__clear {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $ink-light;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: color .15s;
+  &:hover { color: $ink; }
+}
+
+// Right visual — floating category mini-cards
+.cat-hero__visual {
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  pointer-events: none;
+
+  @media (max-width: 900px) { display: none; }
+}
+
+.floating-cards {
+  position: relative;
+  width: 220px;
+  height: 280px;
+}
+
+.fc {
+  position: absolute;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: $shadow-md;
+  min-width: 150px;
+}
+
+.fc--1 {
+  top: 0;
+  left: 20px;
+  animation: float-1 5s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.fc--2 {
+  top: 85px;
+  right: 0;
+  animation: float-2 6s ease-in-out infinite;
+  animation-delay: .8s;
+}
+
+.fc--3 {
+  bottom: 0;
+  left: 0;
+  animation: float-3 7s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.fc__icon {
+  font-size: 1.4rem;
+}
+
+.fc__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: $ink;
+}
+
+.fc__count {
+  font-size: 0.7rem;
+  color: $ink-light;
+}
+
+// ─── TICKER ───────────────────────────────────────────────────────────────────
+.ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: $ink;
+  padding: 0.7rem 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.ticker-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: ticker-scroll 28s linear infinite;
+  will-change: transform;
+
+  &.paused { animation-play-state: paused; }
+}
+
+.ticker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+  color: rgba(255,255,255,.85);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ticker-chip__icon {
+  font-size: 0.95rem;
+}
+
+.ticker-chip__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.3);
+  margin-left: 1.5rem;
+}
+
+// ─── FEATURED GRID ────────────────────────────────────────────────────────────
+.featured-section {
+  background: $canvas;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+}
+
+// Featured card
+.feat-card {
+  position: relative;
+  background: $surface;
+  border-radius: $radius-xl;
+  border: 1px solid $border;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .22s $ease, transform .22s $ease, border-color .22s $ease;
+  animation: pop-in .3s $ease both;
+
+  &:focus-visible {
+    outline: 3px solid $accent-blue;
+    outline-offset: 2px;
+  }
+
+  &:hover,
+  &.hovered {
+    box-shadow: $shadow-lg;
+    transform: translateY(-4px);
+    border-color: transparent;
+
+    .feat-card__img {
+      transform: scale(1.06);
+    }
+
+    .feat-card__cta svg {
+      transform: translateX(3px);
+    }
+  }
+}
+
+// Card image zone — uses CSS custom property for per-card bg tint
+.feat-card__img-zone {
+  position: relative;
+  height: 200px;
+  background: var(--card-tint, #f5f5f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.feat-card__img {
+  max-width: 55%;
+  max-height: 160px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.10));
+  transition: transform .3s $ease;
+}
+
+.feat-card__icon-bubble {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: $shadow-sm;
+}
+
+// Card body
+.feat-card__body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.feat-card__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $ink;
+  margin: 0;
+}
+
+.feat-card__desc {
+  font-size: 0.78rem;
+  color: $ink-mid;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.feat-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.feat-card__count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: $ink-light;
+  font-weight: 500;
+
+  svg { flex-shrink: 0; }
+}
+
+.feat-card__cta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $accent-blue;
+
+  svg {
+    transition: transform .2s $ease;
+  }
+}
+
+// Badge (Hot / New)
+.feat-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: $radius-pill;
+  letter-spacing: .04em;
+}
+
+.feat-badge--hot {
+  background: $sale-red;
+  color: #fff;
+}
+
+.feat-badge--new {
+  background: $new-green;
+  color: #fff;
+  animation: pulse-ring 2.5s infinite;
+}
+
+// ─── POPULAR GRID ─────────────────────────────────────────────────────────────
+.popular-section {
+  background: $surface;
+}
+
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 768px)  { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 480px)  { grid-template-columns: 1fr; }
+}
+
+// Popular card — compact, matching home .cat-card spirit
+.pop-card {
+  position: relative;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  transition: border-color .2s $ease, box-shadow .2s $ease, transform .2s $ease;
+  animation: pop-in .3s $ease both;
+
+  &:focus-visible {
+    outline: 3px solid $accent-blue;
+    outline-offset: 2px;
+  }
+
+  &:hover,
+  &.hovered {
+    border-color: #ddd;
+    box-shadow: $shadow-md;
+    transform: translateY(-3px);
+
+    .pop-card__img { transform: scale(1.08); }
+
+    .pop-card__arrow {
+      border-color: #999;
+      transform: translateX(2px);
+    }
+  }
+}
+
+.pop-card__img-zone {
+  width: 80px;
+  height: 70px;
+  background: var(--card-tint, #f5f5f5);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pop-card__img {
+  max-width: 80%;
+  max-height: 56px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.08));
+  transition: transform .25s $ease;
+}
+
+.pop-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.pop-card__icon {
+  font-size: 1.25rem;
+}
+
+.pop-card__name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $ink;
+  margin: 0;
+}
+
+.pop-card__count {
+  font-size: 0.7rem;
+  color: $ink-light;
+  margin: 0;
+}
+
+.pop-card__arrow {
+  width: 28px;
+  height: 28px;
+  border: 1px solid $border;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $ink-mid;
+  background: $surface;
+  margin-top: 0.2rem;
+  transition: border-color .2s, transform .2s $ease;
+}
+
+// Trending badge
+.pop-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba($star, .12);
+  color: darken($star, 15%);
+  border: 1px solid rgba($star, .25);
+  border-radius: $radius-pill;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  letter-spacing: .04em;
+}
+
+// ─── COLLECTIONS ──────────────────────────────────────────────────────────────
+.collections-section {
+  background: $canvas;
+}
+
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.col-card {
+  position: relative;
+  border-radius: $radius-xl;
+  padding: 2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 180px;
+  border: 1px solid transparent;
+  transition: box-shadow .25s $ease, transform .25s $ease;
+  animation: pop-in .3s $ease both;
+
+  &:focus-visible {
+    outline: 3px solid rgba(255,255,255,.7);
+    outline-offset: 2px;
+  }
+
+  &:hover {
+    box-shadow: $shadow-xl;
+    transform: translateY(-3px);
+
+    .col-card__img {
+      transform: scale(1.06) rotate(-3deg);
+    }
+
+    .col-card__cta svg {
+      transform: translateX(3px);
+    }
+  }
+
+  // Subtle shimmer overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255,255,255,.0) 0%,
+      rgba(255,255,255,.04) 50%,
+      rgba(255,255,255,.0) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+.col-card__tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(255,255,255,.15);
+  color: rgba(255,255,255,.9);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: $radius-pill;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  padding: 4px 10px;
+  backdrop-filter: blur(6px);
+}
+
+.col-card__copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 55%;
+}
+
+.col-card__name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.col-card__sub {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.col-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
+  height: 38px;
+  padding: 0 1.1rem;
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.35);
+  border-radius: $radius-pill;
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background .2s $ease, border-color .2s;
+  align-self: flex-start;
+
+  svg { transition: transform .2s $ease; }
+
+  &:hover {
+    background: rgba(255,255,255,.25);
+    border-color: rgba(255,255,255,.5);
+  }
+}
+
+.col-card__img-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.col-card__img {
+  max-height: 130px;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 12px 24px rgba(0,0,0,.3));
+  transition: transform .35s $ease;
+}
+
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 40%,
+    #f0f0f0 80%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: $radius-sm;
+}
+
+.skeleton-card {
+  background: $surface;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 1px solid $border;
+}
+
+.skeleton-img {
+  height: 200px;
+  border-radius: 0;
+}
+
+.skeleton-body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-line {
+  height: 14px;
+}
+
+// ─── Empty State ──────────────────────────────────────────────────────────────
+.empty-state {
+  text-align: center;
+  padding: 5rem 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.empty-state__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: $border-subtle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  color: $ink-light;
+}
+
+.empty-state__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.empty-state__sub {
+  font-size: 0.85rem;
+  color: $ink-mid;
+  margin: 0 0 1.5rem;
+}
+
+.empty-state__cta {
+  height: 44px;
+  padding: 0 1.75rem;
+  background: $ink;
+  color: #fff;
+  border: none;
+  border-radius: $radius-pill;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s $ease;
+  &:hover { background: #333; }
+}
+
+// ─── Reduced motion ───────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .fc,
+  .ticker-track,
+  .feat-card,
+  .pop-card,
+  .col-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,375 @@
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!--  CATEGORIES PAGE                                                          -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="cat-page">
+
+  <!-- ── SECTION 1: HERO ────────────────────────────────────────────────────── -->
+  <section class="cat-hero">
+    <!-- Floating orbs (decorative, aria-hidden) -->
+    <div class="orb orb--1" aria-hidden="true"></div>
+    <div class="orb orb--2" aria-hidden="true"></div>
+    <div class="orb orb--3" aria-hidden="true"></div>
+
+    <div class="cat-hero__inner">
+
+      <!-- Breadcrumb -->
+      <nav class="bc" aria-label="Breadcrumb">
+        <a class="bc__link" routerLink="/home">Home</a>
+        <span class="bc__sep" aria-hidden="true">/</span>
+        <span class="bc__current">Categories</span>
+      </nav>
+
+      <!-- Headline group -->
+      <div class="cat-hero__copy">
+        <p class="hero-eyebrow">Explore Our World</p>
+        <h1 class="hero-title">
+          Find Your<br />
+          <span class="hero-title__accent">Perfect Category</span>
+        </h1>
+        <p class="hero-sub">
+          From cutting-edge electronics to timeless fashion —
+          every passion has a place here.
+        </p>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="hero-stats" aria-label="Store highlights">
+        @for (stat of stats; track trackByIndex($index)) {
+          <div class="hero-stat">
+            <strong class="hero-stat__val">{{ stat.value }}</strong>
+            <span class="hero-stat__lbl">{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Search -->
+      <div
+        class="hero-search"
+        [class.focused]="heroSearchFocused()"
+        role="search"
+      >
+        <svg class="hero-search__icon" width="18" height="18" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          class="hero-search__input"
+          type="search"
+          placeholder="Search categories…"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          (focus)="heroSearchFocused.set(true)"
+          (blur)="heroSearchFocused.set(false)"
+          aria-label="Search categories"
+        />
+        @if (searchQuery) {
+          <button
+            class="hero-search__clear"
+            (click)="clearSearch()"
+            aria-label="Clear search"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Hero visual (right side) -->
+    <div class="cat-hero__visual" aria-hidden="true">
+      <div class="floating-cards">
+        <div class="fc fc--1">
+          <span class="fc__icon">⚡</span>
+          <span class="fc__name">Electronics</span>
+          <span class="fc__count">248 items</span>
+        </div>
+        <div class="fc fc--2">
+          <span class="fc__icon">👗</span>
+          <span class="fc__name">Fashion</span>
+          <span class="fc__count">183 items</span>
+        </div>
+        <div class="fc fc--3">
+          <span class="fc__icon">🎮</span>
+          <span class="fc__name">Gaming</span>
+          <span class="fc__count">97 items</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TICKER STRIP ────────────────────────────────────────────────────────── -->
+  <div
+    class="ticker-wrap"
+    (mouseenter)="pauseTicker()"
+    (mouseleave)="resumeTicker()"
+    aria-hidden="true"
+  >
+    <div class="ticker-track" [class.paused]="tickerPaused()">
+      @for (item of tickerItems; track trackByIndex($index)) {
+        <div class="ticker-chip">
+          <span class="ticker-chip__icon">{{ item.icon }}</span>
+          <span class="ticker-chip__name">{{ item.name }}</span>
+          <span class="ticker-chip__dot"></span>
+        </div>
+      }
+    </div>
+  </div>
+
+
+  <!-- ── SECTION 2: FEATURED CATEGORIES ────────────────────────────────────── -->
+  <section class="section featured-section">
+    <div class="section__inner">
+
+      <!-- Header -->
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">Hand-Picked For You</p>
+          <h2 class="section-title">Featured Categories</h2>
+        </div>
+        <a class="view-all" routerLink="/products">View All</a>
+      </div>
+
+      <!-- Skeleton -->
+      @if (isLoading()) {
+        <div class="featured-grid" aria-busy="true">
+          @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="skeleton-card">
+              <div class="skeleton-img shimmer"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line shimmer" style="width:40%"></div>
+                <div class="skeleton-line shimmer" style="width:70%"></div>
+                <div class="skeleton-line shimmer" style="width:50%; height:10px"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Empty state -->
+      @if (!isLoading() && filteredFeatured().length === 0 && filteredPopular().length === 0) {
+        <div class="empty-state" role="status">
+          <div class="empty-state__icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+          <h3 class="empty-state__title">No categories found</h3>
+          <p class="empty-state__sub">Try a different search term.</p>
+          <button class="empty-state__cta" (click)="clearSearch()">Clear search</button>
+        </div>
+      }
+
+      <!-- Featured grid -->
+      @if (!isLoading() && filteredFeatured().length > 0) {
+        <div class="featured-grid" role="list">
+          @for (cat of filteredFeatured(); track cat.id) {
+            <article
+              class="feat-card"
+              role="listitem"
+              [class.hovered]="hoveredFeaturedId() === cat.id"
+              [style.--card-tint]="cat.accentColor"
+              (mouseenter)="setFeaturedHover(cat.id)"
+              (mouseleave)="setFeaturedHover(null)"
+              (click)="navigateToCategory(cat)"
+              (keydown.enter)="navigateToCategory(cat)"
+              (keydown.space)="navigateToCategory(cat)"
+              tabindex="0"
+              [attr.aria-label]="cat.name + ' — ' + cat.productCount + ' products'"
+            >
+              <!-- Badge -->
+              @if (cat.badge) {
+                <span
+                  class="feat-badge"
+                  [class.feat-badge--hot]="cat.badge === 'hot'"
+                  [class.feat-badge--new]="cat.badge === 'new'"
+                  aria-label="{{ cat.badge === 'hot' ? 'Trending' : 'New' }}"
+                >
+                  {{ cat.badge === 'hot' ? '🔥 Hot' : '✨ New' }}
+                </span>
+              }
+
+              <!-- Image zone -->
+              <div class="feat-card__img-zone">
+                <img
+                  class="feat-card__img"
+                  [src]="cat.image"
+                  [alt]="cat.name"
+                  loading="lazy"
+                  width="200"
+                  height="180"
+                />
+                <div class="feat-card__icon-bubble" aria-hidden="true">
+                  {{ cat.icon }}
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="feat-card__body">
+                <h3 class="feat-card__name">{{ cat.name }}</h3>
+                <p class="feat-card__desc">{{ cat.desc }}</p>
+                <div class="feat-card__footer">
+                  <span class="feat-card__count">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <rect x="2" y="7" width="20" height="14" rx="2"/>
+                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                    </svg>
+                    {{ cat.productCount }} products
+                  </span>
+                  <span class="feat-card__cta">
+                    Explore
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 3: POPULAR CATEGORIES GRID ────────────────────────────────── -->
+  @if (!isLoading() && filteredPopular().length > 0) {
+    <section class="section popular-section">
+      <div class="section__inner">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Trending Right Now</p>
+            <h2 class="section-title">Popular Categories</h2>
+          </div>
+          <a class="view-all" routerLink="/products">View All</a>
+        </div>
+
+        <div class="popular-grid" role="list">
+          @for (cat of filteredPopular(); track cat.id) {
+            <article
+              class="pop-card"
+              role="listitem"
+              [class.hovered]="hoveredPopularId() === cat.id"
+              [style.--card-tint]="cat.accentColor"
+              (mouseenter)="setPopularHover(cat.id)"
+              (mouseleave)="setPopularHover(null)"
+              (click)="navigateToCategory(cat)"
+              (keydown.enter)="navigateToCategory(cat)"
+              (keydown.space)="navigateToCategory(cat)"
+              tabindex="0"
+              [attr.aria-label]="cat.name + ' — ' + cat.productCount + ' products'"
+            >
+              <!-- Trending badge -->
+              @if (cat.trending) {
+                <span class="pop-badge" aria-label="Trending">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                  Trending
+                </span>
+              }
+
+              <!-- Image -->
+              <div class="pop-card__img-zone">
+                <img
+                  class="pop-card__img"
+                  [src]="cat.image"
+                  [alt]="cat.name"
+                  loading="lazy"
+                  width="120"
+                  height="100"
+                />
+              </div>
+
+              <!-- Info -->
+              <div class="pop-card__body">  
+                <h3 class="pop-card__name">{{ cat.name }}</h3>
+                <p class="pop-card__count">{{ cat.productCount }} items</p>
+              </div>
+
+              <!-- Arrow -->
+              <div class="pop-card__arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </article>
+          }
+        </div>
+
+      </div>
+    </section>
+  }
+
+
+  <!-- ── SECTION 4: SHOP COLLECTIONS ──────────────────────────────────────── -->
+  @if (!isLoading()) {
+    <section class="section collections-section">
+      <div class="section__inner">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Curated Selections</p>
+            <h2 class="section-title">Shop Collections</h2>
+          </div>
+        </div>
+
+        <div class="collections-grid" role="list">
+          @for (col of collections; track col.id) {
+            <article
+              class="col-card"
+              role="listitem"
+              [style.background]="col.bgGradient"
+              (click)="navigateToCollection(col)"
+              (keydown.enter)="navigateToCollection(col)"
+              (keydown.space)="navigateToCollection(col)"
+              tabindex="0"
+              [attr.aria-label]="col.name + ' — ' + col.subtitle"
+            >
+              <!-- Tag pill -->
+              <span class="col-card__tag">{{ col.tag }}</span>
+
+              <!-- Text -->
+              <div class="col-card__copy">
+                <h3 class="col-card__name">{{ col.name }}</h3>
+                <p class="col-card__sub">{{ col.subtitle }}</p>
+                <button
+                  class="col-card__cta"
+                  (click)="navigateToCollection(col); $event.stopPropagation()"
+                  [attr.aria-label]="col.cta + ' in ' + col.name"
+                >
+                  {{ col.cta }}
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Product image -->
+              <div class="col-card__img-wrap" aria-hidden="true">
+                <img
+                  class="col-card__img"
+                  [src]="col.image"
+                  [alt]="col.name"
+                  loading="lazy"
+                  width="180"
+                  height="160"
+                />
+              </div>
+            </article>
+          }
+        </div>
+
+      </div>
+    </section>
+  }
+
+</div>

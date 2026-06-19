@@ -150,4 +150,8 @@ resumeScroll() {
   shopNow(): void {
     this.router.navigate(['/products']);
   }
+
+  categoriesGo(){
+    this.router.navigate(['/categories'])
+  }
 }
