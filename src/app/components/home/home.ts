@@ -22,7 +22,7 @@ export class Home implements AfterViewInit, OnDestroy {
     {
       name: 'Laptops',
       desc: 'High performance for every need',
-      image: '/categories/laptop.jfif'
+      image: '/categories/laptop.png'
     },
     {
       name: 'Audio',

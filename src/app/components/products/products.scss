@@ -196,6 +196,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   flex-wrap: nowrap;
   white-space: nowrap;
 
+  scroll-behavior: smooth;
+
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE
 
@@ -228,6 +230,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     border-color: $ink;
     color: #fff;
     font-weight: 600;
+    
   }
 }
 
