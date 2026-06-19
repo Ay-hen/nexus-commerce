@@ -19,6 +19,10 @@ export const routes: Routes = [
         component : Products
     },
     {
+        path: 'products/category/:category',
+        component: Products
+    },
+    {
         path:'products/:id',
         component: ProductDetails
     },

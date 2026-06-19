@@ -1,7 +1,7 @@
 import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface Product {
   id: number;
@@ -31,7 +31,7 @@ type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'New
 })
 export class Products implements OnInit {
   // ── Constants ──────────────────────────────────────────────────────────────
-  categories = ['All', 'Electronics', 'Fashion', 'Gaming', 'Shoes', 'Watches'];
+  categories = ['All', 'Electronics', 'Fashion', 'Gaming', 'Shoes', 'Watches', 'Laptops', 'Accessories','Audios', 'Smartphones'];
   sortOptions: SortOption[] = [
     'Popular',
     'Price: Low to High',
@@ -79,7 +79,7 @@ export class Products implements OnInit {
       image: '/products/headphones.png',
       bgColor: 'rgb(238, 240, 248)',
       liked: false,
-      category: 'Electronics',
+      category: 'Audios',
     },
     {
       id: 2,
@@ -124,7 +124,7 @@ export class Products implements OnInit {
       image: '/products/macbook pro 13.png',
       bgColor: '#f8f5ee',
       liked: false,
-      category: 'Electronics',
+      category: 'Laptops',
     },
     {
       id: 5,
@@ -139,7 +139,7 @@ export class Products implements OnInit {
       image: '/products/samsung galxy s24 ultra silver.png',
       bgColor: '#f0f8fe',
       liked: false,
-      category: 'Electronics',
+      category: 'Smartphones',
     },
     {
       id: 6,
@@ -326,11 +326,21 @@ export class Products implements OnInit {
   }
 
   // ── Lifecycle ────────────────────────────────────────────────────────────────
-  constructor(private router: Router) {}
+  constructor(private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit() {
-    // Simulate a brief loading state on first mount
     this.isLoading.set(true);
+
+    this.route.paramMap.subscribe(params => {
+      const category = params.get('category');
+
+      if (category) {
+        this.activeCategory.set(category);
+      } else {
+        this.activeCategory.set('All');
+      }
+    });
+
     setTimeout(() => this.isLoading.set(false), 600);
   }
 }

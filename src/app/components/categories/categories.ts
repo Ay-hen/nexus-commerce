@@ -338,9 +338,7 @@ export class Categories implements OnInit, OnDestroy {
   }
 
   navigateToCategory(cat: Category): void {
-    this.router.navigate(['/products'], {
-      queryParams: { category: cat.name },
-    });
+    this.router.navigate(['/products/category', cat.name]);
   }
 
   navigateToCollection(col: Collection): void {

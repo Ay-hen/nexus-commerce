@@ -184,10 +184,24 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
 // Category pills
 .category-pills {
+  flex: 1;
+  min-width: 0;
+
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
-  flex: 1 1 auto;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .pill {
