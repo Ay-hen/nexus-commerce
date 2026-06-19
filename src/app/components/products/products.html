@@ -41,7 +41,7 @@
 
     <!-- Category pills -->
     <div class="category-pills" role="group" aria-label="Filter by category">
-      @for (cat of categories; track cat) {
+      @for (cat of displayCategories(); track cat) {
         <button
           class="pill"
           [class.active]="activeCategory() === cat"

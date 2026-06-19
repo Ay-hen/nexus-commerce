@@ -31,7 +31,19 @@ type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'New
 })
 export class Products implements OnInit {
   // ── Constants ──────────────────────────────────────────────────────────────
-  categories = ['All', 'Electronics', 'Fashion', 'Gaming', 'Shoes', 'Watches', 'Laptops', 'Accessories','Audios', 'Smartphones'];
+  categories = [
+    'All',
+    'Electronics',
+    'Fashion',
+    'Gaming',
+    'Shoes',
+    'Watches',
+    'Laptops',
+    'Accessories',
+    'Audios',
+    'Smartphones'
+  ];
+
   sortOptions: SortOption[] = [
     'Popular',
     'Price: Low to High',
@@ -343,4 +355,21 @@ export class Products implements OnInit {
 
     setTimeout(() => this.isLoading.set(false), 600);
   }
+
+  displayCategories = computed(() => {
+    const active = this.activeCategory();
+
+    // Default order when All is selected
+    if (active === 'All') {
+      return [...this.categories];
+    }
+
+    return [
+      active,
+      'All',
+      ...this.categories.filter(
+        c => c !== active && c !== 'All'
+      )
+    ];
+  });
 }
