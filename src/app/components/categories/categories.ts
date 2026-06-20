@@ -191,7 +191,7 @@ export class Categories implements OnInit, OnDestroy {
       id: 15,
       name: 'Tablets',
       desc: 'Work and play without limits',
-      image: '/products/macbook pro 13.png',
+      image: '/products/tablet.png',
       icon: '📋',
       productCount: 28,
       accentColor: '#f8f5ee',
