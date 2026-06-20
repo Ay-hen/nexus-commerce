@@ -1,0 +1,577 @@
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!--  CONTACT PAGE — Nexus                                                     -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="contact-page">
+
+  <!-- ── SECTION 1: HERO ────────────────────────────────────────────────────── -->
+  <section class="contact-hero">
+    <!-- Decorative orbs -->
+    <div class="orb orb--1" aria-hidden="true"></div>
+    <div class="orb orb--2" aria-hidden="true"></div>
+    <div class="orb orb--3" aria-hidden="true"></div>
+
+    <div class="contact-hero__inner">
+
+      <!-- Breadcrumb -->
+      <nav class="bc" aria-label="Breadcrumb">
+        <a class="bc__link" (click)="goHome()" role="button" tabindex="0">Home</a>
+        <span class="bc__sep" aria-hidden="true">/</span>
+        <span class="bc__current">Contact</span>
+      </nav>
+
+      <!-- Copy -->
+      <div class="contact-hero__copy">
+        <p class="hero-eyebrow">Support &amp; Contact</p>
+        <h1 class="hero-title">
+          We're Here<br />
+          <span class="hero-title__accent">to Help You</span>
+        </h1>
+        <p class="hero-sub">
+          Whether you have a question about an order, need product advice,
+          or just want to say hello — our team is ready.
+        </p>
+      </div>
+
+      <!-- Response stats -->
+      <div class="hero-stats" aria-label="Support stats">
+        <div class="hero-stat">
+          <strong class="hero-stat__val">&lt; 2h</strong>
+          <span class="hero-stat__lbl">Response Time</span>
+        </div>
+        <div class="hero-stat">
+          <strong class="hero-stat__val">24/7</strong>
+          <span class="hero-stat__lbl">Live Chat</span>
+        </div>
+        <div class="hero-stat">
+          <strong class="hero-stat__val">4.9★</strong>
+          <span class="hero-stat__lbl">Support Rating</span>
+        </div>
+        <div class="hero-stat">
+          <strong class="hero-stat__val">98%</strong>
+          <span class="hero-stat__lbl">Satisfaction</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="hero-btns">
+        <a class="btn-primary" href="#contact-form">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          Send a Message
+        </a>
+        <a class="btn-secondary" href="tel:+18006398700">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/>
+          </svg>
+          Call Us Now
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero visual — floating support cards -->
+    <div class="contact-hero__visual" aria-hidden="true">
+      <div class="support-floats">
+        <div class="sf sf--1">
+          <div class="sf__avatar">JD</div>
+          <div class="sf__body">
+            <span class="sf__name">Jordan D.</span>
+            <span class="sf__msg">Your order has shipped! 🚀</span>
+          </div>
+          <span class="sf__time">just now</span>
+        </div>
+        <div class="sf sf--2">
+          <div class="sf__icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="sf__body">
+            <span class="sf__name">Refund approved</span>
+            <span class="sf__msg">Back in 2 business days</span>
+          </div>
+        </div>
+        <div class="sf sf--3">
+          <div class="sf__pulse" aria-hidden="true"></div>
+          <div class="sf__body">
+            <span class="sf__name">Live Chat</span>
+            <span class="sf__msg">3 agents online now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 2: CONTACT CARDS ──────────────────────────────────────────── -->
+  <section class="section contact-cards-section" aria-labelledby="cards-heading">
+    <div class="section__inner">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">Get in Touch</p>
+          <h2 class="section-title" id="cards-heading">Every Way to Reach Us</h2>
+        </div>
+      </div>
+
+      <div class="contact-cards-grid">
+        @for (card of contactCards; track card.id) {
+          <div class="contact-card" [style.--card-accent]="card.accentColor">
+            <div class="contact-card__icon-wrap">
+              <!-- Email -->
+              @if (card.icon === 'email') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              }
+              <!-- Phone -->
+              @if (card.icon === 'phone') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/>
+                </svg>
+              }
+              <!-- Location -->
+              @if (card.icon === 'location') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              }
+              <!-- Chat -->
+              @if (card.icon === 'chat') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              }
+            </div>
+
+            <div class="contact-card__body">
+              <h3 class="contact-card__title">{{ card.title }}</h3>
+              <p class="contact-card__desc">{{ card.description }}</p>
+              <p class="contact-card__value">{{ card.value }}</p>
+              @if (card.sub) {
+                <p class="contact-card__sub">{{ card.sub }}</p>
+              }
+            </div>
+
+            <a
+              class="contact-card__action"
+              [href]="card.actionHref"
+              [attr.aria-label]="card.action + ' via ' + card.title"
+            >
+              {{ card.action }}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 3 + 4: FORM & HOURS SPLIT ────────────────────────────────── -->
+  <section class="section form-hours-section">
+    <div class="section__inner">
+      <div class="form-hours-grid">
+
+        <!-- ── CONTACT FORM ─────────────────────────────────────────────────── -->
+        <div class="form-panel" id="contact-form">
+          <div class="panel-header">
+            <p class="section-eyebrow">Drop Us a Note</p>
+            <h2 class="section-title">Send a Message</h2>
+          </div>
+
+          @if (formStatus() === 'success') {
+            <!-- Success state -->
+            <div class="form-feedback form-feedback--success" role="status" aria-live="polite">
+              <div class="feedback-icon feedback-icon--success" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <h3 class="feedback-title">Message sent!</h3>
+              <p class="feedback-sub">We've received your message and will get back to you within 2 hours. Check your inbox.</p>
+              <button class="btn-primary btn-primary--small" (click)="resetForm()">Send Another</button>
+            </div>
+          } @else if (formStatus() === 'error') {
+            <!-- Error state -->
+            <div class="form-feedback form-feedback--error" role="alert" aria-live="assertive">
+              <div class="feedback-icon feedback-icon--error" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="feedback-title">Something went wrong</h3>
+              <p class="feedback-sub">We couldn't send your message. Please try again or reach us directly at support&#64;nexus.store.</p>
+              <button class="btn-primary btn-primary--small" (click)="resetForm()">Try Again</button>
+            </div>
+          } @else {
+            <!-- Form -->
+            <div class="contact-form" role="form" aria-label="Contact form">
+
+              <!-- Full name -->
+              <div class="field-wrap" [class.has-value]="form.fullName">
+                <input
+                  class="field-input"
+                  type="text"
+                  id="fullName"
+                  /* [(ngModel)]="form.fullName" */
+                  placeholder=" "
+                  autocomplete="name"
+                  aria-label="Full Name"
+                  [disabled]="formStatus() === 'loading'"
+                />
+                <label class="field-label" for="fullName">Full Name</label>
+                @if (form.fullName && form.fullName.trim().length < 2) {
+                  <p class="field-error" role="alert">Please enter your full name.</p>
+                }
+              </div>
+
+              <!-- Email -->
+              <div class="field-wrap" [class.has-value]="form.email">
+                <input
+                  class="field-input"
+                  type="email"
+                  id="email"
+                  /* [(ngModel)]="form.email" */
+                  placeholder=" "
+                  autocomplete="email"
+                  aria-label="Email Address"
+                  [disabled]="formStatus() === 'loading'"
+                />
+                <label class="field-label" for="email">Email Address</label>
+                @if (form.email && !isEmailValid(form.email)) {
+                  <p class="field-error" role="alert">Please enter a valid email address.</p>
+                }
+              </div>
+
+              <!-- Subject -->
+              <div class="field-wrap" [class.has-value]="form.subject">
+                <input
+                  class="field-input"
+                  type="text"
+                  id="subject"
+                  /* [(ngModel)]="form.subject" */
+                  placeholder=" "
+                  aria-label="Subject"
+                  [disabled]="formStatus() === 'loading'"
+                />
+                <label class="field-label" for="subject">Subject</label>
+              </div>
+
+              <!-- Message -->
+              <div
+                class="field-wrap field-wrap--textarea"
+                [class.has-value]="form.message"
+                [class.focused]="messageFocused()"
+              >
+                <textarea
+                  class="field-input field-input--textarea"
+                  id="message"
+                  /* [(ngModel)]="form.message" */
+                  placeholder=" "
+                  /* [maxlength]="messageMaxLength" */
+                  rows="5"
+                  aria-label="Message"
+                  (focus)="messageFocused.set(true)"
+                  (blur)="messageFocused.set(false)"
+                  [disabled]="formStatus() === 'loading'"
+                ></textarea>
+                <label class="field-label" for="message">Your Message</label>
+                <div
+                  class="char-counter"
+                  [class.char-counter--warn]="messageProgress > 85"
+                  [class.char-counter--full]="messageProgress >= 100"
+                  aria-label="{{ messageCharCount }} of {{ messageMaxLength }} characters used"
+                >
+                  {{ messageCharCount }}/{{ messageMaxLength }}
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button
+                class="btn-submit"
+                (click)="onSubmit()"
+                [disabled]="!isFormValid() || formStatus() === 'loading'"
+                [class.btn-submit--loading]="formStatus() === 'loading'"
+                aria-label="Send message"
+              >
+                @if (formStatus() === 'loading') {
+                  <span class="spinner" aria-hidden="true"></span>
+                  Sending…
+                } @else {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                  </svg>
+                  Send Message
+                }
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- ── BUSINESS HOURS ───────────────────────────────────────────────── -->
+        <div class="hours-panel">
+          <div class="panel-header">
+            <p class="section-eyebrow">Opening Hours</p>
+            <h2 class="section-title">When We're Available</h2>
+          </div>
+
+          <div class="hours-card">
+            <div class="hours-status">
+              <span class="hours-dot" aria-hidden="true"></span>
+              <span class="hours-status__text">Support team is available now</span>
+            </div>
+
+            <ul class="hours-list" role="list">
+              @for (day of businessHours; track day.day) {
+                <li
+                  class="hours-row"
+                  [class.hours-row--current]="day.isCurrent"
+                  [class.hours-row--closed]="!day.isOpen"
+                >
+                  <span class="hours-day">{{ day.day }}</span>
+                  <span class="hours-time">{{ day.hours }}</span>
+                  @if (day.isCurrent) {
+                    <span class="hours-today-badge" aria-label="Today">Today</span>
+                  }
+                </li>
+              }
+            </ul>
+
+            <div class="hours-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              All times listed in Eastern Standard Time (EST)
+            </div>
+          </div>
+
+          <!-- Quick contact pill links -->
+          <div class="quick-links">
+            <p class="quick-links__label">Quick options</p>
+            <div class="quick-links__grid">
+              <a class="quick-link" href="mailto:support@nexus.store">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Email
+              </a>
+              <a class="quick-link" href="tel:+18006398700">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 3.06 3.33 2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/>
+                </svg>
+                Call
+              </a>
+              <a class="quick-link" href="#chat">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Live Chat
+              </a>
+              <a class="quick-link" href="https://maps.google.com" target="_blank" rel="noopener noreferrer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                Directions
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 5: FAQ ─────────────────────────────────────────────────────── -->
+  <section class="section faq-section" aria-labelledby="faq-heading">
+    <div class="section__inner">
+      <div class="section-header section-header--centered">
+        <div>
+          <p class="section-eyebrow">Quick Answers</p>
+          <h2 class="section-title" id="faq-heading">Frequently Asked Questions</h2>
+        </div>
+      </div>
+
+      <div class="faq-list" role="list">
+        @for (faq of faqs; track faq.id) {
+          <div
+            class="faq-item"
+            [class.faq-item--open]="faq.open"
+            role="listitem"
+          >
+            <button
+              class="faq-trigger"
+              (click)="toggleFaq(faq)"
+              [attr.aria-expanded]="faq.open"
+              [attr.aria-controls]="'faq-body-' + faq.id"
+            >
+              <span class="faq-trigger__q">{{ faq.question }}</span>
+              <span class="faq-trigger__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </span>
+            </button>
+            @if (faq.open) {
+              <div
+                class="faq-body"
+                [id]="'faq-body-' + faq.id"
+                role="region"
+                [attr.aria-label]="faq.question"
+              >
+                <p class="faq-body__text">{{ faq.answer }}</p>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 6: SOCIAL MEDIA ───────────────────────────────────────────── -->
+  <section class="section social-section" aria-labelledby="social-heading">
+    <div class="section__inner">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">Stay Connected</p>
+          <h2 class="section-title" id="social-heading">Follow the Journey</h2>
+        </div>
+      </div>
+
+      <div class="social-grid">
+        @for (social of socialLinks; track social.id) {
+          <a
+            class="social-card"
+            [href]="social.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            [style.--social-color]="social.color"
+            [style.--social-bg]="social.bgColor"
+            [attr.aria-label]="'Follow us on ' + social.name"
+          >
+            <!-- Icon -->
+            <div class="social-card__icon-wrap">
+              <img [src]="social.icon" alt="">
+            </div>
+
+            <div class="social-card__info">
+              <h3 class="social-card__name">{{ social.name }}</h3>
+              <p class="social-card__handle">{{ social.handle }}</p>
+              <p class="social-card__followers">{{ social.followers }}</p>
+            </div>
+
+            <div class="social-card__arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SECTION 7: MAP ────────────────────────────────────────────────────── -->
+  <section class="section map-section" aria-labelledby="map-heading">
+    <div class="section__inner">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">Find Us</p>
+          <h2 class="section-title" id="map-heading">Our Location</h2>
+        </div>
+        <a
+          class="view-all"
+          href="https://maps.google.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open in Maps
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="map-card">
+        <!-- Styled map placeholder / SVG pattern -->
+        <div class="map-visual" role="img" aria-label="Map showing Nexus headquarters at 340 Pine Street, San Francisco">
+          <!-- Grid lines pattern -->
+          <svg class="map-grid" width="100%" height="100%" aria-hidden="true">
+            <defs>
+              <pattern id="map-pattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#E5E7EB" stroke-width="0.8"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#map-pattern)"/>
+            <!-- Decorative "streets" -->
+            <line x1="0" y1="40%" x2="100%" y2="40%" stroke="#D1D5DB" stroke-width="6" stroke-linecap="round"/>
+            <line x1="0" y1="65%" x2="100%" y2="65%" stroke="#D1D5DB" stroke-width="3"/>
+            <line x1="30%" y1="0" x2="30%" y2="100%" stroke="#D1D5DB" stroke-width="4"/>
+            <line x1="65%" y1="0" x2="65%" y2="100%" stroke="#D1D5DB" stroke-width="3"/>
+            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#D1D5DB" stroke-width="2" stroke-dasharray="6 4"/>
+            <!-- Blocks -->
+            <rect x="2%" y="2%" width="27%" height="37%" rx="4" fill="#F3F4F6"/>
+            <rect x="31%" y="2%" width="33%" height="37%" rx="4" fill="#F3F4F6"/>
+            <rect x="66%" y="2%" width="32%" height="37%" rx="4" fill="#F3F4F6"/>
+            <rect x="2%" y="41%" width="27%" height="23%" rx="4" fill="#F3F4F6"/>
+            <rect x="31%" y="41%" width="33%" height="23%" rx="4" fill="#F3F4F6"/>
+            <rect x="66%" y="41%" width="32%" height="23%" rx="4" fill="#F3F4F6"/>
+          </svg>
+
+          <!-- Pin marker -->
+          <div class="map-pin" aria-hidden="true">
+            <div class="map-pin__circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="map-pin__shadow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- Address card overlay -->
+        <div class="map-address-card">
+          <div class="map-address-card__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="map-address-card__body">
+            <strong class="map-address-card__name">Nexus Headquarters</strong>
+            <p class="map-address-card__addr">340 Pine Street, Suite 800</p>
+            <p class="map-address-card__city">San Francisco, CA 94104</p>
+          </div>
+          <a
+            class="map-address-card__btn"
+            href="https://maps.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Get directions to Nexus Headquarters"
+          >
+            Directions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+</div>

@@ -3,6 +3,7 @@ import { Home } from './components/home/home';
 import { Products } from './components/products/products';
 import { ProductDetails } from './components/product-details/product-details';
 import { Categories } from './components/categories/categories';
+import { Contact} from './components/contact/contact'
 
 export const routes: Routes = [
     {
@@ -30,4 +31,8 @@ export const routes: Routes = [
         path : 'categories',
         component : Categories
     },
+    {
+        path:'contact',
+        component : Contact
+    }
 ];
