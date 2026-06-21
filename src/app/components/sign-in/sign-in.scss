@@ -78,13 +78,21 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   to   { stroke-dashoffset: 0; }
 }
 
+* {
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
 // ─── Page shell ───────────────────────────────────────────────────────────────
 .auth-page {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: $canvas;
+  background: white;
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
@@ -234,7 +242,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .scene-card-label {
   font-size: 0.82rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
   color: rgba(255,255,255,.9);
 }
 
@@ -318,7 +326,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   font-weight: 700;
   color: #fff;
   line-height: 1.25;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -335,7 +343,6 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   justify-content: center;
   padding: 2rem 1.5rem;
   min-height: 100vh;
-  background: $canvas;
   position: relative;
 }
 
@@ -385,12 +392,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-xl;
-  padding: 2.5rem 2rem;
+  padding: 1rem 2rem;
   box-shadow: $shadow-xl;
   animation: fadeSlideIn .4s $ease both;
   position: relative;
   overflow: hidden;
-  margin-top: 2rem;
 
   @media (max-width: 480px) {
     padding: 2rem 1.25rem;
@@ -451,7 +457,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.25rem;
   box-shadow: $shadow-md;
 
   img {
@@ -466,7 +472,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   font-weight: 700;
   color: $ink;
   letter-spacing: -.025em;
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.2rem;
 }
 
 .card-subtitle {
@@ -486,7 +492,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   padding: 10px 14px;
   font-size: 0.82rem;
   color: $error;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   animation: pop-in .2s $ease;
 
   svg { flex-shrink: 0; }
@@ -724,7 +730,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 }
 
 .divider-line {

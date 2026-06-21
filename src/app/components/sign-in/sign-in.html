@@ -1,5 +1,7 @@
 <div class="auth-page">
 
+    <aside></aside>
+
     <main class="form-panel">
 
     <!-- Top nav -->
@@ -8,7 +10,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M19 12H5M12 5l-7 7 7 7"/>
         </svg>
-        Back to store
+        Back
       </a>
       
     </header>
@@ -54,7 +56,7 @@
 
         <!-- Email -->
         <div class="field-group" [class.field-error]="fieldError('email')" [class.field-valid]="email.valid && email.dirty">
-          <label class="field-label" for="email">Email address</label>
+          <label class="field-label" for="email">Email</label>
           <div class="field-input-wrap">
             <svg class="field-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -212,74 +214,6 @@
 
 
 
-  <aside class="art-panel" aria-hidden="true">
-
-    <!-- Ambient gradient blobs -->
-    <div class="blob blob--1"></div>
-    <div class="blob blob--2"></div>
-    <div class="blob blob--3"></div>
-
-    <!-- Grid overlay -->
-    <div class="grid-overlay"></div>
-
-    <!-- Brand lockup -->
-    <div class="art-brand">
-      <div class="art-logo">
-        <img src="favicon.png" alt="Nexus logo" />
-      </div>
-      <span class="art-brand-name">Nexus</span>
-    </div>
-
-    <!-- Floating product scene -->
-    <div class="art-scene" [style.transform]="'translateY(' + floatOffset() + 'px)'">
-
-      <!-- Central card -->
-      <div class="scene-card scene-card--main">
-        <div class="scene-card-img">
-          <img src="/products/macbook pro 13.png" alt="MacBook Pro" />
-        </div>
-        <div class="scene-card-body">
-          <p class="scene-card-label">MacBook Pro M3</p>
-          <p class="scene-card-price">$1,999</p>
-          <div class="scene-card-stars">
-            @for (i of [1,2,3,4,5]; track i) {
-              <svg width="11" height="11" viewBox="0 0 24 24">
-                <polygon fill="#f59e0b" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-            }
-            <span>4.8</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Floating mini chips -->
-      <div class="float-chip float-chip--tl">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2.5">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        <span>Order placed</span>
-      </div>
-
-      <div class="float-chip float-chip--br">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00C06B" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-        <span>Fast delivery</span>
-      </div>
-
-      <div class="float-chip float-chip--tr">
-        <span class="chip-avatar">3K+</span>
-        <span>Happy users</span>
-      </div>
-
-    </div>
-
-    <!-- Art tagline -->
-    <div class="art-tagline">
-      <p class="art-headline">Shop smarter.<br />Live better.</p>
-      <p class="art-sub">Join 50,000+ customers already on Nexus.</p>
-    </div>
-
-  </aside>
+  
 
 </div>
