@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [
-    RouterLink,
+    
     RouterLinkActive],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
@@ -18,4 +18,9 @@ export class Navbar {
   };
   notification = 3;
   buy = 0;
+
+  constructor(private router : Router){}
+  signIn() : void{
+    this.router.navigate(['/sign-in']);
+  }
 }

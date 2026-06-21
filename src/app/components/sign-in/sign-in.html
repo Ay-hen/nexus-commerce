@@ -1,1 +1,285 @@
-<p>sign-in works!</p>
+<div class="auth-page">
+
+    <main class="form-panel">
+
+    <!-- Top nav -->
+    <header class="form-header">
+      <a routerLink="/home" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back to store
+      </a>
+      
+    </header>
+
+    <!-- Auth card -->
+    <div class="auth-card">
+
+      <!-- Success overlay -->
+      @if (isSuccess) {
+        <div class="success-overlay" role="status" aria-live="polite">
+          <div class="success-ring">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p class="success-title">Welcome back!</p>
+          <p class="success-sub">Signing you in…</p>
+        </div>
+      }
+
+      <!-- Card header -->
+      <div class="card-header">
+        <div class="card-logo">
+          <img src="favicon.png" alt="Nexus" />
+        </div>
+        <h1 class="card-title">Welcome back</h1>
+        <p class="card-subtitle">Sign in to your Nexus account</p>
+      </div>
+
+      <!-- Error banner -->
+      @if (hasError) {
+        <div class="error-banner" role="alert" aria-live="assertive">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+
+        <!-- Email -->
+        <div class="field-group" [class.field-error]="fieldError('email')" [class.field-valid]="email.valid && email.dirty">
+          <label class="field-label" for="email">Email address</label>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M2 7l10 7 10-7"/>
+            </svg>
+            <input
+              id="email"
+              class="field-input"
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              [attr.aria-invalid]="email.invalid && email.dirty"
+              aria-describedby="email-error"
+            />
+            @if (email.valid && email.dirty) {
+              <svg class="field-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </div>
+          @if (fieldError('email')) {
+            <p class="field-error-msg" id="email-error" role="alert">{{ fieldError('email') }}</p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="field-group" [class.field-error]="fieldError('password')" [class.field-valid]="password.valid && password.dirty">
+          <div class="field-label-row">
+            <label class="field-label" for="password">Password</label>
+            <a href="#" class="forgot-link" tabindex="0">Forgot password?</a>
+          </div>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="password"
+              class="field-input"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              [attr.aria-invalid]="password.invalid && password.dirty"
+              aria-describedby="password-error"
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              [attr.aria-pressed]="showPassword()"
+            >
+              @if (showPassword()) {
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              }
+            </button>
+          </div>
+          @if (fieldError('password')) {
+            <p class="field-error-msg" id="password-error" role="alert">{{ fieldError('password') }}</p>
+          }
+        </div>
+
+        <!-- Remember Me -->
+        <div class="remember-row">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="rememberMe" class="checkbox-input" />
+            <span class="checkbox-box" aria-hidden="true"></span>
+            Remember me for 30 days
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn-submit"
+          [class.btn-loading]="isLoading"
+          [class.btn-success]="isSuccess"
+          [disabled]="isLoading || isSuccess"
+          [attr.aria-busy]="isLoading"
+        >
+          @if (isLoading) {
+            <span class="spinner" aria-hidden="true"></span>
+            Signing in…
+          } @else if (isSuccess) {
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Signed in!
+          } @else {
+            Sign In
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          }
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-text">or continue with</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Social auth -->
+      <div class="social-group" role="group" aria-label="Social sign-in options">
+        <button type="button" class="social-btn" (click)="signInWithGoogle()" aria-label="Continue with Google">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+
+        <button type="button" class="social-btn" (click)="signInWithGitHub()" aria-label="Continue with GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          GitHub
+        </button>
+
+        <button type="button" class="social-btn" (click)="signInWithFacebook()" aria-label="Continue with Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Facebook
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <p class="card-footer">
+        Don't have an account?
+        <a routerLink="/signup" class="link-accent">Create account</a>
+      </p>
+
+    </div>
+
+  </main>
+
+
+
+
+
+  <aside class="art-panel" aria-hidden="true">
+
+    <!-- Ambient gradient blobs -->
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
+
+    <!-- Grid overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Brand lockup -->
+    <div class="art-brand">
+      <div class="art-logo">
+        <img src="favicon.png" alt="Nexus logo" />
+      </div>
+      <span class="art-brand-name">Nexus</span>
+    </div>
+
+    <!-- Floating product scene -->
+    <div class="art-scene" [style.transform]="'translateY(' + floatOffset() + 'px)'">
+
+      <!-- Central card -->
+      <div class="scene-card scene-card--main">
+        <div class="scene-card-img">
+          <img src="/products/macbook pro 13.png" alt="MacBook Pro" />
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-card-label">MacBook Pro M3</p>
+          <p class="scene-card-price">$1,999</p>
+          <div class="scene-card-stars">
+            @for (i of [1,2,3,4,5]; track i) {
+              <svg width="11" height="11" viewBox="0 0 24 24">
+                <polygon fill="#f59e0b" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            }
+            <span>4.8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating mini chips -->
+      <div class="float-chip float-chip--tl">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>Order placed</span>
+      </div>
+
+      <div class="float-chip float-chip--br">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00C06B" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        <span>Fast delivery</span>
+      </div>
+
+      <div class="float-chip float-chip--tr">
+        <span class="chip-avatar">3K+</span>
+        <span>Happy users</span>
+      </div>
+
+    </div>
+
+    <!-- Art tagline -->
+    <div class="art-tagline">
+      <p class="art-headline">Shop smarter.<br />Live better.</p>
+      <p class="art-sub">Join 50,000+ customers already on Nexus.</p>
+    </div>
+
+  </aside>
+
+</div>

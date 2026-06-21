@@ -336,13 +336,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     }));
   }
 
-  /**
-   * Navigating to a related product should feel like a fresh page load:
-   * scroll to top, show skeletons, then populate with the new product's data.
-   * We navigate via the Router so the URL/history updates correctly; the
-   * actual reload-and-skeleton behavior is driven by the paramMap subscription
-   * in ngOnInit, which calls loadProduct() whenever the :id changes.
-   */
+
   goToProduct(id: number) {
     if (this.product && id === this.product.id) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });

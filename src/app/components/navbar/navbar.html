@@ -28,11 +28,6 @@
       <img class="icon-img" [src]="icons.like" alt="Like" />
     </div>
 
-    <!-- Account -->
-    <!-- <div class="icon" title="Account">
-      <img class="icon-img" [src]="icons.user" alt="account" />
-    </div> -->
-
     <!-- Cart -->
     <div class="icon">
       @if (buy > 0) {
@@ -50,6 +45,6 @@
     </div>
 
     <!-- Sign In -->
-    <button class="sign-in-btn">Sign In</button>
+    <button class="sign-in-btn" (click)="signIn()">Sign In</button>
   </div>
 </div>
