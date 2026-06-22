@@ -1,8 +1,76 @@
 <div class="auth-page">
 
-    <aside></aside>
+  <aside class="art-panel">
 
-    <main class="form-panel">
+    <!-- Ambient background -->
+    <div class="art-decor" aria-hidden="true">
+      <div class="blob blob--1"></div>
+      <div class="blob blob--2"></div>
+      <svg class="art-wave" viewBox="0 0 700 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,140 C120,180 220,100 350,130 C480,160 580,90 700,120" fill="none" stroke="#0066FF" stroke-opacity="0.12" stroke-width="2"/>
+        <path d="M0,165 C130,120 240,190 360,155 C490,118 590,170 700,150" fill="none" stroke="#7C5CFC" stroke-opacity="0.10" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <!-- Brand -->
+    <div class="art-brand">
+      <div class="art-logo">
+        <span class="logo-mark">N</span>
+      </div>
+      <span class="art-brand-name">Nexus</span>
+    </div>
+
+    <!-- Copy + feature list -->
+    <div class="art-copy">
+      <h2 class="art-headline">Welcome <span class="text-gradient">back</span></h2>
+      <p class="art-sub">Sign in to your Nexus account and continue where you left off.</p>
+
+      <ul class="feature-list">
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--blue" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">Secure &amp; private</p>
+            <p class="feature-desc">Your data is protected with enterprise-grade security.</p>
+          </div>
+        </li>
+
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--purple" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">Fast &amp; seamless</p>
+            <p class="feature-desc">Quick access to all your tools and features.</p>
+          </div>
+        </li>
+
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--green" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">Work together</p>
+            <p class="feature-desc">Collaborate with your team in real-time.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <main class="form-panel">
 
     <!-- Top nav -->
     <header class="form-header">
@@ -12,7 +80,6 @@
         </svg>
         Back
       </a>
-      
     </header>
 
     <!-- Auth card -->
@@ -34,7 +101,7 @@
       <!-- Card header -->
       <div class="card-header">
         <div class="card-logo">
-          <img src="favicon.png" alt="Nexus" />
+          <span class="logo-mark">N</span>
         </div>
         <h1 class="card-title">Welcome back</h1>
         <p class="card-subtitle">Sign in to your Nexus account</p>
@@ -209,11 +276,5 @@
     </div>
 
   </main>
-
-
-
-
-
-  
 
 </div>
