@@ -105,7 +105,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 3rem 4rem;
+  padding: 1rem 1.75rem;
   min-height: 100vh;
 
   @media (max-width: 900px) {
@@ -121,30 +121,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   z-index: 0;
 }
 
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  pointer-events: none;
-}
 
-.blob--1 {
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba($accent, .16) 0%, transparent 70%);
-  top: -12%;
-  right: -10%;
-  animation: blobDrift1 14s ease-in-out infinite;
-}
-
-.blob--2 {
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba($purple, .13) 0%, transparent 70%);
-  bottom: -16%;
-  left: -12%;
-  animation: blobDrift2 16s ease-in-out infinite;
-}
 
 .art-wave {
   position: absolute;
@@ -162,20 +139,24 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .art-logo {
   width: 44px;
   height: 44px;
   border-radius: $radius-md;
-  background: linear-gradient(135deg, $accent, $purple);
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: $shadow-md;
 
   .logo-mark { font-size: 1.15rem; }
+
+  img{
+    height: 42px;
+    width:42px;
+  }
 }
 
 .art-brand-name {
@@ -322,11 +303,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 // ─── Auth card ────────────────────────────────────────────────────────────────
 .auth-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-xl;
-  padding: 2.5rem;
+  padding: 1rem 2rem;
   box-shadow: $shadow-xl;
   animation: fadeSlideIn .4s $ease both;
   position: relative;
@@ -388,7 +369,6 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   width: 52px;
   height: 52px;
   border-radius: $radius-md;
-  background: linear-gradient(135deg, $accent, $purple);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -396,6 +376,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   box-shadow: $shadow-md;
 
   .logo-mark { font-size: 1.3rem; }
+
+  img{
+    height: 42px;
+    width:42px;
+  }
 }
 
 .card-title {
@@ -408,7 +393,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .card-subtitle {
   font-size: 0.85rem;
-  color: $ink-mid;
+  color: black;
   margin: 0;
 }
 
@@ -423,7 +408,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   padding: 10px 14px;
   font-size: 0.82rem;
   color: $error;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   animation: pop-in .2s $ease;
 
   svg { flex-shrink: 0; }
@@ -717,5 +702,5 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   text-align: center;
   font-size: 0.82rem;
   color: $ink-mid;
-  margin: 1.5rem 0 0;
+  margin: 1rem 0 0;
 }

@@ -2,27 +2,28 @@
 
   <aside class="art-panel">
 
-    <!-- Ambient background -->
-    <div class="art-decor" aria-hidden="true">
-      <div class="blob blob--1"></div>
-      <div class="blob blob--2"></div>
-      <svg class="art-wave" viewBox="0 0 700 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,140 C120,180 220,100 350,130 C480,160 580,90 700,120" fill="none" stroke="#0066FF" stroke-opacity="0.12" stroke-width="2"/>
-        <path d="M0,165 C130,120 240,190 360,155 C490,118 590,170 700,150" fill="none" stroke="#7C5CFC" stroke-opacity="0.10" stroke-width="2"/>
-      </svg>
-    </div>
-
+    <header class="form-header">
+      <a routerLink="/home" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back
+      </a>
+    </header>
+    
     <!-- Brand -->
     <div class="art-brand">
       <div class="art-logo">
-        <span class="logo-mark">N</span>
+        <img src="favicon.png" alt="">
       </div>
       <span class="art-brand-name">Nexus</span>
     </div>
+    
+    <h2 class="art-headline">Welcome <span class="text-gradient">back</span></h2>
 
     <!-- Copy + feature list -->
     <div class="art-copy">
-      <h2 class="art-headline">Welcome <span class="text-gradient">back</span></h2>
+      
       <p class="art-sub">Sign in to your Nexus account and continue where you left off.</p>
 
       <ul class="feature-list">
@@ -73,14 +74,7 @@
   <main class="form-panel">
 
     <!-- Top nav -->
-    <header class="form-header">
-      <a routerLink="/home" class="back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5M12 5l-7 7 7 7"/>
-        </svg>
-        Back
-      </a>
-    </header>
+    
 
     <!-- Auth card -->
     <div class="auth-card">
@@ -100,11 +94,12 @@
 
       <!-- Card header -->
       <div class="card-header">
-        <div class="card-logo">
-          <span class="logo-mark">N</span>
+        <div class="card-logo-frame">
+          <div class="card-logo">
+            <img src="favicon.png" alt="">
+          </div>
         </div>
-        <h1 class="card-title">Welcome back</h1>
-        <p class="card-subtitle">Sign in to your Nexus account</p>
+        <h1 class="card-subtitle">Sign in to your Nexus account</h1>
       </div>
 
       <!-- Error banner -->
@@ -125,7 +120,7 @@
         <div class="field-group" [class.field-error]="fieldError('email')" [class.field-valid]="email.valid && email.dirty">
           <label class="field-label" for="email">Email</label>
           <div class="field-input-wrap">
-            <svg class="field-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="2" y="4" width="20" height="16" rx="2"/>
               <path d="M2 7l10 7 10-7"/>
             </svg>
@@ -140,7 +135,7 @@
               aria-describedby="email-error"
             />
             @if (email.valid && email.dirty) {
-              <svg class="field-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+              <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             }
@@ -157,7 +152,7 @@
             <a href="#" class="forgot-link" tabindex="0">Forgot password?</a>
           </div>
           <div class="field-input-wrap">
-            <svg class="field-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="3" y="11" width="18" height="11" rx="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
@@ -179,13 +174,13 @@
               [attr.aria-pressed]="showPassword()"
             >
               @if (showPassword()) {
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
                   <line x1="1" y1="1" x2="23" y2="23"/>
                 </svg>
               } @else {
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
@@ -219,15 +214,12 @@
             <span class="spinner" aria-hidden="true"></span>
             Signing in…
           } @else if (isSuccess) {
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
             Signed in!
           } @else {
             Sign In
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           }
         </button>
 
