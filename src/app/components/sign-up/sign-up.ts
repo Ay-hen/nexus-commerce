@@ -266,7 +266,6 @@ export class SignUp implements OnInit, OnDestroy {
     this.errorMessage.set('');
  
     try {
-      // TODO: replace with real AuthService call
       // await this.authService.signUp(this.form.value);
       await new Promise(resolve => setTimeout(resolve, 1600));
  
