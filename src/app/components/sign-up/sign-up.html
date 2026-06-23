@@ -1,1 +1,514 @@
-<p>sign-up works!</p>
+<div class="auth-page">
+
+  <!-- ─── LEFT ART PANEL ──────────────────────────────────────────────────────── -->
+  <aside class="art-panel">
+
+    <header class="form-header">
+      <a routerLink="/home" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back
+      </a>
+    </header>
+
+    <!-- Brand -->
+    <div class="art-brand">
+      <div class="art-logo">
+        <img src="favicon.png" alt="Nexus logo">
+      </div>
+      <span class="art-brand-name">Nexus</span>
+    </div>
+
+    <h2 class="art-headline">
+      Shop smarter,<br>
+      <span class="text-gradient">live better.</span>
+    </h2>
+
+    <!-- Copy + feature list -->
+    <div class="art-copy">
+      <p class="art-sub">
+        Join thousands of shoppers who trust Nexus for premium tech and
+        electronics — delivered fast, every time.
+      </p>
+
+      <ul class="feature-list">
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--blue" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">Exclusive member deals</p>
+            <p class="feature-desc">Unlock member-only discounts on thousands of products.</p>
+          </div>
+        </li>
+
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--purple" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13" rx="2"/>
+              <path d="M16 8h5a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1l-3 3v-3H9a2 2 0 0 1-2-2v-2"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">24 / 7 support</p>
+            <p class="feature-desc">Our experts are always here to help you with anything.</p>
+          </div>
+        </li>
+
+        <li class="feature-item">
+          <span class="feature-icon feature-icon--green" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12l5 5L20 7"/>
+            </svg>
+          </span>
+          <div>
+            <p class="feature-title">Hassle-free returns</p>
+            <p class="feature-desc">Not happy? Return it within 30 days, no questions asked.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- ─── RIGHT FORM PANEL ──────────────────────────────────────────────────────── -->
+  <main class="form-panel">
+
+    <!-- Top nav -->
+    <header class="form-header" aria-label="Navigation">
+      <a routerLink="/home" class="back-link" aria-label="Back to home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back
+      </a>
+      <span class="form-header-cta">
+        Already a member?&nbsp;
+        <a routerLink="/signin" class="link-accent">Sign in</a>
+      </span>
+    </header>
+
+    <!-- Auth card -->
+    <div class="auth-card">
+
+      <!-- Success overlay -->
+      @if (isSuccess) {
+        <div class="success-overlay" role="status" aria-live="polite">
+          <div class="success-ring">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p class="success-title">Account created!</p>
+          <p class="success-sub">Welcome to Nexus — redirecting you now…</p>
+        </div>
+      }
+
+      <!-- Card header -->
+      <div class="card-header">
+        <div class="card-logo">
+          <img src="favicon.png" alt="Nexus logo">
+        </div>
+        <h1 class="card-subtitle">Create your Nexus account</h1>
+      </div>
+
+      <!-- Error banner -->
+      @if (hasError) {
+        <div class="error-banner" role="alert" aria-live="assertive">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+
+        <!-- ── Row: First Name + Last Name ───────────────────────────────── -->
+        <div class="field-row">
+
+          <!-- First Name -->
+          <div class="field-group" [class.field-error]="hasFieldError('firstName')" [class.field-valid]="isFieldValid('firstName')">
+            <label class="field-label" for="firstName">First name</label>
+            <div class="field-input-wrap">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input
+                id="firstName"
+                class="field-input"
+                type="text"
+                formControlName="firstName"
+                placeholder="Ada"
+                autocomplete="given-name"
+                [attr.aria-invalid]="firstName.invalid && firstName.dirty"
+                aria-describedby="firstName-error"
+              />
+              @if (isFieldValid('firstName')) {
+                <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              }
+            </div>
+            @if (hasFieldError('firstName')) {
+              <p class="field-error-msg" id="firstName-error" role="alert">{{ fieldError('firstName') }}</p>
+            }
+          </div>
+
+          <!-- Last Name -->
+          <div class="field-group" [class.field-error]="hasFieldError('lastName')" [class.field-valid]="isFieldValid('lastName')">
+            <label class="field-label" for="lastName">Last name</label>
+            <div class="field-input-wrap">
+              <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input
+                id="lastName"
+                class="field-input"
+                type="text"
+                formControlName="lastName"
+                placeholder="Lovelace"
+                autocomplete="family-name"
+                [attr.aria-invalid]="lastName.invalid && lastName.dirty"
+                aria-describedby="lastName-error"
+              />
+              @if (isFieldValid('lastName')) {
+                <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              }
+            </div>
+            @if (hasFieldError('lastName')) {
+              <p class="field-error-msg" id="lastName-error" role="alert">{{ fieldError('lastName') }}</p>
+            }
+          </div>
+
+        </div>
+        <!-- /field-row -->
+
+        <!-- ── Username ────────────────────────────────────────────────────── -->
+        <div class="field-group" [class.field-error]="hasFieldError('username')" [class.field-valid]="isFieldValid('username')">
+          <label class="field-label" for="username">Username</label>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M18 20a6 6 0 0 0-12 0"/>
+              <circle cx="12" cy="10" r="4"/>
+              <path d="M22 20v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.74"/>
+            </svg>
+            <input
+              id="username"
+              class="field-input"
+              type="text"
+              formControlName="username"
+              placeholder="ada_lovelace"
+              autocomplete="username"
+              [attr.aria-invalid]="username.invalid && username.dirty"
+              aria-describedby="username-error"
+            />
+            @if (isFieldValid('username')) {
+              <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </div>
+          @if (hasFieldError('username')) {
+            <p class="field-error-msg" id="username-error" role="alert">{{ fieldError('username') }}</p>
+          }
+        </div>
+
+        <!-- ── Email ──────────────────────────────────────────────────────── -->
+        <div class="field-group" [class.field-error]="hasFieldError('email')" [class.field-valid]="isFieldValid('email')">
+          <label class="field-label" for="email">Email address</label>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M2 7l10 7 10-7"/>
+            </svg>
+            <input
+              id="email"
+              class="field-input"
+              type="email"
+              formControlName="email"
+              placeholder="ada@example.com"
+              autocomplete="email"
+              [attr.aria-invalid]="email.invalid && email.dirty"
+              aria-describedby="email-error"
+            />
+            @if (isFieldValid('email')) {
+              <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </div>
+          @if (hasFieldError('email')) {
+            <p class="field-error-msg" id="email-error" role="alert">{{ fieldError('email') }}</p>
+          }
+        </div>
+
+        <!-- ── Phone (optional) ───────────────────────────────────────────── -->
+        <div class="field-group" [class.field-error]="hasFieldError('phone')" [class.field-valid]="isFieldValid('phone')">
+          <div class="field-label-row">
+            <label class="field-label" for="phone">Phone number</label>
+            <span class="field-optional">Optional</span>
+          </div>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.01z"/>
+            </svg>
+            <input
+              id="phone"
+              class="field-input"
+              type="tel"
+              formControlName="phone"
+              placeholder="+1 (555) 000-0000"
+              autocomplete="tel"
+              [attr.aria-invalid]="phone.invalid && phone.dirty"
+              aria-describedby="phone-error"
+            />
+            @if (isFieldValid('phone')) {
+              <svg class="field-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </div>
+          @if (hasFieldError('phone')) {
+            <p class="field-error-msg" id="phone-error" role="alert">{{ fieldError('phone') }}</p>
+          }
+        </div>
+
+        <!-- ── Password ───────────────────────────────────────────────────── -->
+        <div class="field-group" [class.field-error]="hasFieldError('password')" [class.field-valid]="isFieldValid('password')">
+          <label class="field-label" for="password">Password</label>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="password"
+              class="field-input"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              [attr.aria-invalid]="password.invalid && password.dirty"
+              aria-describedby="password-error password-strength"
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              [attr.aria-pressed]="showPassword()"
+            >
+              @if (showPassword()) {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              }
+            </button>
+          </div>
+          @if (hasFieldError('password')) {
+            <p class="field-error-msg" id="password-error" role="alert">{{ fieldError('password') }}</p>
+          }
+
+          <!-- Password strength meter -->
+          @if (password.dirty || password.value) {
+            <div class="strength-meter" id="password-strength" aria-live="polite">
+              <div class="strength-bars">
+                <span class="strength-bar" [class]="'bar-' + passwordStrength()"></span>
+                <span class="strength-bar" [class]="(passwordStrength() === 'fair' || passwordStrength() === 'good' || passwordStrength() === 'strong') ? 'bar-' + passwordStrength() : ''"></span>
+                <span class="strength-bar" [class]="(passwordStrength() === 'good' || passwordStrength() === 'strong') ? 'bar-' + passwordStrength() : ''"></span>
+                <span class="strength-bar" [class]="passwordStrength() === 'strong' ? 'bar-strong' : ''"></span>
+              </div>
+              @if (strengthLabel) {
+                <span class="strength-label strength-label--{{ passwordStrength() }}">{{ strengthLabel }}</span>
+              }
+            </div>
+
+            <!-- Requirements checklist -->
+            <ul class="pw-rules" aria-label="Password requirements">
+              @for (rule of strengthRules(); track rule.label) {
+                <li class="pw-rule" [class.pw-rule--met]="rule.met">
+                  @if (rule.met) {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  } @else {
+                    <span class="pw-rule-dot" aria-hidden="true"></span>
+                  }
+                  {{ rule.label }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <!-- ── Confirm Password ───────────────────────────────────────────── -->
+        <div class="field-group" [class.field-error]="hasFieldError('confirmPassword')" [class.field-valid]="isFieldValid('confirmPassword')">
+          <label class="field-label" for="confirmPassword">Confirm password</label>
+          <div class="field-input-wrap">
+            <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="confirmPassword"
+              class="field-input"
+              [type]="showConfirmPw() ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              autocomplete="new-password"
+              [attr.aria-invalid]="confirmPassword.invalid && confirmPassword.dirty"
+              aria-describedby="confirmPw-error"
+            />
+            <button
+              type="button"
+              class="toggle-pw"
+              (click)="toggleConfirmPw()"
+              [attr.aria-label]="showConfirmPw() ? 'Hide confirm password' : 'Show confirm password'"
+              [attr.aria-pressed]="showConfirmPw()"
+            >
+              @if (showConfirmPw()) {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              }
+            </button>
+          </div>
+          @if (hasFieldError('confirmPassword')) {
+            <p class="field-error-msg" id="confirmPw-error" role="alert">{{ fieldError('confirmPassword') }}</p>
+          }
+        </div>
+
+        <!-- ── Checkboxes ─────────────────────────────────────────────────── -->
+        <div class="checkbox-stack">
+
+          <!-- Terms -->
+          <div [class.checkbox-error]="agreeTerms.invalid && agreeTerms.dirty">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="agreeTerms" class="checkbox-input" />
+              <span class="checkbox-box" aria-hidden="true"></span>
+              I agree to the
+              <a href="#" class="link-accent" tabindex="0">Terms of Service</a>
+            </label>
+            @if (agreeTerms.invalid && agreeTerms.dirty) {
+              <p class="field-error-msg checkbox-error-msg" role="alert">You must accept the Terms of Service.</p>
+            }
+          </div>
+
+          <!-- Privacy -->
+          <div [class.checkbox-error]="agreePrivacy.invalid && agreePrivacy.dirty">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="agreePrivacy" class="checkbox-input" />
+              <span class="checkbox-box" aria-hidden="true"></span>
+              I agree to the
+              <a href="#" class="link-accent" tabindex="0">Privacy Policy</a>
+            </label>
+            @if (agreePrivacy.invalid && agreePrivacy.dirty) {
+              <p class="field-error-msg checkbox-error-msg" role="alert">You must accept the Privacy Policy.</p>
+            }
+          </div>
+
+          <!-- Newsletter (optional) -->
+          <label class="checkbox-label checkbox-label--muted">
+            <input type="checkbox" formControlName="newsletter" class="checkbox-input" />
+            <span class="checkbox-box" aria-hidden="true"></span>
+            Send me deals, product news &amp; updates
+          </label>
+
+        </div>
+
+        <!-- ── Submit ─────────────────────────────────────────────────────── -->
+        <button
+          type="submit"
+          class="btn-submit"
+          [class.btn-loading]="isLoading"
+          [class.btn-success]="isSuccess"
+          [disabled]="isLoading || isSuccess"
+          [attr.aria-busy]="isLoading"
+        >
+          @if (isLoading) {
+            <span class="spinner" aria-hidden="true"></span>
+            Creating account…
+          } @else if (isSuccess) {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Account created!
+          } @else {
+            Create Account
+          }
+        </button>
+
+      </form>
+
+      <!-- Divider -->
+      <div class="divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-text">or sign up with</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Social auth -->
+      <div class="social-group" role="group" aria-label="Social sign-up options">
+        <button type="button" class="social-btn" (click)="signUpWithGoogle()" aria-label="Continue with Google">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+
+        <button type="button" class="social-btn" (click)="signUpWithGitHub()" aria-label="Continue with GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          GitHub
+        </button>
+
+        <button type="button" class="social-btn" (click)="signUpWithFacebook()" aria-label="Continue with Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Facebook
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <p class="card-footer">
+        Already have an account?
+        <a routerLink="/signin" class="link-accent">Sign in</a>
+      </p>
+
+    </div><!-- /auth-card -->
+
+  </main>
+
+</div><!-- /auth-page -->
