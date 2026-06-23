@@ -79,18 +79,7 @@
   <main class="form-panel">
 
     <!-- Top nav -->
-    <header class="form-header" aria-label="Navigation">
-      <a routerLink="/home" class="back-link" aria-label="Back to home">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5M12 5l-7 7 7 7"/>
-        </svg>
-        Back
-      </a>
-      <span class="form-header-cta">
-        Already a member?&nbsp;
-        <a routerLink="/signin" class="link-accent">Sign in</a>
-      </span>
-    </header>
+   
 
     <!-- Auth card -->
     <div class="auth-card">
@@ -110,9 +99,7 @@
 
       <!-- Card header -->
       <div class="card-header">
-        <div class="card-logo">
-          <img src="favicon.png" alt="Nexus logo">
-        </div>
+        
         <h1 class="card-subtitle">Create your Nexus account</h1>
       </div>
 
@@ -270,7 +257,7 @@
               class="field-input"
               type="tel"
               formControlName="phone"
-              placeholder="+1 (555) 000-0000"
+              placeholder="+212 736-541244"
               autocomplete="tel"
               [attr.aria-invalid]="phone.invalid && phone.dirty"
               aria-describedby="phone-error"
@@ -414,25 +401,14 @@
               <input type="checkbox" formControlName="agreeTerms" class="checkbox-input" />
               <span class="checkbox-box" aria-hidden="true"></span>
               I agree to the
-              <a href="#" class="link-accent" tabindex="0">Terms of Service</a>
+              <a href="#" class="link-accent" tabindex="0">Terms of Service</a> and
+              <a href="#" class="link-accent" tabindex="0">Privacy Policy</a>
             </label>
             @if (agreeTerms.invalid && agreeTerms.dirty) {
-              <p class="field-error-msg checkbox-error-msg" role="alert">You must accept the Terms of Service.</p>
+              <p class="field-error-msg checkbox-error-msg" role="alert">You must accept the Terms of Service and the Privacy Policy.</p>
             }
           </div>
 
-          <!-- Privacy -->
-          <div [class.checkbox-error]="agreePrivacy.invalid && agreePrivacy.dirty">
-            <label class="checkbox-label">
-              <input type="checkbox" formControlName="agreePrivacy" class="checkbox-input" />
-              <span class="checkbox-box" aria-hidden="true"></span>
-              I agree to the
-              <a href="#" class="link-accent" tabindex="0">Privacy Policy</a>
-            </label>
-            @if (agreePrivacy.invalid && agreePrivacy.dirty) {
-              <p class="field-error-msg checkbox-error-msg" role="alert">You must accept the Privacy Policy.</p>
-            }
-          </div>
 
           <!-- Newsletter (optional) -->
           <label class="checkbox-label checkbox-label--muted">
@@ -504,7 +480,7 @@
       <!-- Footer -->
       <p class="card-footer">
         Already have an account?
-        <a routerLink="/signin" class="link-accent">Sign in</a>
+        <a routerLink="/sign-in" class="link-accent">Sign in</a>
       </p>
 
     </div><!-- /auth-card -->
