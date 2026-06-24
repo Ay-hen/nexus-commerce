@@ -4,13 +4,14 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Auth } from '../../auth/auth';
+import { PendingAction } from '../../auth/action-queue';
 
 export interface ProductColor {
   label: string;
   hex: string;
-  images?: string[]; // optional: per-color image set. Falls back to product.images if omitted.
+  images?: string[];
 }
-
 
 export interface ProductDetail {
   id: number;
@@ -66,36 +67,19 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   private route  = inject(ActivatedRoute);
   private router = inject(Router);
+  private auth   = inject(Auth);
 
   // ── Loading state ───────────────────────────────────────────────────────────
-  // True while a product is being "fetched". Drives skeleton UI everywhere.
   loading = signal(true);
-
-  // Minimum time the skeleton stays visible so it doesn't just flash on fast
-  // loads (real APIs would replace this with the actual request latency).
   private readonly SIMULATED_LOAD_MS = 700;
   private loadToken = 0;
 
   // ── All products data ────────────────────────────────────────────────────────
   private allProducts: ProductDetail[] = [
     {
-      id: 1,
-      brand: 'Sony',
-      name: 'WH-XM6 Wireless ANC',
-      rating: 4.8,
-      reviewCount: 2148,
-      price: 249,
-      originalPrice: 329,
-      discount: 24,
-      badge: 'new',
-      stock: 12,
-      bgColor: '#eef0f8',
-      images: [
-        '/products/headphones.png',
-        '/products/headphones-side.png',
-        '/products/headphones-case.png',
-        '/products/headphones-box.png',
-      ],
+      id: 1, brand: 'Sony', name: 'WH-XM6 Wireless ANC', rating: 4.8, reviewCount: 2148,
+      price: 249, originalPrice: 329, discount: 24, badge: 'new', stock: 12, bgColor: '#eef0f8',
+      images: ['/products/headphones.png', '/products/headphones-side.png', '/products/headphones-case.png', '/products/headphones-box.png'],
       colors: [
         { label: 'Black',  hex: '#1a1a1a' },
         { label: 'Navy',   hex: '#1e3a6e' },
@@ -105,17 +89,8 @@ export class ProductDetails implements OnInit, OnDestroy {
       category: 'Electronics',
     },
     {
-      id: 2,
-      brand: 'Apple',
-      name: 'Ultra Watch Series 3',
-      rating: 4.7,
-      reviewCount: 876,
-      price: 189,
-      originalPrice: 315,
-      discount: 40,
-      badge: 'sale',
-      stock: 8,
-      bgColor: '#f0eef8',
+      id: 2, brand: 'Apple', name: 'Ultra Watch Series 3', rating: 4.7, reviewCount: 876,
+      price: 189, originalPrice: 315, discount: 40, badge: 'sale', stock: 8, bgColor: '#f0eef8',
       images: ['/products/appel watch.png'],
       colors: [
         { label: 'Midnight',  hex: '#1a1a1a' },
@@ -124,59 +99,21 @@ export class ProductDetails implements OnInit, OnDestroy {
       category: 'Watches',
     },
     {
-      id: 3,
-      brand: 'Apple',
-      name: 'AirPods Pro 2nd Gen',
-      rating: 4.9,
-      reviewCount: 3412,
-      price: 199,
-      originalPrice: 249,
-      discount: 20,
-      badge: 'new',
-      stock: 25,
-      bgColor: '#eef8f2',
+      id: 3, brand: 'Apple', name: 'AirPods Pro 2nd Gen', rating: 4.9, reviewCount: 3412,
+      price: 199, originalPrice: 249, discount: 20, badge: 'new', stock: 25, bgColor: '#eef8f2',
       images: [
-        '/products/airpods pro w1.png',
-        '/products/airpods pro w2.png',
-        '/products/airpods pro w3.png',
-        '/products/airpods pro b1.png',
-        '/products/airpods pro b2.png',
-        '/products/airpods pro b3.png'
+        '/products/airpods pro w1.png', '/products/airpods pro w2.png', '/products/airpods pro w3.png',
+        '/products/airpods pro b1.png', '/products/airpods pro b2.png', '/products/airpods pro b3.png',
       ],
       colors: [
-        {
-          label: 'White',
-          hex: '#f5f5f5',
-          images: [
-            '/products/airpods pro w1.png',
-            '/products/airpods pro w2.png',
-            '/products/airpods pro w3.png'
-          ]
-        },
-        {
-          label: 'Black',
-          hex: '#000000',
-          images: [
-            '/products/airpods pro b1.png',
-            '/products/airpods pro b2.png',
-            '/products/airpods pro b3.png'
-          ]
-        }
+        { label: 'White', hex: '#f5f5f5', images: ['/products/airpods pro w1.png', '/products/airpods pro w2.png', '/products/airpods pro w3.png'] },
+        { label: 'Black', hex: '#000000', images: ['/products/airpods pro b1.png', '/products/airpods pro b2.png', '/products/airpods pro b3.png'] },
       ],
       category: 'Electronics',
     },
     {
-      id: 4,
-      brand: 'Apple',
-      name: 'MacBook Pro M3',
-      rating: 4.8,
-      reviewCount: 513,
-      price: 1999,
-      originalPrice: 2199,
-      discount: 9,
-      badge: null,
-      stock: 5,
-      bgColor: '#f8f5ee',
+      id: 4, brand: 'Apple', name: 'MacBook Pro M3', rating: 4.8, reviewCount: 513,
+      price: 1999, originalPrice: 2199, discount: 9, badge: null, stock: 5, bgColor: '#f8f5ee',
       images: ['/products/macbook pro 13.png'],
       colors: [
         { label: 'Space Gray', hex: '#5f5f5f' },
@@ -185,41 +122,15 @@ export class ProductDetails implements OnInit, OnDestroy {
       category: 'Electronics',
     },
     {
-      id: 5,
-      brand: 'Samsung',
-      name: 'Galaxy S24 Ultra',
-      rating: 4.7,
-      reviewCount: 1890,
-      price: 1099,
-      originalPrice: 1299,
-      discount: 15,
-      badge: 'sale',
-      stock: 14,
-      bgColor: '#f0f8fe',
+      id: 5, brand: 'Samsung', name: 'Galaxy S24 Ultra', rating: 4.7, reviewCount: 1890,
+      price: 1099, originalPrice: 1299, discount: 15, badge: 'sale', stock: 14, bgColor: '#f0f8fe',
       images: ['/products/samsung galxy s24 ultra silver.png'],
-      colors: [
-        {
-          label: 'Silver',
-          hex: '#f4ffc5',
-          images: [
-            '/products/samsung galxy s24 ultra silver.png',
-          ]
-        }
-      ],
+      colors: [{ label: 'Silver', hex: '#f4ffc5', images: ['/products/samsung galxy s24 ultra silver.png'] }],
       category: 'Electronics',
     },
     {
-      id: 6,
-      brand: 'Nike',
-      name: 'Air Max 270',
-      rating: 4.6,
-      reviewCount: 742,
-      price: 129,
-      originalPrice: 160,
-      discount: 19,
-      badge: null,
-      stock: 30,
-      bgColor: '#fff3ee',
+      id: 6, brand: 'Nike', name: 'Air Max 270', rating: 4.6, reviewCount: 742,
+      price: 129, originalPrice: 160, discount: 19, badge: null, stock: 30, bgColor: '#fff3ee',
       images: ['/products/shoes.png'],
       colors: [
         { label: 'Black', hex: '#1a1a1a' },
@@ -236,9 +147,6 @@ export class ProductDetails implements OnInit, OnDestroy {
   activeImageIndex = signal(0);
   isFading         = signal(false);
 
-  // The image set currently on display. If the selected color defines its own
-  // `images`, use those; otherwise fall back to the product's default images.
-  // This is what actually makes color selection swap the gallery photos.
   galleryImages = computed(() => {
     const colorImages = this.selectedColor()?.images;
     return (colorImages && colorImages.length > 0) ? colorImages : (this.product?.images ?? []);
@@ -256,17 +164,11 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   // ── Colour ───────────────────────────────────────────────────────────────────
-  selectedColor = signal<ProductColor>({
-    label: '',
-    hex: '',
-    images: []
-  });
+  selectedColor = signal<ProductColor>({ label: '', hex: '', images: [] });
 
   selectColor(c: ProductColor) {
     if (this.selectedColor().label === c.label) return;
     this.selectedColor.set(c);
-    // Reset back to the first photo of the newly selected color's gallery,
-    // with the same fade transition used for thumbnail clicks.
     this.isFading.set(true);
     setTimeout(() => {
       this.activeImageIndex.set(0);
@@ -282,23 +184,60 @@ export class ProductDetails implements OnInit, OnDestroy {
     if (this.quantity() < this.product.stock) this.quantity.update(n => n + 1);
   }
 
-  // ── Wishlist + Cart ──────────────────────────────────────────────────────────
+  // ── Wishlist + Cart (both protected actions) ─────────────────────────────────
   isWishlisted = signal(false);
   cartAdded    = signal(false);
 
-  toggleWishlist() { this.isWishlisted.update(v => !v); }
+  /**
+   * Real toggle logic, separated from the click handler so the registered
+   * resume-handler can call it directly without re-running the auth check.
+   */
+  private performWishlistToggle() {
+    this.isWishlisted.update(v => !v);
+  }
 
-  addToCart() {
+  toggleWishlist() {
+    const ok = this.auth.requireAuth('wishlist', {
+      type: 'WISHLIST',
+      productId: this.product.id,
+    });
+    if (!ok) return; 
+
+    this.performWishlistToggle();
+  }
+
+  private performAddToCart() {
     if (this.cartAdded()) return;
     this.cartAdded.set(true);
     setTimeout(() => this.cartAdded.set(false), 2500);
   }
 
-  buyNow() {
-    // In a real app, go to checkout with this item pre-loaded
-    this.router.navigate(['/checkout'], {
-      queryParams: { productId: this.product.id, qty: this.quantity() },
+  addToCart() {
+    const ok = this.auth.requireAuth('generic', {
+      type: 'ADD_TO_CART',
+      productId: this.product.id,
+      quantity: this.quantity(),
     });
+    if (!ok) return;
+
+    this.performAddToCart();
+  }
+
+  private performBuyNow(productId: number, qty: number) {
+    this.router.navigate(['/checkout'], {
+      queryParams: { productId, qty },
+    });
+  }
+
+  buyNow() {
+    const ok = this.auth.requireAuth('buy-now', {
+      type: 'BUY_NOW',
+      productId: this.product.id,
+      quantity: this.quantity(),
+    });
+    if (!ok) return;
+
+    this.performBuyNow(this.product.id, this.quantity());
   }
 
   // ── Sticky bar (show after scrolling past the CTA area) ──────────────────────
@@ -322,20 +261,11 @@ export class ProductDetails implements OnInit, OnDestroy {
       .slice(0, 4 - sameCategory.length);
 
     this.related = [...sameCategory, ...extras].map(p => ({
-      id: p.id,
-      brand: p.brand,
-      name: p.name,
-      price: p.price,
-      originalPrice: p.originalPrice,
-      rating: p.rating,
-      reviewCount: p.reviewCount,
-      badge: p.badge,
-      discount: p.discount,
-      image: p.images[0],
-      bgColor: p.bgColor,
+      id: p.id, brand: p.brand, name: p.name, price: p.price, originalPrice: p.originalPrice,
+      rating: p.rating, reviewCount: p.reviewCount, badge: p.badge, discount: p.discount,
+      image: p.images[0], bgColor: p.bgColor,
     }));
   }
-
 
   goToProduct(id: number) {
     if (this.product && id === this.product.id) return;
@@ -346,48 +276,28 @@ export class ProductDetails implements OnInit, OnDestroy {
   // ── Reviews ──────────────────────────────────────────────────────────────────
   reviews: Review[] = [
     {
-      id: 1,
-      author: 'Alex Morgan',
-      avatar: 'AM',
-      rating: 5,
-      date: 'May 18, 2025',
+      id: 1, author: 'Alex Morgan', avatar: 'AM', rating: 5, date: 'May 18, 2025',
       title: "Best headphones I've ever owned",
       body: 'The noise cancellation is absolutely incredible. I use these daily on my commute and they block out everything. Sound quality is warm and detailed without being overly bass-heavy. Battery easily lasts a full work week.',
-      helpful: 42,
-      verified: true,
+      helpful: 42, verified: true,
     },
     {
-      id: 2,
-      author: 'Jamie Lee',
-      avatar: 'JL',
-      rating: 4,
-      date: 'Apr 30, 2025',
+      id: 2, author: 'Jamie Lee', avatar: 'JL', rating: 4, date: 'Apr 30, 2025',
       title: 'Excellent ANC, slightly tight fit',
       body: 'Sound and noise cancellation are top-tier. My only gripe is that after 2–3 hours of continuous wear they get a little snug. That said, build quality feels premium and the carrying case is compact.',
-      helpful: 28,
-      verified: true,
+      helpful: 28, verified: true,
     },
     {
-      id: 3,
-      author: 'Sam Rivera',
-      avatar: 'SR',
-      rating: 5,
-      date: 'Apr 12, 2025',
+      id: 3, author: 'Sam Rivera', avatar: 'SR', rating: 5, date: 'Apr 12, 2025',
       title: 'Worth every penny',
       body: 'I compared these against Bose QC45 and Sony simply wins. The transparency mode is natural and the touch controls are responsive. LDAC support is a bonus for Android users.',
-      helpful: 19,
-      verified: false,
+      helpful: 19, verified: false,
     },
     {
-      id: 4,
-      author: 'Taylor Kim',
-      avatar: 'TK',
-      rating: 4,
-      date: 'Mar 5, 2025',
+      id: 4, author: 'Taylor Kim', avatar: 'TK', rating: 4, date: 'Mar 5, 2025',
       title: 'Great upgrade from XM4',
       body: 'If you already own the XM4, the jump feels incremental but real — better mid-range clarity and a tighter soundstage. Multipoint connection finally works flawlessly.',
-      helpful: 15,
-      verified: true,
+      helpful: 15, verified: true,
     },
   ];
 
@@ -414,21 +324,14 @@ export class ProductDetails implements OnInit, OnDestroy {
   setHoverRating(r: number) { this.hoverRating.set(r); }
   clearHover()              { this.hoverRating.set(0); }
 
-  submitReview() {
+  private performSubmitReview() {
     if (!this.newReview.author || !this.newReview.body || !this.newReview.rating) return;
     this.reviews.unshift({
       id: Date.now(),
       author: this.newReview.author,
-      avatar: this.newReview.author
-        .split(' ')
-        .map(w => w[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase(),
+      avatar: this.newReview.author.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
       rating: this.newReview.rating,
-      date: new Date().toLocaleDateString('en-US', {
-        year: 'numeric', month: 'short', day: 'numeric',
-      }),
+      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
       title: this.newReview.title || 'My Review',
       body: this.newReview.body,
       helpful: 0,
@@ -437,6 +340,19 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.newReview = { author: '', title: '', body: '', rating: 0 };
     this.submitted.set(true);
     setTimeout(() => this.submitted.set(false), 4000);
+  }
+
+  submitReview() {
+    if (!this.newReview.author || !this.newReview.body || !this.newReview.rating) return;
+
+    const ok = this.auth.requireAuth('review', {
+      type: 'LEAVE_REVIEW',
+      productId: this.product.id,
+      payload: { ...this.newReview },
+    });
+    if (!ok) return; // form values are preserved in newReview, untouched
+
+    this.performSubmitReview();
   }
 
   markHelpful(review: Review) { review.helpful++; }
@@ -453,15 +369,9 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   // ── Load logic ────────────────────────────────────────────────────────────────
   private loadProduct(id: number) {
-    // Invalidate any in-flight simulated load so a rapid second navigation
-    // (e.g. clicking through several related products quickly) can't let an
-    // older timeout overwrite newer data.
     const token = ++this.loadToken;
-
     this.loading.set(true);
 
-    // Reset interactive state immediately so stale values never show once
-    // the skeleton clears, even before the new product data has arrived.
     this.activeImageIndex.set(0);
     this.isFading.set(false);
     this.quantity.set(1);
@@ -471,7 +381,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.stickyBarVisible.set(false);
 
     setTimeout(() => {
-      if (token !== this.loadToken) return; // a newer load superseded this one
+      if (token !== this.loadToken) return;
 
       const found = this.allProducts.find(p => p.id === id);
       this.product = found ?? this.allProducts[0];
@@ -483,12 +393,41 @@ export class ProductDetails implements OnInit, OnDestroy {
     }, this.SIMULATED_LOAD_MS);
   }
 
+  // ── Resume-handler registration ────────────────────────────────────────────
+  // While this component is alive, it's the one responsible for finishing
+  // ADD_TO_CART / BUY_NOW / WISHLIST / LEAVE_REVIEW after a successful login.
+  // Unregistered automatically in ngOnDestroy so a stale handler can never
+  // fire against a torn-down component if the person navigates away mid-auth.
+  private unregisterHandlers: Array<() => void> = [];
 
+  private registerResumeHandlers() {
+    this.unregisterHandlers.push(
+      this.auth.registerHandler('ADD_TO_CART', (action: PendingAction) => {
+        if (action.type !== 'ADD_TO_CART') return;
+        this.quantity.set(action.quantity);
+        this.performAddToCart();
+      }),
+      this.auth.registerHandler('BUY_NOW', (action: PendingAction) => {
+        if (action.type !== 'BUY_NOW') return;
+        this.performBuyNow(action.productId, action.quantity);
+      }),
+      this.auth.registerHandler('WISHLIST', (action: PendingAction) => {
+        if (action.type !== 'WISHLIST') return;
+        this.performWishlistToggle();
+      }),
+      this.auth.registerHandler('LEAVE_REVIEW', (action: PendingAction) => {
+        if (action.type !== 'LEAVE_REVIEW') return;
+        this.performSubmitReview();
+      }),
+    );
+  }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────────
   private routeSub: any;
 
   ngOnInit() {
+    this.registerResumeHandlers();
+
     const initialId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProduct(initialId);
 
@@ -503,5 +442,6 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSub?.unsubscribe();
+    this.unregisterHandlers.forEach(fn => fn());
   }
 }

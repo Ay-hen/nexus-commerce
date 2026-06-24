@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { Footer } from "./components/footer/footer";
 import { RouterOutlet } from '@angular/router';
+import { AuthModal } from "./components/auth-modal/auth-modal";
 
 @Component({
   selector: 'app-root',
-  imports: [ Footer, RouterOutlet],
+  imports: [Footer, RouterOutlet, AuthModal],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

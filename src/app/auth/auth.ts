@@ -1,73 +1,79 @@
-import { Service } from '@angular/core';
-
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActionQueue, PendingAction, PendingActionInput } from './action-queue';
 
-export type AuthModalReason = 'buy-now' | 'checkout' | 'wishlist' | 'generic';
+export type AuthModalReason = 'buy-now' | 'checkout' | 'wishlist' | 'review' | 'account' | 'generic';
 
 export interface MockUser {
   name: string;
   email: string;
 }
 
-/**
- * What the user was trying to do when we interrupted them with auth.
- * This is the piece that makes "redirect back after sign-in" possible,
- * and it's the exact shape your real backend flow will need too —
- * when JWT auth lands, only `mockLogin`/`mockSignUp` change, this stays.
- */
-interface PendingIntent {
-  type: 'buy-now' | 'add-to-cart' | 'wishlist' | 'checkout';
-  productId?: number;
-  quantity?: number;
-  returnUrl: string;
-}
-
 const SESSION_KEY = 'mock_session_v1';
+
+/**
+ * A handler resumes exactly one PendingAction variant after login succeeds.
+ * Components register handlers for the action types they know how to perform
+ * (e.g. ProductDetails registers ADD_TO_CART/BUY_NOW/WISHLIST while it's alive).
+ * If no handler is registered for the resumed action's type — e.g. the person
+ * navigated away before finishing sign-in — Auth falls back to returnUrl.
+ */
+type ActionHandler = (action: PendingAction) => void;
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private router = inject(Router);
+  private queue  = inject(ActionQueue);
 
-  // ── Auth state ──────────────────────────────────────────────────────────
-  isLoggedIn   = signal<boolean>(this.readPersistedUser() !== null);
-  currentUser  = signal<MockUser | null>(this.readPersistedUser());
+  // ── Auth state ────────────────────────────────────────────────────────────
+  // 🔁 FUTURE JWT SWAP POINT:
+  // Replace readPersistedUser()/setSession()/logout() bodies with real HTTP
+  // calls to Spring Security endpoints + access/refresh token storage.
+  // isLoggedIn, currentUser, requireAuth(), and resumePendingAction() are the
+  // PUBLIC CONTRACT the rest of the app depends on — none of that changes.
+  isLoggedIn  = signal<boolean>(this.readPersistedUser() !== null);
+  currentUser = signal<MockUser | null>(this.readPersistedUser());
 
-  // ── Modal state ─────────────────────────────────────────────────────────
-  modalOpen    = signal(false);
-  modalReason  = signal<AuthModalReason>('generic');
+  // ── Modal state ───────────────────────────────────────────────────────────
+  modalOpen   = signal(false);
+  modalReason = signal<AuthModalReason>('generic');
 
-  private pendingIntent: PendingIntent | null = null;
+  
+
+  private handlers = new Map<PendingAction['type'], ActionHandler>();
 
   /**
-   * Call this from any "protected" action (Buy Now, Add to Cart, Add to
-   * Wishlist, Checkout). Returns true if the user is already authenticated
-   * (caller should proceed immediately). Returns false if the modal was
-   * opened instead (caller should stop and let the modal take over).
+   * Components call this once (typically in their constructor) to claim
+   * responsibility for resuming a given action type once login succeeds.
+   * Returns an unregister function — call it in ngOnDestroy / DestroyRef.
    */
-  requireAuth(
-    reason: AuthModalReason,
-    intent?: Omit<PendingIntent, 'returnUrl'>
-  ): boolean {
+  registerHandler(type: PendingAction['type'], handler: ActionHandler): () => void {
+    this.handlers.set(type, handler);
+    return () => this.handlers.delete(type);
+  }
+
+  /**
+   * Call from any protected action. Returns true immediately if already
+   * authenticated (caller proceeds inline). Returns false if the modal was
+   * opened instead — caller should stop; resumption happens automatically.
+   */
+  requireAuth(reason: AuthModalReason, action: PendingActionInput): boolean {
     if (this.isLoggedIn()) return true;
 
-    this.pendingIntent = {
-      ...(intent ?? { type: 'checkout' }),
-      returnUrl: this.router.url,
-    };
+    this.queue.enqueue(action, this.router.url);
     this.modalReason.set(reason);
     this.modalOpen.set(true);
     return false;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.modalOpen.set(false);
-    // Closing without authenticating (X button / Esc / backdrop) abandons
-    // the intent — don't silently redirect somewhere unexpected later.
-    this.pendingIntent = null;
+    // Closing without authenticating (X / Esc / backdrop) abandons the
+    // intent on purpose — don't silently resume something unexpected later.
+    this.queue.clear();
   }
 
-  // ── Mock auth actions (swap these for real HTTP calls later) ────────────
+  // ── Mock auth actions (swap for real HTTP calls when Spring Security lands) ─
   async mockLogin(email: string, password: string): Promise<void> {
     await this.fakeNetworkDelay();
     if (!email.trim() || password.length < 6) {
@@ -85,11 +91,10 @@ export class Auth {
   }
 
   continueAsGuest(): void {
-    // For buy-now/checkout intents you may eventually want a distinct
-    // "guest checkout" path rather than fully discarding the intent.
-    // For this prototype we just close and let the user keep browsing.
+    // Buy Now / Checkout could route to a distinct guest-checkout flow later.
+    // For this prototype, guest browsing simply abandons the queued intent.
     this.modalOpen.set(false);
-    this.pendingIntent = null;
+    this.queue.clear();
   }
 
   logout(): void {
@@ -99,31 +104,42 @@ export class Auth {
   }
 
   /**
-   * Called by the modal right after a successful sign-in/sign-up.
-   * This is the "redirect back to product / go to checkout" requirement.
+   * Called by AuthModal immediately after a successful sign-in/sign-up.
+   * Resolves the queued action via whichever component registered a handler
+   * for its type; falls back to returnUrl if nothing claims it.
    */
-  handlePostAuthRedirect(): void {
+  resumePendingAction(): void {
     this.modalOpen.set(false);
-    const intent = this.pendingIntent;
-    this.pendingIntent = null;
+    const action = this.queue.consume();
+    if (!action) return; // opened generically, nothing to resume
 
-    if (!intent) return; // opened generically, no specific destination
-
-    if (intent.type === 'buy-now' || intent.type === 'checkout') {
-      this.router.navigate(['/checkout'], {
-        queryParams: {
-          productId: intent.productId ?? null,
-          qty: intent.quantity ?? 1,
-        },
-      });
+    const handler = this.handlers.get(action.type);
+    if (handler) {
+      handler(action);
       return;
     }
 
-    // add-to-cart / wishlist intents: just send them back where they were
-    this.router.navigateByUrl(intent.returnUrl);
+    // No live handler (e.g. person navigated away mid-login). Reasonable
+    // defaults per action so the redirect still makes sense.
+    switch (action.type) {
+      case 'BUY_NOW':
+      case 'CHECKOUT':
+        this.router.navigate(['/checkout'], {
+          queryParams: {
+            productId: 'productId' in action ? action.productId : null,
+            qty: 'quantity' in action ? action.quantity : 1,
+          },
+        });
+        return;
+      case 'VIEW_ORDER_HISTORY':
+        this.router.navigate(['/account/orders']);
+        return;
+      default:
+        this.router.navigateByUrl(action.returnUrl);
+    }
   }
 
-  // ── Persistence (swap for real token storage later) ─────────────────────
+  // ── Persistence (swap for real token storage later) ──────────────────────
   private setSession(user: MockUser) {
     this.isLoggedIn.set(true);
     this.currentUser.set(user);

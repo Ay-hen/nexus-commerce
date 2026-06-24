@@ -44,28 +44,37 @@ export class AuthModal {
   errors   = signal<FormErrors>({});
   apiError = signal('');
 
+  constructor() {
+  effect(() => {
+    const shouldBeOpen = this.auth.modalOpen();
+    if (shouldBeOpen && !this.isVisible()) this.open();
+    if (!shouldBeOpen && this.isVisible() && !this.isLeaving()) this.animateClose();
+  });
+}
+
   // ── Derived from service ────────────────────────────────────────────────
   reason = computed(() => this.auth.modalReason());
 
   readonly reasonCopy: Record<AuthModalReason, { title: string; sub: string }> = {
-    'buy-now':  { title: 'Sign in to complete your purchase', sub: 'Join Nexus for a faster, smarter checkout experience.' },
+    'buy-now':  { title: 'Sign in to complete your purchase', sub: 'Create an account or sign in to access your cart, wishlist, orders, and secure checkout.' },
     'checkout': { title: 'Almost there!',                     sub: 'Sign in to review your order and check out securely.' },
     'wishlist': { title: 'Save to your wishlist',             sub: 'Create an account to keep track of everything you love.' },
-    'generic':  { title: 'Sign in to continue',                sub: 'Access your orders, wishlist, and secure checkout.' },
+    'review':   { title: 'Sign in to leave a review',         sub: 'Verified sign-in helps keep reviews trustworthy for everyone.' },
+    'account':  { title: 'Sign in to your account',           sub: 'View your orders, saved addresses, and payment methods.' },
+    'generic':  { title: 'Sign in to continue',               sub: 'Create an account or sign in to access your cart, wishlist, orders, and secure checkout.' },
   };
 
   get copy() { return this.reasonCopy[this.reason()]; }
 
-  constructor() {
-    // Replaces the old setInterval(16ms) polling loop. effect() re-runs
-    // automatically whenever auth.modalOpen() changes — no timer, no
-    // teardown bug, no wasted ticks while the modal is already in sync.
+  /*constructor() {
+    // effect() re-runs automatically whenever auth.modalOpen() changes — no
+    // timer, no teardown bug, no wasted ticks while the modal is in sync.
     effect(() => {
       const shouldBeOpen = this.auth.modalOpen();
       if (shouldBeOpen && !this.isVisible()) this.open();
       if (!shouldBeOpen && this.isVisible() && !this.isLeaving()) this.animateClose();
     });
-  }
+  }*/
 
   // ── Open / close ─────────────────────────────────────────────────────────
   open() {
@@ -137,7 +146,7 @@ export class AuthModal {
     this.apiError.set('');
     try {
       await this.auth.mockLogin(this.email, this.password);
-      this.auth.handlePostAuthRedirect();
+      this.auth.resumePendingAction();
     } catch {
       this.apiError.set('Incorrect email or password. Please try again.');
     } finally {
@@ -151,7 +160,7 @@ export class AuthModal {
     this.apiError.set('');
     try {
       await this.auth.mockSignUp(this.name, this.email, this.password);
-      this.auth.handlePostAuthRedirect();
+      this.auth.resumePendingAction();
     } catch {
       this.apiError.set('Something went wrong. Please try again.');
     } finally {
