@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '../../auth/auth';
 import { PendingAction } from '../../auth/action-queue';
+import { Footer } from "../footer/footer";
 
 export interface ProductColor {
   label: string;
@@ -59,7 +60,7 @@ export interface Review {
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Footer],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })

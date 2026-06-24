@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Footer } from "../footer/footer";
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@ export interface ContactForm {
 
 @Component({
   selector: 'app-contact',
-  imports: [],
+  imports: [Footer],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })

@@ -2,6 +2,7 @@ import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Footer } from "../footer/footer";
 
 export interface Product {
   id: number;
@@ -25,7 +26,7 @@ type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'New
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Footer],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })

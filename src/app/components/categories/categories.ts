@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Footer } from "../footer/footer";
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 
@@ -40,7 +41,7 @@ export interface Collection {
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Footer],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })

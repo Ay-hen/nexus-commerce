@@ -2,11 +2,12 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@ang
 import { CommonModule } from '@angular/common';
 import { Navbar } from '../navbar/navbar';
 import { Router } from '@angular/router';
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Navbar],
+  imports: [CommonModule, Navbar, Footer],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
