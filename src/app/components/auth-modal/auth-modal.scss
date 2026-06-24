@@ -1,0 +1,307 @@
+// Reuses your existing design tokens. If this component already imports
+// a shared _tokens.scss, drop this block and `@use` that file instead.
+$canvas:        #FAFAF9;
+$surface:       #FFFFFF;
+$ink:           #0A0A0B;
+$ink-mid:       #6B7280;
+$ink-light:     #9CA3AF;
+$border:        #E5E7EB;
+$border-subtle: #F3F4F6;
+
+$accent:        #0066FF;
+$accent-dark:   #0050CC;
+$accent-bg:     #EFF5FF;
+
+$sale-red:      #FF3B30;
+$success:       #16A34A;
+$success-bg:    #ECFDF5;
+
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  16px;
+$radius-xl:  24px;
+
+$shadow-lg: 0 24px 64px rgba(0,0,0,.18);
+$ease:      cubic-bezier(.25,.1,.25,1);
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ─── Backdrop ───────────────────────────────────────────────────────────────
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  background: rgba(10, 10, 11, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  opacity: 0;
+  transition: opacity .22s $ease;
+
+  &.entering { opacity: 1; }
+  &.leaving  { opacity: 0; }
+}
+
+// ─── Panel (glassmorphism) ──────────────────────────────────────────────────
+.auth-panel {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg;
+
+  padding: 36px 32px 32px;
+
+  opacity: 0;
+  transform: translateY(12px) scale(.96);
+  transition: opacity .26s $ease, transform .26s $ease;
+
+  &.entering { opacity: 1; transform: translateY(0) scale(1); }
+  &.leaving  { opacity: 0; transform: translateY(8px) scale(.97); }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    border-radius: $radius-lg;
+    padding: 30px 22px 26px;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,.05);
+  color: $ink-mid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s $ease, color .15s $ease;
+
+  &:hover { background: rgba(0,0,0,.1); color: $ink; }
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: $ink-mid;
+  cursor: pointer;
+  transition: color .15s;
+  &:hover { color: $ink; }
+}
+
+.auth-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: $ink;
+  margin: 0 0 6px;
+}
+
+.auth-sub {
+  font-size: 14px;
+  color: $ink-mid;
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+// ─── Benefits ───────────────────────────────────────────────────────────────
+.benefit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: $ink;
+
+  svg {
+    flex-shrink: 0;
+    color: $success;
+    background: $success-bg;
+    border-radius: 50%;
+    padding: 3px;
+    box-sizing: content-box;
+  }
+}
+
+// ─── Buttons ────────────────────────────────────────────────────────────────
+.btn-primary {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: $ink;
+  color: #fff;
+  border: none;
+  border-radius: $radius-md;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background .15s $ease, transform .1s $ease;
+
+  &:hover:not(:disabled) { background: #2a2a2c; }
+  &:active:not(:disabled) { transform: scale(.99); }
+  &:disabled { opacity: .7; cursor: not-allowed; }
+}
+
+.btn-secondary {
+  width: 100%;
+  height: 50px;
+  background: $surface;
+  color: $ink;
+  border: 1.5px solid $border;
+  border-radius: $radius-md;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: border-color .15s $ease, background .15s $ease;
+
+  &:hover { border-color: $ink-light; background: $border-subtle; }
+}
+
+.btn-guest {
+  width: 100%;
+  height: 40px;
+  background: none;
+  border: none;
+  color: $ink-mid;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color .15s;
+
+  &:hover { color: $ink; }
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+// ─── Form ───────────────────────────────────────────────────────────────────
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: $ink-mid;
+}
+
+.form-input {
+  height: 46px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  background: rgba(255,255,255,.7);
+  border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  color: $ink;
+  transition: border-color .15s $ease, box-shadow .15s $ease;
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px rgba($accent, .12);
+  }
+
+  &.invalid {
+    border-color: $sale-red;
+  }
+}
+
+.password-wrap {
+  position: relative;
+
+  .form-input { padding-right: 56px; width: 100%; box-sizing: border-box; }
+}
+
+.show-pass-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: $accent;
+  cursor: pointer;
+}
+
+.field-error {
+  font-size: 12px;
+  color: $sale-red;
+  font-weight: 500;
+}
+
+.form-error-banner {
+  background: #FFF1F0;
+  color: $sale-red;
+  border-radius: $radius-sm;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
