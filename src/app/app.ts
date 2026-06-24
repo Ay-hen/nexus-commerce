@@ -5,7 +5,7 @@ import { AuthModal } from "./components/auth-modal/auth-modal";
 
 @Component({
   selector: 'app-root',
-  imports: [Footer, RouterOutlet, AuthModal],
+  imports: [RouterOutlet, AuthModal],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

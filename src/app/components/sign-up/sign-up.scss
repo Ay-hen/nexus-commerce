@@ -88,6 +88,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   grid-template-columns: 1fr 1fr;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: white;
+  lign-items: stretch;
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
@@ -104,14 +105,26 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 // ─── LEFT ART PANEL ───────────────────────────────────────────────────────────
 .art-panel {
-  position: relative;
+  position: sticky;
+  top: 0;
+
+  min-height: 100vh;
+  height: 100vh;
+
   overflow: hidden;
-  background: linear-gradient(160deg, #FFFFFF 0%, #F7F8FC 55%, #EEF1FB 100%);
+
+  background: linear-gradient(
+    160deg,
+    #FFFFFF 0%,
+    #F7F8FC 55%,
+    #EEF1FB 100%
+  );
+
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   padding: 2rem 3rem;
-  min-height: 100vh;
 
   @media (max-width: 900px) {
     display: none;
@@ -248,16 +261,18 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .form-panel {
   display: flex;
   flex-direction: column;
+
   align-items: center;
-  justify-content: center;
-  padding: 5rem 1.5rem 2rem;    // extra top so header doesn't overlap card
+
   min-height: 100vh;
-  position: relative;
+
+  padding: 5rem 1.5rem 2rem;
+
   background: $canvas;
+  position: relative;
 
   @media (max-width: 900px) {
     background: $surface;
-    padding-top: 5rem;
   }
 }
 
@@ -302,19 +317,15 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .auth-card {
   width: 100%;
   max-width: 480px;
+
+  margin-top: auto;
+  margin-bottom: auto;
+
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-xl;
   padding: 1rem 2rem 1.5rem;
   box-shadow: $shadow-xl;
-  animation: fadeSlideIn .4s $ease both;
-  position: relative;
-  overflow: hidden;
-
-  @media (max-width: 480px) {
-    padding: 1.5rem 1.25rem;
-    border-radius: $radius-lg;
-  }
 }
 
 // ─── Success overlay (identical to sign-in) ───────────────────────────────────
