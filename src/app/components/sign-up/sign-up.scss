@@ -266,7 +266,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
   min-height: 100vh;
 
-  padding: 5rem 1.5rem 2rem;
+  padding: 1rem 1.5rem 1rem;
 
   background: $canvas;
   position: relative;
@@ -318,8 +318,6 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   width: 100%;
   max-width: 480px;
 
-  margin-top: auto;
-  margin-bottom: auto;
 
   background: $surface;
   border: 1px solid $border;
