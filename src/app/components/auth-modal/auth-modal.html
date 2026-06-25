@@ -100,7 +100,9 @@
       @if (view() === 'sign-up') {
         <div class="auth-content">
           <button class="back-btn" (click)="goTo('landing')" aria-label="Back">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
             Back
           </button>
 
@@ -108,43 +110,154 @@
           <p class="auth-sub">Takes less than a minute.</p>
 
           @if (apiError()) {
-            <div class="form-error-banner" role="alert">{{ apiError() }}</div>
+            <div class="form-error-banner" role="alert">
+              {{ apiError() }}
+            </div>
           }
 
           <form class="auth-form" (ngSubmit)="submitSignUp()">
+
+            <!-- First Name -->
             <div class="form-group">
-              <label class="form-label" for="su-name">Full name</label>
-              <input id="su-name" class="form-input" type="text" autocomplete="name" [(ngModel)]="name" name="name" [class.invalid]="hasError('name')" />
-              @if (hasError('name')) { <span class="field-error">{{ getError('name') }}</span> }
+              <label class="form-label" for="su-first-name">First Name</label>
+              <input
+                id="su-first-name"
+                class="form-input"
+                type="text"
+                autocomplete="given-name"
+                [(ngModel)]="firstName"
+                name="firstName"
+                [class.invalid]="hasError('firstName')"
+              />
+              @if (hasError('firstName')) {
+                <span class="field-error">{{ getError('firstName') }}</span>
+              }
             </div>
 
+            <!-- Last Name -->
+            <div class="form-group">
+              <label class="form-label" for="su-last-name">Last Name</label>
+              <input
+                id="su-last-name"
+                class="form-input"
+                type="text"
+                autocomplete="family-name"
+                [(ngModel)]="lastName"
+                name="lastName"
+                [class.invalid]="hasError('lastName')"
+              />
+              @if (hasError('lastName')) {
+                <span class="field-error">{{ getError('lastName') }}</span>
+              }
+            </div>
+
+            <!-- Email -->
             <div class="form-group">
               <label class="form-label" for="su-email">Email</label>
-              <input id="su-email" class="form-input" type="email" autocomplete="email" [(ngModel)]="email" name="email" [class.invalid]="hasError('email')" />
-              @if (hasError('email')) { <span class="field-error">{{ getError('email') }}</span> }
+              <input
+                id="su-email"
+                class="form-input"
+                type="email"
+                autocomplete="email"
+                [(ngModel)]="email"
+                name="email"
+                [class.invalid]="hasError('email')"
+              />
+              @if (hasError('email')) {
+                <span class="field-error">{{ getError('email') }}</span>
+              }
             </div>
 
+            <!-- Password -->
             <div class="form-group">
               <label class="form-label" for="su-password">Password</label>
               <div class="password-wrap">
                 <input
-                  id="su-password" class="form-input" [type]="showPass() ? 'text' : 'password'"
-                  autocomplete="new-password" [(ngModel)]="password" name="password"
+                  id="su-password"
+                  class="form-input"
+                  [type]="showPass() ? 'text' : 'password'"
+                  autocomplete="new-password"
+                  [(ngModel)]="password"
+                  name="password"
                   [class.invalid]="hasError('password')"
                 />
-                <button type="button" class="show-pass-btn" (click)="toggleShowPass()" [attr.aria-label]="showPass() ? 'Hide password' : 'Show password'">
+
+                <button
+                  type="button"
+                  class="show-pass-btn"
+                  (click)="toggleShowPass()"
+                  [attr.aria-label]="showPass() ? 'Hide password' : 'Show password'"
+                >
                   {{ showPass() ? 'Hide' : 'Show' }}
                 </button>
               </div>
-              @if (hasError('password')) { <span class="field-error">{{ getError('password') }}</span> }
+
+              @if (hasError('password')) {
+                <span class="field-error">{{ getError('password') }}</span>
+              }
             </div>
 
-            <button class="btn-primary" type="submit" [disabled]="loading()">
-              @if (loading()) { <span class="spinner" aria-hidden="true"></span> Creating account… } @else { Create Account }
+            <!-- Confirm Password -->
+            <div class="form-group">
+              <label class="form-label" for="su-confirm-password">
+                Confirm Password
+              </label>
+
+              <input
+                id="su-confirm-password"
+                class="form-input"
+                [type]="showPass() ? 'text' : 'password'"
+                autocomplete="new-password"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                [class.invalid]="hasError('confirmPassword')"
+              />
+
+              @if (hasError('confirmPassword')) {
+                <span class="field-error">
+                  {{ getError('confirmPassword') }}
+                </span>
+              }
+            </div>
+
+            <!-- Terms -->
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="agreeTerms"
+                  name="agreeTerms"
+                />
+                <span>
+                  I agree to the Terms & Conditions and Privacy Policy
+                </span>
+              </label>
+
+              @if (hasError('agreeTerms')) {
+                <span class="field-error">
+                  {{ getError('agreeTerms') }}
+                </span>
+              }
+            </div>
+
+            <button
+              class="btn-primary"
+              type="submit"
+              [disabled]="loading()"
+            >
+              @if (loading()) {
+                <span class="spinner" aria-hidden="true"></span>
+                Creating account…
+              } @else {
+                Create Account
+              }
             </button>
+
           </form>
 
-          <button class="btn-guest" (click)="continueAsGuest()">Continue as Guest</button>
+          <button class="btn-guest" (click)="continueAsGuest()">
+            Continue as Guest
+          </button>
         </div>
       }
 

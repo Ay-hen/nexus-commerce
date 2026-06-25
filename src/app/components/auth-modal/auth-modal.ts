@@ -8,9 +8,12 @@ import { Auth, AuthModalReason } from '../../auth/auth';
 type ModalView = 'landing' | 'sign-in' | 'sign-up';
 
 interface FormErrors {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   password?: string;
+  confirmPassword?: string;
+  agreeTerms?: string;
 }
 
 @Component({
@@ -34,10 +37,14 @@ export class AuthModal {
   view = signal<ModalView>('landing');
 
   // ── Form fields ──────────────────────────────────────────────────────────
-  name     = '';
+  firstName = '';
+  lastName = '';
+  confirmPassword = '';
+  agreeTerms = false;
   email    = '';
   password = '';
   showPass = signal(false);
+  passwordStrength = signal<'empty' | 'weak' | 'fair' | 'good' | 'strong'>('empty');
 
   // ── Async state ──────────────────────────────────────────────────────────
   loading  = signal(false);
@@ -130,12 +137,39 @@ export class AuthModal {
 
   private validateSignUp(): boolean {
     const e: FormErrors = {};
-    if (!this.name.trim()) e.name = 'Full name is required.';
-    if (!this.email.trim()) e.email = 'Email is required.';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) e.email = 'Enter a valid email address.';
-    if (!this.password) e.password = 'Password is required.';
-    else if (this.password.length < 6) e.password = 'Must be at least 6 characters.';
+
+    if (!this.firstName.trim()) {
+      e.firstName = 'First name is required.';
+    }
+
+    if (!this.lastName.trim()) {
+      e.lastName = 'Last name is required.';
+    }
+
+    if (!this.email.trim()) {
+      e.email = 'Email is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+      e.email = 'Enter a valid email address.';
+    }
+
+    if (!this.password) {
+      e.password = 'Password is required.';
+    } else if (this.password.length < 8) {
+      e.password = 'Password must be at least 8 characters.';
+    }
+
+    if (!this.confirmPassword) {
+      e.confirmPassword = 'Please confirm your password.';
+    } else if (this.password !== this.confirmPassword) {
+      e.confirmPassword = 'Passwords do not match.';
+    }
+
+    if (!this.agreeTerms) {
+      e.agreeTerms = 'You must accept the Terms.';
+    }
+
     this.errors.set(e);
+
     return Object.keys(e).length === 0;
   }
 
@@ -159,7 +193,11 @@ export class AuthModal {
     this.loading.set(true);
     this.apiError.set('');
     try {
-      await this.auth.mockSignUp(this.name, this.email, this.password);
+      await this.auth.mockSignUp(
+        `${this.firstName} ${this.lastName}`,
+        this.email,
+        this.password
+      );
       this.auth.resumePendingAction();
     } catch {
       this.apiError.set('Something went wrong. Please try again.');
@@ -174,9 +212,13 @@ export class AuthModal {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   private resetForm() {
-    this.name = '';
+    this.firstName = '';
+    this.lastName = '';
     this.email = '';
     this.password = '';
+    this.confirmPassword = '';
+    this.agreeTerms = false;
+
     this.showPass.set(false);
     this.errors.set({});
     this.apiError.set('');
