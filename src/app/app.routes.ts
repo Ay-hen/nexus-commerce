@@ -6,6 +6,7 @@ import { Categories } from './components/categories/categories';
 import { Contact} from './components/contact/contact'
 import { SignIn } from './components/sign-in/sign-in';
 import { SignUp } from './components/sign-up/sign-up';
+import { Cart } from './components/cart/cart';
 
 export const routes: Routes = [
     {
@@ -44,5 +45,9 @@ export const routes: Routes = [
     {
         path : 'signup',
         component : SignUp
-    }
+    },
+    {
+        path : 'cart',
+        component : Cart
+    },
 ];
