@@ -33,7 +33,7 @@
       @if (buy > 0) {
         <span class="badge">{{ buy }}</span>
       }
-      <img class="icon-img" [src]="icons.shopping" alt="shopping" />
+      <img class="icon-img" (click)="toCart()" [src]="icons.shopping" alt="shopping" />
     </div>
     
     <!-- Notification -->

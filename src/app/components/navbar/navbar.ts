@@ -23,4 +23,8 @@ export class Navbar {
   signIn() : void{
     this.router.navigate(['/sign-in']);
   }
+
+  toCart():void {
+    this.router.navigate(['/cart']);
+  }
 }
