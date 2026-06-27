@@ -1,1 +1,283 @@
-<p>notification works!</p>
+<!-- notification.component.html -->
+<div class="notif-host" (click)="$event.stopPropagation()">
+
+  <!-- ── BELL TRIGGER ─────────────────────────────────────────────────────── -->
+  <button
+    class="bell-btn"
+    [class.bell-btn--active]="isOpen()"
+    (click)="toggle()"
+    aria-label="Notifications"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="true"
+  >
+    <!-- Bell icon -->
+    <svg
+      class="bell-icon"
+      [class.bell-icon--ringing]="hasUnread()"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>
+
+    <!-- Unread badge -->
+    @if (hasUnread()) {
+      <span class="bell-badge" aria-label="{{ unreadCount() }} unread notifications">
+        {{ badgeLabel(unreadCount()) }}
+      </span>
+    }
+  </button>
+
+  <!-- ── BACKDROP (click outside closes) ──────────────────────────────────── -->
+  @if (isOpen()) {
+    <div class="notif-backdrop" (click)="ns.close()" aria-hidden="true"></div>
+  }
+
+  <!-- ── DROPDOWN PANEL ───────────────────────────────────────────────────── -->
+  @if (isOpen()) {
+    <div
+      class="notif-panel"
+      role="dialog"
+      aria-label="Notification center"
+      aria-modal="true"
+    >
+
+      <!-- Panel header -->
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h2 class="panel-title">Notifications</h2>
+          @if (unreadCount() > 0) {
+            <span class="unread-pill">{{ unreadCount() }} new</span>
+          }
+        </div>
+        <div class="panel-actions">
+          @if (unreadCount() > 0) {
+            <button
+              class="action-link"
+              (click)="markAllRead()"
+              aria-label="Mark all notifications as read"
+            >Mark all read</button>
+          }
+          @if (notifications().length > 0) {
+            <button
+              class="action-link action-link--danger"
+              (click)="clearAll()"
+              aria-label="Clear all notifications"
+            >Clear all</button>
+          }
+        </div>
+      </div>
+
+      <!-- Category filter chips -->
+      <div class="filter-bar" role="group" aria-label="Filter notifications by category">
+        @for (filter of categoryFilters; track trackByKey($index, filter)) {
+          <button
+            class="filter-chip"
+            [class.filter-chip--active]="activeFilter() === filter.key"
+            (click)="setFilter(filter.key)"
+            [attr.aria-pressed]="activeFilter() === filter.key"
+          >{{ filter.label }}</button>
+        }
+      </div>
+
+      <!-- ── SKELETON (loading) ─────────────────────────────────────────── -->
+      @if (isLoading()) {
+        <div class="notif-list" aria-busy="true" aria-label="Loading notifications">
+          @for (i of [1, 2, 3]; track i) {
+            <div class="sk-card">
+              <div class="sk-icon shimmer"></div>
+              <div class="sk-body">
+                <div class="sk-line shimmer" style="width: 65%"></div>
+                <div class="sk-line shimmer" style="width: 88%; height: 11px"></div>
+                <div class="sk-line shimmer" style="width: 40%; height: 10px"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ── EMPTY STATE ─────────────────────────────────────────────────── -->
+      @if (!isLoading() && notifications().length === 0) {
+        <div class="empty-state" role="status">
+          <div class="empty-illustration" aria-hidden="true">
+            <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="44" cy="44" r="40" fill="#F3F4F6"/>
+              <!-- Bell body -->
+              <path d="M54 38a10 10 0 0 0-20 0c0 9-4 12-4 12h28s-4-3-4-12" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="white"/>
+              <!-- Bell bottom -->
+              <path d="M46.9 57.5a3 3 0 0 1-5.8 0" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/>
+              <!-- Check mark on bell -->
+              <circle cx="54" cy="35" r="7" fill="#ECFDF5"/>
+              <path d="M51 35l2.5 2.5 4-4" stroke="#16A34A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="empty-title">You're all caught up!</p>
+          <p class="empty-sub">New notifications will appear here.</p>
+        </div>
+      }
+
+      <!-- ── NOTIFICATIONS LIST ──────────────────────────────────────────── -->
+      @if (!isLoading() && notifications().length > 0) {
+        <div class="notif-list" role="list">
+          @for (n of notifications(); track trackById($index, n)) {
+            <article
+              class="notif-card"
+              [class.notif-card--unread]="!n.read"
+              [class.notif-card--removing]="removingId() === n.id"
+              role="listitem"
+              [attr.aria-label]="n.title + (n.read ? '' : ', unread')"
+              (click)="onCardClick(n)"
+            >
+
+              <!-- Unread indicator stripe -->
+              @if (!n.read) {
+                <span class="unread-stripe" aria-hidden="true"></span>
+              }
+
+              <!-- Left: icon or product image -->
+              <div
+                class="notif-icon-wrap"
+                [style.background]="getCategoryMeta(n.category).bgColor"
+                aria-hidden="true"
+              >
+                @if (n.productImage) {
+                  <img
+                    class="notif-product-img"
+                    [src]="n.productImage"
+                    [alt]="n.title"
+                    loading="lazy"
+                  />
+                } @else {
+                  <!-- Category SVG icons -->
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    [style.color]="getCategoryMeta(n.category).iconColor"
+                  >
+                    @switch (n.category) {
+                      @case ('cart') {
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                      }
+                      @case ('wishlist') {
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor"/>
+                      }
+                      @case ('order') {
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                      }
+                      @case ('delivery') {
+                        <rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                      }
+                      @case ('promotion') {
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                      }
+                      @case ('review') {
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/>
+                      }
+                      @case ('checkout') {
+                        <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                      }
+                      @case ('warning') {
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                      }
+                      @default {
+                        <!-- account -->
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                      }
+                    }
+                  </svg>
+                }
+              </div>
+
+              <!-- Right: content -->
+              <div class="notif-content">
+                <div class="notif-top-row">
+                  <span class="notif-category-label" [style.color]="getCategoryMeta(n.category).accentColor">
+                    {{ getCategoryMeta(n.category).label }}
+                  </span>
+                  <span class="notif-time">{{ timeAgo(n.createdAt) }}</span>
+                </div>
+
+                <p class="notif-title">{{ n.title }}</p>
+                <p class="notif-body">{{ n.body }}</p>
+
+                <!-- Action row -->
+                @if (n.actionLabel || !n.read) {
+                  <div class="notif-action-row">
+                    @if (n.actionLabel) {
+                      <button
+                        class="notif-action-btn"
+                        [style.color]="getCategoryMeta(n.category).accentColor"
+                        (click)="onAction(n, $event)"
+                        [attr.aria-label]="n.actionLabel + ' for notification: ' + n.title"
+                      >
+                        {{ n.actionLabel }}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                    }
+                    @if (!n.read) {
+                      <button
+                        class="notif-read-btn"
+                        (click)="markRead(n, $event)"
+                        aria-label="Mark as read"
+                        title="Mark as read"
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- Delete button (shown on hover) -->
+              <button
+                class="notif-delete-btn"
+                (click)="deleteNotification(n, $event)"
+                aria-label="Delete notification: {{ n.title }}"
+                title="Delete"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+
+            </article>
+          }
+        </div>
+      }
+
+      <!-- Panel footer -->
+      @if (!isLoading() && notifications().length > 0) {
+        <div class="panel-footer">
+          <button class="view-all-btn" (click)="ns.close()" aria-label="View all notifications">
+            View all activity
+          </button>
+        </div>
+      }
+
+    </div><!-- /notif-panel -->
+  }
+
+</div><!-- /notif-host -->
