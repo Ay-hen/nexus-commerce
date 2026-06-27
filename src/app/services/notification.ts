@@ -11,7 +11,7 @@ import {
   NOTIFICATION_CATEGORY_META,
   CategoryFilter,
   CATEGORY_FILTERS,
-} from './notification.model';
+} from '../model/notification.model';
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 // Replace with HTTP calls once Spring Boot is ready.
