@@ -7,6 +7,7 @@ import { Contact} from './components/contact/contact'
 import { SignIn } from './components/sign-in/sign-in';
 import { SignUp } from './components/sign-up/sign-up';
 import { Cart } from './components/cart/cart';
+import { Favorites } from './components/favorites/favorites';
 
 export const routes: Routes = [
     {
@@ -49,5 +50,9 @@ export const routes: Routes = [
     {
         path : 'cart',
         component : Cart
+    },
+    {
+        path : 'favorites',
+        component : Favorites
     },
 ];

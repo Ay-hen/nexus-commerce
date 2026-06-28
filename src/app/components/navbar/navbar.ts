@@ -30,4 +30,10 @@ export class Navbar {
   toCart():void {
     this.router.navigate(['/cart']);
   }
+
+  favCount = 0; // wire to a shared FavoritesService later
+
+  toFavorites(): void {
+    this.router.navigate(['/favorites']);
+  }
 }

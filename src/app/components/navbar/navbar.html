@@ -23,9 +23,13 @@
 </ul>
 
   <div class="right-nav">
+
     <!-- favorite products -->
-    <div class="icon" title="Like">
-      <img class="icon-img" [src]="icons.like" alt="Like" />
+    <div class="icon" (click)="toFavorites()" title="Favorites">
+      @if (favCount > 0) {
+        <span class="badge">{{ favCount }}</span>
+      }
+      <img class="icon-img" [class.heart-bounce]="favCount > 0" [src]="icons.like" alt="Favorites" />
     </div>
 
     <!-- Cart -->
