@@ -20,7 +20,7 @@ export class Navbar {
       search: 'icons/icons8-search-96.png'
   };
   notification = 3;
-  buy = 0;
+  buy = 2;
 
   constructor(private router : Router){}
   signIn() : void{
