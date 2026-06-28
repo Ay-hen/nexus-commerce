@@ -1,1 +1,444 @@
-<p>favorites works!</p>
+<div class="fav-page" (click)="onDocClick()">
+
+  <!-- ── TOAST ──────────────────────────────────────────────────────────────── -->
+  @if (toastMessage()) {
+    <div class="toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ toastMessage() }}
+    </div>
+  }
+
+  <!-- ── CONFIRM DIALOG ─────────────────────────────────────────────────────── -->
+  @if (showConfirmClear() || showConfirmRemoveSelected()) {
+    <div class="dialog-backdrop" (click)="cancelConfirm()" aria-hidden="true"></div>
+    <div class="confirm-dialog" role="alertdialog" aria-modal="true">
+      <div class="confirm-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </div>
+      @if (showConfirmClear()) {
+        <h3 class="confirm-title">Clear all favorites?</h3>
+        <p class="confirm-sub">This will remove all {{ totalCount() }} saved products. This action cannot be undone.</p>
+      } @else {
+        <h3 class="confirm-title">Remove {{ selectedCount() }} item{{ selectedCount() > 1 ? 's' : '' }}?</h3>
+        <p class="confirm-sub">Selected products will be removed from your favorites.</p>
+      }
+      <div class="confirm-actions">
+        <button class="confirm-btn-cancel" (click)="cancelConfirm()">Cancel</button>
+        <button class="confirm-btn-danger" (click)="showConfirmClear() ? executeClearAll() : executeRemoveSelected()">
+          Remove
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ── PAGE HERO ───────────────────────────────────────────────────────────── -->
+  <div class="page-hero">
+    <div class="hero-inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/" class="bc-link">Home</a>
+        <svg class="bc-sep" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+        <span class="bc-current">Favorites</span>
+      </nav>
+
+      <div class="hero-title-row">
+        <div class="hero-left">
+          <div class="hero-icon-wrap" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="hero-title">My Favorites</h1>
+            <p class="hero-sub">All the products you've saved for later.</p>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          @if (!isLoading()) {
+            <div class="stat-chip">
+              <span class="stat-val">{{ totalCount() }}</span>
+              <span class="stat-lbl">saved item{{ totalCount() === 1 ? '' : 's' }}</span>
+            </div>
+          }
+          @if (!isLoading() && totalCount() > 0) {
+            <button
+              class="multi-select-toggle"
+              [class.multi-select-toggle--active]="multiSelectMode()"
+              (click)="toggleMultiSelect(); $event.stopPropagation()"
+              [attr.aria-pressed]="multiSelectMode()"
+            >
+              @if (multiSelectMode()) {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+                Cancel
+              } @else {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                Select
+              }
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MULTI-SELECT ACTIONS BAR ────────────────────────────────────────────── -->
+  @if (multiSelectMode()) {
+    <div class="select-bar" role="toolbar" aria-label="Selection actions">
+      <div class="select-bar__inner">
+        <div class="select-bar__left">
+          <label class="select-all-label">
+            <input
+              class="select-checkbox"
+              type="checkbox"
+              [checked]="allSelected()"
+              (change)="toggleSelectAll()"
+              aria-label="Select all items"
+            />
+            <span class="select-checkbox-box" aria-hidden="true"></span>
+            {{ allSelected() ? 'Deselect All' : 'Select All' }}
+          </label>
+          @if (selectedCount() > 0) {
+            <span class="selected-count-pill">{{ selectedCount() }} selected</span>
+          }
+        </div>
+        <div class="select-bar__actions">
+          @if (selectedCount() > 0) {
+            <button class="select-action-btn" (click)="moveSelectedToCart()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+              Add to Cart
+            </button>
+            <button class="select-action-btn select-action-btn--danger" (click)="confirmRemoveSelected()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              </svg>
+              Remove
+            </button>
+          }
+          @if (totalCount() > 0) {
+            <button class="select-action-btn select-action-btn--ghost" (click)="confirmClearAll()">
+              Clear All
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ─────────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Search favorites…"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        aria-label="Search favorites"
+      />
+      @if (searchQuery) {
+        <button class="search-clear" (click)="clearSearch()" aria-label="Clear search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <!-- Category pills -->
+    <div class="category-pills" role="group" aria-label="Filter by category">
+      @for (cat of categories; track cat) {
+        <button
+          class="pill"
+          [class.active]="activeCategory() === cat"
+          (click)="setCategory(cat)"
+          [attr.aria-pressed]="activeCategory() === cat"
+        >{{ cat }}</button>
+      }
+    </div>
+
+    <!-- Sort dropdown -->
+    <div class="sort-wrap">
+      <button class="sort-btn" (click)="toggleSortDropdown(); $event.stopPropagation()" [attr.aria-expanded]="sortDropdownOpen()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 6h18M6 12h12M9 18h6"/>
+        </svg>
+        <span>{{ activeSort() }}</span>
+        <svg class="chevron" [class.open]="sortDropdownOpen()" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      @if (sortDropdownOpen()) {
+        <ul class="sort-dropdown" role="listbox" aria-label="Sort options">
+          @for (opt of sortOptions; track opt) {
+            <li
+              class="sort-option"
+              [class.selected]="activeSort() === opt"
+              (click)="setSort(opt)"
+              role="option"
+              [attr.aria-selected]="activeSort() === opt"
+            >
+              @if (activeSort() === opt) {
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              }
+              {{ opt }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+  </div>
+
+  <!-- ── ACTIVE FILTERS ─────────────────────────────────────────────────────── -->
+  @if (hasActiveFilters()) {
+    <div class="active-filters">
+      <span class="af-label">Active filters:</span>
+      @if (activeCategory() !== 'All') {
+        <span class="af-tag">
+          {{ activeCategory() }}
+          <button class="af-remove" (click)="setCategory('All')" aria-label="Remove category filter">×</button>
+        </span>
+      }
+      @if (searchQuery) {
+        <span class="af-tag">
+          "{{ searchQuery }}"
+          <button class="af-remove" (click)="clearSearch()" aria-label="Remove search filter">×</button>
+        </span>
+      }
+      <button class="af-clear-all" (click)="clearAllFilters()">Clear all</button>
+    </div>
+  }
+
+  <!-- ── SKELETON LOADING ────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="products-grid" aria-busy="true" aria-label="Loading favorites">
+      @for (i of skeletonItems; track i) {
+        <div class="skeleton-card">
+          <div class="skeleton-img shimmer"></div>
+          <div class="skeleton-body">
+            <div class="skeleton-line shimmer" style="width: 38%"></div>
+            <div class="skeleton-line shimmer" style="width: 72%"></div>
+            <div class="skeleton-line shimmer" style="width: 50%; height: 10px"></div>
+            <div class="skeleton-line shimmer" style="width: 32%; height: 22px; margin-top: 8px"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ── EMPTY STATE ────────────────────────────────────────────────────────── -->
+  @if (!isLoading() && totalCount() === 0) {
+    <div class="empty-state" role="status">
+      <div class="empty-illustration" aria-hidden="true">
+        <svg width="130" height="130" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="65" cy="65" r="60" fill="#F3F4F6"/>
+          <!-- Heart outline -->
+          <path d="M65 90 C65 90 35 72 35 52 C35 43 42 36 50 36 C57 36 62 40 65 44 C68 40 73 36 80 36 C88 36 95 43 95 52 C95 72 65 90 65 90Z"
+            fill="white" stroke="#E5E7EB" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Plus inside heart -->
+          <line x1="65" y1="56" x2="65" y2="68" stroke="#D1D5DB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="59" y1="62" x2="71" y2="62" stroke="#D1D5DB" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="empty-title">No favorites yet</h2>
+      <p class="empty-sub">Tap the heart icon on any product to save it here.</p>
+      <button class="btn-explore" (click)="exploreProducts()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        Explore Products
+      </button>
+    </div>
+  }
+
+  <!-- ── NO RESULTS (filtered) ─────────────────────────────────────────────── -->
+  @if (!isLoading() && totalCount() > 0 && visibleProducts().length === 0) {
+    <div class="empty-state" role="status">
+      <div class="empty-illustration" aria-hidden="true">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="46" fill="#F3F4F6"/>
+          <circle cx="44" cy="44" r="16" stroke="#D1D5DB" stroke-width="2.5" fill="none"/>
+          <path d="M56 56l10 10" stroke="#D1D5DB" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M39 44h10M44 39v10" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
+      <h2 class="empty-title">No results found</h2>
+      <p class="empty-sub">Try adjusting your search or filters.</p>
+      <button class="btn-explore" (click)="clearAllFilters()">Clear filters</button>
+    </div>
+  }
+
+  <!-- ── PRODUCT GRID ───────────────────────────────────────────────────────── -->
+  @if (!isLoading() && visibleProducts().length > 0) {
+    <div class="products-grid" role="list">
+      @for (product of visibleProducts(); track trackById($index, product)) {
+        <article
+          class="product-card"
+          role="listitem"
+          [class.product-card--removing]="removingId() === product.id"
+          [class.product-card--selected]="product.selected && multiSelectMode()"
+          (click)="multiSelectMode() ? toggleSelect(product, $event) : viewProduct(product)"
+          (keydown.enter)="viewProduct(product)"
+          tabindex="0"
+          [attr.aria-label]="product.name + ' — ' + product.brand + ' — $' + product.price"
+        >
+
+          <!-- Multi-select checkbox overlay -->
+          @if (multiSelectMode()) {
+            <div class="card-select-overlay" aria-hidden="true">
+              <span class="card-checkbox" [class.card-checkbox--checked]="product.selected">
+                @if (product.selected) {
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                }
+              </span>
+            </div>
+          }
+
+          <!-- Image zone -->
+          <div class="card-image" [style.background]="product.bgColor">
+
+            <!-- Badges -->
+            <div class="badge-group" aria-hidden="true">
+              @if (product.badge === 'new') {
+                <span class="badge badge--new">New</span>
+              }
+              @if (product.badge === 'sale') {
+                <span class="badge badge--sale">-{{ product.discount }}%</span>
+              }
+            </div>
+
+            <!-- Remove from favorites (heart) -->
+            @if (!multiSelectMode()) {
+              <button
+                class="heart-btn heart-btn--active"
+                (click)="removeFavorite(product, $event)"
+                [attr.aria-label]="'Remove ' + product.name + ' from favorites'"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            }
+
+            <!-- Product image -->
+            <img
+              class="product-img"
+              [src]="product.image"
+              [alt]="product.name"
+              loading="lazy"
+              width="280"
+              height="240"
+            />
+          </div>
+
+          <!-- Card body -->
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="product-brand">{{ product.brand }}</span>
+              <span class="product-category">{{ product.category }}</span>
+            </div>
+
+            <h3 class="product-name">{{ product.name }}</h3>
+
+            <!-- Stars -->
+            <div class="rating-row" [attr.aria-label]="product.rating + ' out of 5 stars, ' + product.reviewCount + ' reviews'">
+              <div class="stars" aria-hidden="true">
+                @for (star of getStars(product.rating); track $index) {
+                  <svg class="star" width="13" height="13" viewBox="0 0 24 24">
+                    @if (star === 'full') {
+                      <polygon fill="#f59e0b" stroke="#f59e0b" stroke-width="1"
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    } @else if (star === 'half') {
+                      <defs>
+                        <linearGradient [id]="'hg-fav-' + product.id + '-' + $index">
+                          <stop offset="50%" stop-color="#f59e0b"/>
+                          <stop offset="50%" stop-color="#e5e7eb"/>
+                        </linearGradient>
+                      </defs>
+                      <polygon [attr.fill]="'url(#hg-fav-' + product.id + '-' + $index + ')'" stroke="#f59e0b" stroke-width="1"
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    } @else {
+                      <polygon fill="#e5e7eb" stroke="#e5e7eb" stroke-width="1"
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    }
+                  </svg>
+                }
+              </div>
+              <span class="rating-text">{{ product.rating }} <span class="review-ct">({{ product.reviewCount | number }})</span></span>
+            </div>
+
+            <!-- Price -->
+            <div class="price-row">
+              <div class="prices">
+                <span class="price-current">${{ product.price }}</span>
+                @if (product.originalPrice > product.price) {
+                  <span class="price-original">${{ product.originalPrice }}</span>
+                }
+              </div>
+              @if (product.discount > 0) {
+                <span class="discount-badge">-{{ product.discount }}%</span>
+              }
+            </div>
+
+            <!-- Actions -->
+            @if (!multiSelectMode()) {
+              <div class="card-actions">
+                <button
+                  class="btn-cart"
+                  [class.added]="product.addedToCart"
+                  (click)="addToCart(product, $event)"
+                  [attr.aria-label]="'Add ' + product.name + ' to cart'"
+                >
+                  @if (product.addedToCart) {
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Added!
+                  } @else {
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    Add to Cart
+                  }
+                </button>
+                <button
+                  class="btn-buy"
+                  (click)="buyNow(product, $event)"
+                  [attr.aria-label]="'Buy ' + product.name + ' now'"
+                >
+                  Buy Now
+                </button>
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+</div>
