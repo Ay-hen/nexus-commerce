@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NotificationComponent } from "../notification/notification";
 
 @Component({
   selector: 'app-navbar',
   imports: [
     RouterLink,
-    RouterLinkActive],
+    RouterLinkActive,
+    NotificationComponent
+],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

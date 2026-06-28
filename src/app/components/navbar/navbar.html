@@ -37,12 +37,8 @@
     </div>
     
     <!-- Notification -->
-    <div class="icon">
-      @if (notification > 0) {
-        <span class="badge">{{ notification }}</span>
-      }
-      <img class="icon-img" [src]="icons.notification" alt="notification" />
-    </div>
+    
+    <app-notification></app-notification>
 
     <!-- Sign In -->
     <button class="sign-in-btn" (click)="signIn()">Sign In</button>
