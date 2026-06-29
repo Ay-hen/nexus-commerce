@@ -21,13 +21,13 @@ export const ADMIN_ROUTES: Routes = [
           import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
       },
       // Phase 2+
-      /*
-      { path: 'products',    loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'orders',      loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'customers',   loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
-      { path: 'analytics',   loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
+      
+      { path: 'products',    loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'orders',      loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'customers',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'analytics',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    */
+    
     ],
   },
 ];
