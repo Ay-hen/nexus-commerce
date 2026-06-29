@@ -1,25 +1,23 @@
 // admin-login.component.scss
-// ─── Admin Design Tokens ──────────────────────────────────────────────────────
-// Surface uses a slightly blue-tinted dark — distinct from pure black,
-// gives depth without the AI-default near-black + acid accent look.
-$admin-bg:      #0A0E1A;          // deep navy-black canvas
-$admin-surface: #111827;          // card surface
-$admin-surface2:#1C2333;          // elevated element
-$admin-border:  rgba(255,255,255,.08);
-$admin-border2: rgba(255,255,255,.14);
+// ─── Admin Design Tokens (Light) ────────────────────────────────────────────────
+$admin-bg:      #F8FAFC;          // soft canvas
+$admin-surface: #FFFFFF;          // card surface
+$admin-surface2:#F5F7FA;          // elevated element
+$admin-border:  #E5E7EB;
+$admin-border2: #D1D5DB;
 
-$text-primary:  #F1F5F9;
-$text-mid:      #94A3B8;
-$text-light:    #64748B;
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
 
-$accent:        #0066FF;
-$accent-light:  #3B82F6;
-$accent-glow:   rgba(0,102,255,.25);
-$accent-bg:     rgba(0,102,255,.12);
+$accent:        #4F46E5;
+$accent-light:  #6366F1;
+$accent-glow:   rgba(79,70,229,.18);
+$accent-bg:     rgba(79,70,229,.08);
 
 $success:       #10B981;
 $error:         #EF4444;
-$error-bg:      rgba(239,68,68,.10);
+$error-bg:      rgba(239,68,68,.08);
 
 $radius-sm:     8px;
 $radius-md:     12px;
@@ -37,8 +35,8 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 }
 
 @keyframes orb-pulse {
-  0%, 100% { transform: scale(1); opacity: .5; }
-  50%       { transform: scale(1.15); opacity: .7; }
+  0%, 100% { transform: scale(1); opacity: .4; }
+  50%       { transform: scale(1.15); opacity: .6; }
 }
 
 @keyframes fade-up {
@@ -68,8 +66,8 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    linear-gradient(rgba(17,24,39,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,24,39,.035) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
 }
@@ -84,21 +82,21 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .orb--1 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(0,102,255,.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(79,70,229,.10) 0%, transparent 70%);
   top: -150px; left: -100px;
   animation-delay: 0s;
 }
 
 .orb--2 {
   width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(124,92,252,.10) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(124,58,237,.07) 0%, transparent 70%);
   bottom: -80px; left: 30%;
   animation-delay: 3s;
 }
 
 .orb--3 {
   width: 250px; height: 250px;
-  background: radial-gradient(circle, rgba(16,185,129,.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(16,185,129,.06) 0%, transparent 70%);
   top: 40%; right: 35%;
   animation-delay: 5s;
 }
@@ -175,7 +173,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   margin-bottom: 1rem;
 
   // Signature: gradient on last word
-  background: linear-gradient(135deg, $text-primary 40%, $accent-light 100%);
+  background: linear-gradient(135deg, $text-primary 40%, $accent 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -227,11 +225,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: $admin-surface2;
-  border: 1px solid $admin-border2;
+  background: $admin-surface;
+  border: 1px solid $admin-border;
   border-radius: $radius-lg;
   padding: 14px 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.3);
+  box-shadow: 0 12px 32px rgba(16,24,40,.10), 0 0 0 1px rgba(16,24,40,.02);
   animation: float-card 5s ease-in-out infinite;
 }
 
@@ -239,7 +237,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   width: 36px;
   height: 36px;
   border-radius: $radius-sm;
-  background: rgba($success, .15);
+  background: rgba($success, .10);
   color: $success;
   display: flex;
   align-items: center;
@@ -266,7 +264,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 0.75rem;
 
   @media (max-width: 900px) {
     min-height: 100vh;
@@ -276,12 +274,12 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .form-card {
   width: 100%;
   max-width: 420px;
-  background: rgba($admin-surface, .9);
+  background: rgba($admin-surface, .92);
   backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid $admin-border2;
+  border: 1px solid $admin-border;
   border-radius: $radius-xl;
-  padding: 36px;
-  box-shadow: 0 24px 64px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);
+  padding: 32px;
+  box-shadow: 0 20px 48px rgba(16,24,40,.10), 0 0 0 1px rgba(16,24,40,.03);
   animation: fade-up .5s .1s $ease both;
 }
 
@@ -296,7 +294,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   height: 52px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid rgba($accent, .3);
+  border: 1px solid rgba($accent, .2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,12 +321,12 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex;
   align-items: center;
   gap: 7px;
-  background: rgba($accent, .08);
-  border: 1px solid rgba($accent, .2);
+  background: $accent-bg;
+  border: 1px solid rgba($accent, .18);
   border-radius: $radius-sm;
   padding: 9px 12px;
   font-size: .78rem;
-  color: $accent-light;
+  color: $accent;
   margin-bottom: 20px;
 
   svg { flex-shrink: 0; }
@@ -340,7 +338,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   align-items: center;
   gap: 8px;
   background: $error-bg;
-  border: 1px solid rgba($error, .25);
+  border: 1px solid rgba($error, .2);
   border-radius: $radius-sm;
   padding: 10px 14px;
   font-size: .82rem;
@@ -378,11 +376,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .forgot-link {
   font-size: .78rem;
-  color: $accent-light;
+  color: $accent;
   text-decoration: none;
   font-weight: 500;
   transition: color .15s;
-  &:hover { color: lighten($accent-light, 15%); }
+  &:hover { color: darken($accent, 8%); }
 }
 
 .field__wrap {
@@ -404,17 +402,18 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   height: 46px;
   padding: 0 44px;
   background: $admin-surface2;
-  border: 1.5px solid $admin-border2;
+  border: 1.5px solid $admin-border;
   border-radius: $radius-sm;
   font-family: inherit;
   font-size: .9rem;
   color: $text-primary;
-  transition: border-color .15s $ease, box-shadow .15s;
+  transition: border-color .15s $ease, box-shadow .15s, background .15s;
 
   &::placeholder { color: $text-light; }
 
   &:focus {
     outline: none;
+    background: $admin-surface;
     border-color: $accent;
     box-shadow: 0 0 0 3px $accent-glow;
   }
@@ -500,8 +499,8 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   letter-spacing: .01em;
 
   &:hover:not(:disabled) {
-    background: darken($accent, 8%);
-    box-shadow: 0 8px 24px $accent-glow;
+    background: darken($accent, 7%);
+    box-shadow: 0 8px 20px $accent-glow;
     transform: translateY(-1px);
   }
 
@@ -518,7 +517,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2.5px solid rgba(255,255,255,.3);
+  border: 2.5px solid rgba(255,255,255,.35);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin .7s linear infinite;

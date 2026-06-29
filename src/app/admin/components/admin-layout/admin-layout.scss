@@ -1,32 +1,32 @@
 // admin-layout.component.scss
-// ─── Admin Token System ────────────────────────────────────────────────────────
+// ─── Admin Token System (Light) ────────────────────────────────────────────────
 $sidebar-w:     240px;
 $sidebar-w-col: 64px;
 $topnav-h:      60px;
 
-$bg:            #0A0E1A;
-$surface:       #111827;
-$surface2:      #1C2333;
-$surface3:      #252D3D;
-$border:        rgba(255,255,255,.07);
-$border2:       rgba(255,255,255,.12);
+$bg:            #F8FAFC;
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
 
-$text-primary:  #F1F5F9;
-$text-mid:      #94A3B8;
-$text-light:    #64748B;
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
 
-$accent:        #0066FF;
-$accent-light:  #3B82F6;
-$accent-bg:     rgba(0,102,255,.12);
-$accent-glow:   rgba(0,102,255,.2);
+$accent:        #4F46E5;
+$accent-light:  #6366F1;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
 
 $red:           #EF4444;
 $amber:         #F59E0B;
 $green:         #10B981;
 
-$radius-sm:     6px;
-$radius-md:     10px;
-$radius-lg:     14px;
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
 $radius-pill:   999px;
 
 $ease:          cubic-bezier(.25,.1,.25,1);
@@ -61,7 +61,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .mobile-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.6);
+  background: rgba(17,24,39,.32);
   backdrop-filter: blur(4px);
   z-index: 300;
 }
@@ -84,6 +84,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   @media (max-width: 900px) {
     transform: translateX(-100%);
     width: $sidebar-w !important;
+    box-shadow: 0 0 0 1px $border, 0 12px 32px rgba(16,24,40,.12);
 
     &--open { transform: translateX(0); }
   }
@@ -107,7 +108,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 32px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid rgba($accent, .25);
+  border: 1px solid rgba($accent, .18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,7 +136,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .logo-badge {
   font-size: .6rem;
   font-weight: 600;
-  color: $accent-light;
+  color: $accent;
   background: $accent-bg;
   border-radius: $radius-pill;
   padding: 1px 6px;
@@ -151,16 +152,16 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 26px;
   border-radius: $radius-sm;
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
   color: $text-light;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background .15s $ease, color .15s;
+  transition: background .15s $ease, color .15s, border-color .15s;
 
-  &:hover { background: $surface3; color: $text-primary; }
+  &:hover { background: $surface3; color: $text-primary; border-color: $border2; }
 
   @media (max-width: 900px) { display: none; }
 }
@@ -176,7 +177,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
   &::-webkit-scrollbar       { width: 3px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: $border; border-radius: $radius-pill; }
+  &::-webkit-scrollbar-thumb { background: $border2; border-radius: $radius-pill; }
 }
 
 .nav-section { margin-bottom: 8px; }
@@ -214,10 +215,10 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
   &--active {
     background: $accent-bg;
-    color: $accent-light;
+    color: $accent;
     font-weight: 600;
 
-    .nav-icon { color: $accent-light; }
+    .nav-icon { color: $accent; }
 
     &::before {
       content: '';
@@ -249,7 +250,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   min-width: 20px;
   height: 18px;
   padding: 0 5px;
-  background: rgba($red, .2);
+  background: rgba($red, .12);
   color: $red;
   border-radius: $radius-pill;
   font-size: .65rem;
@@ -289,8 +290,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 34px;
   border-radius: 50%;
   background: $accent-bg;
-  border: 1.5px solid rgba($accent, .3);
-  color: $accent-light;
+  border: 1.5px solid rgba($accent, .2);
+  color: $accent;
   font-size: .72rem;
   font-weight: 800;
   display: flex;
@@ -334,7 +335,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   cursor: pointer;
   transition: all .15s $ease;
 
-  &:hover { background: rgba($red, .1); border-color: rgba($red, .3); color: $red; }
+  &:hover { background: rgba($red, .08); border-color: rgba($red, .25); color: $red; }
 }
 
 // ─── Main area ─────────────────────────────────────────────────────────────────
@@ -369,7 +370,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   width: 36px;
   height: 36px;
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
   border-radius: $radius-sm;
   color: $text-mid;
   display: none;
@@ -409,12 +410,13 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   font-family: inherit;
   font-size: .83rem;
   color: $text-primary;
-  transition: border-color .15s, box-shadow .15s;
+  transition: border-color .15s, box-shadow .15s, background .15s;
 
   &::placeholder { color: $text-light; }
 
   &:focus {
     outline: none;
+    background: $surface;
     border-color: $accent;
     box-shadow: 0 0 0 3px $accent-glow;
   }
@@ -424,7 +426,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   position: absolute;
   right: 10px;
   padding: 2px 7px;
-  background: $surface3;
+  background: $surface;
   border: 1px solid $border2;
   border-radius: 5px;
   font-size: .68rem;
@@ -475,8 +477,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 36px;
   border-radius: 50%;
   background: $accent-bg;
-  border: 1.5px solid rgba($accent, .3);
-  color: $accent-light;
+  border: 1.5px solid rgba($accent, .2);
+  color: $accent;
   font-size: .72rem;
   font-weight: 800;
   display: flex;
