@@ -1,39 +1,39 @@
 // admin-dashboard.component.scss
-// ─── Admin Design Tokens (matches layout exactly) ─────────────────────────────
-$bg:            #0A0E1A;
-$surface:       #111827;
-$surface2:      #1C2333;
-$surface3:      #252D3D;
-$border:        rgba(255,255,255,.07);
-$border2:       rgba(255,255,255,.12);
+// ─── Admin Design Tokens (Light — matches layout exactly) ─────────────────────
+$bg:            #F8FAFC;
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
 
-$text-primary:  #F1F5F9;
-$text-mid:      #94A3B8;
-$text-light:    #64748B;
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
 
-$accent:        #0066FF;
-$accent-light:  #3B82F6;
-$accent-bg:     rgba(0,102,255,.12);
-$accent-glow:   rgba(0,102,255,.2);
+$accent:        #4F46E5;
+$accent-light:  #6366F1;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
 
 $green:         #10B981;
-$green-bg:      rgba(16,185,129,.12);
+$green-bg:      rgba(16,185,129,.08);
 $red:           #EF4444;
-$red-bg:        rgba(239,68,68,.12);
+$red-bg:        rgba(239,68,68,.08);
 $amber:         #F59E0B;
-$amber-bg:      rgba(245,158,11,.12);
-$purple:        #7C5CFC;
-$purple-bg:     rgba(124,92,252,.12);
-$slate-bg:      rgba(100,116,139,.12);
+$amber-bg:      rgba(245,158,11,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
+$slate-bg:      #F1F4F8;
 
-$radius-sm:     6px;
-$radius-md:     10px;
-$radius-lg:     14px;
-$radius-xl:     18px;
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-xl:     20px;
 $radius-pill:   999px;
 
-$shadow-card:   0 1px 3px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.04);
-$shadow-hover:  0 8px 24px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.06);
+$shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
 
 $ease:          cubic-bezier(.25,.1,.25,1);
 
@@ -99,7 +99,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: $surface2;
+  background: $surface;
   border: 1px solid $border2;
   border-radius: $radius-sm;
   font: inherit;
@@ -107,9 +107,9 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   font-weight: 500;
   color: $text-mid;
   cursor: pointer;
-  transition: background .15s $ease, color .15s;
+  transition: background .15s $ease, color .15s, border-color .15s;
 
-  &:hover { background: $surface3; color: $text-primary; }
+  &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
 }
 
 .btn-primary-sm {
@@ -129,8 +129,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   transition: background .15s $ease, box-shadow .15s;
 
   &:hover {
-    background: darken($accent, 8%);
-    box-shadow: 0 4px 16px $accent-glow;
+    background: darken($accent, 7%);
+    box-shadow: 0 4px 14px $accent-glow;
   }
 }
 
@@ -219,12 +219,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   justify-content: center;
   flex-shrink: 0;
 
-  .stat-card--blue   & { background: $accent-bg;  color: $accent-light; }
-  .stat-card--green  & { background: $green-bg;   color: $green;        }
-  .stat-card--red    & { background: $red-bg;     color: $red;          }
-  .stat-card--amber  & { background: $amber-bg;   color: $amber;        }
-  .stat-card--purple & { background: $purple-bg;  color: $purple;       }
-  .stat-card--slate  & { background: $slate-bg;   color: $text-mid;     }
+  .stat-card--blue   & { background: $accent-bg;  color: $accent;     }
+  .stat-card--green  & { background: $green-bg;   color: $green;      }
+  .stat-card--red    & { background: $red-bg;     color: $red;        }
+  .stat-card--amber  & { background: $amber-bg;   color: $amber;      }
+  .stat-card--purple & { background: $purple-bg;  color: $purple;     }
+  .stat-card--slate  & { background: $slate-bg;   color: $text-mid;   }
 }
 
 .stat-body {
@@ -466,11 +466,11 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
 .view-all-link {
   font-size: .78rem;
-  color: $accent-light;
+  color: $accent;
   text-decoration: none;
   font-weight: 500;
   transition: color .15s;
-  &:hover { color: lighten($accent-light, 15%); }
+  &:hover { color: darken($accent, 10%); }
 }
 
 .table-wrap {
@@ -511,7 +511,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
   tr:last-child td { border-bottom: none; }
 
-  tr:hover td { background: rgba(255,255,255,.02); }
+  tr:hover td { background: #F9FAFB; }
 }
 
 .order-id-cell { font-weight: 700; color: $text-primary; font-size: .82rem; }
@@ -531,7 +531,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 30px;
   border-radius: 50%;
   background: $accent-bg;
-  color: $accent-light;
+  color: $accent;
   font-size: .65rem;
   font-weight: 800;
   display: flex;
@@ -554,12 +554,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   text-transform: capitalize;
   letter-spacing: .03em;
 
-  &--green  { background: $green-bg;   color: $green;      }
-  &--blue   { background: $accent-bg;  color: $accent-light;}
-  &--amber  { background: $amber-bg;   color: $amber;      }
-  &--red    { background: $red-bg;     color: $red;        }
-  &--slate  { background: $slate-bg;   color: $text-mid;   }
-  &--purple { background: $purple-bg;  color: $purple;     }
+  &--green  { background: $green-bg;   color: $green;   }
+  &--blue   { background: $accent-bg;  color: $accent;   }
+  &--amber  { background: $amber-bg;   color: $amber;   }
+  &--red    { background: $red-bg;     color: $red;     }
+  &--slate  { background: $slate-bg;   color: $text-mid;}
+  &--purple { background: $purple-bg;  color: $purple;  }
 }
 
 // ─── Right column ─────────────────────────────────────────────────────────────
@@ -578,8 +578,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   animation: pop-in .3s .2s $ease both;
 
   &--alert {
-    border-color: rgba($red, .2);
-    background: linear-gradient(135deg, $surface 60%, rgba($red, .04) 100%);
+    border-color: rgba($red, .18);
+    background: linear-gradient(135deg, $surface 60%, rgba($red, .03) 100%);
   }
 }
 
@@ -606,6 +606,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 38px;
   border-radius: $radius-sm;
   background: $surface2;
+  border: 1px solid $border;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -616,7 +617,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   width: 28px;
   height: 28px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  filter: drop-shadow(0 2px 4px rgba(16,24,40,.10));
 }
 
 .tp-info { flex: 1; min-width: 0; }
@@ -686,11 +687,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border-radius: $radius-md;
   text-decoration: none;
   cursor: pointer;
-  transition: background .15s $ease, border-color .15s, transform .15s;
+  transition: background .15s $ease, border-color .15s, transform .15s, box-shadow .15s;
 
   &:hover {
-    background: $surface2;
+    background: $surface;
     border-color: $border2;
+    box-shadow: $shadow-card;
     transform: translateY(-1px);
   }
 }

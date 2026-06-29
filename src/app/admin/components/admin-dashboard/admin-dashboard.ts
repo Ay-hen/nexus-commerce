@@ -79,7 +79,7 @@ export class AdminDashboard implements OnInit {
 
   // ── Recent orders ─────────────────────────────────────────────────────────
   recentOrders: Order[] = [
-    { id: '1', orderId: '#1284', customer: 'Ayoub Hennani',  customerAvatar: 'AH', email: 'ayoub@nexus.com', items: 2, total: 448,  status: 'delivered',  date: '2 min ago',   paymentMethod: 'Visa' },
+    { id: '1', orderId: '#1284', customer: 'Ayoub Hen',  customerAvatar: 'AH', email: 'ayoub@nexus.com', items: 2, total: 448,  status: 'delivered',  date: '2 min ago',   paymentMethod: 'Visa' },
     { id: '2', orderId: '#1283', customer: 'Sara Idrissi',   customerAvatar: 'SI', email: 'sara@mail.com',   items: 1, total: 1099, status: 'processing', date: '18 min ago',  paymentMethod: 'PayPal' },
     { id: '3', orderId: '#1282', customer: 'Karim Mansouri', customerAvatar: 'KM', email: 'karim@mail.com',  items: 3, total: 376,  status: 'shipped',    date: '1 hr ago',    paymentMethod: 'Mastercard' },
     { id: '4', orderId: '#1281', customer: 'Leila Boudali',  customerAvatar: 'LB', email: 'leila@mail.com',  items: 1, total: 249,  status: 'pending',    date: '2 hr ago',    paymentMethod: 'Visa' },

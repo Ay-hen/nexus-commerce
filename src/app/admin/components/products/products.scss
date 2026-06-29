@@ -1,0 +1,564 @@
+// admin-products.component.scss
+// ─── Tokens (shared across all admin pages) ────────────────────────────────────
+$surface:       #111827;
+$surface2:      #1C2333;
+$surface3:      #252D3D;
+$border:        rgba(255,255,255,.07);
+$border2:       rgba(255,255,255,.12);
+
+$text-primary:  #F1F5F9;
+$text-mid:      #94A3B8;
+$text-light:    #64748B;
+
+$accent:        #0066FF;
+$accent-light:  #3B82F6;
+$accent-bg:     rgba(0,102,255,.12);
+$accent-glow:   rgba(0,102,255,.2);
+
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.12);
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.12);
+$amber:         #F59E0B;
+$amber-bg:      rgba(245,158,11,.12);
+
+$radius-sm:     6px;
+$radius-md:     10px;
+$radius-lg:     14px;
+$radius-pill:   999px;
+
+$shadow-card:   0 1px 3px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.04);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+
+// ─── Keyframes ─────────────────────────────────────────────────────────────────
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translate(-50%,-50%) scale(.94); }
+  to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.products-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: $text-primary;
+  animation: pop-in .25s $ease;
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+.admin-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1E293B;
+  border: 1px solid $border2;
+  color: $text-primary;
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: $radius-pill;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  white-space: nowrap;
+  animation: toast-in .2s $ease;
+
+  svg { color: $green; }
+}
+
+// ─── Confirm dialog ───────────────────────────────────────────────────────────
+.dialog-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+  z-index: 800;
+}
+
+.confirm-dialog {
+  position: fixed;
+  top: 50%; left: 50%;
+  z-index: 900;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  background: $surface;
+  border: 1px solid $border2;
+  border-radius: $radius-lg;
+  padding: 28px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  animation: dialog-in .2s $ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+
+.confirm-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: $red-bg;
+  color: $red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.confirm-title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 8px; }
+.confirm-sub   { font-size: .82rem; color: $text-mid; line-height: 1.6; margin: 0 0 22px; }
+
+.confirm-actions { display: flex; gap: 10px; width: 100%; }
+
+.btn-cancel {
+  flex: 1; height: 40px;
+  background: $surface2;
+  border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .83rem; font-weight: 600;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s;
+  &:hover { background: $surface3; color: $text-primary; }
+}
+
+.btn-danger {
+  flex: 1; height: 40px;
+  background: $red; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .83rem; font-weight: 700;
+  color: #fff; cursor: pointer;
+  transition: background .15s;
+  &:hover { background: darken($red, 8%); }
+}
+
+// ─── Page header ──────────────────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  color: $text-primary;
+  margin: 0 0 3px;
+}
+
+.page-sub { font-size: .82rem; color: $text-light; }
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
+
+.btn-ghost {
+  height: 36px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $surface2; border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .82rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s;
+  &:hover { background: $surface3; color: $text-primary; }
+}
+
+.btn-primary {
+  height: 36px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .82rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s, box-shadow .15s;
+  &:hover { background: darken($accent, 8%); box-shadow: 0 4px 16px $accent-glow; }
+}
+
+// ─── Status tabs ──────────────────────────────────────────────────────────────
+.status-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid $border;
+  padding-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.status-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 500;
+  color: $text-light;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+  margin-bottom: -1px;
+
+  &:hover { color: $text-mid; }
+
+  &--active {
+    color: $accent-light;
+    border-bottom-color: $accent;
+    font-weight: 600;
+  }
+}
+
+.tab-count {
+  font-size: .68rem;
+  font-weight: 700;
+  background: $surface2;
+  border-radius: $radius-pill;
+  padding: 1px 7px;
+  color: $text-light;
+
+  .status-tab--active & { background: $accent-bg; color: $accent-light; }
+}
+
+// ─── Toolbar ──────────────────────────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-wrap { position: relative; flex: 0 0 240px; @media (max-width: 600px) { flex: 1 1 100%; } }
+
+.search-icon {
+  position: absolute; left: 11px; top: 50%;
+  transform: translateY(-50%);
+  color: $text-light; pointer-events: none;
+}
+
+.search-input {
+  width: 100%; height: 36px;
+  padding: 0 12px 0 34px;
+  background: $surface2; border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .82rem; color: $text-primary;
+  transition: border-color .15s;
+
+  &::placeholder { color: $text-light; }
+  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+  &::-webkit-search-cancel-button { display: none; }
+}
+
+.cat-pills {
+  display: flex; gap: 5px;
+  overflow-x: auto; flex-wrap: nowrap;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.cat-pill {
+  height: 32px; padding: 0 12px;
+  background: $surface2; border: 1px solid $border;
+  border-radius: $radius-pill;
+  font: inherit; font-size: .76rem; font-weight: 500;
+  color: $text-mid; cursor: pointer; white-space: nowrap;
+  transition: all .15s $ease;
+
+  &:hover { border-color: $border2; color: $text-primary; }
+  &.active { background: $accent; border-color: $accent; color: #fff; font-weight: 600; }
+}
+
+// Bulk dropdown
+.bulk-wrap { position: relative; margin-left: auto; }
+
+.bulk-btn {
+  height: 36px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $accent-bg; border: 1px solid rgba($accent, .3);
+  border-radius: $radius-sm;
+  font: inherit; font-size: .82rem; font-weight: 600;
+  color: $accent-light; cursor: pointer;
+  transition: background .15s;
+  &:hover { background: rgba($accent, .2); }
+
+  svg { transition: transform .2s; &.open { transform: rotate(180deg); } }
+}
+
+.bulk-dropdown {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  min-width: 190px;
+  background: $surface; border: 1px solid $border2;
+  border-radius: $radius-md;
+  box-shadow: 0 12px 32px rgba(0,0,0,.4);
+  list-style: none; padding: 6px; z-index: 200;
+}
+
+.bulk-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; border-radius: $radius-sm;
+  font-size: .82rem; color: $text-mid;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+
+  &:hover { background: $surface2; color: $text-primary; }
+  &--danger { color: $red; &:hover { background: $red-bg; color: $red; } }
+}
+
+// ─── Table card ───────────────────────────────────────────────────────────────
+.table-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.table-scroll { overflow-x: auto; }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+
+  thead tr { border-bottom: 1px solid $border; background: $surface2; }
+
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: $text-light;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 13px 14px;
+    border-bottom: 1px solid $border;
+    vertical-align: middle;
+    color: $text-mid;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr.tr-selected td { background: $accent-bg; }
+  tr.tr-out-of-stock td { opacity: .7; }
+
+  tr:not(.tr-selected):hover td { background: rgba(255,255,255,.02); }
+}
+
+.th-check  { width: 44px; }
+.th-product{ width: auto; }
+.th-sortable {
+  cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+
+  svg { opacity: .3; transition: opacity .15s; }
+  .sort-active { opacity: 1; color: $accent-light; }
+  &:hover svg { opacity: .7; }
+}
+
+.td-check  { width: 44px; }
+.td-price  { font-weight: 700; color: $text-primary; }
+.td-sales  { font-weight: 600; color: $text-primary; }
+.td-sku    { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
+
+.cb {
+  width: 16px; height: 16px;
+  accent-color: $accent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+// Product cell
+.product-cell {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.product-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px; height: 42px;
+  border-radius: $radius-sm;
+  background: $surface2;
+  display: flex; align-items: center; justify-content: center;
+  overflow: visible;
+}
+
+.product-img {
+  width: 32px; height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+
+.featured-dot {
+  position: absolute; top: -3px; right: -3px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: $amber;
+  border: 1.5px solid $surface;
+}
+
+.product-info { min-width: 0; }
+.product-name {
+  font-weight: 600; color: $text-primary;
+  font-size: .84rem;
+  margin: 0 0 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 220px;
+}
+.product-meta { font-size: .72rem; color: $text-light; margin: 0; }
+
+// Status pill
+.status-pill {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px;
+  border-radius: $radius-pill;
+  font-size: .68rem; font-weight: 700;
+  text-transform: capitalize;
+
+  &--active   { background: $green-bg;   color: $green;       }
+  &--draft    { background: $amber-bg;   color: $amber;       }
+  &--archived { background: rgba(100,116,139,.12); color: #64748B; }
+}
+
+// Stock badge
+.stock-badge {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px;
+  border-radius: $radius-pill;
+  font-size: .72rem; font-weight: 600;
+  white-space: nowrap;
+
+  &--green { background: $green-bg; color: $green;  }
+  &--amber { background: $amber-bg; color: $amber;  }
+  &--red   { background: $red-bg;   color: $red;    }
+}
+
+// Action buttons
+.td-actions { white-space: nowrap; }
+
+.action-group {
+  display: flex; align-items: center; gap: 4px;
+  opacity: 0;
+  transition: opacity .15s;
+
+  tr:hover & { opacity: 1; }
+  // Always show on touch devices
+  @media (hover: none) { opacity: 1; }
+}
+
+.action-btn {
+  width: 30px; height: 30px;
+  background: $surface2; border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover { background: $surface3; color: $text-primary; }
+  &--danger:hover { background: $red-bg; color: $red; border-color: rgba($red, .3); }
+}
+
+// ─── Skeleton ─────────────────────────────────────────────────────────────────
+.shimmer {
+  background: linear-gradient(90deg, $surface2 0%, $surface3 40%, $surface2 80%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.sk-row {
+  height: 62px;
+  border-bottom: 1px solid $border;
+  border-radius: 0;
+}
+
+// ─── Empty state ──────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.empty-icon {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: $surface2;
+  color: $text-light;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+
+.empty-title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 6px; }
+.empty-sub   { font-size: .82rem; color: $text-light; }
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid $border;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pag-info { font-size: .78rem; color: $text-light; }
+
+.pag-controls { display: flex; align-items: center; gap: 4px; }
+
+.pag-btn {
+  width: 32px; height: 32px;
+  background: $surface2; border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover:not(:disabled) { background: $surface3; color: $text-primary; }
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+.pag-num {
+  min-width: 32px; height: 32px; padding: 0 6px;
+  background: transparent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover { background: $surface2; color: $text-primary; }
+  &--active { background: $accent; color: #fff; font-weight: 700; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .products-page, .admin-toast, .confirm-dialog { animation: none; }
+}

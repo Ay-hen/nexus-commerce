@@ -38,7 +38,7 @@ export class AdminAuthService {
     if (creds.email === 'admin@nexus.com' && creds.password === 'Admin@123') {
       const mockAdmin: AdminUser = {
         id: 'adm-001',
-        name: 'Ayoub Hennani',
+        name: 'Ayoub hen',
         email: creds.email,
         role: 'super_admin',
         avatar: '',

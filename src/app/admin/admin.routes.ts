@@ -22,7 +22,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       // Phase 2+
       
-      { path: 'products',    loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'products',    loadComponent: () => import('./components/products/products').then(m => m.Products) },
       { path: 'orders',      loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: 'customers',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: 'analytics',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
