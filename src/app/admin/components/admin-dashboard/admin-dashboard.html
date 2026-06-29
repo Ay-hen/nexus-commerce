@@ -1,0 +1,301 @@
+<!-- admin-dashboard.component.html -->
+<div class="dash">
+
+  <!-- ── PAGE HEADER ─────────────────────────────────────────────────────── -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Dashboard</h1>
+      <p class="dash-sub">Welcome back — here's what's happening today.</p>
+    </div>
+    <div class="dash-header-actions">
+      <button class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export
+      </button>
+      <button class="btn-primary-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add Product
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SKELETON ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid" aria-busy="true">
+      @for (i of skeletons; track i) {
+        <div class="sk-stat shimmer"></div>
+      }
+    </div>
+    <div class="charts-grid" aria-busy="true">
+      <div class="sk-chart shimmer" style="grid-column: span 2"></div>
+      <div class="sk-chart shimmer"></div>
+    </div>
+  }
+
+  @if (!isLoading()) {
+
+    <!-- ── STAT CARDS ──────────────────────────────────────────────────────── -->
+    <div class="stats-grid">
+      @for (card of statCards; track card.id) {
+        <div class="stat-card stat-card--{{ card.color }}">
+          <div class="stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              @switch (card.icon) {
+                @case ('revenue') {
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                }
+                @case ('orders') {
+                  <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                }
+                @case ('products') {
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                }
+                @case ('customers') {
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                }
+                @case ('pending') {
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                }
+                @case ('today') {
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                }
+                @case ('stock') {
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                }
+                @default {
+                  <!-- rating -->
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                }
+              }
+            </svg>
+          </div>
+
+          <div class="stat-body">
+            <p class="stat-label">{{ card.label }}</p>
+            <p class="stat-value">
+              {{ card.prefix }}{{ card.value | number }}{{ card.suffix }}
+            </p>
+          </div>
+
+          <div class="stat-change" [class.stat-change--up]="card.change > 0" [class.stat-change--down]="card.change < 0">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              @if (card.change >= 0) {
+                <polyline points="18 15 12 9 6 15"/>
+              } @else {
+                <polyline points="6 9 12 15 18 9"/>
+              }
+            </svg>
+            {{ card.change > 0 ? '+' : '' }}{{ card.change }}%
+            <span class="change-label">{{ card.changeLabel }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- ── CHARTS ROW ──────────────────────────────────────────────────────── -->
+    <div class="charts-grid">
+
+      <!-- Revenue bar chart -->
+      <div class="chart-card chart-card--wide">
+        <div class="chart-head">
+          <div>
+            <h3 class="chart-title">Revenue Overview</h3>
+            <p class="chart-sub">Monthly revenue for the past 12 months</p>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-dot legend-dot--blue"></span> Revenue
+            <span class="legend-dot legend-dot--green" style="margin-left: 12px"></span> Profit
+          </div>
+        </div>
+
+        <div class="bar-chart">
+          @for (pt of revenueData; track pt.month) {
+            <div class="bar-col">
+              <div class="bar-pair">
+                <div class="bar bar--blue"  [style.height.%]="barHeight(pt.revenue)" [attr.title]="'Revenue: $' + pt.revenue"></div>
+                <div class="bar bar--green" [style.height.%]="barHeight(pt.profit)"  [attr.title]="'Profit: $' + pt.profit"></div>
+              </div>
+              <span class="bar-label">{{ pt.month }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Donut chart — top categories -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <h3 class="chart-title">Top Categories</h3>
+            <p class="chart-sub">Sales distribution</p>
+          </div>
+        </div>
+
+        <div class="donut-wrap">
+          <svg class="donut-svg" viewBox="0 0 100 100" aria-hidden="true">
+            @for (seg of donutSegments(); track seg.label) {
+              <circle
+                class="donut-seg"
+                cx="50" cy="50" r="42"
+                fill="none"
+                [attr.stroke]="seg.color"
+                stroke-width="14"
+                [attr.stroke-dasharray]="seg.dashArray + ' ' + (seg.circumference - seg.dashArray)"
+                [attr.stroke-dashoffset]="seg.dashOffset"
+              />
+            }
+            <!-- Center -->
+            <text x="50" y="46" text-anchor="middle" class="donut-center-val">$84k</text>
+            <text x="50" y="57" text-anchor="middle" class="donut-center-lbl">Revenue</text>
+          </svg>
+        </div>
+
+        <div class="donut-legend">
+          @for (cat of categoryData; track cat.label) {
+            <div class="donut-legend-item">
+              <span class="donut-dot" [style.background]="cat.color"></span>
+              <span class="donut-lbl">{{ cat.label }}</span>
+              <span class="donut-val">{{ cat.value }}%</span>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── CONTENT ROW ─────────────────────────────────────────────────────── -->
+    <div class="content-grid">
+
+      <!-- Recent orders table -->
+      <div class="table-card">
+        <div class="table-head">
+          <h3 class="chart-title">Recent Orders</h3>
+          <a class="view-all-link" routerLink="/admin/orders">View all →</a>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of recentOrders; track trackById($index, order)) {
+                <tr>
+                  <td class="order-id-cell">{{ order.orderId }}</td>
+                  <td>
+                    <div class="customer-cell">
+                      <span class="cust-avatar">{{ order.customerAvatar }}</span>
+                      <div>
+                        <p class="cust-name">{{ order.customer }}</p>
+                        <p class="cust-email">{{ order.email }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-mid">{{ order.items }}</td>
+                  <td class="font-bold">${{ order.total | number }}</td>
+                  <td>
+                    <span class="status-pill status-pill--{{ statusColor(order.status) }}">
+                      {{ order.status }}
+                    </span>
+                  </td>
+                  <td class="text-light">{{ order.date }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="right-col">
+
+        <!-- Top products -->
+        <div class="panel-card">
+          <div class="table-head">
+            <h3 class="chart-title">Top Products</h3>
+            <a class="view-all-link" routerLink="/admin/products">View all →</a>
+          </div>
+
+          <div class="top-products-list">
+            @for (p of topProducts; track p.id) {
+              <div class="tp-item">
+                <div class="tp-img-wrap">
+                  <img [src]="p.image" [alt]="p.name" class="tp-img" loading="lazy" />
+                </div>
+                <div class="tp-info">
+                  <p class="tp-name">{{ p.name }}</p>
+                  <p class="tp-brand">{{ p.brand }} · {{ p.category }}</p>
+                </div>
+                <div class="tp-right">
+                  <p class="tp-sales">{{ p.sales }} sold</p>
+                  <p class="tp-price">${{ p.price }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Low stock alert -->
+        @if (lowStockProducts().length > 0) {
+          <div class="panel-card panel-card--alert">
+            <div class="table-head">
+              <h3 class="chart-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" style="margin-right: 6px; vertical-align: middle;">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                Low Stock
+              </h3>
+              <a class="view-all-link" routerLink="/admin/inventory">Fix →</a>
+            </div>
+
+            @for (p of lowStockProducts(); track p.id) {
+              <div class="low-stock-item">
+                <span class="ls-name">{{ p.name }}</span>
+                <span class="ls-stock" [class.ls-stock--critical]="p.stock <= 5">{{ p.stock }} left</span>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
+
+    </div>
+
+    <!-- ── QUICK ACTIONS ────────────────────────────────────────────────────── -->
+    <div class="quick-actions">
+      <h3 class="qa-title">Quick Actions</h3>
+      <div class="qa-grid">
+        @for (action of quickActions; track action.label) {
+          <a class="qa-card" [routerLink]="action.route">
+            <span class="qa-icon" [style.background]="action.bg" [style.color]="action.color" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                <path [attr.d]="action.icon"/>
+              </svg>
+            </span>
+            <p class="qa-label">{{ action.label }}</p>
+          </a>
+        }
+      </div>
+    </div>
+
+  }
+
+</div>
