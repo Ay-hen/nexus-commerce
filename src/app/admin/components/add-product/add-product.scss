@@ -1,37 +1,37 @@
 // add-product.component.scss
-// ─── Admin tokens ─────────────────────────────────────────────────────────────
-$surface:       #111827;
-$surface2:      #1C2333;
-$surface3:      #252D3D;
-$border:        rgba(255,255,255,.07);
-$border2:       rgba(255,255,255,.12);
-$border3:       rgba(255,255,255,.18);
+// ─── Admin tokens (Light — matches dashboard/products/layout exactly) ─────────
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+$border3:       #C7CCD3;
 
-$text-primary:  #F1F5F9;
-$text-mid:      #94A3B8;
-$text-light:    #64748B;
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
 
-$accent:        #0066FF;
-$accent-light:  #3B82F6;
-$accent-bg:     rgba(0,102,255,.12);
-$accent-glow:   rgba(0,102,255,.2);
+$accent:        #4F46E5;
+$accent-light:  #6366F1;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
 
 $green:         #10B981;
-$green-bg:      rgba(16,185,129,.12);
+$green-bg:      rgba(16,185,129,.08);
 $red:           #EF4444;
-$red-bg:        rgba(239,68,68,.12);
+$red-bg:        rgba(239,68,68,.08);
 $amber:         #F59E0B;
-$amber-bg:      rgba(245,158,11,.12);
-$purple:        #7C5CFC;
-$purple-bg:     rgba(124,92,252,.12);
+$amber-bg:      rgba(245,158,11,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
 
-$radius-sm:     6px;
-$radius-md:     10px;
-$radius-lg:     14px;
-$radius-xl:     18px;
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-xl:     20px;
 $radius-pill:   999px;
 
-$shadow-card:   0 1px 3px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.04);
+$shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 $ease:          cubic-bezier(.25,.1,.25,1);
 $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
@@ -84,7 +84,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border-radius: 50%;
   background: $green;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 0 14px rgba($green, .15);
+  box-shadow: 0 0 0 14px rgba($green, .12);
   animation: success-pop .4s $ease-spring;
 }
 
@@ -98,7 +98,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   z-index: 100;
   background: rgba($surface, .92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid $border2;
+  border-bottom: 1px solid $border;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -117,14 +117,14 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .back-link {
   width: 34px; height: 34px;
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
   border-radius: $radius-sm;
   display: flex; align-items: center; justify-content: center;
   color: $text-mid; text-decoration: none;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, border-color .15s;
   flex-shrink: 0;
 
-  &:hover { background: $surface3; color: $text-primary; }
+  &:hover { background: $surface3; color: $text-primary; border-color: $border2; }
 }
 
 .page-title {
@@ -152,7 +152,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: $surface2;
+  background: $surface;
   border: 1px solid $border2;
   border-radius: $radius-sm;
   font: inherit;
@@ -160,9 +160,9 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   font-weight: 600;
   color: $text-mid;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, border-color .15s;
 
-  &:hover:not(:disabled) { background: $surface3; color: $text-primary; }
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
   &:disabled { opacity: .5; cursor: not-allowed; }
 }
 
@@ -183,8 +183,8 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   transition: background .15s, box-shadow .15s;
 
   &:hover:not(:disabled) {
-    background: darken($accent, 8%);
-    box-shadow: 0 4px 16px $accent-glow;
+    background: darken($accent, 7%);
+    box-shadow: 0 4px 14px $accent-glow;
   }
 
   &:disabled { opacity: .6; cursor: not-allowed; }
@@ -192,7 +192,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .spinner-sm {
   width: 15px; height: 15px;
-  border: 2px solid rgba(0,0,0,.2);
+  border: 2px solid rgba(17,24,39,.12);
   border-top-color: $text-mid;
   border-radius: 50%;
   animation: spin .7s linear infinite;
@@ -253,11 +253,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 
-  &.blue   { background: $accent-bg;  color: $accent-light; }
+  &.blue   { background: $accent-bg;  color: $accent;       }
   &.green  { background: $green-bg;   color: $green;        }
   &.amber  { background: $amber-bg;   color: $amber;        }
   &.purple { background: $purple-bg;  color: $purple;       }
-  &.slate  { background: rgba(100,116,139,.12); color: $text-mid; }
+  &.slate  { background: $surface3;   color: $text-mid;     }
 }
 
 .card-title {
@@ -302,17 +302,18 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .field__textarea,
 .field__select {
   background: $surface2;
-  border: 1.5px solid $border2;
+  border: 1.5px solid $border;
   border-radius: $radius-sm;
   font: inherit;
   font-size: .85rem;
   color: $text-primary;
-  transition: border-color .15s $ease, box-shadow .15s;
+  transition: border-color .15s $ease, box-shadow .15s, background .15s;
 
   &::placeholder { color: $text-light; }
 
   &:focus {
     outline: none;
+    background: $surface;
     border-color: $accent;
     box-shadow: 0 0 0 3px $accent-glow;
   }
@@ -407,7 +408,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   height: 42px;
   padding: 0 10px;
   background: $surface3;
-  border: 1.5px solid $border2;
+  border: 1.5px solid $border;
   border-right: none;
   border-radius: $radius-sm 0 0 $radius-sm;
   font-size: .78rem;
@@ -432,7 +433,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   gap: 14px;
   padding: 14px;
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
   border-radius: $radius-md;
   margin-bottom: 18px;
   cursor: pointer;
@@ -448,7 +449,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border: 1px solid $border2;
   position: relative;
   cursor: pointer;
-  transition: background .2s $ease;
+  transition: background .2s $ease, border-color .2s;
 
   &.on { background: $accent; border-color: $accent; }
 }
@@ -460,12 +461,12 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: $text-mid;
-  transition: transform .2s $ease, background .2s;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16,24,40,.2);
+  transition: transform .2s $ease;
 
   .toggle-switch.on & {
     transform: translateX(18px);
-    background: #fff;
   }
 }
 
@@ -521,7 +522,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border-radius: $radius-md;
   overflow: hidden;
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
 
   &--sm { border-radius: $radius-sm; }
 
@@ -535,7 +536,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   &__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,.5);
+    background: rgba(17,24,39,.55);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -552,7 +553,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
     right: 6px;
     font-size: .65rem;
     color: #fff;
-    background: rgba(0,0,0,.5);
+    background: rgba(17,24,39,.6);
     border-radius: $radius-pill;
     padding: 1px 6px;
   }
@@ -573,16 +574,16 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .tile-action {
   width: 30px; height: 30px;
-  background: rgba(255,255,255,.15);
-  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.3);
   border-radius: $radius-sm;
   color: #fff;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: background .15s;
 
-  &:hover { background: rgba(255,255,255,.3); }
-  &--danger:hover { background: rgba($red, .6); border-color: rgba($red, .5); }
+  &:hover { background: rgba(255,255,255,.32); }
+  &--danger:hover { background: rgba($red, .7); border-color: rgba($red, .6); }
 }
 
 // Upload slot
@@ -603,7 +604,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   &--drag {
     border-color: $accent;
     background: $accent-bg;
-    color: $accent-light;
+    color: $accent;
   }
 
   &__label { font-size: .78rem; font-weight: 600; color: inherit; text-align: center; }
@@ -620,7 +621,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
 .variant-card {
   background: $surface2;
-  border: 1px solid $border2;
+  border: 1px solid $border;
   border-radius: $radius-md;
   padding: 14px;
 }
@@ -659,16 +660,16 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   flex: 1;
   height: 36px;
   padding: 0 10px;
-  background: $surface3;
+  background: $surface;
   border: 1.5px solid $border;
   border-radius: $radius-sm;
   font: inherit;
   font-size: .83rem;
   color: $text-primary;
-  transition: border-color .15s;
+  transition: border-color .15s, background .15s;
 
   &::placeholder { color: $text-light; }
-  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+  &:focus { outline: none; background: $surface; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
 }
 
 .variant-remove-btn {
@@ -682,7 +683,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   cursor: pointer;
   transition: background .15s, color .15s;
 
-  &:hover:not(:disabled) { background: $red-bg; color: $red; border-color: rgba($red, .3); }
+  &:hover:not(:disabled) { background: $red-bg; color: $red; border-color: rgba($red, .25); }
   &:disabled { opacity: .3; cursor: not-allowed; }
 }
 
@@ -705,7 +706,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
   &:hover {
     border-color: $accent;
-    color: $accent-light;
+    color: $accent;
     background: $accent-bg;
   }
 }
@@ -795,7 +796,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border: 1px solid $border2;
   position: relative;
   cursor: pointer;
-  transition: background .2s;
+  transition: background .2s, border-color .2s;
 
   &.on { background: $accent; border-color: $accent; }
 }
@@ -805,10 +806,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   top: 2px; left: 2px;
   width: 14px; height: 14px;
   border-radius: 50%;
-  background: $text-mid;
-  transition: transform .2s $ease, background .2s;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16,24,40,.2);
+  transition: transform .2s $ease;
 
-  .mini-toggle.on & { transform: translateX(16px); background: #fff; }
+  .mini-toggle.on & { transform: translateX(16px); }
 }
 
 // ─── Preview card ─────────────────────────────────────────────────────────────
@@ -846,7 +848,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border-radius: $radius-pill;
   padding: 3px 8px;
 
-  &--new { background: #10B981; }
+  &--new { background: $green; }
 }
 
 .preview-body { padding: 12px; }
@@ -860,7 +862,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   gap: 7px;
 }
 
-.preview-price    { font-size: 1rem; font-weight: 800; color: $accent-light; }
+.preview-price    { font-size: 1rem; font-weight: 800; color: $accent; }
 .preview-orig     { font-size: .75rem; color: $text-light; text-decoration: line-through; }
 .preview-discount { font-size: .7rem; font-weight: 700; color: $red; background: $red-bg; border-radius: $radius-pill; padding: 1px 6px; }
 
