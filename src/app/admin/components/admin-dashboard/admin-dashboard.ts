@@ -1,14 +1,13 @@
 // admin-dashboard.component.ts
 import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   StatCard, Order, AdminProduct, Customer, ChartPoint, RevenuePoint
 } from '../../model/admin-models.model';
 
 @Component({
   selector: 'app-admin-dashboard',
-  standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss',
@@ -17,6 +16,10 @@ export class AdminDashboard implements OnInit {
 
   isLoading = signal(true);
   skeletons = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  constructor(private router : Router){
+
+  }
 
   // ── Stat cards ────────────────────────────────────────────────────────────
   statCards: StatCard[] = [
@@ -137,5 +140,9 @@ export class AdminDashboard implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => this.isLoading.set(false), 700);
+  }
+
+  addProduct(): void{
+    this.router.navigate(['/admin/products/new'])
   }
 }
