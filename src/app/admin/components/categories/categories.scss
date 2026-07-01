@@ -1067,3 +1067,21 @@ $z-modal:       1000;
   .modal,
   .action-menu { animation: none !important; transition: none !important; }
 }
+
+// Menus on the last couple of rows would otherwise open downward and get
+// clipped by (or spill past) the bottom of the table card. Since there's no
+// JS measuring viewport space, flip those specific rows' menus to open
+// upward instead — anchored to the bottom of the trigger button rather than
+// the top, so they expand into open space above the row instead of off the
+// edge of the table.
+.table-row:nth-last-child(-n+2) .action-menu {
+  top: auto;
+  bottom: calc(100% + 6px);
+  transform-origin: bottom right;
+  animation-name: menu-in-up;
+}
+
+@keyframes menu-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
