@@ -1,1 +1,488 @@
-<p>categories works!</p>
+<div class="categories-page">
+
+  <!-- ── DELETE CONFIRM MODAL ─────────────────────────────────────────────── -->
+  @if (pendingDelete()) {
+    <div class="modal-backdrop" (click)="cancelDelete()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </div>
+        <h2 class="modal__title" id="modal-title">Delete Category</h2>
+        <p class="modal__body">
+          Are you sure you want to delete <strong>{{ pendingDelete()!.name }}</strong>?
+          This action cannot be undone and may affect {{ pendingDelete()!.productCount }} products.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDelete()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            </svg>
+            Delete Category
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <div class="page-title-group">
+        <div class="page-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="page-title">Categories</h1>
+          <p class="page-sub">Manage your product taxonomy</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export
+      </button>
+      <a routerLink="/admin/categories/new" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add Category
+      </a>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="sk-stat shimmer"></div>
+      }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Total Categories</p>
+          <p class="stat-card__value">{{ totalCategories() }}</p>
+          <p class="stat-card__sub">across all sections</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--green">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Active</p>
+          <p class="stat-card__value">{{ activeCategories() }}</p>
+          <p class="stat-card__sub">visible in store</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--amber">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Featured</p>
+          <p class="stat-card__value">{{ featuredCount() }}</p>
+          <p class="stat-card__sub">on homepage</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--purple">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Total Products</p>
+          <p class="stat-card__value">{{ totalProducts() | number }}</p>
+          <p class="stat-card__sub">catalogued items</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar">
+    <!-- Search -->
+    <div class="search-wrap">
+      <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Search categories…"
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+        aria-label="Search categories"
+      />
+      @if (searchQuery()) {
+        <button class="search-clear" (click)="onSearch('')" aria-label="Clear search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <!-- Status filter pills -->
+    <div class="filter-pills" role="group" aria-label="Filter by status">
+      <button class="filter-pill" [class.filter-pill--active]="statusFilter() === 'all'"   (click)="setStatusFilter('all')">All</button>
+      <button class="filter-pill" [class.filter-pill--active]="statusFilter() === 'active'"   (click)="setStatusFilter('active')">Active</button>
+      <button class="filter-pill" [class.filter-pill--active]="statusFilter() === 'inactive'" (click)="setStatusFilter('inactive')">Inactive</button>
+    </div>
+
+    <!-- Featured toggle -->
+    <button class="filter-pill filter-pill--star" [class.filter-pill--active]="featuredOnly()" (click)="toggleFeaturedOnly()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      Featured
+    </button>
+
+    <div class="toolbar__right">
+      <!-- Results count -->
+      <span class="results-label">{{ pageRangeLabel() }}</span>
+
+      <!-- View mode toggle -->
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/>
+            <line x1="9" y1="9" x2="9" y2="21"/>
+          </svg>
+        </button>
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) {
+          <div class="sk-row shimmer" [style.animation-delay]="(i * 0.06) + 's'"></div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT (loaded) ──────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    <!-- ── EMPTY STATE ────────────────────────────────────────────────────── -->
+    @if (filteredCategories().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </div>
+        <h3 class="empty-state__title">No categories found</h3>
+        <p class="empty-state__sub">
+          @if (searchQuery() || statusFilter() !== 'all' || featuredOnly()) {
+            Try adjusting your search or filters.
+          } @else {
+            Create your first category to organize your products.
+          }
+        </p>
+        @if (searchQuery() || statusFilter() !== 'all' || featuredOnly()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        } @else {
+          <a routerLink="/admin/categories/new" class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Category
+          </a>
+        }
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- TABLE VIEW                                                            -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    @if (viewMode() === 'table' && filteredCategories().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--img"></th>
+                <th>
+                  <button class="th-sort" (click)="setSort('name')">
+                    Category
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'name'" [class.sort-icon--desc]="sortKey() === 'name' && sortDir() === 'desc'">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </button>
+                </th>
+                <th>Status</th>
+                <th>Featured</th>
+                <th>
+                  <button class="th-sort" (click)="setSort('productCount')">
+                    Products
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'productCount'" [class.sort-icon--desc]="sortKey() === 'productCount' && sortDir() === 'desc'">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </button>
+                </th>
+                <th>
+                  <button class="th-sort" (click)="setSort('createdAt')">
+                    Created
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'createdAt'" [class.sort-icon--desc]="sortKey() === 'createdAt' && sortDir() === 'desc'">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </span>
+                  </button>
+                </th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (cat of pagedCategories(); track trackById($index, cat)) {
+                <tr class="table-row" [style.animation-delay]="($index * 0.04) + 's'">
+
+                  <!-- Thumbnail -->
+                  <td class="td--img">
+                    <div class="cat-thumb">
+                      <img [src]="cat.image" [alt]="cat.name" class="cat-thumb__img" loading="lazy" />
+                    </div>
+                  </td>
+
+                  <!-- Name + slug -->
+                  <td>
+                    <p class="cat-name">{{ cat.name }}</p>
+                    <p class="cat-slug">/{{ cat.slug }}</p>
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    <span class="status-pill" [class.status-pill--active]="cat.status === 'active'" [class.status-pill--inactive]="cat.status === 'inactive'">
+                      <span class="status-dot"></span>
+                      {{ cat.status | titlecase }}
+                    </span>
+                  </td>
+
+                  <!-- Featured -->
+                  <td>
+                    @if (cat.featured) {
+                      <span class="featured-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        Featured
+                      </span>
+                    } @else {
+                      <span class="no-badge">—</span>
+                    }
+                  </td>
+
+                  <!-- Product count -->
+                  <td>
+                    <span class="product-count" [class.product-count--zero]="cat.productCount === 0">
+                      {{ cat.productCount | number }}
+                    </span>
+                  </td>
+
+                  <!-- Created date -->
+                  <td class="td--date">{{ formatDate(cat.createdAt) }}</td>
+
+                  <!-- Actions menu -->
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(cat.id, $event)" [attr.aria-expanded]="openMenuId() === cat.id" aria-label="Category actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+                        </svg>
+                      </button>
+
+                      @if (openMenuId() === cat.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(cat.id)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            View
+                          </a>
+                          <a class="action-item" (click)="editCategory(cat.id)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(cat, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- GRID VIEW                                                             -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    @if (viewMode() === 'grid' && filteredCategories().length > 0) {
+      <div class="cat-grid">
+        @for (cat of pagedCategories(); track trackById($index, cat)) {
+          <div class="cat-card" [style.animation-delay]="($index * 0.05) + 's'">
+
+            <!-- Image zone -->
+            <div class="cat-card__img-zone">
+              <img [src]="cat.image" [alt]="cat.name" class="cat-card__img" loading="lazy" />
+
+              <!-- Featured star -->
+              @if (cat.featured) {
+                <span class="cat-card__star" title="Featured">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                </span>
+              }
+
+              <!-- Status dot overlay -->
+              <span class="cat-card__status-dot" [class.cat-card__status-dot--active]="cat.status === 'active'" [title]="cat.status | titlecase"></span>
+
+              <!-- Hover overlay with actions -->
+              <div class="cat-card__overlay">
+                <a class="card-action-btn" (click)="showDetails(cat.id)" title="View">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </a>
+                <a class="card-action-btn" (click)="editCategory(cat.id)" title="Edit">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </a>
+                <button class="card-action-btn card-action-btn--danger" title="Delete" (click)="requestDelete(cat, $event)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card body -->
+            <div class="cat-card__body">
+              <div class="cat-card__top">
+                <p class="cat-card__name">{{ cat.name }}</p>
+                <span class="status-pill status-pill--sm" [class.status-pill--active]="cat.status === 'active'" [class.status-pill--inactive]="cat.status === 'inactive'">
+                  {{ cat.status | titlecase }}
+                </span>
+              </div>
+              <p class="cat-card__slug">/{{ cat.slug }}</p>
+              <div class="cat-card__footer">
+                <span class="cat-card__count">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  </svg>
+                  {{ cat.productCount | number }} products
+                </span>
+                <span class="cat-card__date">{{ formatDate(cat.createdAt) }}</span>
+              </div>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (filteredCategories().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+
+          @for (page of pageNumbers(); track page) {
+            <button class="page-btn" [class.page-btn--active]="page === currentPage()" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }<!-- /!isLoading -->
+
+</div>
