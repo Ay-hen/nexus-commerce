@@ -35,6 +35,12 @@ $shadow-menu:   0 8px 24px rgba(16,24,40,.12), 0 2px 6px rgba(16,24,40,.06);
 $ease:          cubic-bezier(.25,.1,.25,1);
 $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 
+// ─── Z-index scale ──────────────────────────────────────────────────────────
+// Kept explicit so the action menu portal is guaranteed to sit above the
+// delete modal and everything else in the page, regardless of DOM order.
+$z-modal:       1000;
+$z-action-menu: 10000;
+
 // ─── Keyframes ─────────────────────────────────────────────────────────────────
 @keyframes pop-in {
   from { opacity: 0; transform: translateY(10px) scale(.98); }
@@ -102,7 +108,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: $z-modal;
   background: rgba(17,24,39,.5);
   backdrop-filter: blur(6px);
   display: flex;
@@ -506,10 +512,17 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   border: 1px solid $border;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  overflow: hidden;
+  overflow: visible;
   animation: pop-in .28s .05s $ease both;
 }
 
+// NOTE: overflow-x: auto here implicitly computes overflow-y as auto too
+// (browsers can't scroll one axis and leave the other "visible" — see the
+// CSS overflow spec). That combination is what was clipping the dropdown
+// vertically. We no longer rely on this container NOT clipping — the action
+// menu has been moved out of this DOM subtree entirely and is rendered as a
+// `position: fixed` portal at the page root, so this rule is now safe to
+// keep as-is for horizontal scrolling on narrow screens.
 .table-wrap {
   overflow-x: auto;
 }
@@ -675,7 +688,11 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 }
 
 // ─── Action menu ──────────────────────────────────────────────────────────────
-.action-menu-wrap { position: relative; display: inline-flex; justify-content: flex-end; }
+.action-menu-wrap {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-end;
+}
 
 .action-trigger {
   width: 30px;
@@ -698,16 +715,23 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   }
 }
 
+// This is now a PORTAL element: it is rendered once at the root of the
+// component (not inside any <td>/<tr>/<table>) and positioned with
+// `position: fixed` using inline top/left styles computed in the TS
+// (toggleMenu()). `position: fixed` is placed relative to the viewport and
+// is not affected by ancestor `overflow` at all — only by an ancestor with
+// a `transform`/`filter`/`perspective`, which this component doesn't have —
+// so the menu can never be clipped by the table, its wrapper, or the card.
+// z-index is set above the delete modal (1000) to guarantee it always
+// renders on top of everything else in the page.
 .action-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  z-index: 200;
+  position: fixed;
+  z-index: $z-action-menu;
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-md;
   box-shadow: $shadow-menu;
-  min-width: 148px;
+  width: 150px;
   overflow: hidden;
   animation: menu-in .18s $ease-spring;
 }
