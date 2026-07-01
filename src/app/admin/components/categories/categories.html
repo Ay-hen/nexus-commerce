@@ -31,45 +31,6 @@
     </div>
   }
 
-  <!-- ── ACTION MENU PORTAL ───────────────────────────────────────────────── -->
-  <!-- Rendered once at the component root, completely outside the table's
-       DOM subtree. Positioned with `position: fixed` using coordinates
-       computed from the trigger button's bounding rect (see toggleMenu()),
-       so it can never be clipped by table/tbody/tr/td or any overflow
-       container, and always renders above everything else via z-index. -->
-  @if (openMenuId() && activeMenuCategory() && menuPosition()) {
-    <div
-      class="action-menu action-menu--portal"
-      role="menu"
-      [style.top.px]="menuPosition()!.top"
-      [style.left.px]="menuPosition()!.left"
-      (click)="$event.stopPropagation()"
-    >
-      <a class="action-item" (click)="showDetails(activeMenuCategory()!.id)" role="menuitem">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        View
-      </a>
-      <a class="action-item" (click)="editCategory(activeMenuCategory()!.id)" role="menuitem">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-        </svg>
-        Edit
-      </a>
-      <div class="action-divider"></div>
-      <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(activeMenuCategory()!, $event)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-        </svg>
-        Delete
-      </button>
-    </div>
-  }
-
   <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
   <div class="page-header">
     <div class="page-header__left">
@@ -369,8 +330,9 @@
                   <!-- Created date -->
                   <td class="td--date">{{ formatDate(cat.createdAt) }}</td>
 
-                  <!-- Actions trigger only — the menu itself lives in the
-                       root-level portal above, not here. -->
+                  <!-- Actions — trigger button + dropdown, both live inside
+                       .action-menu-wrap so the menu is anchored directly to
+                       its button and scrolls naturally with the row. -->
                   <td class="td--actions">
                     <div class="action-menu-wrap">
                       <button
@@ -383,6 +345,33 @@
                           <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                         </svg>
                       </button>
+
+                      @if (openMenuId() === cat.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(cat.id)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            View
+                          </a>
+                          <a class="action-item" (click)="editCategory(cat.id)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(cat, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
                     </div>
                   </td>
                 </tr>

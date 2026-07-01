@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -17,18 +17,13 @@ export interface AdminCategory {
 
 type SortKey = 'name' | 'productCount' | 'createdAt';
 
-interface MenuPosition {
-  top: number;
-  left: number;
-}
-
 @Component({
   selector: 'app-categories',
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
-export class Categories implements OnInit, OnDestroy {
+export class Categories {
 
   // ── Loading ────────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -62,22 +57,11 @@ export class Categories implements OnInit, OnDestroy {
   pageSize    = signal(6);
   currentPage = signal(1);
 
-  // ── Row menu (portal-based actions dropdown) ──────────────────────────────
-  // The menu is NOT rendered inside the table anymore. It's rendered once at
-  // the root of the component template as a `position: fixed` element, so it
-  // can never be clipped by `table`, `tbody`, `tr`, `td`, or any scrollable
-  // ancestor (e.g. `.table-wrap { overflow-x: auto }`, which also implicitly
-  // clips the y-axis). Its coordinates are computed from the trigger button's
-  // bounding box at open-time, and it flips above the trigger automatically
-  // when there isn't enough room below.
-  openMenuId          = signal<string | null>(null);
-  activeMenuCategory  = signal<AdminCategory | null>(null);
-  menuPosition        = signal<MenuPosition | null>(null);
-
-  private readonly MENU_WIDTH  = 150;
-  private readonly MENU_HEIGHT = 132; // approx: 2 items + divider + 1 danger item
-  private readonly VIEWPORT_MARGIN = 8;
-  private readonly TRIGGER_GAP = 6;
+  // ── Row menu ───────────────────────────────────────────────────────────────
+  // The menu renders in-flow inside `.action-menu-wrap` (position: absolute,
+  // anchored to the trigger button via CSS only), so all that's needed here
+  // is which row's menu (if any) is currently open.
+  openMenuId = signal<string | null>(null);
 
   // ── Delete confirm ────────────────────────────────────────────────────────
   pendingDelete = signal<AdminCategory | null>(null);
@@ -133,28 +117,6 @@ export class Categories implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     setTimeout(() => this.isLoading.set(false), 700);
-    // useCapture: true — this is what lets us catch scroll events fired by
-    // ANY scrollable ancestor (like `.table-wrap`), not just the window.
-    // Scroll events don't bubble, so a normal (bubble-phase) listener would
-    // miss internal container scrolling entirely.
-    window.addEventListener('scroll', this.handleGlobalScroll, true);
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener('scroll', this.handleGlobalScroll, true);
-  }
-
-  private handleGlobalScroll = (): void => {
-    if (this.openMenuId()) {
-      this.closeMenu();
-    }
-  };
-
-  @HostListener('window:resize')
-  onWindowResize(): void {
-    if (this.openMenuId()) {
-      this.closeMenu();
-    }
   }
 
   // ── Search / filter handlers ──────────────────────────────────────────────
@@ -210,54 +172,20 @@ export class Categories implements OnInit, OnDestroy {
     return range;
   }
 
-  // ── Row menu (portal) ──────────────────────────────────────────────────────
+  // ── Row menu ───────────────────────────────────────────────────────────────
   /**
-   * Opens the fixed-position action menu for a given category, computing its
-   * viewport coordinates from the trigger button's bounding rect. Flips the
-   * menu above the trigger if there isn't enough space below, and clamps
-   * horizontally so it never runs off-screen.
+   * Opens/closes the in-flow action menu for a given category. The menu is
+   * positioned purely via CSS (`.action-menu { position: absolute; top: calc(100% + 6px); right: 0; }`
+   * inside `.action-menu-wrap { position: relative; }`), so no coordinates
+   * are computed here.
    */
   toggleMenu(cat: AdminCategory, event: Event): void {
     event.stopPropagation();
-
-    if (this.openMenuId() === cat.id) {
-      this.closeMenu();
-      return;
-    }
-
-    const trigger = event.currentTarget as HTMLElement;
-    const rect = trigger.getBoundingClientRect();
-
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const openUpward = spaceBelow < this.MENU_HEIGHT + this.TRIGGER_GAP && spaceAbove > spaceBelow;
-
-    let top = openUpward
-      ? rect.top - this.MENU_HEIGHT - this.TRIGGER_GAP
-      : rect.bottom + this.TRIGGER_GAP;
-
-    // Clamp vertically so the menu is always fully on-screen even in edge cases.
-    top = Math.max(
-      this.VIEWPORT_MARGIN,
-      Math.min(top, window.innerHeight - this.MENU_HEIGHT - this.VIEWPORT_MARGIN)
-    );
-
-    // Right-align the menu to the trigger's right edge, then clamp horizontally.
-    let left = rect.right - this.MENU_WIDTH;
-    left = Math.max(
-      this.VIEWPORT_MARGIN,
-      Math.min(left, window.innerWidth - this.MENU_WIDTH - this.VIEWPORT_MARGIN)
-    );
-
-    this.menuPosition.set({ top, left });
-    this.activeMenuCategory.set(cat);
-    this.openMenuId.set(cat.id);
+    this.openMenuId.update(id => (id === cat.id ? null : cat.id));
   }
 
   closeMenu(): void {
     this.openMenuId.set(null);
-    this.activeMenuCategory.set(null);
-    this.menuPosition.set(null);
   }
 
   @HostListener('document:click')
