@@ -1,0 +1,207 @@
+<div class="vcm-backdrop" [class.vcm-backdrop--closing]="closing()" (click)="onBackdropClick()">
+  <div
+    class="vcm-modal"
+    [class.vcm-modal--closing]="closing()"
+    (click)="stop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="vcm-title"
+  >
+    <!-- ── Header (fixed) ─────────────────────────────────────────────── -->
+    <header class="vcm-header">
+      <div class="vcm-header__left">
+        <div class="vcm-header__thumb">
+          <img [src]="category.image" [alt]="category.name" />
+        </div>
+        <div class="vcm-header__info">
+          <h2 class="vcm-header__name" id="vcm-title">{{ category.name }}</h2>
+          <p class="vcm-header__slug">/{{ category.slug }}</p>
+          <div class="vcm-header__badges">
+            <span
+              class="vcm-badge"
+              [class.vcm-badge--active]="category.status === 'active'"
+              [class.vcm-badge--inactive]="category.status === 'inactive'"
+            >
+              <span class="vcm-badge__dot"></span>
+              {{ category.status === 'active' ? 'Active' : 'Inactive' }}
+            </span>
+            @if (category.featured) {
+              <span class="vcm-badge vcm-badge--featured">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Featured
+              </span>
+            }
+            <span class="vcm-meta">Created {{ formatDate(category.createdAt) }}</span>
+            <span class="vcm-meta-dot">·</span>
+            <span class="vcm-meta">Updated {{ formatDate(category.updatedAt) }}</span>
+          </div>
+        </div>
+      </div>
+      <button class="vcm-close" (click)="requestClose()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ── Body (scrollable) ──────────────────────────────────────────── -->
+    <div class="vcm-body">
+
+      <!-- Stats -->
+      <section class="vcm-section">
+        <div class="vcm-stats-grid">
+          <div class="vcm-stat">
+            <p class="vcm-stat__label">Products</p>
+            <p class="vcm-stat__value">{{ category.stats.productsInCategory | number }}</p>
+          </div>
+          <div class="vcm-stat">
+            <p class="vcm-stat__label">Featured</p>
+            <p class="vcm-stat__value">{{ category.stats.featuredProducts | number }}</p>
+          </div>
+          <div class="vcm-stat">
+            <p class="vcm-stat__label">Avg. Rating</p>
+            <p class="vcm-stat__value">{{ category.stats.avgRating | number:'1.1-1' }}<span class="vcm-stat__unit">/5</span></p>
+          </div>
+          <div class="vcm-stat">
+            <p class="vcm-stat__label">Total Sales</p>
+            <p class="vcm-stat__value">{{ category.stats.totalSales | number }}</p>
+          </div>
+          <div class="vcm-stat">
+            <p class="vcm-stat__label">Views</p>
+            <p class="vcm-stat__value">{{ category.stats.views | number }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Description -->
+      <section class="vcm-section">
+        <h3 class="vcm-section__title">Description</h3>
+        <div class="vcm-desc-card">
+          <p>{{ category.description }}</p>
+        </div>
+      </section>
+
+      <!-- SEO -->
+      <section class="vcm-section">
+        <h3 class="vcm-section__title">SEO</h3>
+        <div class="vcm-seo-card">
+          <div class="vcm-seo-row">
+            <span class="vcm-seo-row__label">Meta Title</span>
+            <span class="vcm-seo-row__value">{{ category.seo.metaTitle }}</span>
+          </div>
+          <div class="vcm-seo-row">
+            <span class="vcm-seo-row__label">Meta Description</span>
+            <span class="vcm-seo-row__value">{{ category.seo.metaDescription }}</span>
+          </div>
+          <div class="vcm-seo-row">
+            <span class="vcm-seo-row__label">Keywords</span>
+            <span class="vcm-seo-row__value vcm-seo-row__value--tags">
+              @for (kw of category.seo.keywords; track kw) {
+                <span class="vcm-tag">{{ kw }}</span>
+              }
+            </span>
+          </div>
+          <div class="vcm-seo-row">
+            <span class="vcm-seo-row__label">Slug</span>
+            <span class="vcm-seo-row__value vcm-mono">/{{ category.slug }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cover image -->
+      <section class="vcm-section">
+        <h3 class="vcm-section__title">Cover Image</h3>
+        <button class="vcm-cover" (click)="openZoom(category.coverImage, $event)" type="button">
+          <img [src]="category.coverImage" [alt]="category.name" />
+          <span class="vcm-cover__hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+            Click to zoom
+          </span>
+        </button>
+      </section>
+
+      <!-- Gallery -->
+      @if (category.gallery.length > 1) {
+        <section class="vcm-section">
+          <h3 class="vcm-section__title">Gallery</h3>
+          <div class="vcm-gallery">
+            @for (img of category.gallery; track trackByImage($index, img)) {
+              <button class="vcm-gallery__item" (click)="openZoom(img, $event)" type="button">
+                <img [src]="img" [alt]="category.name" />
+              </button>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Products preview -->
+      <section class="vcm-section">
+        <div class="vcm-section__head">
+          <h3 class="vcm-section__title">Products in this Category</h3>
+          <span class="vcm-section__count">{{ category.products.length }} shown</span>
+        </div>
+        @if (category.products.length === 0) {
+          <div class="vcm-empty-mini">No products linked to this category yet.</div>
+        } @else {
+          <div class="vcm-products-grid">
+            @for (p of category.products.slice(0, 6); track trackByProduct($index, p)) {
+              <div class="vcm-product-card">
+                <div class="vcm-product-card__img"><img [src]="p.image" [alt]="p.name" /></div>
+                <p class="vcm-product-card__name">{{ p.name }}</p>
+                <div class="vcm-product-card__row">
+                  <span class="vcm-product-card__price">{{ p.price | number:'1.2-2' }} MAD</span>
+                  <span class="vcm-product-card__rating">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    {{ p.rating | number:'1.1-1' }}
+                  </span>
+                </div>
+                <div class="vcm-product-card__row">
+                  <span
+                    class="vcm-stock-pill"
+                    [class.vcm-stock-pill--low]="p.status === 'low-stock'"
+                    [class.vcm-stock-pill--out]="p.status === 'out-of-stock'"
+                  >
+                    {{ stockLabel(p) }}
+                  </span>
+                  <button class="vcm-product-card__link" type="button">View Product</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+    </div>
+
+    <!-- ── Footer (fixed) ─────────────────────────────────────────────── -->
+    <footer class="vcm-footer">
+      <button class="btn-ghost" type="button" (click)="requestClose()">Close</button>
+      <button class="btn-primary" type="button" (click)="onEdit()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Category
+      </button>
+    </footer>
+  </div>
+</div>
+
+<!-- ── Lightbox ─────────────────────────────────────────────────────────── -->
+@if (zoomedImage()) {
+  <div class="vcm-lightbox" (click)="closeZoom()">
+    <img [src]="zoomedImage()" [alt]="category.name" (click)="stop($event)" />
+    <button class="vcm-lightbox__close" (click)="closeZoom()" aria-label="Close preview" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+}
