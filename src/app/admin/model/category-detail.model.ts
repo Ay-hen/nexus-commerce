@@ -3,8 +3,7 @@
 // component instead of redefining it. Adjust the import path below to
 // match where these modal files actually live relative to `categories.ts`
 // (this assumes: src/app/admin/categories/{categories.ts, category-detail.model.ts}).
-
-import { AdminCategory } from "./admin-category.model";
+import { AdminCategory } from './admin-category.model';
 
 export type ProductStockStatus = 'in-stock' | 'low-stock' | 'out-of-stock';
 
