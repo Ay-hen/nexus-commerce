@@ -402,3 +402,5 @@ export class AddProduct implements OnDestroy {
 
   ngOnDestroy(): void { /* cleanup if needed */ }
 }
+
+

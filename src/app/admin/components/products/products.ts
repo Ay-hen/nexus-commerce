@@ -12,7 +12,7 @@ type SortField = 'name' | 'price' | 'stock' | 'sales' | 'status';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
@@ -166,7 +166,7 @@ export class Products implements OnInit {
   setCategory(c: string): void { this.activeCategory.set(c); this.currentPage.set(1); }
 
   // ── CRUD ──────────────────────────────────────────────────────────────────
-  editProduct(id: number): void { this.router.navigate(['/admin/products', id, 'edit']); }
+  editProduct(id: number): void { this.router.navigate(['/admin/product', id, 'edit']); }
   addProduct():            void { this.router.navigate(['/admin/products/new']); }
 
   duplicateProduct(product: AdminProduct): void {

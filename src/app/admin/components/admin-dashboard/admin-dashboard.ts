@@ -146,3 +146,5 @@ export class AdminDashboard implements OnInit {
     this.router.navigate(['/admin/products/new'])
   }
 }
+
+

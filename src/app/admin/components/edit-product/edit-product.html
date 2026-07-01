@@ -1,1 +1,705 @@
-<p>edit-product works!</p>
+<!-- edit-product.component.html -->
+<div class="edit-product-page">
+
+  <!-- ── LIGHTBOX ─────────────────────────────────────────────────────────── -->
+  @if (lightboxSrc()) {
+    <div class="lightbox" (click)="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image preview">
+      <button class="lightbox__close" (click)="closeLightbox()" aria-label="Close preview">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <img [src]="lightboxSrc()!" class="lightbox__img" alt="Image preview" (click)="$event.stopPropagation()" />
+    </div>
+  }
+
+  <!-- ── SUCCESS OVERLAY ──────────────────────────────────────────────────── -->
+  @if (submitStatus() === 'success') {
+    <div class="success-overlay" role="status" aria-live="polite">
+      <div class="success-ring">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <p class="success-title">Changes saved!</p>
+      <p class="success-sub">Returning to products list…</p>
+    </div>
+  }
+
+  <!-- ── LOADING SKELETON ─────────────────────────────────────────────────── -->
+  @if (isLoadingProduct()) {
+    <div class="skeleton-page" aria-busy="true" aria-label="Loading product">
+      <div class="sk-bar shimmer"></div>
+      <div class="sk-layout">
+        <div class="sk-main">
+          <div class="sk-card shimmer"></div>
+          <div class="sk-card shimmer"></div>
+          <div class="sk-card shimmer" style="height: 280px"></div>
+        </div>
+        <div class="sk-side">
+          <div class="sk-card shimmer" style="height: 200px"></div>
+          <div class="sk-card shimmer" style="height: 180px"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── LOAD ERROR ───────────────────────────────────────────────────────── -->
+  @if (loadError()) {
+    <div class="error-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p class="error-state__title">{{ loadError() }}</p>
+      <a routerLink="/admin/products" class="btn-back-link">← Back to Products</a>
+    </div>
+  }
+
+  <!-- ── MAIN FORM ─────────────────────────────────────────────────────────── -->
+  @if (!isLoadingProduct() && !loadError()) {
+
+    <!-- ── STICKY TOP BAR ──────────────────────────────────────────────────── -->
+    <div class="sticky-bar">
+      <div class="sticky-bar__left">
+        <a routerLink="/admin/products" class="back-link" aria-label="Back to products">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </a>
+        <div>
+          <h1 class="page-title">Edit Product</h1>
+          <p class="page-sub">{{ form().name || 'Untitled product' }} · ID #{{ productId() }}</p>
+        </div>
+      </div>
+
+      <div class="sticky-bar__actions">
+        <!-- Status chip -->
+        <span class="status-chip" [class.status-chip--active]="form().status === 'active'">
+          <span class="status-dot"></span>
+          {{ form().status === 'active' ? 'Published' : 'Draft' }}
+        </span>
+
+        <button class="btn-draft" (click)="saveDraft()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) { <span class="spinner-sm" aria-hidden="true"></span> }
+          Save as Draft
+        </button>
+        <button class="btn-save" (click)="saveChanges()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span>
+          } @else {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          }
+          Save Changes
+        </button>
+      </div>
+    </div>
+
+    <!-- ── FORM LAYOUT ──────────────────────────────────────────────────────── -->
+    <div class="form-layout">
+
+      <!-- LEFT COLUMN ──────────────────────────────────────────────────────── -->
+      <div class="form-col form-col--main">
+
+        <!-- ── BASIC INFORMATION ──────────────────────────────────────────── -->
+        <section class="form-card" aria-labelledby="sec-basic">
+          <div class="card-header">
+            <div class="card-header__icon blue">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+            </div>
+            <h2 class="card-title" id="sec-basic">Basic Information</h2>
+          </div>
+
+          <div class="field-grid">
+            <!-- Name -->
+            <div class="field field--full" [class.field--error]="hasError('name')">
+              <label class="field__label" for="name">Product Name <span class="required">*</span></label>
+              <input id="name" class="field__input" type="text"
+                placeholder="Product name" maxlength="120"
+                [value]="form().name"
+                (input)="patchForm({ name: $any($event.target).value })" />
+              @if (hasError('name')) { <p class="field__error">{{ errorMsg('name') }}</p> }
+              <span class="field__hint">{{ form().name.length }}/120</span>
+            </div>
+
+            <!-- Brand -->
+            <div class="field" [class.field--error]="hasError('brand')">
+              <label class="field__label" for="brand">Brand <span class="required">*</span></label>
+              <input id="brand" class="field__input" type="text" placeholder="Brand"
+                [value]="form().brand"
+                (input)="patchForm({ brand: $any($event.target).value })" />
+              @if (hasError('brand')) { <p class="field__error">{{ errorMsg('brand') }}</p> }
+            </div>
+
+            <!-- Category -->
+            <div class="field" [class.field--error]="hasError('category')">
+              <label class="field__label" for="category">Category <span class="required">*</span></label>
+              <div class="select-wrap">
+                <select id="category" class="field__select"
+                  [value]="form().category"
+                  (change)="patchForm({ category: $any($event.target).value })">
+                  <option value="" disabled>Select category…</option>
+                  @for (cat of categories; track cat) {
+                    <option [value]="cat" [selected]="form().category === cat">{{ cat }}</option>
+                  }
+                </select>
+                <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              @if (hasError('category')) { <p class="field__error">{{ errorMsg('category') }}</p> }
+            </div>
+
+            <!-- Description -->
+            <div class="field field--full" [class.field--error]="hasError('description')">
+              <label class="field__label" for="description">Description <span class="required">*</span></label>
+              <textarea id="description" class="field__textarea" rows="5"
+                placeholder="Product description…"
+                [value]="form().description"
+                (input)="patchForm({ description: $any($event.target).value })"></textarea>
+              @if (hasError('description')) { <p class="field__error">{{ errorMsg('description') }}</p> }
+            </div>
+
+            <!-- Specifications -->
+            <div class="field field--full">
+              <label class="field__label" for="specs">Specifications</label>
+              <textarea id="specs" class="field__textarea field__textarea--sm" rows="3"
+                placeholder="Driver: 40mm · Frequency: 4Hz–40kHz…"
+                [value]="form().specifications"
+                (input)="patchForm({ specifications: $any($event.target).value })"></textarea>
+            </div>
+
+            <!-- Tags -->
+            <div class="field field--full">
+              <label class="field__label" for="tags">Tags</label>
+              <input id="tags" class="field__input" type="text"
+                placeholder="wireless, premium, audio (comma separated)"
+                [value]="form().tagsRaw"
+                (input)="patchForm({ tagsRaw: $any($event.target).value })" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PRICING & INVENTORY ─────────────────────────────────────────── -->
+        <section class="form-card" aria-labelledby="sec-price">
+          <div class="card-header">
+            <div class="card-header__icon green">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <h2 class="card-title" id="sec-price">Pricing &amp; Inventory</h2>
+          </div>
+
+          <div class="field-grid">
+            <!-- Sale price -->
+            <div class="field" [class.field--error]="hasError('price')">
+              <label class="field__label" for="price">Sale Price ($) <span class="required">*</span></label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input id="price" class="field__input field__input--prefixed" type="number" min="0" step="0.01" placeholder="0.00"
+                  [value]="form().price ?? ''"
+                  (input)="patchForm({ price: +$any($event.target).value || null })" />
+              </div>
+              @if (hasError('price')) { <p class="field__error">{{ errorMsg('price') }}</p> }
+            </div>
+
+            <!-- Original price -->
+            <div class="field">
+              <label class="field__label" for="orig-price">Original Price ($)</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">$</span>
+                <input id="orig-price" class="field__input field__input--prefixed" type="number" min="0" step="0.01" placeholder="0.00"
+                  [value]="form().originalPrice ?? ''"
+                  (input)="patchForm({ originalPrice: +$any($event.target).value || null })" />
+              </div>
+            </div>
+
+            <!-- Discount -->
+            <div class="field" [class.field--error]="hasError('discount')">
+              <label class="field__label" for="discount">Discount (%)</label>
+              <div class="input-suffix-wrap">
+                <input id="discount" class="field__input field__input--suffixed" type="number" min="0" max="100" placeholder="0"
+                  [value]="form().discount ?? computedDiscount() || ''"
+                  (input)="patchForm({ discount: +$any($event.target).value || null })" />
+                <span class="input-suffix">%</span>
+              </div>
+              @if (computedDiscount() > 0 && !form().discount) {
+                <span class="field__hint field__hint--success">Auto-computed: {{ computedDiscount() }}%</span>
+              }
+              @if (hasError('discount')) { <p class="field__error">{{ errorMsg('discount') }}</p> }
+            </div>
+
+            <!-- Stock -->
+            <div class="field" [class.field--error]="hasError('stock')">
+              <label class="field__label" for="stock">Stock Quantity <span class="required">*</span></label>
+              <input id="stock" class="field__input" type="number" min="0" placeholder="0"
+                [value]="form().stock ?? ''"
+                (input)="patchForm({ stock: +$any($event.target).value })" />
+              @if (hasError('stock')) { <p class="field__error">{{ errorMsg('stock') }}</p> }
+            </div>
+
+            <!-- SKU -->
+            <div class="field" [class.field--error]="hasError('sku')">
+              <label class="field__label" for="sku">SKU <span class="required">*</span></label>
+              <input id="sku" class="field__input field__input--mono" type="text" placeholder="BRAND-MODEL"
+                [value]="form().sku"
+                (input)="patchForm({ sku: $any($event.target).value })" />
+              @if (hasError('sku')) { <p class="field__error">{{ errorMsg('sku') }}</p> }
+            </div>
+
+            <!-- Barcode -->
+            <div class="field">
+              <label class="field__label" for="barcode">Barcode</label>
+              <input id="barcode" class="field__input field__input--mono" type="text" placeholder="123456789012"
+                [value]="form().barcode"
+                (input)="patchForm({ barcode: $any($event.target).value })" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SHIPPING ────────────────────────────────────────────────────── -->
+        <section class="form-card" aria-labelledby="sec-ship">
+          <div class="card-header">
+            <div class="card-header__icon amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <h2 class="card-title" id="sec-ship">Shipping</h2>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label class="field__label" for="weight">Weight</label>
+              <div class="input-suffix-wrap">
+                <input id="weight" class="field__input field__input--suffixed" type="number" min="0" placeholder="0"
+                  [value]="form().weight ?? ''"
+                  (input)="patchForm({ weight: +$any($event.target).value || null })" />
+                <span class="input-suffix">g</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="warranty">Warranty</label>
+              <div class="select-wrap">
+                <select id="warranty" class="field__select"
+                  [value]="form().warranty"
+                  (change)="patchForm({ warranty: $any($event.target).value })">
+                  @for (opt of warrantyOptions; track opt) {
+                    <option [value]="opt" [selected]="form().warranty === opt">{{ opt }}</option>
+                  }
+                </select>
+                <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+
+            <div class="field field--full">
+              <label class="field__label">Dimensions (cm)</label>
+              <div class="dim-row">
+                <div class="input-suffix-wrap">
+                  <input class="field__input field__input--suffixed" type="number" min="0" placeholder="Length"
+                    [value]="form().dimLength ?? ''"
+                    (input)="patchForm({ dimLength: +$any($event.target).value || null })" />
+                  <span class="input-suffix">L</span>
+                </div>
+                <div class="input-suffix-wrap">
+                  <input class="field__input field__input--suffixed" type="number" min="0" placeholder="Width"
+                    [value]="form().dimWidth ?? ''"
+                    (input)="patchForm({ dimWidth: +$any($event.target).value || null })" />
+                  <span class="input-suffix">W</span>
+                </div>
+                <div class="input-suffix-wrap">
+                  <input class="field__input field__input--suffixed" type="number" min="0" placeholder="Height"
+                    [value]="form().dimHeight ?? ''"
+                    (input)="patchForm({ dimHeight: +$any($event.target).value || null })" />
+                  <span class="input-suffix">H</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── IMAGES ──────────────────────────────────────────────────────── -->
+        <section class="form-card" aria-labelledby="sec-images">
+          <div class="card-header">
+            <div class="card-header__icon purple">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <h2 class="card-title" id="sec-images">Product Images</h2>
+          </div>
+
+          <!-- Toggle -->
+          <label class="toggle-row">
+            <div class="toggle-switch" [class.on]="hasColorVariants()"
+              (click)="toggleColorVariants()" role="switch" [attr.aria-checked]="hasColorVariants()">
+              <span class="toggle-knob"></span>
+            </div>
+            <div>
+              <p class="toggle-label">Product has multiple color variants</p>
+              <p class="toggle-sub">Upload separate images for each color option</p>
+            </div>
+          </label>
+
+          <!-- Default images -->
+          @if (!hasColorVariants()) {
+            <div class="image-section">
+              <div class="image-section__header">
+                <p class="image-section__title">
+                  Product Images
+                  <span class="image-section__count">{{ defaultImages().length }}/3</span>
+                </p>
+                <p class="image-section__hint">First image is the main display photo. Click to preview.</p>
+              </div>
+
+              @if (hasError('images')) {
+                <p class="field__error" style="margin-bottom: 12px">{{ errorMsg('images') }}</p>
+              }
+
+              <div class="image-grid">
+                @for (img of defaultImages(); track trackById($index, img)) {
+                  <div class="image-tile" (click)="openLightbox(img.preview)">
+                    <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
+                    <div class="image-tile__overlay" (click)="$event.stopPropagation()">
+                      <!-- Replace -->
+                      <label class="tile-action" [for]="'replace-' + img.id" title="Replace" (click)="replaceDefaultImage(img.id)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="1 4 1 10 7 10"/>
+                          <path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+                        </svg>
+                        <input [id]="'replace-' + img.id" type="file" accept="image/*" class="sr-only"
+                          (change)="onDefaultImageSelect($event)" />
+                      </label>
+                      <!-- Preview -->
+                      <button class="tile-action" (click)="openLightbox(img.preview)" title="Full preview" type="button">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                      <!-- Delete -->
+                      <button class="tile-action tile-action--danger" (click)="removeDefaultImage(img.id)" title="Delete" type="button">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                      </button>
+                    </div>
+                    @if ($index === 0) { <span class="main-badge">Main</span> }
+                    <span class="image-tile__size">
+                      {{ img.size > 0 ? formatBytes(img.size) : 'Existing' }}
+                    </span>
+                  </div>
+                }
+
+                @if (defaultImages().length < 3) {
+                  <label class="upload-slot"
+                    [class.upload-slot--drag]="dragOverSlot() === 'default'"
+                    for="default-image-input"
+                    (dragover)="onDragOver($event, 'default')"
+                    (dragleave)="onDragLeave()"
+                    (drop)="onDefaultImageDrop($event)">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <p class="upload-slot__label">Click or drag &amp; drop</p>
+                    <p class="upload-slot__hint">JPEG, PNG, WebP · Max 5 MB</p>
+                    <input id="default-image-input" type="file"
+                      accept="image/jpeg,image/png,image/webp" multiple class="sr-only"
+                      (change)="onDefaultImageSelect($event)" />
+                  </label>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Color variants -->
+          @if (hasColorVariants()) {
+            <div class="variants-list">
+              @if (hasError('colorVariants')) {
+                <p class="field__error" style="margin-bottom: 12px">{{ errorMsg('colorVariants') }}</p>
+              }
+
+              @for (variant of colorVariants(); track trackById($index, variant)) {
+                <div class="variant-card">
+                  <div class="variant-header">
+                    <div class="variant-color-pick">
+                      <input type="color" class="color-picker" [value]="variant.colorHex"
+                        (input)="patchVariant(variant.id, { colorHex: $any($event.target).value })"
+                        [attr.aria-label]="'Color for ' + variant.colorName" />
+                      <span class="color-swatch" [style.background]="variant.colorHex"></span>
+                    </div>
+                    <input class="variant-name-input" type="text"
+                      placeholder="Color name (e.g. Midnight Black)"
+                      [value]="variant.colorName"
+                      (input)="patchVariant(variant.id, { colorName: $any($event.target).value })" />
+                    <button class="variant-remove-btn" type="button"
+                      (click)="removeColorVariant(variant.id)"
+                      [disabled]="colorVariants().length === 1"
+                      aria-label="Remove variant">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="image-grid image-grid--sm">
+                    @for (img of variant.images; track trackById($index, img)) {
+                      <div class="image-tile image-tile--sm" (click)="openLightbox(img.preview)">
+                        <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
+                        <div class="image-tile__overlay" (click)="$event.stopPropagation()">
+                          <button class="tile-action" type="button" (click)="openLightbox(img.preview)" title="Preview">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                          </button>
+                          <button class="tile-action tile-action--danger" type="button"
+                            (click)="removeVariantImage(variant.id, img.id)" title="Delete">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                              <path d="M18 6L6 18M6 6l12 12"/>
+                            </svg>
+                          </button>
+                        </div>
+                        @if ($index === 0) { <span class="main-badge">Main</span> }
+                        <span class="image-tile__size">{{ img.size > 0 ? formatBytes(img.size) : 'Existing' }}</span>
+                      </div>
+                    }
+
+                    @if (variant.images.length < 3) {
+                      <label class="upload-slot upload-slot--sm"
+                        [class.upload-slot--drag]="dragOverSlot() === variant.id"
+                        [for]="'variant-img-' + variant.id"
+                        (dragover)="onDragOver($event, variant.id)"
+                        (dragleave)="onDragLeave()"
+                        (drop)="onVariantImageDrop(variant.id, $event)">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <p class="upload-slot__hint">Add image</p>
+                        <input [id]="'variant-img-' + variant.id" type="file"
+                          accept="image/jpeg,image/png,image/webp" multiple class="sr-only"
+                          (change)="onVariantImageSelect(variant.id, $event)" />
+                      </label>
+                    }
+                  </div>
+
+                  @if (hasError('variant_' + variant.id + '_images')) {
+                    <p class="field__error" style="margin-top: 8px">{{ errorMsg('variant_' + variant.id + '_images') }}</p>
+                  }
+                </div>
+              }
+
+              @if (colorVariants().length < 8) {
+                <button class="add-variant-btn" type="button" (click)="addColorVariant()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Add Color Variant
+                </button>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- ── SEO ─────────────────────────────────────────────────────────── -->
+        <section class="form-card" aria-labelledby="sec-seo">
+          <div class="card-header">
+            <div class="card-header__icon slate">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </div>
+            <h2 class="card-title" id="sec-seo">SEO &amp; Metadata</h2>
+          </div>
+
+          <div class="field-grid">
+            <div class="field field--full">
+              <label class="field__label" for="seo-title">SEO Title</label>
+              <input id="seo-title" class="field__input" type="text" maxlength="70"
+                placeholder="Leave blank to use product name"
+                [value]="form().seoTitle"
+                (input)="patchForm({ seoTitle: $any($event.target).value })" />
+              <span class="field__hint">{{ (form().seoTitle || form().name).length }}/70</span>
+            </div>
+
+            <div class="field field--full">
+              <label class="field__label" for="seo-desc">SEO Description</label>
+              <textarea id="seo-desc" class="field__textarea field__textarea--sm" rows="2" maxlength="160"
+                placeholder="150–160 characters for best SEO"
+                [value]="form().seoDescription"
+                (input)="patchForm({ seoDescription: $any($event.target).value })"></textarea>
+              <span class="field__hint">{{ form().seoDescription.length }}/160</span>
+            </div>
+
+            <div class="field field--full">
+              <label class="field__label" for="slug">URL Slug</label>
+              <div class="slug-wrap">
+                <span class="slug-prefix">/products/</span>
+                <input id="slug" class="field__input field__input--slug" type="text"
+                  [placeholder]="computedSlug()"
+                  [value]="form().slug"
+                  (input)="patchForm({ slug: $any($event.target).value })" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /form-col--main -->
+
+      <!-- RIGHT COLUMN ────────────────────────────────────────────────────── -->
+      <div class="form-col form-col--side">
+
+        <!-- Status & visibility -->
+        <div class="side-card">
+          <h3 class="side-card__title">Status &amp; Visibility</h3>
+
+          <div class="status-options">
+            <label class="status-option">
+              <input type="radio" name="status" value="active" class="sr-only"
+                [checked]="form().status === 'active'"
+                (change)="patchForm({ status: 'active' })" />
+              <span class="status-option__radio" [class.checked]="form().status === 'active'"></span>
+              <div>
+                <p class="status-option__label">Published</p>
+                <p class="status-option__sub">Visible to customers</p>
+              </div>
+            </label>
+            <label class="status-option">
+              <input type="radio" name="status" value="draft" class="sr-only"
+                [checked]="form().status === 'draft'"
+                (change)="patchForm({ status: 'draft' })" />
+              <span class="status-option__radio" [class.checked]="form().status === 'draft'"></span>
+              <div>
+                <p class="status-option__label">Draft</p>
+                <p class="status-option__sub">Hidden from store</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="side-divider"></div>
+
+          <div class="toggle-list">
+            <div class="toggle-item">
+              <div>
+                <p class="toggle-item__label">Featured Product</p>
+                <p class="toggle-item__sub">Show on homepage</p>
+              </div>
+              <div class="mini-toggle" [class.on]="form().featured"
+                (click)="patchForm({ featured: !form().featured })"
+                role="switch" [attr.aria-checked]="form().featured">
+                <span class="mini-knob"></span>
+              </div>
+            </div>
+            <div class="toggle-item">
+              <div>
+                <p class="toggle-item__label">New Badge</p>
+                <p class="toggle-item__sub">Show "New" label</p>
+              </div>
+              <div class="mini-toggle" [class.on]="form().isNew"
+                (click)="patchForm({ isNew: !form().isNew })"
+                role="switch" [attr.aria-checked]="form().isNew">
+                <span class="mini-knob"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick preview -->
+        <div class="side-card">
+          <h3 class="side-card__title">Preview</h3>
+          <div class="preview-card">
+            <div class="preview-img-zone">
+              @if (defaultImages().length > 0) {
+                <img [src]="defaultImages()[0].preview" alt="Preview" class="preview-img" />
+              } @else if (hasColorVariants() && colorVariants()[0]?.images.length > 0) {
+                <img [src]="colorVariants()[0].images[0].preview" alt="Preview" class="preview-img" />
+              } @else {
+                <div class="preview-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+              }
+              @if (form().isNew) { <span class="preview-badge preview-badge--new">New</span> }
+            </div>
+            <div class="preview-body">
+              <p class="preview-brand">{{ form().brand || 'Brand' }}</p>
+              <p class="preview-name">{{ form().name || 'Product name' }}</p>
+              <div class="preview-price-row">
+                <span class="preview-price">${{ form().price || '0.00' }}</span>
+                @if (form().originalPrice && form().originalPrice! > (form().price ?? 0)) {
+                  <span class="preview-orig">${{ form().originalPrice }}</span>
+                  <span class="preview-discount">-{{ computedDiscount() }}%</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="side-card">
+          <h3 class="side-card__title">Summary</h3>
+          <div class="summary-list">
+            <div class="summary-row">
+              <span class="summary-label">Product ID</span>
+              <span class="summary-val">#{{ productId() }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Images</span>
+              <span class="summary-val" [class.summary-val--warn]="totalImages() === 0">
+                {{ totalImages() }} image{{ totalImages() !== 1 ? 's' : '' }}
+              </span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Variants</span>
+              <span class="summary-val">
+                {{ hasColorVariants() ? colorVariants().length + ' colors' : 'Single color' }}
+              </span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Category</span>
+              <span class="summary-val">{{ form().category || '—' }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Price</span>
+              <span class="summary-val">${{ form().price ?? 0 }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Stock</span>
+              <span class="summary-val" [class.summary-val--warn]="(form().stock ?? 0) <= 5">
+                {{ form().stock ?? 0 }} units
+              </span>
+            </div>
+          </div>
+
+          <div class="side-divider"></div>
+
+          <!-- Danger zone -->
+          <div class="danger-zone">
+            <p class="danger-zone__label">Danger Zone</p>
+            <button class="btn-archive" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="21 8 21 21 3 21 3 8"/>
+                <rect x="1" y="3" width="22" height="5"/>
+                <line x1="10" y1="12" x2="14" y2="12"/>
+              </svg>
+              Archive Product
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /form-col--side -->
+    </div><!-- /form-layout -->
+
+  }
+
+</div>
+
