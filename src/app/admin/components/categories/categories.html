@@ -31,6 +31,24 @@
     </div>
   }
 
+  <!-- ── VIEW CATEGORY MODAL ──────────────────────────────────────────────── -->
+  @if (viewingCategory()) {
+    <app-view-category-modal
+      [category]="viewingCategory()!"
+      (closed)="onViewModalClosed()"
+      (editRequested)="onEditRequestedFromView($event)"
+    />
+  }
+
+  <!-- ── EDIT CATEGORY MODAL ──────────────────────────────────────────────── -->
+  @if (editingCategory()) {
+    <app-edit-category-modal
+      [category]="editingCategory()!"
+      (closed)="onEditModalClosed()"
+      (saved)="onCategorySaved($event)"
+    />
+  }
+
   <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
   <div class="page-header">
     <div class="page-header__left">

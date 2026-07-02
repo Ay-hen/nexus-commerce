@@ -1,1 +1,270 @@
-<p>edit-category works!</p>
+<div class="ecm-backdrop" [class.ecm-backdrop--closing]="closing()" (click)="onBackdropClick()">
+  <div
+    class="ecm-modal"
+    [class.ecm-modal--closing]="closing()"
+    (click)="stop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ecm-title"
+  >
+    <!-- ── Header (fixed) ─────────────────────────────────────────────── -->
+    <header class="ecm-header">
+      <div class="ecm-header__left">
+        <div class="ecm-header__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="ecm-header__title" id="ecm-title">Edit Category</h2>
+          <p class="ecm-header__sub">/{{ category.slug }}</p>
+        </div>
+      </div>
+      <button class="ecm-close" (click)="requestClose()" aria-label="Close" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ── Discard-changes confirmation (overlays the body) ───────────── -->
+    @if (confirmingDiscard()) {
+      <div class="ecm-discard">
+        <div class="ecm-discard__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          </svg>
+        </div>
+        <p class="ecm-discard__title">Discard unsaved changes?</p>
+        <p class="ecm-discard__body">You've made changes to this category that haven't been saved yet.</p>
+        <div class="ecm-discard__actions">
+          <button class="btn-ghost" type="button" (click)="keepEditing()">Keep Editing</button>
+          <button class="btn-danger" type="button" (click)="discardAndClose()">Discard Changes</button>
+        </div>
+      </div>
+    }
+
+    <!-- ── Body (scrollable) ──────────────────────────────────────────── -->
+    <form class="ecm-body" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- Basic info -->
+      <section class="ecm-section">
+        <h3 class="ecm-section__title">Basic Information</h3>
+
+        <div class="field" [class.field--invalid]="f.name.invalid && f.name.touched" [class.field--filled]="f.name.value">
+          <input id="name" type="text" formControlName="name" placeholder=" " />
+          <label for="name">Category Name</label>
+          @if (f.name.invalid && f.name.touched) {
+            <span class="field__error">Name must be between 2 and 60 characters.</span>
+          }
+        </div>
+
+        <div class="field" [class.field--invalid]="f.slug.invalid && f.slug.touched" [class.field--filled]="f.slug.value">
+          <span class="field__prefix">/</span>
+          <input id="slug" type="text" formControlName="slug" placeholder=" " (input)="onSlugManualEdit()" class="field__input--prefixed" />
+          <label for="slug" class="field__label--prefixed">Slug</label>
+          @if (f.slug.invalid && f.slug.touched) {
+            <span class="field__error">Use lowercase letters, numbers, and hyphens only.</span>
+          }
+        </div>
+
+        <div class="field field--textarea" [class.field--invalid]="f.description.invalid && f.description.touched" [class.field--filled]="f.description.value">
+          <textarea id="description" formControlName="description" placeholder=" " rows="4" maxlength="500"></textarea>
+          <label for="description">Description</label>
+          <span class="field__counter">{{ f.description.value.length || 0 }}/500</span>
+          @if (f.description.invalid && f.description.touched) {
+            <span class="field__error">Description is required.</span>
+          }
+        </div>
+
+        <div class="ecm-row">
+          <div class="switch-field">
+            <span class="switch-field__label">Status</span>
+            <label class="switch">
+              <input
+                type="checkbox"
+                [checked]="f.status.value === 'active'"
+                (change)="form.controls.status.setValue($any($event.target).checked ? 'active' : 'inactive')"
+              />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+              <span class="switch__text">{{ f.status.value === 'active' ? 'Active' : 'Inactive' }}</span>
+            </label>
+          </div>
+
+          <label class="checkbox-field">
+            <input type="checkbox" formControlName="featured" />
+            <span class="checkbox-field__box">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </span>
+            Featured category
+          </label>
+        </div>
+      </section>
+
+      <!-- SEO -->
+      <section class="ecm-section">
+        <h3 class="ecm-section__title">SEO</h3>
+
+        <div class="field" [class.field--invalid]="f.seoTitle.invalid && f.seoTitle.touched" [class.field--filled]="f.seoTitle.value">
+          <input id="seoTitle" type="text" formControlName="seoTitle" placeholder=" " maxlength="60" />
+          <label for="seoTitle">Meta Title</label>
+          <span class="field__counter">{{ f.seoTitle.value.length || 0 }}/60</span>
+        </div>
+
+        <div class="field field--textarea" [class.field--filled]="f.seoDescription.value">
+          <textarea id="seoDescription" formControlName="seoDescription" placeholder=" " rows="2" maxlength="160"></textarea>
+          <label for="seoDescription">Meta Description</label>
+          <span class="field__counter">{{ f.seoDescription.value.length || 0 }}/160</span>
+        </div>
+
+        <div class="field field--chips" [class.field--filled]="keywords().length">
+          <div class="chip-input">
+            @for (kw of keywords(); track kw) {
+              <span class="chip">
+                {{ kw }}
+                <button type="button" (click)="removeKeyword(kw)" aria-label="Remove keyword">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+              </span>
+            }
+            <input
+              type="text"
+              class="chip-input__field"
+              [ngModel]="keywordDraft()"
+              (ngModelChange)="keywordDraft.set($event)"
+              [ngModelOptions]="{ standalone: true }"
+              (keydown)="onKeywordKeydown($event)"
+              placeholder="Add keyword and press Enter…"
+            />
+          </div>
+          <label>Keywords</label>
+        </div>
+      </section>
+
+      <!-- Cover image -->
+      <section class="ecm-section">
+        <h3 class="ecm-section__title">Cover Image</h3>
+
+        <div
+          class="upload-zone"
+          [class.upload-zone--drag]="coverDragOver()"
+          [class.upload-zone--filled]="coverImage()"
+          (dragover)="onCoverDragOver($event)"
+          (dragleave)="onCoverDragLeave()"
+          (drop)="onCoverDrop($event)"
+        >
+          @if (!coverImage()) {
+            <label class="upload-zone__empty" for="coverInput">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>Drag &amp; drop an image, or <strong>browse</strong></span>
+              <small>PNG or JPG, up to 5MB</small>
+            </label>
+          } @else {
+            <div class="upload-zone__preview">
+              <img [src]="coverImage()" alt="Cover preview" />
+              <div class="upload-zone__actions">
+                <label class="upload-zone__btn" for="coverInput">Replace</label>
+                <button type="button" class="upload-zone__btn" title="Crop tool coming soon">Crop</button>
+                <button type="button" class="upload-zone__btn upload-zone__btn--danger" (click)="removeCover()">Remove</button>
+              </div>
+            </div>
+          }
+          <input id="coverInput" type="file" accept="image/*" (change)="onCoverFileSelected($event)" hidden />
+        </div>
+        @if (!coverImage()) {
+          <span class="field__error field__error--standalone">Cover image is required.</span>
+        }
+      </section>
+
+      <!-- Gallery -->
+      <section class="ecm-section">
+        <h3 class="ecm-section__title">Gallery</h3>
+
+        <div
+          class="upload-zone upload-zone--gallery"
+          [class.upload-zone--drag]="galleryDragOver()"
+          (dragover)="onGalleryDragOver($event)"
+          (dragleave)="onGalleryDragLeave()"
+          (drop)="onGalleryDrop($event)"
+        >
+          <label class="upload-zone__empty upload-zone__empty--compact" for="galleryInput">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Add gallery images</span>
+          </label>
+          <input id="galleryInput" type="file" accept="image/*" multiple (change)="onGalleryFilesSelected($event)" hidden />
+        </div>
+
+        @if (gallery().length) {
+          <div class="gallery-grid">
+            @for (img of gallery(); track img; let i = $index) {
+              <div class="gallery-grid__item">
+                <img [src]="img" alt="Gallery image" />
+                <button type="button" class="gallery-grid__remove" (click)="removeGalleryImage(i)" aria-label="Remove image">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+    </form>
+
+    <!-- ── Footer (fixed) ─────────────────────────────────────────────── -->
+    <footer class="ecm-footer">
+      <div class="ecm-footer__status">
+        @if (saveState() === 'error') {
+          <span class="ecm-status ecm-status--error">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {{ errorMessage() }}
+          </span>
+        }
+        @if (saveState() === 'success') {
+          <span class="ecm-status ecm-status--success">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Category saved successfully
+          </span>
+        }
+        @if (isDirty() && saveState() === 'idle') {
+          <span class="ecm-status ecm-status--dirty">
+            <span class="ecm-status__dot"></span>
+            Unsaved changes
+          </span>
+        }
+      </div>
+      <div class="ecm-footer__actions">
+        <button class="btn-ghost" type="button" (click)="resetForm()" [disabled]="saveState() === 'saving'">Reset</button>
+        <button class="btn-ghost" type="button" (click)="requestClose()" [disabled]="saveState() === 'saving'">Cancel</button>
+        <button
+          class="btn-primary"
+          type="button"
+          (click)="onSubmit()"
+          [class.btn-primary--saving]="saveState() === 'saving'"
+          [class.btn-primary--success]="saveState() === 'success'"
+          [class.btn-primary--error]="saveState() === 'error'"
+          [disabled]="saveState() === 'saving' || saveState() === 'success'"
+        >
+          @if (saveState() === 'saving') {
+            <span class="ecm-spinner"></span>
+            Saving…
+          } @else if (saveState() === 'success') {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+            Saved
+          } @else {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Changes
+          }
+        </button>
+      </div>
+    </footer>
+  </div>
+</div>

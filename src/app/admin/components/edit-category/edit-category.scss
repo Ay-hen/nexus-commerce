@@ -1,0 +1,729 @@
+// ─── Admin Design Tokens (mirrors categories.scss) ─────────────────────────
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$accent:        #4F46E5;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
+
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.08);
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.08);
+$amber:         #F59E0B;
+$amber-bg:      rgba(245,158,11,.08);
+
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-pill:   999px;
+
+$shadow-menu:   0 8px 24px rgba(16,24,40,.12), 0 2px 6px rgba(16,24,40,.06);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+$z-modal: 1000;
+
+* { box-sizing: border-box; }
+
+// ─── Keyframes ───────────────────────────────────────────────────────────────
+@keyframes ecm-backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ecm-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+
+@keyframes ecm-modal-in {
+  from { opacity: 0; transform: scale(.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes ecm-modal-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(.95) translateY(8px); }
+}
+
+@keyframes ecm-discard-in {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes ecm-spin { to { transform: rotate(360deg); } }
+
+@keyframes ecm-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-5px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(2px); }
+}
+
+@keyframes ecm-pop {
+  0%   { transform: scale(.8); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes ecm-status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .35; }
+}
+
+// ─── Backdrop / modal shell ──────────────────────────────────────────────────
+.ecm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  background: rgba(17,24,39,.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: ecm-backdrop-in .2s $ease both;
+  font-family: 'Inter', -apple-system, sans-serif;
+
+  &--closing { animation: ecm-backdrop-out .2s $ease both; }
+}
+
+.ecm-modal {
+  position: relative;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-menu;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: ecm-modal-in .25s $ease-spring both;
+
+  &--closing { animation: ecm-modal-out .2s $ease both; }
+}
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+.ecm-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid $border;
+  background: $surface;
+}
+
+.ecm-header__left { display: flex; align-items: center; gap: 12px; }
+
+.ecm-header__icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: $radius-md;
+  background: $accent-bg;
+  border: 1px solid rgba($accent, .15);
+  color: $accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ecm-header__title { font-size: 1.05rem; font-weight: 700; color: $text-primary; margin: 0 0 2px; }
+.ecm-header__sub   { font-size: .76rem; color: $text-light; font-family: 'Courier New', monospace; }
+
+.ecm-close {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
+  &:hover { background: $red-bg; color: $red; border-color: rgba($red, .25); }
+}
+
+// ─── Discard-changes overlay ─────────────────────────────────────────────────
+.ecm-discard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  width: min(340px, calc(100% - 48px));
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-menu;
+  padding: 24px;
+  text-align: center;
+  animation: ecm-discard-in .22s $ease-spring both;
+}
+
+.ecm-discard__icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: $amber-bg;
+  color: $amber;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ecm-discard__title   { font-size: .98rem; font-weight: 700; color: $text-primary; margin: 0 0 6px; }
+.ecm-discard__body    { font-size: .82rem; color: $text-mid; line-height: 1.55; margin: 0 0 18px; }
+.ecm-discard__actions { display: flex; gap: 8px; justify-content: center; }
+
+// ─── Body ────────────────────────────────────────────────────────────────────
+.ecm-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background: $surface;
+
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border2; border-radius: $radius-pill; }
+  &::-webkit-scrollbar-thumb:hover { background: $text-light; }
+}
+
+.ecm-section__title {
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: $text-light;
+  margin: 0 0 14px;
+}
+
+.ecm-section { display: flex; flex-direction: column; gap: 14px; }
+
+.ecm-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+
+// ─── Floating-label fields ───────────────────────────────────────────────────
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  input[type='text'],
+  textarea {
+    width: 100%;
+    background: $surface2;
+    border: 1.5px solid $border;
+    border-radius: $radius-md;
+    padding: 18px 14px 8px;
+    font: inherit;
+    font-size: .88rem;
+    color: $text-primary;
+    transition: border-color .15s $ease, background .15s $ease, box-shadow .15s $ease;
+    resize: none;
+
+    &:focus {
+      outline: none;
+      border-color: $accent;
+      background: $surface;
+      box-shadow: 0 0 0 3px $accent-glow;
+    }
+  }
+
+  textarea { padding-top: 20px; min-height: 44px; }
+
+  label {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    font-size: .86rem;
+    color: $text-light;
+    pointer-events: none;
+    transform-origin: left top;
+    transition: transform .15s $ease, color .15s $ease, top .15s $ease;
+  }
+
+  input[type='text']:focus + label,
+  input[type='text']:not(:placeholder-shown) + label,
+  textarea:focus + label,
+  textarea:not(:placeholder-shown) + label {
+    top: 7px;
+    transform: scale(.72);
+    color: $accent;
+  }
+
+  &--filled label { top: 7px; transform: scale(.72); }
+
+  &--invalid input[type='text'],
+  &--invalid textarea { border-color: $red; background: $red-bg; }
+  &--invalid label    { color: $red; }
+
+  &__error {
+    font-size: .72rem;
+    color: $red;
+    margin-top: 5px;
+    animation: ecm-shake .35s $ease;
+  }
+
+  &__counter {
+    position: absolute;
+    right: 12px;
+    bottom: -18px;
+    font-size: .68rem;
+    color: $text-light;
+  }
+
+  &__prefix {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    font-size: .86rem;
+    color: $text-light;
+    font-family: 'Courier New', monospace;
+    z-index: 1;
+  }
+
+  .field__input--prefixed { padding-left: 24px; font-family: 'Courier New', monospace; }
+  .field__label--prefixed { left: 24px; }
+}
+
+// ─── Keyword chip input ──────────────────────────────────────────────────────
+.field--chips {
+  padding-top: 4px;
+
+  label {
+    position: static;
+    display: block;
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: $text-light;
+    margin-bottom: 6px;
+    transform: none;
+  }
+}
+
+.chip-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 46px;
+  padding: 8px 10px;
+  background: $surface2;
+  border: 1.5px solid $border;
+  border-radius: $radius-md;
+  transition: border-color .15s $ease, background .15s $ease, box-shadow .15s $ease;
+
+  &:focus-within {
+    border-color: $accent;
+    background: $surface;
+    box-shadow: 0 0 0 3px $accent-glow;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 6px 0 10px;
+  background: $accent-bg;
+  color: $accent;
+  border-radius: $radius-pill;
+  font-size: .76rem;
+  font-weight: 600;
+  animation: ecm-pop .18s $ease-spring both;
+
+  button {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($accent, .12);
+    border: none;
+    border-radius: 50%;
+    color: $accent;
+    cursor: pointer;
+    transition: background .12s;
+    &:hover { background: rgba($accent, .22); }
+  }
+}
+
+.chip-input__field {
+  flex: 1 1 140px;
+  min-width: 140px;
+  border: none;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: .84rem;
+  color: $text-primary;
+  padding: 4px;
+
+  &::placeholder { color: $text-light; }
+}
+
+// ─── Switch ──────────────────────────────────────────────────────────────────
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  gap: 16px;
+}
+
+.switch-row__text { display: flex; flex-direction: column; gap: 2px; }
+.switch-row__label { font-size: .84rem; font-weight: 600; color: $text-primary; }
+.switch-row__sub   { font-size: .74rem; color: $text-light; }
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+
+  input { position: absolute; opacity: 0; width: 0; height: 0; }
+}
+
+.switch__track {
+  width: 40px;
+  height: 22px;
+  border-radius: $radius-pill;
+  background: $border2;
+  position: relative;
+  transition: background .2s $ease;
+  flex-shrink: 0;
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(16,24,40,.25);
+  transition: transform .2s $ease-spring;
+}
+
+.switch input:checked ~ .switch__track           { background: $green; }
+.switch input:checked ~ .switch__track .switch__thumb { transform: translateX(18px); }
+.switch input:focus-visible ~ .switch__track     { box-shadow: 0 0 0 3px $accent-glow; }
+
+.switch__text {
+  font-size: .84rem;
+  font-weight: 600;
+  color: $text-primary;
+  min-width: 54px;
+}
+
+// ─── Checkbox ────────────────────────────────────────────────────────────────
+.checkbox-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: .84rem;
+  font-weight: 600;
+  color: $text-primary;
+  cursor: pointer;
+  user-select: none;
+
+  input { position: absolute; opacity: 0; width: 0; height: 0; }
+}
+
+.checkbox-field__box {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1.5px solid $border2;
+  background: $surface;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background .15s $ease, border-color .15s $ease, transform .15s $ease-spring;
+
+  svg { opacity: 0; transform: scale(.5); transition: opacity .12s $ease, transform .12s $ease; }
+}
+
+.checkbox-field input:checked ~ .checkbox-field__box {
+  background: $accent;
+  border-color: $accent;
+  transform: scale(1.04);
+
+  svg { opacity: 1; transform: scale(1); }
+}
+
+.checkbox-field input:focus-visible ~ .checkbox-field__box { box-shadow: 0 0 0 3px $accent-glow; }
+
+// ─── Upload zones ────────────────────────────────────────────────────────────
+.upload-zone {
+  border: 1.5px dashed $border2;
+  border-radius: $radius-lg;
+  background: $surface2;
+  transition: border-color .15s $ease, background .15s $ease;
+  overflow: hidden;
+
+  &--drag { border-color: $accent; background: $accent-bg; }
+  &--gallery { padding: 4px; }
+}
+
+.upload-zone__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 34px 20px;
+  cursor: pointer;
+  color: $text-mid;
+  text-align: center;
+
+  svg    { color: $text-light; margin-bottom: 4px; }
+  span   { font-size: .84rem; font-weight: 500; }
+  strong { color: $accent; font-weight: 700; }
+  small  { font-size: .72rem; color: $text-light; }
+}
+
+.upload-zone__preview {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $surface;
+
+  img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 16px; }
+}
+
+.upload-zone__actions {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: rgba(17,24,39,.72);
+  padding: 6px;
+  border-radius: $radius-pill;
+}
+
+.upload-zone__btn {
+  height: 28px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: $radius-pill;
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s $ease;
+
+  &:hover         { background: rgba(255,255,255,.26); }
+  &--danger:hover { background: rgba($red, .8); border-color: rgba($red, .5); }
+}
+
+// ─── Gallery preview grid ────────────────────────────────────────────────────
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 10px;
+}
+
+.gallery-grid__item {
+  position: relative;
+  height: 84px;
+  border-radius: $radius-md;
+  border: 1px solid $border;
+  background: $surface2;
+  overflow: hidden;
+  animation: ecm-pop .2s $ease-spring both;
+
+  img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+}
+
+.gallery-grid__remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17,24,39,.75);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background .12s;
+
+  &:hover { background: $red; }
+}
+
+// ─── Google preview ──────────────────────────────────────────────────────────
+.google-preview {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 14px 16px;
+  margin-top: 4px;
+
+  &__site  { font-size: .74rem; color: $green; margin: 0 0 2px; }
+  &__title { font-size: .92rem; font-weight: 600; color: #1a0dab; margin: 0 0 4px; }
+  &__desc  { font-size: .78rem; color: $text-mid; line-height: 1.5; margin: 0; }
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+.ecm-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid $border;
+  background: $surface;
+  flex-wrap: wrap;
+}
+
+.ecm-footer__status  { display: flex; align-items: center; min-height: 20px; }
+.ecm-footer__actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.ecm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .78rem;
+  font-weight: 600;
+
+  &--error   { color: $red;   animation: ecm-shake .35s $ease; }
+  &--success { color: $green; animation: ecm-pop .3s $ease-spring; }
+  &--dirty   { color: $amber; }
+}
+
+.ecm-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: ecm-status-pulse 1.4s ease-in-out infinite;
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+.btn-ghost {
+  height: 38px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $surface;
+  border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 500;
+  color: $text-mid;
+  cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s, opacity .15s;
+
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+.btn-danger {
+  height: 38px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $red;
+  border: none;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
+}
+
+.btn-primary {
+  height: 38px;
+  min-width: 140px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: $accent;
+  border: none;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s, transform .1s $ease;
+
+  &:hover:not(:disabled) { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  &:disabled   { cursor: not-allowed; opacity: .85; }
+  &--saving  { background: darken($accent, 4%); }
+  &--success { background: $green; }
+  &--error   { animation: ecm-shake .4s $ease; background: $red; }
+}
+
+.ecm-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
+  animation: ecm-spin .7s linear infinite;
+}
+
+// ─── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: 640px) {
+  .ecm-header, .ecm-body, .ecm-footer { padding: 16px; }
+  .ecm-footer { flex-direction: column; align-items: stretch; }
+  .ecm-footer__actions { margin-left: 0; justify-content: flex-end; }
+  .ecm-row { gap: 14px; }
+}
+
+// ─── Reduced motion ──────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .ecm-backdrop, .ecm-modal, .ecm-discard, .chip,
+  .gallery-grid__item, .field__error, .ecm-status--error,
+  .ecm-status--success, .btn-primary--error, .ecm-spinner, .ecm-status__dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}

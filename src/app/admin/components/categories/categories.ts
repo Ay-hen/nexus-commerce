@@ -2,6 +2,9 @@ import { Component, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ViewCategoryModalComponent } from '../view-category-modal/view-category-modal';
+import { EditCategoryModal} from '../edit-category/edit-category';
+import { AdminCategoryDetail, toCategoryDetail } from '../../model/category-detail.model';
 
 // ─── Local types (kept inline — promote to model file once approved) ─────────
 export interface AdminCategory {
@@ -19,7 +22,7 @@ type SortKey = 'name' | 'productCount' | 'createdAt';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ViewCategoryModalComponent, EditCategoryModal],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
@@ -65,6 +68,14 @@ export class Categories {
 
   // ── Delete confirm ────────────────────────────────────────────────────────
   pendingDelete = signal<AdminCategory | null>(null);
+
+  // ── View / Edit modals ──────────────────────────────────────────────────
+  // Both hold the *detail* shape (extra fields the row/table doesn't carry).
+  // `null` means "not open" — the modal components are only mounted via @if,
+  // which also gives us a clean mount/unmount point for their own
+  // enter/exit animations.
+  viewingCategory = signal<AdminCategoryDetail | null>(null);
+  editingCategory = signal<AdminCategoryDetail | null>(null);
 
   // ── Computed: filtered + sorted list ─────────────────────────────────────
   filteredCategories = computed(() => {
@@ -224,13 +235,53 @@ export class Categories {
 
   constructor(private router: Router) {}
 
-  editCategory(id: any): void {
+  // ── View / Edit modal wiring ──────────────────────────────────────────────
+  // These replace the old router.navigate() calls — both actions now open an
+  // in-page modal instead of leaving the Categories screen. Swap
+  // `toCategoryDetail(cat)` for a real `CategoryService.getDetail(cat.id)`
+  // call whenever the backend is wired up; the modals only depend on the
+  // `AdminCategoryDetail` shape, not where it came from.
+  editCategory(id: string): void {
     this.closeMenu();
-    this.router.navigate(['/admin/categories', id, 'edit']);
+    const cat = this.allCategories().find(c => c.id === id);
+    if (!cat) return;
+    this.viewingCategory.set(null);
+    this.editingCategory.set(toCategoryDetail(cat));
   }
 
-  showDetails(id: any): void {
+  showDetails(id: string): void {
     this.closeMenu();
-    this.router.navigate(['/admin/categories', id]);
+    const cat = this.allCategories().find(c => c.id === id);
+    if (!cat) return;
+    this.viewingCategory.set(toCategoryDetail(cat));
+  }
+
+  onViewModalClosed(): void {
+    this.viewingCategory.set(null);
+  }
+
+  onEditRequestedFromView(detail: AdminCategoryDetail): void {
+    this.viewingCategory.set(null);
+    this.editingCategory.set(detail);
+  }
+
+  onEditModalClosed(): void {
+    this.editingCategory.set(null);
+  }
+
+  onCategorySaved(updated: AdminCategoryDetail): void {
+    this.allCategories.update(list =>
+      list.map(c => (c.id === updated.id ? {
+        id: updated.id,
+        name: updated.name,
+        slug: updated.slug,
+        image: updated.image,
+        productCount: updated.productCount,
+        status: updated.status,
+        featured: updated.featured,
+        createdAt: updated.createdAt,
+      } : c))
+    );
+    this.editingCategory.set(null);
   }
 }
