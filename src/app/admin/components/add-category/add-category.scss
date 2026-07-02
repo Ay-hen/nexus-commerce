@@ -67,7 +67,10 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   color: $text-primary;
   position: relative;
   animation: pop-in .25s $ease;
-  padding-bottom: 88px; // room for sticky footer
+  padding-bottom: 88px; 
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 // ─── Success overlay ──────────────────────────────────────────────────────────
@@ -164,9 +167,9 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 // ─── Form layout ──────────────────────────────────────────────────────────────
 .form-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 20px;
-  align-items: start;
+  width: 100%;
 
   @media (max-width: 1100px) { grid-template-columns: 1fr 260px; }
   @media (max-width: 900px)  { grid-template-columns: 1fr; }
