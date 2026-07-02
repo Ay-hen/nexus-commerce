@@ -18,7 +18,7 @@ export class AdminLayout {
 
   sidebarCollapsed = signal(false);
   mobileSidebarOpen = signal(false);
-  darkMode = signal(true); // admin is dark by default
+  darkMode = signal(false);
   searchQuery = signal('');
   searchOpen = signal(false);
 
@@ -86,5 +86,3 @@ export class AdminLayout {
     },
   ];
 }
-
-

@@ -81,7 +81,7 @@ $z-modal:       1000;
   gap: 24px;
   font-family: 'Inter', -apple-system, sans-serif;
   color: $text-primary;
-  animation: pop-in .28s $ease both;
+  animation: pop-in .28s $ease;
 }
 
 // ─── Skeleton shimmer ─────────────────────────────────────────────────────────
