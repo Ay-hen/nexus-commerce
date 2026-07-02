@@ -47,7 +47,6 @@ export class AdminLayout {
       section: 'Overview',
       items: [
         { id: 'dashboard',  label: 'Dashboard',    route: '/admin/dashboard',  icon: 'dashboard'  },
-        { id: 'analytics',  label: 'Analytics',    route: '/admin/analytics',  icon: 'analytics'  },
         { id: 'reports',    label: 'Reports',       route: '/admin/reports',    icon: 'reports'    },
       ],
     },
