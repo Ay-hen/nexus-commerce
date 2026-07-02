@@ -26,6 +26,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'products/new',    loadComponent: () => import('./components/add-product/add-product').then(m => m.AddProduct) },
       { path: 'product/:id/edit',    loadComponent: () => import('./components/edit-product/edit-product').then(m => m.EditProduct) },
       { path: 'categories', loadComponent: () => import('./components/categories/categories').then(m => m.Categories) },
+      { path: 'categories/new', loadComponent: () => import('./components/add-category/add-category').then(m => m.AddCategory) },
       { path: 'orders',      loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: 'customers',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: 'analytics',   loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },

@@ -1,1 +1,523 @@
-<p>add-category works!</p>
+<!-- add-category.component.html -->
+<div class="add-category-page">
+
+  <!-- ── SUCCESS OVERLAY ────────────────────────────────────────────────── -->
+  @if (submitStatus() === 'success') {
+    <div class="success-overlay" role="status" aria-live="polite">
+      <div class="success-ring">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <p class="success-title">Category saved!</p>
+      <p class="success-sub">Redirecting to categories…</p>
+    </div>
+  }
+
+  <!-- ── PAGE HEADER ────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <a routerLink="/admin/categories" class="back-link" aria-label="Back to categories">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </a>
+      <div>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a routerLink="/admin/dashboard" class="breadcrumb__link">Admin</a>
+          <span class="breadcrumb__sep">/</span>
+          <a routerLink="/admin/categories" class="breadcrumb__link">Categories</a>
+          <span class="breadcrumb__sep">/</span>
+          <span class="breadcrumb__current">New</span>
+        </nav>
+        <h1 class="page-title">Add Category</h1>
+        <p class="page-sub">Create a new category to organize your product catalog</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN LAYOUT ───────────────────────────────────────────────────────── -->
+  <div class="form-layout">
+
+    <!-- LEFT COLUMN ──────────────────────────────────────────────────────────── -->
+    <div class="form-col form-col--main">
+
+      <!-- ── GENERAL INFORMATION ───────────────────────────────────────────── -->
+      <section class="form-card" aria-labelledby="sec-general">
+        <div class="card-header">
+          <div class="card-header__icon blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </div>
+          <h2 class="card-title" id="sec-general">General Information</h2>
+        </div>
+
+        <div class="field-grid">
+          <!-- Name -->
+          <div class="field field--full" [class.field--error]="hasError('name')">
+            <label class="field__label" for="name">
+              Category Name <span class="required">*</span>
+            </label>
+            <input
+              id="name"
+              class="field__input"
+              type="text"
+              placeholder="e.g. Electronics, Smart Home, Footwear"
+              [value]="form().name"
+              (input)="patchForm({ name: $any($event.target).value })"
+              maxlength="80"
+            />
+            @if (hasError('name')) { <p class="field__error">{{ errorMsg('name') }}</p> }
+            <span class="field__hint">{{ form().name.length }}/80</span>
+          </div>
+
+          <!-- Slug -->
+          <div class="field field--full" [class.field--error]="hasError('slug')">
+            <label class="field__label" for="slug">URL Slug <span class="required">*</span></label>
+            <div class="slug-wrap">
+              <span class="slug-prefix">/categories/</span>
+              <input
+                id="slug"
+                class="field__input field__input--slug"
+                type="text"
+                [placeholder]="computedSlug() || 'auto-generated-from-name'"
+                [value]="form().slug"
+                (input)="onSlugInput($any($event.target).value)"
+              />
+            </div>
+            @if (hasError('slug')) { <p class="field__error">{{ errorMsg('slug') }}</p> }
+            <span class="field__hint">Auto-generated from name — edit anytime</span>
+          </div>
+
+          <!-- Description -->
+          <div class="field field--full" [class.field--error]="hasError('description')">
+            <label class="field__label" for="description">
+              Description <span class="required">*</span>
+            </label>
+            <textarea
+              id="description"
+              class="field__textarea"
+              rows="5"
+              placeholder="Describe what belongs in this category and help customers find it…"
+              [value]="form().description"
+              (input)="patchForm({ description: $any($event.target).value })"
+              maxlength="500"
+            ></textarea>
+            @if (hasError('description')) { <p class="field__error">{{ errorMsg('description') }}</p> }
+            <span class="field__hint">{{ form().description.length }}/500</span>
+          </div>
+
+          <!-- Status -->
+          <div class="field">
+            <label class="field__label">Status</label>
+            <div class="status-options status-options--inline">
+              <label class="status-option">
+                <input type="radio" name="status" class="sr-only"
+                  [checked]="form().status === 'active'"
+                  (change)="patchForm({ status: 'active' })" />
+                <span class="status-option__radio" [class.checked]="form().status === 'active'"></span>
+                <div>
+                  <p class="status-option__label">Active</p>
+                  <p class="status-option__sub">Visible in store</p>
+                </div>
+              </label>
+              <label class="status-option">
+                <input type="radio" name="status" class="sr-only"
+                  [checked]="form().status === 'inactive'"
+                  (change)="patchForm({ status: 'inactive' })" />
+                <span class="status-option__radio" [class.checked]="form().status === 'inactive'"></span>
+                <div>
+                  <p class="status-option__label">Inactive</p>
+                  <p class="status-option__sub">Hidden from store</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Featured toggle -->
+          <div class="field">
+            <label class="field__label">Visibility</label>
+            <label class="toggle-row toggle-row--compact">
+              <div class="toggle-switch" [class.on]="form().featured" (click)="patchForm({ featured: !form().featured })" role="switch" [attr.aria-checked]="form().featured">
+                <span class="toggle-knob"></span>
+              </div>
+              <div>
+                <p class="toggle-label">Featured Category</p>
+                <p class="toggle-sub">Show on homepage</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── IMAGES ─────────────────────────────────────────────────────────── -->
+      <section class="form-card" aria-labelledby="sec-images">
+        <div class="card-header">
+          <div class="card-header__icon purple">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <h2 class="card-title" id="sec-images">Images</h2>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="image-section">
+          <div class="image-section__header">
+            <p class="image-section__title">Category Thumbnail <span class="required">*</span></p>
+            <p class="image-section__hint">Square image shown in tables, grids &amp; the storefront menu.</p>
+          </div>
+
+          @if (hasError('thumbnail')) {
+            <p class="field__error" style="margin-bottom: 12px">{{ errorMsg('thumbnail') }}</p>
+          }
+
+          <div class="image-grid image-grid--single">
+            @if (thumbnail(); as img) {
+              <div class="image-tile">
+                <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
+                <div class="image-tile__overlay">
+                  <label class="tile-action" for="thumbnail-replace" title="Replace image">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+                    </svg>
+                    <input id="thumbnail-replace" type="file" accept="image/*" class="sr-only" (change)="onThumbnailSelect($event)" />
+                  </label>
+                  <button class="tile-action tile-action--danger" (click)="removeThumbnail()" title="Remove image" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="image-tile__size">{{ formatBytes(img.size) }}</span>
+              </div>
+            } @else {
+              <label
+                class="upload-slot"
+                [class.upload-slot--drag]="dragOverSlot() === 'thumbnail'"
+                [class.upload-slot--error]="hasError('thumbnail')"
+                for="thumbnail-input"
+                (dragover)="onDragOver($event, 'thumbnail')"
+                (dragleave)="onDragLeave()"
+                (drop)="onThumbnailDrop($event)"
+              >
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <p class="upload-slot__label">Click or drag &amp; drop</p>
+                <p class="upload-slot__hint">JPEG, PNG, WebP · Max 5 MB</p>
+                <input id="thumbnail-input" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" (change)="onThumbnailSelect($event)" />
+              </label>
+            }
+          </div>
+        </div>
+
+        <!-- Cover -->
+        <div class="image-section">
+          <div class="image-section__header">
+            <p class="image-section__title">Cover Image</p>
+            <p class="image-section__hint">Wide banner used at the top of the category landing page.</p>
+          </div>
+
+          @if (hasError('cover')) {
+            <p class="field__error" style="margin-bottom: 12px">{{ errorMsg('cover') }}</p>
+          }
+
+          <div class="image-grid image-grid--wide">
+            @if (cover(); as img) {
+              <div class="image-tile image-tile--wide">
+                <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
+                <div class="image-tile__overlay">
+                  <label class="tile-action" for="cover-replace" title="Replace image">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+                    </svg>
+                    <input id="cover-replace" type="file" accept="image/*" class="sr-only" (change)="onCoverSelect($event)" />
+                  </label>
+                  <button class="tile-action tile-action--danger" (click)="removeCover()" title="Remove image" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="image-tile__size">{{ formatBytes(img.size) }}</span>
+              </div>
+            } @else {
+              <label
+                class="upload-slot upload-slot--wide"
+                [class.upload-slot--drag]="dragOverSlot() === 'cover'"
+                for="cover-input"
+                (dragover)="onDragOver($event, 'cover')"
+                (dragleave)="onDragLeave()"
+                (drop)="onCoverDrop($event)"
+              >
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <p class="upload-slot__label">Click or drag &amp; drop a banner image</p>
+                <p class="upload-slot__hint">Recommended 1600×400 · Max 5 MB</p>
+                <input id="cover-input" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" (change)="onCoverSelect($event)" />
+              </label>
+            }
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="image-section">
+          <div class="image-section__header">
+            <p class="image-section__title">Gallery Images <span class="image-section__count">{{ gallery().length }}/{{ maxGalleryImages }}</span></p>
+            <p class="image-section__hint">Extra lifestyle or detail shots shown on the category page.</p>
+          </div>
+
+          @if (hasError('gallery')) {
+            <p class="field__error" style="margin-bottom: 12px">{{ errorMsg('gallery') }}</p>
+          }
+
+          <div class="image-grid">
+            @for (img of gallery(); track trackById($index, img)) {
+              <div class="image-tile">
+                <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
+                <div class="image-tile__overlay">
+                  <button class="tile-action tile-action--danger" (click)="removeGalleryImage(img.id)" title="Remove image" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="image-tile__size">{{ formatBytes(img.size) }}</span>
+              </div>
+            }
+
+            @if (gallery().length < maxGalleryImages) {
+              <label
+                class="upload-slot"
+                [class.upload-slot--drag]="dragOverSlot() === 'gallery'"
+                for="gallery-input"
+                (dragover)="onDragOver($event, 'gallery')"
+                (dragleave)="onDragLeave()"
+                (drop)="onGalleryDrop($event)"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                <p class="upload-slot__label">Add images</p>
+                <p class="upload-slot__hint">Up to {{ maxGalleryImages }} images</p>
+                <input id="gallery-input" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" (change)="onGallerySelect($event)" />
+              </label>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SEO ────────────────────────────────────────────────────────────── -->
+      <section class="form-card" aria-labelledby="sec-seo">
+        <div class="card-header">
+          <div class="card-header__icon slate">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+          <h2 class="card-title" id="sec-seo">SEO &amp; Metadata</h2>
+          <div class="seo-score-chip" [class.seo-score-chip--good]="seoScore() >= 50" [class.seo-score-chip--excellent]="seoScore() >= 80">
+            <span class="seo-score-chip__dot"></span>
+            SEO Score: {{ seoScore() }} · {{ seoScoreLabel() }}
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field field--full">
+            <label class="field__label" for="meta-title">Meta Title</label>
+            <input
+              id="meta-title"
+              class="field__input"
+              type="text"
+              placeholder="Leave blank to use category name"
+              [value]="form().metaTitle"
+              (input)="patchForm({ metaTitle: $any($event.target).value })"
+              maxlength="70"
+            />
+            <span class="field__hint">{{ form().metaTitle.length || form().name.length }}/70 characters</span>
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label" for="meta-desc">Meta Description</label>
+            <textarea
+              id="meta-desc"
+              class="field__textarea field__textarea--sm"
+              rows="3"
+              placeholder="Brief description for search engines (150–160 characters recommended)"
+              [value]="form().metaDescription"
+              (input)="patchForm({ metaDescription: $any($event.target).value })"
+              maxlength="160"
+            ></textarea>
+            <span class="field__hint">{{ form().metaDescription.length }}/160</span>
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label" for="keywords">Keywords</label>
+            <div class="chip-input">
+              @for (kw of form().keywords; track kw) {
+                <span class="chip">
+                  {{ kw }}
+                  <button type="button" class="chip__remove" (click)="removeKeyword(kw)" [attr.aria-label]="'Remove ' + kw">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </span>
+              }
+              <input
+                id="keywords"
+                class="chip-input__field"
+                type="text"
+                [placeholder]="form().keywords.length ? 'Add another…' : 'Type a keyword and press Enter'"
+                [value]="form().keywordDraft"
+                (input)="patchForm({ keywordDraft: $any($event.target).value })"
+                (keydown)="onKeywordKeydown($event)"
+                (blur)="addKeyword()"
+              />
+            </div>
+            <span class="field__hint">Press Enter or comma to add a keyword</span>
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label">Slug Preview</label>
+            <div class="slug-preview">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              yourstore.com/categories/{{ effectiveSlug() || 'category-slug' }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /form-col--main -->
+
+    <!-- RIGHT COLUMN ──────────────────────────────────────────────────────────── -->
+    <div class="form-col form-col--side">
+
+      <!-- ── PUBLISHING ─────────────────────────────────────────────────────── -->
+      <div class="side-card">
+        <h3 class="side-card__title">Publishing</h3>
+        <div class="summary-list">
+          <div class="summary-row">
+            <span class="summary-label">Status</span>
+            <span class="status-pill" [class.status-pill--active]="form().status === 'active'" [class.status-pill--inactive]="form().status === 'inactive'">
+              <span class="status-dot"></span>
+              {{ form().status === 'active' ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Featured</span>
+            @if (form().featured) {
+              <span class="featured-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Featured
+              </span>
+            } @else {
+              <span class="summary-val summary-val--muted">—</span>
+            }
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Created</span>
+            <span class="summary-val">{{ formatDate(createdAt()) }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Last updated</span>
+            <span class="summary-val">{{ formatDate(updatedAt()) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STATISTICS ────────────────────────────────────────────────────── -->
+      <div class="side-card">
+        <h3 class="side-card__title">Category Statistics</h3>
+        <div class="summary-list">
+          <div class="summary-row">
+            <span class="summary-label">Products</span>
+            <span class="summary-val">0 <span class="summary-val--muted">(new)</span></span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">SEO score</span>
+            <span class="summary-val">{{ seoScore() }}/100</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Images</span>
+            <span class="summary-val" [class.summary-val--warn]="totalImages() === 0">{{ totalImages() }} uploaded</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LIVE PREVIEW ──────────────────────────────────────────────────── -->
+      <div class="side-card">
+        <h3 class="side-card__title">Preview</h3>
+        <div class="preview-card">
+          <div class="preview-img-zone">
+            @if (thumbnail(); as img) {
+              <img [src]="img.preview" alt="Preview" class="preview-img" />
+            } @else {
+              <div class="preview-placeholder">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              </div>
+            }
+            @if (form().featured) {
+              <span class="preview-badge preview-badge--featured">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Featured
+              </span>
+            }
+            <span class="preview-status-dot" [class.preview-status-dot--active]="form().status === 'active'"></span>
+          </div>
+          <div class="preview-body">
+            <p class="preview-name">{{ form().name || 'Category name' }}</p>
+            <p class="preview-slug">/{{ effectiveSlug() || 'category-slug' }}</p>
+            <p class="preview-desc">{{ form().description || 'A short description of this category will appear here.' }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-col--side -->
+  </div><!-- /form-layout -->
+
+  <!-- ── STICKY FOOTER ─────────────────────────────────────────────────────── -->
+  <div class="sticky-footer">
+    <div class="sticky-footer__inner">
+      <button class="btn-cancel" type="button" (click)="cancel()" [disabled]="isSubmitting()">
+        Cancel
+      </button>
+      <div class="sticky-footer__actions">
+        <button class="btn-draft" type="button" (click)="saveDraft()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) { <span class="spinner-sm" aria-hidden="true"></span> }
+          Save Draft
+        </button>
+        <button class="btn-publish" type="button" (click)="create()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span>
+          } @else {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          }
+          Create Category
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
