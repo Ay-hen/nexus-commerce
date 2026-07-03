@@ -64,6 +64,14 @@ $z-modal: 1000;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow-x: hidden;
+  box-sizing: border-box;
+
   font-family: 'Inter', -apple-system, sans-serif;
   color: $text-primary;
   animation: pop-in .25s $ease;
@@ -393,20 +401,34 @@ $z-modal: 1000;
 
 // ─── Table card ───────────────────────────────────────────────────────────────
 .table-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  overflow: visible;
-  animation: pop-in .28s $ease both;
+
+  overflow: hidden;
 }
 
-.table-wrap { overflow-x: auto; }
+.table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
 .data-table {
+  
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: .8rem;
+
 
   thead tr { border-bottom: 1px solid $border; background: $surface2; }
 
@@ -438,6 +460,11 @@ $z-modal: 1000;
   tbody tr:hover td { background: $surface2; }
 }
 
+.inventory-page > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
 .th-sortable {
   cursor: pointer; user-select: none;
   svg { display: inline-block; vertical-align: middle; margin-left: 4px; opacity: .35; transition: opacity .15s; }
@@ -919,4 +946,84 @@ $z-modal: 1000;
 
 @media print {
   .page-header__actions, .toolbar, .pagination, .admin-toast, .action-menu-wrap { display: none !important; }
+}
+
+
+.alerts-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: linear-gradient(135deg, $surface 60%, rgba($red, .03) 100%);
+  border: 1px solid rgba($red, .18);
+  border-radius: $radius-lg;
+  padding: 20px;
+  box-shadow: $shadow-card;
+  animation: pop-in .3s .1s $ease both;
+}
+
+.alerts-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.alerts-card__title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  min-width: 0;
+  flex: 1;
+}
+
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  width: 100%;
+  min-width: 0;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 10px;
+}
+
+.alert-item__body {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.alert-item__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
