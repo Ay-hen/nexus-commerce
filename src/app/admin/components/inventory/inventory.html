@@ -435,105 +435,97 @@
         <div class="table-wrap">
           <table class="data-table">
             <thead>
-              <tr>
-                <th class="th--img"></th>
-                <th class="th-sortable" (click)="setSort('product')">
-                  Product
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'product'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='product' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-                </th>
-                <th>SKU</th>
-                <th>Category</th>
-                <th>Warehouse</th>
-                <th class="th-sortable" (click)="setSort('stock')">
-                  Current Stock
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'stock'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-                </th>
-                <th>Reserved</th>
-                <th>Available</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Unit Cost</th>
-                <th class="th-sortable" (click)="setSort('value')">
-                  Inventory Value
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'value'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='value' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-                </th>
-                <th>Status</th>
-                <th class="th-sortable" (click)="setSort('updated')">
-                  Last Updated
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'updated'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='updated' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-                </th>
-                <th class="th--actions"></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of paginatedItems(); track trackById($index, item)) {
-                <tr class="table-row">
-                  <td class="td--img"><div class="prod-thumb"><img [src]="item.image" [alt]="item.name" /></div></td>
-                  <td><p class="prod-name">{{ item.name }}</p></td>
-                  <td class="td-mono">{{ item.sku }}</td>
-                  <td class="td-mid">{{ item.category }}</td>
-                  <td class="td-mid">{{ item.warehouse }}</td>
-                  <td>
-                    <div class="stock-cell">
-                      <span class="stock-num">{{ item.currentStock }}</span>
-                      <div class="progress-track">
-                        <div class="progress-fill progress-fill--{{ statusFor(item) }}" [style.width.%]="stockPercent(item)"></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="td-mid">{{ item.reserved }}</td>
-                  <td class="td-mid">{{ availableStock(item) }}</td>
-                  <td class="td-light">{{ item.minStock }}</td>
-                  <td class="td-light">{{ item.maxStock }}</td>
-                  <td class="td-mid">{{ formatCurrency(item.unitCost) }}</td>
-                  <td class="td-value">{{ formatCurrency(inventoryValueFor(item)) }}</td>
-                  <td>
-                    <span class="status-pill status-pill--{{ statusFor(item) }}">
-                      <span class="status-dot"></span>{{ statusLabel(statusFor(item)) }}
-                    </span>
-                  </td>
-                  <td class="td-light">{{ formatDate(item.lastUpdated) }}</td>
-                  <td class="td--actions">
-                    <div class="action-menu-wrap">
-                      <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" aria-label="Row actions">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
-                        </svg>
-                      </button>
-                      @if (openMenuId() === item.id) {
-                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
-                          <a class="action-item" (click)="openView(item)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            View
-                          </a>
-                          <a class="action-item" (click)="editFromView(item)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            Edit
-                          </a>
-                          <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            Adjust Stock
-                          </a>
-                          <a class="action-item" (click)="openAdjust(item, $event, 'transfer')" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                            Transfer
-                          </a>
-                          <a class="action-item" (click)="openView(item)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-                            Stock History
-                          </a>
-                          <div class="action-divider"></div>
-                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(item, $event)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                            Delete
-                          </button>
-                        </div>
-                      }
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
+  <tr>
+    <th class="th--img"></th>
+    <th class="th-sortable" (click)="setSort('product')">
+      Product
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'product'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='product' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+    </th>
+    <th class="th-sortable" (click)="setSort('stock')">
+      Stock
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'stock'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+    </th>
+    <th>Status</th>
+    <th class="th-sortable" (click)="setSort('value')">
+      Value
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'value'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='value' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+    </th>
+    <th class="th-sortable" (click)="setSort('updated')">
+      Updated
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'updated'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='updated' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+    </th>
+    <th class="th--actions"></th>
+  </tr>
+</thead>
+<tbody>
+  @for (item of paginatedItems(); track trackById($index, item)) {
+    <tr class="table-row">
+      <td class="td--img"><div class="prod-thumb"><img [src]="item.image" [alt]="item.name" /></div></td>
+
+      <td>
+        <p class="prod-name">{{ item.name }}</p>
+        <p class="prod-meta">{{ item.sku }} · {{ item.category }}</p>
+      </td>
+
+      <td>
+        <div class="stock-cell">
+          <span class="stock-num">{{ item.currentStock }} units</span>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill--{{ statusFor(item) }}" [style.width.%]="stockPercent(item)"></div>
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <span class="status-pill status-pill--{{ statusFor(item) }}">
+          <span class="status-dot"></span>{{ statusLabel(statusFor(item)) }}
+        </span>
+      </td>
+
+      <td class="td-value">{{ formatCurrency(inventoryValueFor(item)) }}</td>
+      <td class="td-light">{{ formatDate(item.lastUpdated) }}</td>
+
+      <td class="td--actions">
+        <div class="action-menu-wrap">
+          <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" aria-label="Row actions">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+            </svg>
+          </button>
+          @if (openMenuId() === item.id) {
+            <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+              <a class="action-item" (click)="openView(item)" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </a>
+              <a class="action-item" (click)="editFromView(item)" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </a>
+              <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Adjust Stock
+              </a>
+              <a class="action-item" (click)="openAdjust(item, $event, 'transfer')" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                Transfer
+              </a>
+              <a class="action-item" (click)="openView(item)" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                Stock History
+              </a>
+              <div class="action-divider"></div>
+              <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(item, $event)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                Delete
+              </button>
+            </div>
+          }
+        </div>
+      </td>
+    </tr>
+  }
+</tbody>
           </table>
         </div>
       </div>
@@ -609,3 +601,4 @@
   }
 
 </div>
+
