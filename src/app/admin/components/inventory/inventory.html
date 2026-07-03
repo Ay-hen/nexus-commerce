@@ -340,45 +340,49 @@
 
   <!-- ── FILTER TOOLBAR ────────────────────────────────────────────────────── -->
   <div class="toolbar" (click)="$event.stopPropagation()">
-    <!-- Search -->
-    <div class="search-wrap">
-      <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input
-        class="search-input"
-        type="search"
-        placeholder="Search product, SKU, barcode…"
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value); onFilterChange()"
-      />
-    </div>
+    <div class="toolbar__left">
+      
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          class="search-input"
+          type="search"
+          placeholder="Search product, SKU, barcode…"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value); onFilterChange()"
+        />
+      </div>
+  
+      <!-- Warehouse -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="warehouseFilter()" (change)="warehouseFilter.set($any($event.target).value); onFilterChange()">
+          <option value="all">All Warehouses</option>
+          @for (w of warehouses; track w) { <option [value]="w">{{ w }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+  
+      <!-- Category -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="categoryFilter()" (change)="categoryFilter.set($any($event.target).value); onFilterChange()">
+          <option value="all">All Categories</option>
+          @for (c of categories; track c) { <option [value]="c">{{ c }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+  
+      <!-- Stock status pills -->
+      <div class="filter-pills">
+        @for (opt of stockStatusOptions; track opt.key) {
+          <button class="filter-pill" [class.filter-pill--active]="stockStatusFilter() === opt.key" (click)="stockStatusFilter.set(opt.key); onFilterChange()">
+            {{ opt.label }}
+          </button>
+        }
+      </div>
 
-    <!-- Warehouse -->
-    <div class="select-wrap">
-      <select class="toolbar-select" [value]="warehouseFilter()" (change)="warehouseFilter.set($any($event.target).value); onFilterChange()">
-        <option value="all">All Warehouses</option>
-        @for (w of warehouses; track w) { <option [value]="w">{{ w }}</option> }
-      </select>
-      <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-
-    <!-- Category -->
-    <div class="select-wrap">
-      <select class="toolbar-select" [value]="categoryFilter()" (change)="categoryFilter.set($any($event.target).value); onFilterChange()">
-        <option value="all">All Categories</option>
-        @for (c of categories; track c) { <option [value]="c">{{ c }}</option> }
-      </select>
-      <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-
-    <!-- Stock status pills -->
-    <div class="filter-pills">
-      @for (opt of stockStatusOptions; track opt.key) {
-        <button class="filter-pill" [class.filter-pill--active]="stockStatusFilter() === opt.key" (click)="stockStatusFilter.set(opt.key); onFilterChange()">
-          {{ opt.label }}
-        </button>
-      }
     </div>
 
     <div class="toolbar__right">
@@ -601,4 +605,3 @@
   }
 
 </div>
-

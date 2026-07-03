@@ -377,7 +377,24 @@ $z-modal: 1000;
   &--active { background: $accent-bg; border-color: rgba($accent, .3); color: $accent; font-weight: 700; }
 }
 
-.toolbar__right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.toolbar__left-scroll {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
+.toolbar__left-scroll::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+.toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+
 
 .view-toggle {
   display: flex;
@@ -397,7 +414,7 @@ $z-modal: 1000;
 
   &--active { background: $surface; color: $accent; box-shadow: 0 1px 3px rgba(16,24,40,.08); }
   &:hover:not(.view-btn--active) { color: $text-primary; }
-}
+} 
 
 // ─── Table card ───────────────────────────────────────────────────────────────
 .table-card {
@@ -486,7 +503,16 @@ $z-modal: 1000;
   img { width: 26px; height: 26px; object-fit: contain; }
 }
 
-.prod-name { font-weight: 600; color: $text-primary; font-size: .82rem; }
+.prod-name {
+  font-weight: 600;
+  color: $text-primary;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
 
 .td-mono  { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
 .td-mid   { color: $text-mid; }
@@ -1032,4 +1058,34 @@ $z-modal: 1000;
   font-size: 0.72rem;
   color: $text-light;
   margin: 2px 0 0;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.toolbar__left {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    flex-wrap: nowrap;
+    white-space: nowrap;
+
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.toolbar__right {
+    flex-shrink: 0;
 }
