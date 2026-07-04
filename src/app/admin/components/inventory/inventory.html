@@ -129,6 +129,19 @@
     </div>
   }
 
+  <!-- ── ADD INVENTORY ITEM MODAL ──────────────────────────────────────────── -->
+  @if (isAddingItem()) {
+    <app-add-inventory-item
+      [categories]="categories"
+      [warehouses]="warehouses"
+      [suppliers]="suppliers"
+      [existingSkus]="existingSkus()"
+      (closed)="closeAddItem()"
+      (cancelled)="closeAddItem()"
+      (created)="onItemCreated($event)"
+    />
+  }
+
   <!-- ── ADJUST STOCK MODAL ────────────────────────────────────────────────── -->
   @if (adjustingProduct(); as ap) {
     <app-adjust-stock
@@ -156,8 +169,12 @@
       </div>
     </div>
     <div class="page-header__actions">
-      
-    
+      <button class="btn-primary" (click)="openAddItem()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Add Inventory Item
+      </button>
     </div>
   </div>
 

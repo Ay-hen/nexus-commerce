@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdjustStock, AdjustStockProduct, StockAdjustmentPayload } from '../adjust-stock/adjust-stock';
+import { AddInventoryItem, NewInventoryItemPayload } from '../add-inventory-item/add-inventory-item';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock' | 'overstock' | 'critical';
@@ -45,7 +46,7 @@ export interface InventoryItem {
 
 @Component({
   selector: 'app-inventory',
-  imports: [CommonModule, FormsModule, AdjustStock],
+  imports: [CommonModule, FormsModule, AdjustStock, AddInventoryItem],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss',
 })
@@ -79,6 +80,9 @@ export class Inventory {
   viewingItem   = signal<InventoryItem | null>(null);
   adjustingItem = signal<InventoryItem | null>(null);
   pendingDelete = signal<InventoryItem | null>(null);
+  isAddingItem  = signal(false);
+
+  existingSkus = computed(() => this.items().map(i => i.sku));
 
   // Product shape handed to <app-adjust-stock>, derived from the raw inventory item.
   adjustingProduct = computed<AdjustStockProduct | null>(() => {
@@ -517,6 +521,51 @@ export class Inventory {
   }
 
   adjustStockPrompt(): void { this.showToast('Select a product below to adjust its stock'); }
+
+  // ── Add inventory item modal ─────────────────────────────────────────────
+  openAddItem(): void { this.isAddingItem.set(true); }
+  closeAddItem(): void { this.isAddingItem.set(false); }
+
+  /** Handles the (created) event emitted by <app-add-inventory-item>. */
+  onItemCreated(payload: NewInventoryItemPayload): void {
+    const now = new Date().toISOString();
+
+    const openingMovement: StockMovement = {
+      id: 'mv-' + Date.now(),
+      date: now,
+      type: 'increase',
+      quantity: payload.initialStock,
+      before: 0,
+      after: payload.initialStock,
+      user: 'You',
+      notes: 'Initial stock on creation',
+    };
+
+    const newItem: InventoryItem = {
+      id: 'inv-' + Date.now(),
+      name: payload.name,
+      sku: payload.sku,
+      barcode: payload.barcode,
+      image: payload.image || '/products/headphones.png',
+      category: payload.category,
+      warehouse: payload.warehouse,
+      supplier: payload.supplier,
+      currentStock: payload.initialStock,
+      reserved: 0,
+      incoming: 0,
+      outgoing: 0,
+      minStock: payload.minStock,
+      maxStock: payload.maxStock,
+      unitCost: payload.unitCost,
+      reorderQty: payload.reorderQty,
+      lastUpdated: now,
+      movements: payload.initialStock > 0 ? [openingMovement] : [],
+    };
+
+    this.items.update(list => [newItem, ...list]);
+    this.currentPage.set(1);
+    this.showToast(`"${newItem.name}" added to inventory`);
+  }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   formatCurrency(v: number): string { return '$' + v.toLocaleString(); }

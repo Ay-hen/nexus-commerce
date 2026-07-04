@@ -1,1 +1,254 @@
-<p>add-inventory-item works!</p>
+<!-- add-inventory-item.html -->
+<div class="modal-backdrop" (click)="attemptClose()" role="dialog" aria-modal="true" aria-labelledby="add-item-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- ══════════════════════════ SUCCESS ══════════════════════════ -->
+    @if (showSuccess()) {
+      <div class="success-state">
+        <div class="success-ring">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Item Added to Inventory</h2>
+        <p class="success-sub">{{ form().name }} is now being tracked with {{ initialStockNum() }} units.</p>
+      </div>
+    }
+
+    <!-- ══════════════════════════ MAIN CONTENT ══════════════════════════ -->
+    @if (!showSuccess()) {
+
+      <!-- ── STICKY HEADER ─────────────────────────────────────────────── -->
+      <div class="modal-header">
+        <button class="modal-close" (click)="attemptClose()" [disabled]="isSaving()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <h2 class="modal-header__title" id="add-item-title">Add Inventory Item</h2>
+        <p class="modal-header__sub">Create a new product record to start tracking its stock</p>
+      </div>
+
+      <!-- ── SCROLLABLE BODY ───────────────────────────────────────────── -->
+      <div class="modal-body">
+
+        <!-- Image upload -->
+        <h3 class="section-title">Product Image</h3>
+        <div class="image-row">
+          @if (imagePreview(); as preview) {
+            <div class="image-tile">
+              <img [src]="preview" alt="Product preview" />
+              <button type="button" class="image-remove" (click)="removeImage()" aria-label="Remove image">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+          } @else {
+            <label
+              class="upload-slot"
+              [class.upload-slot--drag]="dragOver()"
+              [class.upload-slot--error]="hasError('image')"
+              for="item-image-input"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave()"
+              (drop)="onImageDrop($event)"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p class="upload-slot__label">Click or drag &amp; drop</p>
+              <p class="upload-slot__hint">JPEG, PNG, WebP · Max 5 MB</p>
+              <input id="item-image-input" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" (change)="onImageSelect($event)" />
+            </label>
+          }
+          @if (hasError('image')) { <p class="field__error">{{ errorMsg('image') }}</p> }
+        </div>
+
+        <!-- Identity -->
+        <h3 class="section-title">Product Identity</h3>
+        <div class="form-grid">
+          <div class="field field--full" [class.field--error]="hasError('name')">
+            <label class="field__label" for="item-name">Product Name <span class="required">*</span></label>
+            <input
+              id="item-name"
+              class="field__input"
+              type="text"
+              placeholder="e.g. Sony WH-1000XM6 Wireless Headphones"
+              [value]="form().name"
+              (input)="patchForm({ name: $any($event.target).value })"
+            />
+            @if (hasError('name')) { <p class="field__error">{{ errorMsg('name') }}</p> }
+          </div>
+
+          <div class="field" [class.field--error]="hasError('sku')">
+            <label class="field__label" for="item-sku">SKU</label>
+            <div class="input-with-btn">
+              <input
+                id="item-sku"
+                class="field__input field__input--mono"
+                type="text"
+                [placeholder]="computedSku() || 'AUTO-GENERATED'"
+                [value]="form().sku"
+                (input)="onSkuInput($any($event.target).value)"
+              />
+              <button type="button" class="btn-inline" (click)="generateSku()">Generate</button>
+            </div>
+            @if (hasError('sku')) { <p class="field__error">{{ errorMsg('sku') }}</p> }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="item-barcode">Barcode <span class="field__optional">(optional)</span></label>
+            <input
+              id="item-barcode"
+              class="field__input field__input--mono"
+              type="text"
+              placeholder="123456789012"
+              [value]="form().barcode"
+              (input)="patchForm({ barcode: $any($event.target).value })"
+            />
+          </div>
+
+          <div class="field" [class.field--error]="hasError('category')">
+            <label class="field__label" for="item-category">Category <span class="required">*</span></label>
+            <div class="select-wrap">
+              <select id="item-category" class="field__select" [value]="form().category" (change)="patchForm({ category: $any($event.target).value })">
+                <option value="" disabled selected>Select category…</option>
+                @for (c of categories; track c) { <option [value]="c">{{ c }}</option> }
+              </select>
+              <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            @if (hasError('category')) { <p class="field__error">{{ errorMsg('category') }}</p> }
+          </div>
+
+          <div class="field" [class.field--error]="hasError('warehouse')">
+            <label class="field__label" for="item-warehouse">Warehouse <span class="required">*</span></label>
+            <div class="select-wrap">
+              <select id="item-warehouse" class="field__select" [value]="form().warehouse" (change)="patchForm({ warehouse: $any($event.target).value })">
+                <option value="" disabled selected>Select warehouse…</option>
+                @for (w of warehouses; track w) { <option [value]="w">{{ w }}</option> }
+              </select>
+              <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            @if (hasError('warehouse')) { <p class="field__error">{{ errorMsg('warehouse') }}</p> }
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label" for="item-supplier">Supplier</label>
+            <div class="select-wrap">
+              <select id="item-supplier" class="field__select" [value]="form().supplier" (change)="patchForm({ supplier: $any($event.target).value })">
+                <option value="">No supplier</option>
+                @for (s of suppliers; track s) { <option [value]="s">{{ s }}</option> }
+              </select>
+              <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stock levels -->
+        <h3 class="section-title">Stock Levels</h3>
+        <div class="form-grid">
+          <div class="field" [class.field--error]="hasError('initialStock')">
+            <label class="field__label" for="item-stock">Initial Stock</label>
+            <input
+              id="item-stock"
+              class="field__input"
+              type="number"
+              min="0"
+              placeholder="0"
+              [value]="form().initialStock ?? ''"
+              (input)="patchForm({ initialStock: +$any($event.target).value || null })"
+            />
+            @if (hasError('initialStock')) { <p class="field__error">{{ errorMsg('initialStock') }}</p> }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="item-cost">Unit Cost ($)</label>
+            <input
+              id="item-cost"
+              class="field__input"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              [value]="form().unitCost ?? ''"
+              (input)="patchForm({ unitCost: +$any($event.target).value || null })"
+            />
+          </div>
+
+          <div class="field" [class.field--error]="hasError('minStock')">
+            <label class="field__label" for="item-min">Minimum Stock</label>
+            <input
+              id="item-min"
+              class="field__input"
+              type="number"
+              min="0"
+              placeholder="0"
+              [value]="form().minStock ?? ''"
+              (input)="patchForm({ minStock: +$any($event.target).value || null })"
+            />
+            @if (hasError('minStock')) { <p class="field__error">{{ errorMsg('minStock') }}</p> }
+          </div>
+
+          <div class="field" [class.field--error]="hasError('maxStock')">
+            <label class="field__label" for="item-max">Maximum Stock <span class="required">*</span></label>
+            <input
+              id="item-max"
+              class="field__input"
+              type="number"
+              min="1"
+              placeholder="100"
+              [value]="form().maxStock ?? ''"
+              (input)="patchForm({ maxStock: +$any($event.target).value || null })"
+            />
+            @if (hasError('maxStock')) { <p class="field__error">{{ errorMsg('maxStock') }}</p> }
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label" for="item-reorder">Reorder Quantity <span class="field__optional">(optional)</span></label>
+            <input
+              id="item-reorder"
+              class="field__input"
+              type="number"
+              min="0"
+              placeholder="Defaults to 2× minimum stock"
+              [value]="form().reorderQty ?? ''"
+              (input)="patchForm({ reorderQty: +$any($event.target).value || null })"
+            />
+          </div>
+        </div>
+
+        <!-- Live preview -->
+        <h3 class="section-title">Preview</h3>
+        <div class="preview-card">
+          <div class="preview-row">
+            <span class="preview-label">Inventory Value</span>
+            <span class="preview-value">{{ formatCurrency(inventoryValue()) }}</span>
+          </div>
+          <div class="preview-row">
+            <span class="preview-label">Stock Level</span>
+            <span class="status-pill status-pill--{{ previewStatus() }}">
+              <span class="status-dot"></span>{{ statusLabel() }}
+            </span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill--{{ previewStatus() }}" [style.width.%]="stockPercent()"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── STICKY FOOTER ─────────────────────────────────────────────── -->
+      <div class="modal-footer">
+        <button class="btn-ghost" (click)="cancel()" [disabled]="isSaving()">Cancel</button>
+        <div class="modal-footer__right">
+          <button class="btn-reset" (click)="reset()" [disabled]="isSaving()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+            Reset
+          </button>
+          <button class="btn-primary" (click)="save()" [disabled]="!canSave()">
+            @if (isSaving()) { <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span> }
+            Add to Inventory
+          </button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
