@@ -590,3 +590,4 @@ export class Inventory {
     setTimeout(() => this.isLoading.set(false), 700);
   }
 }
+
