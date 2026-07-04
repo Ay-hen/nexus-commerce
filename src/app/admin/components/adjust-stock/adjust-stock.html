@@ -1,1 +1,357 @@
-<p>adjust-stock works!</p>
+<!-- adjust-stock-modal.html -->
+<div class="modal-backdrop" (click)="attemptClose()" role="dialog" aria-modal="true" aria-labelledby="adjust-modal-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- ══════════════════════════ LOADING ══════════════════════════ -->
+    @if (isLoading) {
+      <div class="modal-loading">
+        <div class="sk-header shimmer"></div>
+        <div class="sk-body">
+          <div class="sk-row shimmer"></div>
+          <div class="sk-row shimmer"></div>
+          <div class="sk-row shimmer"></div>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════ SUCCESS ══════════════════════════ -->
+    @if (!isLoading && showSuccess()) {
+      <div class="success-state">
+        <div class="success-ring">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Stock Updated Successfully</h2>
+        <p class="success-sub">
+          {{ product?.name }} is now at <strong>{{ resultingStock() }} units</strong>
+          @if (difference() !== 0) {
+            <span class="success-diff" [class.success-diff--pos]="difference() > 0" [class.success-diff--neg]="difference() < 0">
+              ({{ difference() > 0 ? '+' : '' }}{{ difference() }})
+            </span>
+          }
+        </p>
+      </div>
+    }
+
+    <!-- ══════════════════════════ MAIN CONTENT ══════════════════════════ -->
+    @if (!isLoading && !showSuccess() && product) {
+
+      <!-- ── STICKY HEADER ─────────────────────────────────────────────── -->
+      <div class="modal-header">
+        <button class="modal-close" (click)="attemptClose()" [disabled]="isSaving()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+
+        <h2 class="modal-header__title" id="adjust-modal-title">Adjust Inventory</h2>
+        <p class="modal-header__sub">Update product stock levels and inventory information</p>
+
+        <div class="product-identity">
+          <div class="product-identity__img">
+            <img [src]="product.image" [alt]="product.name" />
+          </div>
+          <div class="product-identity__info">
+            <p class="product-identity__name">{{ product.name }}</p>
+            <p class="product-identity__sku">SKU: {{ product.sku }}</p>
+            <div class="product-identity__badges">
+              <span class="id-badge id-badge--category">{{ product.category }}</span>
+              <span class="id-badge id-badge--warehouse">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                {{ product.warehouse }}
+              </span>
+              <span class="id-badge id-badge--stock">{{ product.currentStock }} in stock</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SCROLLABLE BODY ───────────────────────────────────────────── -->
+      <div class="modal-body">
+
+        <!-- Error alert -->
+        @if (errorMsg()) {
+          <div class="error-alert" role="alert">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {{ errorMsg() }}
+          </div>
+        }
+
+        <!-- Inventory summary -->
+        <h3 class="section-title">Current Inventory Summary</h3>
+        <div class="summary-grid">
+          <div class="summary-stat summary-stat--blue">
+            <p class="summary-stat__label">Current Stock</p>
+            <p class="summary-stat__value">{{ product.currentStock }}</p>
+          </div>
+          <div class="summary-stat summary-stat--amber">
+            <p class="summary-stat__label">Reserved</p>
+            <p class="summary-stat__value">{{ product.reserved }}</p>
+          </div>
+          <div class="summary-stat summary-stat--green">
+            <p class="summary-stat__label">Available</p>
+            <p class="summary-stat__value">{{ availableStock() }}</p>
+          </div>
+          <div class="summary-stat summary-stat--purple">
+            <p class="summary-stat__label">Incoming</p>
+            <p class="summary-stat__value">{{ product.incoming }}</p>
+          </div>
+          <div class="summary-stat summary-stat--slate">
+            <p class="summary-stat__label">Minimum</p>
+            <p class="summary-stat__value">{{ product.minStock }}</p>
+          </div>
+          <div class="summary-stat summary-stat--slate">
+            <p class="summary-stat__label">Maximum</p>
+            <p class="summary-stat__value">{{ product.maxStock }}</p>
+          </div>
+          <div class="summary-stat summary-stat--green">
+            <p class="summary-stat__label">Inventory Value</p>
+            <p class="summary-stat__value">{{ formatCurrency(inventoryValue()) }}</p>
+          </div>
+          <div class="summary-stat summary-stat--slate">
+            <p class="summary-stat__label">Last Updated</p>
+            <p class="summary-stat__value summary-stat__value--sm">{{ formatDateTime(product.lastUpdated) }}</p>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <h3 class="section-title">Quick Actions</h3>
+        <div class="quick-actions">
+          <button class="quick-btn" (click)="setToMinimum()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="19 12 12 19 5 12"/><line x1="12" y1="5" x2="12" y2="19"/></svg>
+            Set to Minimum
+          </button>
+          <button class="quick-btn" (click)="setToMaximum()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="5 12 12 5 19 12"/><line x1="12" y1="5" x2="12" y2="19"/></svg>
+            Set to Maximum
+          </button>
+          <button class="quick-btn" (click)="quickRestock()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Restock
+          </button>
+          <button class="quick-btn quick-btn--danger" (click)="clearStock()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Clear Stock
+          </button>
+          <button class="quick-btn quick-btn--accent" (click)="autoFill()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Auto Fill
+          </button>
+        </div>
+
+        <!-- Adjustment form -->
+        <h3 class="section-title">Stock Adjustment</h3>
+        <div class="adjust-form">
+
+          <!-- Type -->
+          <div class="field field--full">
+            <label class="field__label">Adjustment Type</label>
+            <div class="type-grid">
+              @for (opt of adjustmentTypes; track opt.key) {
+                <button type="button" class="type-btn" [class.type-btn--active]="form().type === opt.key" (click)="selectType(opt.key)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                    @switch (opt.icon) {
+                      @case ('plus')     { <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/> }
+                      @case ('minus')    { <line x1="5" y1="12" x2="19" y2="12"/> }
+                      @case ('check')    { <polyline points="20 6 9 17 4 12"/> }
+                      @case ('transfer') { <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/> }
+                      @case ('undo')     { <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/> }
+                      @case ('alert')    { <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/> }
+                      @case ('x')        { <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/> }
+                      @case ('flag')     { <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/> }
+                    }
+                  </svg>
+                  {{ opt.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="field">
+            <label class="field__label" for="adj-qty">{{ isSetType() ? 'New Stock Count' : 'Quantity' }}</label>
+            <div class="qty-stepper">
+              <button type="button" class="qty-btn" (click)="decrementQty()" [disabled]="quantityNum() === 0" aria-label="Decrease">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <input
+                id="adj-qty"
+                class="qty-input"
+                type="number"
+                min="0"
+                placeholder="0"
+                [value]="form().quantity ?? ''"
+                (input)="patchForm({ quantity: +$any($event.target).value || null })"
+              />
+              <button type="button" class="qty-btn" (click)="incrementQty()" aria-label="Increase">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Reason -->
+          <div class="field">
+            <label class="field__label" for="adj-reason">Reason</label>
+            <div class="select-wrap">
+              <select id="adj-reason" class="field__select" [value]="form().reason" (change)="patchForm({ reason: $any($event.target).value })">
+                @for (r of reasonOptions; track r.key) { <option [value]="r.key">{{ r.label }}</option> }
+              </select>
+              <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+
+          <!-- Destination warehouse (transfer only) -->
+          @if (isTransfer()) {
+            <div class="field" [class.field--error]="needsWarehouse()">
+              <label class="field__label" for="adj-warehouse">Destination Warehouse</label>
+              <div class="select-wrap">
+                <select id="adj-warehouse" class="field__select" [value]="form().destinationWarehouse" (change)="patchForm({ destinationWarehouse: $any($event.target).value })">
+                  <option value="" disabled>Select warehouse…</option>
+                  @for (w of destinationWarehouses(); track w) { <option [value]="w">{{ w }}</option> }
+                </select>
+                <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              @if (needsWarehouse()) { <p class="field__error">Select a destination warehouse to continue.</p> }
+            </div>
+          }
+
+          <!-- Reference number -->
+          <div class="field">
+            <label class="field__label" for="adj-ref">Reference Number <span class="field__optional">(optional)</span></label>
+            <input
+              id="adj-ref"
+              class="field__input"
+              type="text"
+              placeholder="e.g. PO-4821"
+              [value]="form().referenceNumber"
+              (input)="patchForm({ referenceNumber: $any($event.target).value })"
+            />
+          </div>
+
+          <!-- Adjustment date -->
+          <div class="field">
+            <label class="field__label" for="adj-date">Adjustment Date</label>
+            <input
+              id="adj-date"
+              class="field__input"
+              type="date"
+              [value]="form().adjustmentDate"
+              (change)="patchForm({ adjustmentDate: $any($event.target).value })"
+            />
+          </div>
+
+          <!-- Performed by -->
+          <div class="field">
+            <label class="field__label">Performed By</label>
+            <input class="field__input field__input--readonly" type="text" [value]="currentUser" readonly />
+          </div>
+
+          <!-- Notes -->
+          <div class="field field--full">
+            <label class="field__label" for="adj-notes">Notes</label>
+            <textarea
+              id="adj-notes"
+              class="field__textarea"
+              rows="3"
+              placeholder="Additional details about this adjustment…"
+              [value]="form().notes"
+              (input)="patchForm({ notes: $any($event.target).value })"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Live preview -->
+        <h3 class="section-title">Live Preview</h3>
+        <div class="preview-card" [class.preview-card--positive]="previewState() === 'positive'" [class.preview-card--negative]="previewState() === 'negative'">
+          <div class="preview-formula">
+            <div class="preview-step">
+              <span class="preview-step__label">Current Stock</span>
+              <span class="preview-step__value">{{ currentStock() }}</span>
+            </div>
+            <span class="preview-op">+</span>
+            <div class="preview-step">
+              <span class="preview-step__label">Adjustment</span>
+              <span class="preview-step__value" [class.preview-step__value--pos]="signedDelta() > 0" [class.preview-step__value--neg]="signedDelta() < 0">
+                {{ signedDelta() > 0 ? '+' : '' }}{{ signedDelta() }}
+              </span>
+            </div>
+            <span class="preview-op">=</span>
+            <div class="preview-step preview-step--result">
+              <span class="preview-step__label">New Stock</span>
+              <span class="preview-step__value preview-step__value--result">{{ resultingStock() }}</span>
+            </div>
+          </div>
+          <div class="preview-diff" [class.preview-diff--pos]="difference() > 0" [class.preview-diff--neg]="difference() < 0">
+            {{ difference() > 0 ? '+' : '' }}{{ difference() }} units {{ difference() === 0 ? '(no change)' : difference() > 0 ? 'gained' : 'lost' }}
+          </div>
+        </div>
+
+        <!-- Validation banners -->
+        @if (exceedsAvailable()) {
+          <div class="validation-banner validation-banner--danger">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            This quantity exceeds the {{ availableStock() }} units currently available.
+          </div>
+        }
+        @if (willBeZero()) {
+          <div class="validation-banner validation-banner--danger">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            This adjustment will bring stock to zero.
+          </div>
+        } @else if (belowMinimum()) {
+          <div class="validation-banner validation-banner--warning">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Resulting stock will fall below the minimum threshold of {{ product.minStock }}.
+          </div>
+        }
+
+        <!-- Timeline -->
+        @if (product.movements.length > 0) {
+          <h3 class="section-title">Recent Stock Movements</h3>
+          <div class="timeline">
+            @for (mv of product.movements; track mv.id) {
+              <div class="timeline-item">
+                <span class="timeline-icon timeline-icon--{{ mv.type }}">
+                  @switch (mv.type) {
+                    @case ('increase') { <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg> }
+                    @case ('decrease') { <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg> }
+                    @case ('transfer') { <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> }
+                    @default            { <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> }
+                  }
+                </span>
+                <div class="timeline-body">
+                  <div class="timeline-top">
+                    <span class="timeline-type">{{ mv.type }}</span>
+                    <span class="timeline-qty" [class.timeline-qty--neg]="mv.type === 'decrease'">
+                      {{ mv.type === 'decrease' ? '-' : '+' }}{{ mv.quantity }} units
+                    </span>
+                  </div>
+                  <p class="timeline-reason">{{ mv.reason }}</p>
+                  <p class="timeline-meta">{{ formatDateTime(mv.date) }} · {{ mv.user }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
+
+      <!-- ── STICKY FOOTER ─────────────────────────────────────────────── -->
+      <div class="modal-footer">
+        <button class="btn-ghost" (click)="cancel()" [disabled]="isSaving()">Cancel</button>
+        <div class="modal-footer__right">
+          <button class="btn-reset" (click)="reset()" [disabled]="isSaving()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+            Reset
+          </button>
+          <button class="btn-primary" (click)="save()" [disabled]="!canSave()">
+            @if (isSaving()) { <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span> }
+            Save Adjustment
+          </button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
