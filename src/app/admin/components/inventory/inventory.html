@@ -130,99 +130,15 @@
   }
 
   <!-- ── ADJUST STOCK MODAL ────────────────────────────────────────────────── -->
-  @if (adjustingItem(); as item) {
-    <div class="modal-backdrop" (click)="closeAdjust()" role="dialog" aria-modal="true" aria-labelledby="adjust-title">
-      <div class="modal modal--md" (click)="$event.stopPropagation()">
-        <button class="modal-close" (click)="closeAdjust()" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-
-        <div class="modal__icon modal__icon--accent">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>
-          </svg>
-        </div>
-        <h2 class="modal__title" id="adjust-title">Adjust Stock</h2>
-        <p class="modal__body modal__body--tight">{{ item.name }} · Current: <strong>{{ item.currentStock }} units</strong></p>
-
-        <div class="adjust-form">
-          <!-- Adjustment type -->
-          <div class="adjust-field">
-            <label class="adjust-label">Adjustment Type</label>
-            <div class="type-grid">
-              @for (opt of adjustTypeOptions; track opt.key) {
-                <button
-                  type="button"
-                  class="type-btn"
-                  [class.type-btn--active]="adjustForm().type === opt.key"
-                  (click)="patchAdjustForm({ type: opt.key })"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                    @switch (opt.icon) {
-                      @case ('plus')     { <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/> }
-                      @case ('minus')    { <line x1="5" y1="12" x2="19" y2="12"/> }
-                      @case ('check')    { <polyline points="20 6 9 17 4 12"/> }
-                      @case ('transfer') { <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/> }
-                    }
-                  </svg>
-                  {{ opt.label }}
-                </button>
-              }
-            </div>
-          </div>
-
-          <!-- Quantity -->
-          <div class="adjust-field">
-            <label class="adjust-label" for="adj-qty">
-              {{ adjustForm().type === 'correction' ? 'Corrected Stock Count' : 'Quantity' }}
-            </label>
-            <input
-              id="adj-qty"
-              class="adjust-input"
-              type="number"
-              min="0"
-              placeholder="0"
-              [value]="adjustForm().quantity ?? ''"
-              (input)="patchAdjustForm({ quantity: +$any($event.target).value || null })"
-            />
-          </div>
-
-          <!-- Reason -->
-          <div class="adjust-field">
-            <label class="adjust-label" for="adj-reason">Reason</label>
-            <input
-              id="adj-reason"
-              class="adjust-input"
-              type="text"
-              placeholder="e.g. Supplier delivery, damaged goods, cycle count…"
-              [value]="adjustForm().reason"
-              (input)="patchAdjustForm({ reason: $any($event.target).value })"
-            />
-          </div>
-
-          <!-- Notes -->
-          <div class="adjust-field">
-            <label class="adjust-label" for="adj-notes">Notes</label>
-            <textarea
-              id="adj-notes"
-              class="adjust-textarea"
-              rows="3"
-              placeholder="Additional details about this adjustment…"
-              [value]="adjustForm().notes"
-              (input)="patchAdjustForm({ notes: $any($event.target).value })"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="modal__actions">
-          <button class="btn-ghost" (click)="closeAdjust()" [disabled]="isSavingAdjust()">Cancel</button>
-          <button class="btn-primary" (click)="saveAdjust()" [disabled]="isSavingAdjust() || !adjustForm().quantity">
-            @if (isSavingAdjust()) { <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span> }
-            Save Adjustment
-          </button>
-        </div>
-      </div>
-    </div>
+  @if (adjustingProduct(); as ap) {
+    <app-adjust-stock
+      [product]="ap"
+      [warehouses]="warehouses"
+      [currentUser]="'You'"
+      (closed)="closeAdjust()"
+      (cancelled)="closeAdjust()"
+      (saved)="onStockAdjusted($event)"
+    />
   }
 
   <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
@@ -240,12 +156,8 @@
       </div>
     </div>
     <div class="page-header__actions">
-      <button class="btn-primary" (click)="adjustStockPrompt()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Adjust Stock
-      </button>
+      
+    
     </div>
   </div>
 
@@ -328,8 +240,9 @@
 
   <!-- ── FILTER TOOLBAR ────────────────────────────────────────────────────── -->
   <div class="toolbar" (click)="$event.stopPropagation()">
+
     <div class="toolbar__left">
-      
+
       <!-- Search -->
       <div class="search-wrap">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -370,7 +283,6 @@
           </button>
         }
       </div>
-
     </div>
 
     <div class="toolbar__right">
@@ -427,97 +339,93 @@
         <div class="table-wrap">
           <table class="data-table">
             <thead>
-  <tr>
-    <th class="th--img"></th>
-    <th class="th-sortable" (click)="setSort('product')">
-      Product
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'product'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='product' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-    </th>
-    <th class="th-sortable" (click)="setSort('stock')">
-      Stock
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'stock'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-    </th>
-    <th>Status</th>
-    <th class="th-sortable" (click)="setSort('value')">
-      Value
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'value'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='value' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-    </th>
-    <th class="th-sortable" (click)="setSort('updated')">
-      Updated
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'updated'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='updated' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
-    </th>
-    <th class="th--actions"></th>
-  </tr>
-</thead>
-<tbody>
-  @for (item of paginatedItems(); track trackById($index, item)) {
-    <tr class="table-row">
-      <td class="td--img"><div class="prod-thumb"><img [src]="item.image" [alt]="item.name" /></div></td>
-
-      <td>
-        <p class="prod-name">{{ item.name }}</p>
-        <p class="prod-meta">{{ item.sku }} · {{ item.category }}</p>
-      </td>
-
-      <td>
-        <div class="stock-cell">
-          <span class="stock-num">{{ item.currentStock }} units</span>
-          <div class="progress-track">
-            <div class="progress-fill progress-fill--{{ statusFor(item) }}" [style.width.%]="stockPercent(item)"></div>
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <span class="status-pill status-pill--{{ statusFor(item) }}">
-          <span class="status-dot"></span>{{ statusLabel(statusFor(item)) }}
-        </span>
-      </td>
-
-      <td class="td-value">{{ formatCurrency(inventoryValueFor(item)) }}</td>
-      <td class="td-light">{{ formatDate(item.lastUpdated) }}</td>
-
-      <td class="td--actions">
-        <div class="action-menu-wrap">
-          <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" aria-label="Row actions">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
-            </svg>
-          </button>
-          @if (openMenuId() === item.id) {
-            <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
-              <a class="action-item" (click)="openView(item)" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                View
-              </a>
-              <a class="action-item" (click)="editFromView(item)" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-              </a>
-              <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Adjust Stock
-              </a>
-              <a class="action-item" (click)="openAdjust(item, $event, 'transfer')" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                Transfer
-              </a>
-              <a class="action-item" (click)="openView(item)" role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-                Stock History
-              </a>
-              <div class="action-divider"></div>
-              <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(item, $event)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                Delete
-              </button>
-            </div>
-          }
-        </div>
-      </td>
-    </tr>
-  }
-</tbody>
+              <tr>
+                <th class="th--img"></th>
+                <th class="th-sortable" (click)="setSort('product')">
+                  Product
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'product'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='product' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+                </th>
+                <th>SKU</th>
+                <th>Warehouse</th>
+                <th class="th-sortable" (click)="setSort('stock')">
+                  Stock
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'stock'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+                </th>
+                <th class="th-sortable" (click)="setSort('value')">
+                  Value
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'value'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='value' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
+                </th>
+                <th>Status</th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of paginatedItems(); track trackById($index, item)) {
+                <tr class="table-row">
+                  <td class="td--img"><div class="prod-thumb"><img [src]="item.image" [alt]="item.name" /></div></td>
+                  <td>
+                    <p class="prod-name">{{ item.name }}</p>
+                    <p class="prod-meta">{{ item.category }}</p>
+                  </td>
+                  <td class="td-mono">{{ item.sku }}</td>
+                  <td class="td-mid">{{ item.warehouse }}</td>
+                  <td>
+                    <div class="stock-cell">
+                      <div class="stock-cell__top">
+                        <span class="stock-num">{{ item.currentStock }}</span>
+                      </div>
+                      <div class="progress-track">
+                        <div class="progress-fill progress-fill--{{ statusFor(item) }}" [style.width.%]="stockPercent(item)"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="td-value">{{ formatCurrency(inventoryValueFor(item)) }}</td>
+                  <td>
+                    <span class="status-pill status-pill--{{ statusFor(item) }}">
+                      <span class="status-dot"></span>{{ statusLabel(statusFor(item)) }}
+                    </span>
+                  </td>
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" aria-label="Row actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+                        </svg>
+                      </button>
+                      @if (openMenuId() === item.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="openView(item)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View
+                          </a>
+                          <a class="action-item" (click)="editFromView(item)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            Edit
+                          </a>
+                          <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Adjust Stock
+                          </a>
+                          <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            Transfer
+                          </a>
+                          <a class="action-item" (click)="openView(item)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                            Stock History
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(item, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
           </table>
         </div>
       </div>

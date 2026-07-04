@@ -95,7 +95,16 @@ $z-modal: 1000;
 }
 
 // ─── Page header ──────────────────────────────────────────────────────────────
-.page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.page-header { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 16px; 
+  flex-wrap: wrap; 
+  background: $surface;
+  padding: 16px 20px;
+  border-radius: 8px;
+}
 .page-title-group { display: flex; align-items: center; gap: 12px; }
 
 .page-icon {

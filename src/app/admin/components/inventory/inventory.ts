@@ -3,6 +3,7 @@ import { Component, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AdjustStock, AdjustStockProduct, StockAdjustmentPayload } from '../adjust-stock/adjust-stock';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock' | 'overstock' | 'critical';
@@ -12,7 +13,7 @@ export type StockStatusFilter = 'all' | 'in-stock' | 'low-stock' | 'out-of-stock
 
 export interface StockMovement {
   id: string;
-  date: string;       
+  date: string;
   type: MovementType;
   quantity: number;
   before: number;
@@ -42,16 +43,9 @@ export interface InventoryItem {
   movements: StockMovement[];
 }
 
-interface AdjustForm {
-  type: MovementType;
-  quantity: number | null;
-  reason: string;
-  notes: string;
-}
-
 @Component({
   selector: 'app-inventory',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AdjustStock],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss',
 })
@@ -86,8 +80,11 @@ export class Inventory {
   adjustingItem = signal<InventoryItem | null>(null);
   pendingDelete = signal<InventoryItem | null>(null);
 
-  adjustForm = signal<AdjustForm>({ type: 'increase', quantity: null, reason: '', notes: '' });
-  isSavingAdjust = signal(false);
+  // Product shape handed to <app-adjust-stock>, derived from the raw inventory item.
+  adjustingProduct = computed<AdjustStockProduct | null>(() => {
+    const item = this.adjustingItem();
+    return item ? this.toAdjustProduct(item) : null;
+  });
 
   // ── Toast ─────────────────────────────────────────────────────────────────
   toastMsg = signal<string | null>(null);
@@ -110,13 +107,6 @@ export class Inventory {
     { key: 'stock',   label: 'Stock' },
     { key: 'value',   label: 'Value' },
     { key: 'updated', label: 'Last Updated' },
-  ];
-
-  adjustTypeOptions: { key: MovementType; label: string; icon: string }[] = [
-    { key: 'increase',   label: 'Increase',   icon: 'plus' },
-    { key: 'decrease',   label: 'Decrease',   icon: 'minus' },
-    { key: 'correction', label: 'Correction', icon: 'check' },
-    { key: 'transfer',   label: 'Transfer',   icon: 'transfer' },
   ];
 
   // ── Mock data (generated once, mutable via signal) ───────────────────────
@@ -411,8 +401,9 @@ export class Inventory {
   onEscape(): void {
     this.closeMenu();
     this.closeView();
-    this.closeAdjust();
     this.pendingDelete.set(null);
+    // Note: the adjust-stock modal handles its own ESC/backdrop-close internally
+    // and emits (closed) back to us; we don't force-close it from here.
   }
 
   // ── Details modal ─────────────────────────────────────────────────────────
@@ -428,64 +419,85 @@ export class Inventory {
     this.router.navigate(['/admin/product', item.id, 'edit']);
   }
 
-  // ── Adjust stock modal ────────────────────────────────────────────────────
-  openAdjust(item: InventoryItem, event?: Event, presetType: MovementType = 'increase', presetQty: number | null = null): void {
+  // ── Adjust stock modal (delegated to <app-adjust-stock>) ──────────────────
+  openAdjust(item: InventoryItem, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
     this.adjustingItem.set(item);
-    this.adjustForm.set({ type: presetType, quantity: presetQty, reason: '', notes: '' });
   }
 
   closeAdjust(): void {
     this.adjustingItem.set(null);
-    this.isSavingAdjust.set(false);
-  }
-
-  patchAdjustForm(patch: Partial<AdjustForm>): void {
-    this.adjustForm.update(f => ({ ...f, ...patch }));
   }
 
   quickRestock(item: InventoryItem, event?: Event): void {
-    this.openAdjust(item, event, 'increase', item.reorderQty);
+    // Opens the modal; the "Restock" quick action inside <app-adjust-stock>
+    // pre-fills type/quantity from the product's own min/max thresholds.
+    this.openAdjust(item, event);
   }
 
-  saveAdjust(): void {
-    const item = this.adjustingItem();
-    const form = this.adjustForm();
-    if (!item || !form.quantity || form.quantity <= 0) return;
+  /** Maps a raw InventoryItem onto the shape <app-adjust-stock> expects. */
+  private toAdjustProduct(item: InventoryItem): AdjustStockProduct {
+    return {
+      id: item.id,
+      name: item.name,
+      sku: item.sku,
+      image: item.image,
+      category: item.category,
+      warehouse: item.warehouse,
+      currentStock: item.currentStock,
+      reserved: item.reserved,
+      incoming: item.incoming,
+      minStock: item.minStock,
+      maxStock: item.maxStock,
+      unitCost: item.unitCost,
+      lastUpdated: item.lastUpdated,
+      movements: item.movements.map(mv => ({
+        id: mv.id,
+        date: mv.date,
+        type: mv.type,
+        quantity: mv.quantity,
+        user: mv.user,
+        reason: mv.notes,
+      })),
+    };
+  }
 
-    this.isSavingAdjust.set(true);
+  /** Handles the (saved) event emitted by <app-adjust-stock>. */
+  onStockAdjusted(payload: StockAdjustmentPayload): void {
+    const target = this.items().find(i => i.id === payload.productId);
+    if (!target) return;
 
-    setTimeout(() => {
-      const before = item.currentStock;
-      let after = before;
-      switch (form.type) {
-        case 'increase':   after = before + form.quantity!; break;
-        case 'decrease':   after = Math.max(0, before - form.quantity!); break;
-        case 'transfer':   after = Math.max(0, before - form.quantity!); break;
-        case 'correction': after = form.quantity!; break;
-      }
+    const before = target.currentStock;
+    const after = payload.resultingStock;
 
-      const movement: StockMovement = {
-        id: 'mv-' + Date.now(),
-        date: new Date().toISOString(),
-        type: form.type,
-        quantity: Math.abs(after - before) || form.quantity!,
-        before,
-        after,
-        user: 'You',
-        notes: form.notes || form.reason || this.notesFor(form.type),
-      };
+    const movementType: MovementType =
+      payload.type === 'transfer' ? 'transfer'
+      : payload.difference > 0 ? 'increase'
+      : payload.difference < 0 ? 'decrease'
+      : 'correction';
 
-      this.items.update(list => list.map(i =>
-        i.id === item.id
-          ? { ...i, currentStock: after, lastUpdated: movement.date, movements: [movement, ...i.movements] }
-          : i
-      ));
+    const reasonText = payload.reason.replace(/-/g, ' ')
+      .replace(/^\w/, c => c.toUpperCase());
 
-      this.showToast(`Stock ${form.type === 'decrease' || form.type === 'transfer' ? 'decreased' : 'updated'} for "${item.name}"`);
-      this.closeAdjust();
-    }, 700);
+    const movement: StockMovement = {
+      id: 'mv-' + Date.now(),
+      date: new Date().toISOString(),
+      type: movementType,
+      quantity: Math.abs(payload.difference) || payload.quantity,
+      before,
+      after,
+      user: payload.performedBy,
+      notes: payload.notes || reasonText,
+    };
+
+    this.items.update(list => list.map(i =>
+      i.id === target.id
+        ? { ...i, currentStock: after, lastUpdated: movement.date, movements: [movement, ...i.movements] }
+        : i
+    ));
+
+    this.showToast(`Stock updated for "${target.name}" (${payload.difference > 0 ? '+' : ''}${payload.difference})`);
   }
 
   // ── Delete ────────────────────────────────────────────────────────────────
@@ -504,9 +516,6 @@ export class Inventory {
     this.showToast(`"${target.name}" removed from inventory`);
   }
 
-  // ── Import / Export ───────────────────────────────────────────────────────
-  importInventory(): void { this.showToast('Import inventory — select a CSV file to continue'); }
-  exportInventory(): void { this.showToast('Exporting inventory data…'); }
   adjustStockPrompt(): void { this.showToast('Select a product below to adjust its stock'); }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
