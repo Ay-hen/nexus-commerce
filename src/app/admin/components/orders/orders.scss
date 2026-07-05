@@ -263,7 +263,7 @@ $z-modal: 1000;
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   background: $surface;
   border: 1px solid $border;
@@ -271,6 +271,8 @@ $z-modal: 1000;
   padding: 14px 16px;
   box-shadow: $shadow-card;
 }
+
+
 
 .toolbar__left {
   flex: 1;
