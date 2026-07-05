@@ -65,12 +65,23 @@ $z-modal: 1000;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
   width: 100%;
   max-width: 100%;
   min-width: 0;
+
+  overflow-x: hidden;
+  box-sizing: border-box;
+
   font-family: 'Inter', -apple-system, sans-serif;
   color: $text-primary;
   animation: pop-in .25s $ease;
+}
+
+.orders-page > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
@@ -371,11 +382,19 @@ $z-modal: 1000;
   overflow: hidden;
 }
 
-.table-wrap { width: 100%; overflow-x: auto; overflow-y: hidden; }
+.table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
 .data-table {
   width: 100%;
-  min-width: 1400px;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: .8rem;
 

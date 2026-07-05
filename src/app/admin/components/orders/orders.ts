@@ -140,7 +140,7 @@ export class Orders {
 
   // ── Pagination ─────────────────────────────────────────────────────────
   currentPage = signal(1);
-  pageSize = 8;
+  pageSize = 9;
 
   // ── Row menu ───────────────────────────────────────────────────────────
   openMenuId = signal<string | null>(null);
