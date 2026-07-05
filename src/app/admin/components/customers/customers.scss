@@ -363,17 +363,22 @@ $z-modal: 1000;
   thead tr { border-bottom: 1px solid $border; background: $surface2; }
 
   th {
-    padding: 11px 13px;
-    text-align: left;
-    font-size: .63rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: $text-light;
-    white-space: nowrap;
-    &.th--img { width: 52px; }
-    &.th--actions { width: 48px; }
-  }
+  padding: 11px 13px;
+  text-align: left;
+  font-size: .63rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: $text-light;
+  white-space: nowrap;
+  &.th--img { width: 52px; }
+  &.th--actions { width: 48px; }
+  &.th--name  { width: 18%; }
+  &.th--id    { width: 12%; }
+  &.th--email { width: 28%; }
+  &.th--phone { width: 22%; }
+  &.th--value { width: 15%; }
+}
 
   td {
     padding: 12px 8px;

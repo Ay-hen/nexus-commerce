@@ -654,14 +654,14 @@
         <div class="table-wrap">
           <table class="data-table data-table--sticky">
             <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Customer ID</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Lifetime Value</th>
-                <th class="th--actions"></th>
-              </tr>
+                <tr>
+                    <th class="th--name">Customer</th>
+                    <th class="th--id">Customer ID</th>
+                    <th class="th--email">Email</th>
+                    <th class="th--phone">Phone</th>
+                    <th class="th--value">Lifetime Value</th>
+                    <th class="th--actions"></th>
+                </tr>
             </thead>
             <tbody>
               @for (c of pagedCustomers(); track trackById($index, c)) {
