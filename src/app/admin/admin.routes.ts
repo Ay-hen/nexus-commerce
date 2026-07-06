@@ -31,6 +31,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'inventory',   loadComponent: () => import('./components/inventory/inventory').then(m => m.Inventory) },
       { path: 'orders',      loadComponent: () => import('./components/orders/orders').then(m => m.Orders) },
       { path: 'customers',   loadComponent: () => import('./components/customers/customers').then(m => m.Customers) },
+      { path: 'notifications',   loadComponent: () => import('./components/notifications/notifications').then(m => m.Notifications) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     
     ],

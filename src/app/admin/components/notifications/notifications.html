@@ -1,1 +1,511 @@
-<p>notifications works!</p>
+<div class="notifications-page">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── DELETE CONFIRM MODAL (single) ────────────────────────────────────── -->
+  @if (pendingDelete()) {
+    <div class="modal-backdrop" (click)="cancelDelete()" role="dialog" aria-modal="true" aria-labelledby="del-title">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </div>
+        <h2 class="modal__title" id="del-title">Delete Notification</h2>
+        <p class="modal__body">
+          Are you sure you want to delete <strong>{{ pendingDelete()!.title }}</strong>?
+          This action cannot be undone.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDelete()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            </svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── DELETE CONFIRM MODAL (bulk) ──────────────────────────────────────── -->
+  @if (pendingBulkDelete()) {
+    <div class="modal-backdrop" (click)="cancelBulkDelete()" role="dialog" aria-modal="true" aria-labelledby="bulk-del-title">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </div>
+        <h2 class="modal__title" id="bulk-del-title">Delete {{ selectedCount() }} Notifications</h2>
+        <p class="modal__body">
+          Are you sure you want to delete the <strong>{{ selectedCount() }}</strong> selected notifications?
+          This action cannot be undone.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelBulkDelete()">Cancel</button>
+          <button class="btn-danger" (click)="confirmBulkDelete()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            </svg>
+            Delete All
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── DETAIL MODAL ──────────────────────────────────────────────────────── -->
+  @if (viewingNotification()) {
+    <app-notification-detail-modal
+      [notification]="viewingNotification()!"
+      (closed)="onDetailModalClosed()"
+      (markRead)="onDetailMarkRead($event)"
+      (markUnread)="onDetailMarkUnread($event)"
+      (deleted)="onDetailDeleted($event)"
+    />
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Notifications</h1>
+        <p class="page-sub">Monitor every activity across your store.</p>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn-ghost" (click)="refresh()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Refresh
+      </button>
+      <button class="btn-ghost" [disabled]="selectedCount() === 0" (click)="markSelectedRead()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Mark Selected Read
+      </button>
+      <button class="btn-danger" [disabled]="selectedCount() === 0" (click)="requestBulkDelete()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Delete Selected
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Unread Notifications</p>
+          <p class="stat-card__value">{{ unreadCount() }}</p>
+          <p class="stat-card__sub">need your attention</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--green">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Today</p>
+          <p class="stat-card__value">{{ todayCount() }}</p>
+          <p class="stat-card__sub">received today</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--purple">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">This Week</p>
+          <p class="stat-card__value">{{ thisWeekCount() }}</p>
+          <p class="stat-card__sub">across all types</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--red">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">High Priority</p>
+          <p class="stat-card__value">{{ highPriorityCount() }}</p>
+          <p class="stat-card__sub">require action</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left">
+
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          class="search-input"
+          type="search"
+          placeholder="Search title, message, actor…"
+          [value]="searchQuery()"
+          (input)="onSearch($any($event.target).value)"
+          aria-label="Search notifications"
+        />
+        @if (searchQuery()) {
+          <button class="search-clear" (click)="onSearch('')" aria-label="Clear search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        }
+      </div>
+
+      <!-- Type -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="typeFilter()" (ngModelChange)="setTypeFilter($event)">
+          @for (opt of typeOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Priority -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="priorityFilter()" (ngModelChange)="setPriorityFilter($event)">
+          @for (opt of priorityOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Status pills -->
+      <div class="filter-pills">
+        @for (opt of statusOptions; track opt.key) {
+          <button class="filter-pill" [class.filter-pill--active]="statusFilter() === opt.key" (click)="setStatusFilter(opt.key)">
+            {{ opt.label }}
+          </button>
+        }
+      </div>
+
+      <!-- Date -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="dateFilter()" (ngModelChange)="setDateFilter($event)">
+          @for (opt of dateOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      @if (hasActiveFilters()) {
+        <button class="clear-filters-btn" (click)="clearFilters()">Clear</button>
+      }
+    </div>
+
+    <div class="toolbar__right">
+      <!-- Sort -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="sortBy()" (ngModelChange)="setSort($event)">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SELECTION BAR ─────────────────────────────────────────────────────── -->
+  @if (selectedCount() > 0) {
+    <div class="selection-bar">
+      <span class="selection-bar__count">{{ selectedCount() }} selected</span>
+      <div class="selection-bar__actions">
+        <button class="selection-bar__btn" (click)="markSelectedRead()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          Mark Read
+        </button>
+        <button class="selection-bar__btn selection-bar__btn--danger" (click)="requestBulkDelete()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+        <button class="selection-bar__btn" (click)="clearSelection()">Clear</button>
+      </div>
+    </div>
+  }
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) {
+          <div class="sk-row shimmer" [style.animation-delay]="(i * 0.06) + 's'"></div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    <!-- ── EMPTY STATE ──────────────────────────────────────────────────────── -->
+    @if (filteredNotifications().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <h3 class="empty-state__title">No notifications found</h3>
+        <p class="empty-state__sub">
+          @if (hasActiveFilters()) {
+            Try adjusting your search or filters.
+          } @else {
+            You're all caught up — new activity will appear here.
+          }
+        </p>
+        @if (hasActiveFilters()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        }
+      </div>
+    }
+
+    <!-- ── TABLE ──────────────────────────────────────────────────────────── -->
+    @if (filteredNotifications().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--check">
+                  <label class="checkbox">
+                    <input type="checkbox" [checked]="allVisibleSelected()" [indeterminate]="someVisibleSelected()" (change)="toggleSelectAllVisible()" />
+                    <span class="checkbox__box">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </label>
+                </th>
+                <th class="th--icon"></th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (n of pagedNotifications(); track trackById($index, n)) {
+                <tr
+                  class="table-row"
+                  [class.table-row--unread]="!n.read"
+                  [style.animation-delay]="($index * 0.03) + 's'"
+                  (click)="onRowClick(n)"
+                >
+                  <!-- Checkbox -->
+                  <td class="td--check" (click)="$event.stopPropagation()">
+                    <label class="checkbox">
+                      <input type="checkbox" [checked]="isSelected(n.id)" (change)="toggleSelect(n.id)" />
+                      <span class="checkbox__box">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                    </label>
+                  </td>
+
+                  <!-- Icon -->
+                  <td class="td--icon">
+                    <div class="type-icon" [style.background]="typeMeta(n.type).bg" [style.color]="typeMeta(n.type).color">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        @switch (n.type) {
+                          @case ('order') {
+                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                          }
+                          @case ('customer') {
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                          }
+                          @case ('inventory') {
+                            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                          }
+                          @case ('product') {
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                          }
+                          @case ('payment') {
+                            <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                          }
+                          @case ('system') {
+                            <circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+                          }
+                          @case ('warning') {
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                          }
+                          @case ('success') {
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                          }
+                          @default {
+                            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                          }
+                        }
+                      </svg>
+                    </div>
+                  </td>
+
+                  <!-- Title + message -->
+                  <td class="td--title">
+                    <p class="ntf-title" [class.ntf-title--unread]="!n.read">{{ n.title }}</p>
+                    <p class="ntf-preview">{{ messagePreview(n.message) }}</p>
+                  </td>
+
+                  <!-- Type -->
+                  <td>
+                    <span class="type-pill" [style.background]="typeMeta(n.type).bg" [style.color]="typeMeta(n.type).color">
+                      {{ typeMeta(n.type).label }}
+                    </span>
+                  </td>
+
+                  <!-- Priority -->
+                  <td>
+                    <span class="priority-pill" [style.background]="priorityMeta(n.priority).bg" [style.color]="priorityMeta(n.priority).color">
+                      {{ priorityMeta(n.priority).label }}
+                    </span>
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    <span class="status-pill" [class.status-pill--unread]="!n.read" [class.status-pill--read]="n.read">
+                      <span class="status-dot"></span>
+                      {{ n.read ? 'Read' : 'Unread' }}
+                    </span>
+                  </td>
+
+                  <!-- Created -->
+                  <td class="td--date" [title]="formatFullDate(n.createdAt)">{{ relativeTime(n.createdAt) }}</td>
+
+                  <!-- Actions -->
+                  <td class="td--actions" (click)="$event.stopPropagation()">
+                    <div class="action-menu-wrap">
+                      <button
+                        class="action-trigger"
+                        (click)="toggleMenu(n, $event)"
+                        [attr.aria-expanded]="openMenuId() === n.id"
+                        aria-label="Notification actions"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+                        </svg>
+                      </button>
+
+                      @if (openMenuId() === n.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(n)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            View Details
+                          </a>
+                          @if (n.read) {
+                            <a class="action-item" (click)="markUnread(n.id); closeMenu()" role="menuitem">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+                              Mark Unread
+                            </a>
+                          } @else {
+                            <a class="action-item" (click)="markRead(n.id); closeMenu()" role="menuitem">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                              Mark Read
+                            </a>
+                          }
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(n, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ── PAGINATION ────────────────────────────────────────────────────────── -->
+    @if (filteredNotifications().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+
+          @for (page of pageNumbers(); track page) {
+            <button class="page-btn" [class.page-btn--active]="page === currentPage()" (click)="goToPage(page)">{{ page }}</button>
+          }
+
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }<!-- /!isLoading -->
+
+</div>
