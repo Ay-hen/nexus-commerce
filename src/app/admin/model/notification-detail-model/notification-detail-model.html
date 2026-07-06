@@ -1,1 +1,176 @@
-<p>notification-detail-model works!</p>
+<div class="ndm-backdrop" [class.ndm-backdrop--closing]="closing" (click)="onBackdropClick()">
+  <div
+    class="ndm-modal"
+    [class.ndm-modal--closing]="closing"
+    (click)="stop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ndm-title"
+  >
+    <!-- ── Header ────────────────────────────────────────────────────── -->
+    <header class="ndm-header">
+      <div class="ndm-header__left">
+        <div class="ndm-header__icon" [style.background]="typeMeta().bg" [style.color]="typeMeta().color">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            @switch (notification.type) {
+              @case ('order') {
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              }
+              @case ('customer') {
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              }
+              @case ('inventory') {
+                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                <line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
+              }
+              @case ('product') {
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              }
+              @case ('payment') {
+                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+              }
+              @case ('system') {
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              }
+              @case ('warning') {
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              }
+              @case ('success') {
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              }
+              @default {
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              }
+            }
+          </svg>
+        </div>
+        <div>
+          <h2 class="ndm-header__title" id="ndm-title">{{ notification.title }}</h2>
+          <div class="ndm-header__badges">
+            <span class="ndm-badge" [style.background]="priorityMeta().bg" [style.color]="priorityMeta().color">
+              {{ priorityMeta().label }} priority
+            </span>
+            <span class="ndm-badge" [class.ndm-badge--unread]="!notification.read" [class.ndm-badge--read]="notification.read">
+              <span class="ndm-badge__dot"></span>
+              {{ notification.read ? 'Read' : 'Unread' }}
+            </span>
+            <span class="ndm-header__date">{{ fullCreatedDate() }}</span>
+          </div>
+        </div>
+      </div>
+      <button class="ndm-close" (click)="requestClose()" aria-label="Close" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ── Body ──────────────────────────────────────────────────────── -->
+    <div class="ndm-body">
+
+      <section class="ndm-section">
+        <p class="ndm-message">{{ notification.message }}</p>
+      </section>
+
+      <section class="ndm-section">
+        <div class="ndm-meta-grid">
+          <div class="ndm-meta-field">
+            <span class="ndm-meta-label">Activity Type</span>
+            <span class="ndm-meta-value">
+              <span class="ndm-type-dot" [style.background]="typeMeta().color"></span>
+              {{ typeMeta().label }}
+            </span>
+          </div>
+
+          @if (notification.actor) {
+            <div class="ndm-meta-field">
+              <span class="ndm-meta-label">Actor</span>
+              <span class="ndm-meta-value ndm-actor">
+                <span class="ndm-actor__avatar">{{ notification.actor.name.charAt(0) }}</span>
+                {{ notification.actor.name }}
+              </span>
+            </div>
+          }
+        </div>
+      </section>
+
+      @if (hasMetadataLinks()) {
+        <section class="ndm-section">
+          <h3 class="ndm-section__title">Related Records</h3>
+          <div class="ndm-links">
+            @if (notification.metadata?.orderId) {
+              <a class="ndm-link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Order {{ notification.metadata?.orderId }}
+              </a>
+            }
+            @if (notification.metadata?.customerId) {
+              <a class="ndm-link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Customer {{ notification.metadata?.customerId }}
+              </a>
+            }
+            @if (notification.metadata?.productId) {
+              <a class="ndm-link">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Product {{ notification.metadata?.productId }}
+              </a>
+            }
+          </div>
+        </section>
+      }
+
+      <section class="ndm-section">
+        <h3 class="ndm-section__title">Timeline</h3>
+        <div class="ndm-timeline">
+          <div class="ndm-timeline__item">
+            <span class="ndm-timeline__dot ndm-timeline__dot--active"></span>
+            <div class="ndm-timeline__body">
+              <p class="ndm-timeline__label">Created</p>
+              <p class="ndm-timeline__time">{{ fullCreatedDate() }} · {{ relativeCreated() }}</p>
+            </div>
+          </div>
+          @if (notification.read) {
+            <div class="ndm-timeline__item">
+              <span class="ndm-timeline__dot ndm-timeline__dot--active"></span>
+              <div class="ndm-timeline__body">
+                <p class="ndm-timeline__label">Read</p>
+                <p class="ndm-timeline__time">{{ fullReadDate() }} · {{ relativeRead() }}</p>
+              </div>
+            </div>
+          } @else {
+            <div class="ndm-timeline__item ndm-timeline__item--pending">
+              <span class="ndm-timeline__dot"></span>
+              <div class="ndm-timeline__body">
+                <p class="ndm-timeline__label">Not yet read</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ── Footer ────────────────────────────────────────────────────── -->
+    <footer class="ndm-footer">
+      <button class="btn-danger" type="button" (click)="onDelete()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Delete
+      </button>
+      <div class="ndm-footer__right">
+        @if (notification.read) {
+          <button class="btn-ghost" type="button" (click)="onMarkUnread()">Mark Unread</button>
+        } @else {
+          <button class="btn-ghost" type="button" (click)="onMarkRead()">Mark Read</button>
+        }
+        <button class="btn-primary" type="button" (click)="requestClose()">Close</button>
+      </div>
+    </footer>
+  </div>
+</div>
