@@ -1,1 +1,113 @@
-<p>notification-dropdown works!</p>
+<div class="ndd-panel" role="dialog" aria-label="Notifications">
+
+  @if (viewingNotification()) {
+    <app-notification-detail-modal
+      [notification]="viewingNotification()!"
+      (closed)="onDetailModalClosed()"
+      (markRead)="onDetailMarkRead($event)"
+      (markUnread)="onDetailMarkUnread($event)"
+      (deleted)="onDetailDeleted($event)"
+    />
+  }
+
+  <!-- ── Header ────────────────────────────────────────────────────────── -->
+  <div class="ndd-header">
+    <div class="ndd-header__title-row">
+      <h3 class="ndd-header__title">Notifications</h3>
+      @if (unreadCount() > 0) {
+        <span class="ndd-unread-badge">{{ unreadCount() }}</span>
+      }
+    </div>
+    <button class="ndd-mark-all" [disabled]="unreadCount() === 0" (click)="markAllRead()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+      Mark All Read
+    </button>
+  </div>
+
+  <!-- ── Tabs ──────────────────────────────────────────────────────────── -->
+  <div class="ndd-tabs" role="tablist">
+    <button class="ndd-tab" [class.ndd-tab--active]="activeTab() === 'all'" (click)="setTab('all')" role="tab">All</button>
+    <button class="ndd-tab" [class.ndd-tab--active]="activeTab() === 'unread'" (click)="setTab('unread')" role="tab">
+      Unread
+      @if (unreadCount() > 0) { <span class="ndd-tab__count">{{ unreadCount() }}</span> }
+    </button>
+  </div>
+
+  <!-- ── List ──────────────────────────────────────────────────────────── -->
+  <div class="ndd-list">
+    @if (visibleNotifications().length === 0) {
+      <div class="ndd-empty">
+        <div class="ndd-empty__orb">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <p class="ndd-empty__title">You're all caught up</p>
+        <p class="ndd-empty__sub">No {{ activeTab() === 'unread' ? 'unread ' : '' }}notifications right now.</p>
+      </div>
+    }
+
+    @for (n of visibleNotifications(); track trackById($index, n)) {
+      <button class="ndd-item" [class.ndd-item--unread]="!n.read" (click)="onNotificationClick(n)">
+        <span class="ndd-item__icon" [style.background]="typeMeta(n.type).bg" [style.color]="typeMeta(n.type).color">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            @switch (n.type) {
+              @case ('order') {
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              }
+              @case ('customer') {
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              }
+              @case ('inventory') {
+                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              }
+              @case ('product') {
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              }
+              @case ('payment') {
+                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+              }
+              @case ('system') {
+                <circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+              }
+              @case ('warning') {
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              }
+              @case ('success') {
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              }
+              @default {
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              }
+            }
+          </svg>
+        </span>
+
+        <span class="ndd-item__body">
+          <span class="ndd-item__top">
+            <span class="ndd-item__title" [class.ndd-item__title--unread]="!n.read">{{ n.title }}</span>
+            <span class="ndd-priority-dot" [style.background]="priorityColor(n)" [attr.title]="n.priority + ' priority'"></span>
+          </span>
+          <span class="ndd-item__message">{{ messagePreview(n.message) }}</span>
+          <span class="ndd-item__time">{{ relativeTime(n.createdAt) }}</span>
+        </span>
+
+        @if (!n.read) {
+          <span class="ndd-item__unread-dot" aria-hidden="true"></span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────── -->
+  <div class="ndd-footer">
+    <button class="ndd-view-all" (click)="viewAll()">
+      View All Notifications
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+</div>
+
