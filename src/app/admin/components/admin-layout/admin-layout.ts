@@ -63,16 +63,13 @@ export class AdminLayout {
       items: [
         { id: 'orders',     label: 'Orders',       route: '/admin/orders',     icon: 'orders',     badge: 12 },
         { id: 'customers',  label: 'Customers',    route: '/admin/customers',  icon: 'customers'  },
-        { id: 'coupons',    label: 'Coupons',      route: '/admin/coupons',    icon: 'coupons'    },
-        { id: 'payments',   label: 'Payments',     route: '/admin/payments',   icon: 'payments'   },
       ],
     },
     {
       section: 'Content',
       items: [
-        { id: 'reviews',      label: 'Reviews',      route: '/admin/reviews',      icon: 'reviews',   badge: 5 },
+        { id: 'reviews',      label: 'Reviews',      route: '/admin/reviews',      icon: 'reviews',   },
         { id: 'notifications',label: 'Notifications',route: '/admin/notifications',icon: 'bell'       },
-        { id: 'messages',     label: 'Messages',     route: '/admin/messages',     icon: 'messages',  badge: 2 },
       ],
     },
     {
