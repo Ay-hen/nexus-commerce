@@ -4,7 +4,7 @@ export interface ModerationHistoryEntry {
   id: string;
   action: string;
   actor: string;
-  date: string; // ISO datetime
+  date: string;
   note?: string;
 }
 
