@@ -473,7 +473,7 @@ export class Reviews {
     const firstNames = ['Ayoub', 'Sara', 'Karim', 'Leila', 'Youssef', 'Nadia', 'Omar', 'Salma', 'Amine', 'Hind',
       'Reda', 'Fatima', 'Yassine', 'Meriem', 'Hamza', 'Ines', 'Adil', 'Zineb', 'Anas', 'Rania',
       'Marc', 'Sophie', 'Julien', 'Claire', 'Thomas', 'Emma', 'Lucas', 'Chloe'];
-    const lastNames = ['Hennani', 'Idrissi', 'Mansouri', 'Boudali', 'Alami', 'Cherkaoui', 'Bennis', 'Fassi',
+    const lastNames = ['Bennani', 'Idrissi', 'Mansouri', 'Boudali', 'Alami', 'Cherkaoui', 'Bennis', 'Fassi',
       'Tazi', 'Amrani', 'Berger', 'Lefevre', 'Moreau', 'Girard', 'Dubois', 'Martin'];
 
     const products: { id: string; name: string; image: string }[] = [
@@ -559,5 +559,12 @@ export class Reviews {
 
     return reviews;
   }
-}
 
+  onRatingFilterChange(value: string): void {
+    if (value === 'all') {
+      this.setRatingFilter('all');
+    } else {
+      this.setRatingFilter(Number(value) as RatingFilter);
+    }
+  }
+}

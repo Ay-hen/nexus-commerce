@@ -156,8 +156,15 @@
 
       <!-- Rating -->
       <div class="select-wrap">
-        <select class="toolbar-select" [value]="ratingFilter()" (change)="setRatingFilter($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)">
-          @for (opt of ratingOptions; track opt.key) { <option [value]="opt.key">Rating: {{ opt.label }}</option> }
+        <select
+          class="toolbar-select"
+          [value]="ratingFilter()"
+          (change)="onRatingFilterChange($any($event.target).value)">
+          @for (opt of ratingOptions; track opt.key) {
+            <option [value]="opt.key">
+              Rating: {{ opt.label }}
+            </option>
+          }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -220,8 +227,6 @@
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-
-      <span class="results-label">{{ pageRangeLabel() }}</span>
     </div>
   </div>
 
@@ -298,7 +303,6 @@
                 <th>Rating</th>
                 <th>Status</th>
                 <th>Verified</th>
-                <th>Helpful</th>
                 <th>Date</th>
                 <th class="th--actions"></th>
               </tr>
@@ -364,7 +368,7 @@
                   </td>
 
                   <!-- Helpful -->
-                  <td class="td-mid">{{ r.helpfulVotes }} 👍</td>
+                  
 
                   <!-- Date -->
                   <td class="td-light">{{ formatDate(r.createdAt) }}</td>
