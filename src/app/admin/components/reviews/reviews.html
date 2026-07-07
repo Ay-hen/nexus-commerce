@@ -1,0 +1,520 @@
+<div class="reviews-page" (click)="closeMenu()">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── VIEW REVIEW MODAL ─────────────────────────────────────────────────── -->
+  @if (viewingReview(); as review) {
+    <app-view-review-modal
+      [review]="review"
+      (closed)="onViewModalClosed()"
+      (deleteRequested)="onDeleteRequestedFromView($event)"
+    />
+  }
+
+  <!-- ── DELETE CONFIRM MODAL (single or bulk) ───────────────────────────── -->
+  @if (deletingReview() || bulkDeleteCount() !== null) {
+    <app-delete-review-modal
+      [review]="deletingReview()"
+      [bulkCount]="bulkDeleteCount()"
+      (cancelled)="cancelDelete()"
+      (confirmed)="confirmDelete()"
+    />
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Reviews</h1>
+        <p class="page-sub">Manage customer reviews and moderation.</p>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn-ghost" (click)="exportCsv()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export CSV
+      </button>
+      <button class="btn-primary" (click)="downloadReport()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Download Report
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Total Reviews</p>
+          <p class="stat-card__value">{{ totalReviews() | number }}</p>
+          <p class="stat-card__sub">across all products</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--amber">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Average Rating</p>
+          <p class="stat-card__value">{{ averageRating() }}★</p>
+          <p class="stat-card__sub">average across all reviews</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--red">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Pending Moderation</p>
+          <p class="stat-card__value">{{ pendingModerationCount() | number }}</p>
+          <p class="stat-card__sub">awaiting review</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--purple">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Featured Reviews</p>
+          <p class="stat-card__value">{{ featuredCount() | number }}</p>
+          <p class="stat-card__sub">shown on storefront</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left-scroll">
+
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          class="search-input"
+          type="search"
+          placeholder="Search reviews…"
+          [value]="searchQuery()"
+          (input)="onSearch($any($event.target).value)"
+        />
+      </div>
+
+      <!-- Search by field -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="searchField()" (change)="onSearchFieldChange($any($event.target).value)">
+          @for (opt of searchFieldOptions; track opt.key) {
+            <option [value]="opt.key">Search: {{ opt.label }}</option>
+          }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Status filter pills -->
+      <div class="filter-pills">
+        @for (opt of statusOptions; track opt.key) {
+          <button class="filter-pill" [class.filter-pill--active]="statusFilter() === opt.key" (click)="setStatusFilter(opt.key)">{{ opt.label }}</button>
+        }
+      </div>
+
+      <!-- Rating -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="ratingFilter()" (change)="setRatingFilter($any($event.target).value === 'all' ? 'all' : +$any($event.target).value)">
+          @for (opt of ratingOptions; track opt.key) { <option [value]="opt.key">Rating: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Verified -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="verifiedFilter()" (change)="setVerifiedFilter($any($event.target).value)">
+          <option value="all">Verified: All</option>
+          <option value="yes">Verified Only</option>
+          <option value="no">Not Verified</option>
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Reported -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="reportedFilter()" (change)="setReportedFilter($any($event.target).value)">
+          <option value="all">Reported: All</option>
+          <option value="yes">Reported</option>
+          <option value="no">Not Reported</option>
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      @if (hasAnyActiveFilter()) {
+        <button class="clear-filters-btn" (click)="clearFilters()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          Clear
+        </button>
+      }
+    </div>
+
+    <div class="toolbar__right">
+      <!-- Sort -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="sortKey()" (change)="setSort($any($event.target).value)">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- View toggle -->
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/>
+          </svg>
+        </button>
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Rows per page -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="pageSize()" (change)="setPageSize(+$any($event.target).value)">
+          @for (size of pageSizeOptions; track size) { <option [value]="size">{{ size }} / page</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <span class="results-label">{{ pageRangeLabel() }}</span>
+    </div>
+  </div>
+
+  <!-- ── BULK ACTION BAR ───────────────────────────────────────────────────── -->
+  @if (selectedIds().size > 0) {
+    <div class="bulk-bar" (click)="$event.stopPropagation()">
+      <span class="bulk-bar__count">{{ selectedIds().size }} selected</span>
+      <div class="bulk-bar__actions">
+        <button class="bulk-btn" (click)="bulkMarkRead()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Mark Read
+        </button>
+        <button class="bulk-btn" (click)="bulkApprove()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"/></svg>
+          Approve
+        </button>
+        <button class="bulk-btn" (click)="bulkFeature()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Feature
+        </button>
+        <button class="bulk-btn bulk-btn--danger" (click)="bulkDelete()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+      </div>
+      <button class="bulk-bar__clear" (click)="clearSelection()">Clear</button>
+    </div>
+  }
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) { <div class="sk-row shimmer" [style.animation-delay]="(i * 0.06) + 's'"></div> }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (pagedReviews().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <h3 class="empty-state__title">No reviews found</h3>
+        <p class="empty-state__sub">Try adjusting your filters or search.</p>
+        <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    }
+
+    <!-- ══════════════════════════════ TABLE VIEW ══════════════════════════════ -->
+    @if (viewMode() === 'table' && pagedReviews().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap" [class.table-wrap--scroll]="pagedReviews().length > 5">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--check">
+                  <label class="checkbox-sm">
+                    <input type="checkbox" [checked]="allOnPageSelected()" [indeterminate]="someOnPageSelected()" (change)="toggleSelectAllOnPage()" />
+                    <span class="checkbox-sm__box">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </label>
+                </th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Product</th>
+                <th>Rating</th>
+                <th>Status</th>
+                <th>Verified</th>
+                <th>Helpful</th>
+                <th>Date</th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of pagedReviews(); track trackById($index, r)) {
+                <tr class="table-row" [class.table-row--selected]="isSelected(r.id)" [style.animation-delay]="($index * 0.03) + 's'">
+
+                  <td class="td--check">
+                    <label class="checkbox-sm">
+                      <input type="checkbox" [checked]="isSelected(r.id)" (change)="toggleSelect(r.id)" (click)="$event.stopPropagation()" />
+                      <span class="checkbox-sm__box">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                    </label>
+                  </td>
+
+                  <!-- Customer -->
+                  <td>
+                    <div class="customer-cell">
+                      <span class="cust-avatar">{{ initialsFor(r.customerName) }}</span>
+                      <div>
+                        <p class="cust-name">{{ r.customerName }}</p>
+                        <p class="cust-sub">{{ r.customerEmail }}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="td-mid td-email">{{ r.customerEmail }}</td>
+
+                  <!-- Product -->
+                  <td>
+                    <div class="product-cell">
+                      <div class="product-thumb"><img [src]="r.productImage" [alt]="r.productName" loading="lazy" /></div>
+                      <span class="product-name">{{ r.productName }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Rating -->
+                  <td>
+                    <div class="star-rating">
+                      @for (s of starsFor(r.rating); track $index) {
+                        <svg class="star" [class.star--filled]="s.filled" width="13" height="13" viewBox="0 0 24 24" [attr.fill]="s.filled ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.6">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      }
+                      <span class="star-rating__num">{{ r.rating }}.0</span>
+                    </div>
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    <span class="status-pill status-pill--{{ r.status }}">{{ statusLabel(r.status) }}</span>
+                  </td>
+
+                  <!-- Verified -->
+                  <td>
+                    @if (r.verifiedPurchase) {
+                      <span class="verified-pill verified-pill--yes">Verified Purchase</span>
+                    } @else {
+                      <span class="verified-pill verified-pill--no">Not Verified</span>
+                    }
+                  </td>
+
+                  <!-- Helpful -->
+                  <td class="td-mid">{{ r.helpfulVotes }} 👍</td>
+
+                  <!-- Date -->
+                  <td class="td-light">{{ formatDate(r.createdAt) }}</td>
+
+                  <!-- Actions -->
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" aria-label="Review actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+                        </svg>
+                      </button>
+
+                      @if (openMenuId() === r.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="viewReview(r)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View Review
+                          </a>
+                          <a class="action-item" (click)="markRead(r, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Mark Read
+                          </a>
+                          <a class="action-item" (click)="approveReview(r, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Approve
+                          </a>
+                          <a class="action-item" (click)="featureReview(r, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            Feature
+                          </a>
+                          <a class="action-item" (click)="flagReview(r, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                            Flag
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(r, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════ GRID VIEW ══════════════════════════════ -->
+    @if (viewMode() === 'grid' && pagedReviews().length > 0) {
+      <div class="review-grid" [class.review-grid--scroll]="pagedReviews().length > 5">
+        @for (r of pagedReviews(); track trackById($index, r)) {
+          <div class="review-card" [class.review-card--selected]="isSelected(r.id)" [style.animation-delay]="($index * 0.04) + 's'">
+            <div class="review-card__top">
+              <label class="checkbox-sm" (click)="$event.stopPropagation()">
+                <input type="checkbox" [checked]="isSelected(r.id)" (change)="toggleSelect(r.id)" />
+                <span class="checkbox-sm__box">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </label>
+              <span class="status-pill status-pill--{{ r.status }}">{{ statusLabel(r.status) }}</span>
+
+              <div class="action-menu-wrap review-card__menu">
+                <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" aria-label="Review actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
+                  </svg>
+                </button>
+                @if (openMenuId() === r.id) {
+                  <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                    <a class="action-item" (click)="viewReview(r)" role="menuitem">View Review</a>
+                    <a class="action-item" (click)="markRead(r, $event)" role="menuitem">Mark Read</a>
+                    <a class="action-item" (click)="approveReview(r, $event)" role="menuitem">Approve</a>
+                    <a class="action-item" (click)="featureReview(r, $event)" role="menuitem">Feature</a>
+                    <a class="action-item" (click)="flagReview(r, $event)" role="menuitem">Flag</a>
+                    <div class="action-divider"></div>
+                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(r, $event)">Delete</button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="review-card__customer">
+              <span class="cust-avatar">{{ initialsFor(r.customerName) }}</span>
+              <div>
+                <p class="cust-name">{{ r.customerName }}</p>
+                <p class="cust-sub">{{ r.customerEmail }}</p>
+              </div>
+            </div>
+
+            <div class="star-rating">
+              @for (s of starsFor(r.rating); track $index) {
+                <svg class="star" [class.star--filled]="s.filled" width="13" height="13" viewBox="0 0 24 24" [attr.fill]="s.filled ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.6">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              }
+            </div>
+
+            <p class="review-card__title" (click)="viewReview(r)">{{ r.title }}</p>
+            <p class="review-card__body">{{ r.review }}</p>
+
+            <div class="review-card__product">
+              <div class="product-thumb"><img [src]="r.productImage" [alt]="r.productName" loading="lazy" /></div>
+              <span class="product-name">{{ r.productName }}</span>
+            </div>
+
+            <div class="review-card__footer">
+              @if (r.verifiedPurchase) {
+                <span class="verified-pill verified-pill--yes">Verified</span>
+              } @else {
+                <span class="verified-pill verified-pill--no">Not Verified</span>
+              }
+              <span class="review-card__helpful">{{ r.helpfulVotes }} 👍</span>
+              <span class="review-card__date">{{ formatDate(r.createdAt) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (sortedReviews().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }
+
+</div>

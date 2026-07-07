@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Rewiews } from './rewiews';
+import { ViewReviewModal } from './view-review-modal';
 
-describe('Rewiews', () => {
-  let component: Rewiews;
-  let fixture: ComponentFixture<Rewiews>;
+describe('ViewReviewModal', () => {
+  let component: ViewReviewModal;
+  let fixture: ComponentFixture<ViewReviewModal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Rewiews],
+      imports: [ViewReviewModal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Rewiews);
+    fixture = TestBed.createComponent(ViewReviewModal);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
