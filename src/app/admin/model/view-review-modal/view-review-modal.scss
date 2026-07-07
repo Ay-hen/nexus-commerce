@@ -1,0 +1,348 @@
+// ─── Admin Design Tokens (mirrors reviews.scss / edit-category.scss) ──────────
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$accent:        #4F46E5;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
+
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.08);
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.08);
+$amber:         #F59E0B;
+$amber-bg:      rgba(245,158,11,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
+$slate-bg:      #F1F4F8;
+
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-pill:   999px;
+
+$shadow-menu:   0 8px 24px rgba(16,24,40,.12), 0 2px 6px rgba(16,24,40,.06);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+$z-modal: 1000;
+
+* { box-sizing: border-box; }
+
+@keyframes vrm-backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vrm-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes vrm-modal-in {
+  from { opacity: 0; transform: scale(.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes vrm-modal-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(.95) translateY(8px); }
+}
+@keyframes vrm-item-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+// ─── Shell ────────────────────────────────────────────────────────────────────
+.vrm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  background: rgba(17,24,39,.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: vrm-backdrop-in .2s $ease both;
+  font-family: 'Inter', -apple-system, sans-serif;
+
+  &--closing { animation: vrm-backdrop-out .2s $ease both; }
+}
+
+.vrm-modal {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-menu;
+  width: 90%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: vrm-modal-in .25s $ease-spring both;
+
+  &--closing { animation: vrm-modal-out .2s $ease both; }
+}
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+.vrm-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid $border;
+  background: $surface;
+}
+
+.vrm-header__left { display: flex; align-items: center; gap: 12px; }
+
+.vrm-header__icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  border-radius: $radius-md;
+  background: $accent-bg;
+  border: 1px solid rgba($accent, .15);
+  color: $accent;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.vrm-header__title { font-size: 1.05rem; font-weight: 700; color: $text-primary; margin: 0 0 2px; }
+.vrm-header__sub   { font-size: .78rem; color: $text-light; }
+
+.vrm-close {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
+  &:hover { background: $red-bg; color: $red; border-color: rgba($red, .25); }
+}
+
+// ─── Body ────────────────────────────────────────────────────────────────────
+.vrm-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: $surface;
+
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border2; border-radius: $radius-pill; }
+  &::-webkit-scrollbar-thumb:hover { background: $text-light; }
+}
+
+.vrm-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $border;
+}
+
+.vrm-customer { display: flex; align-items: center; gap: 10px; }
+
+.cust-avatar {
+  flex-shrink: 0; width: 36px; height: 36px;
+  border-radius: 50%;
+  background: $accent-bg; color: $accent;
+  font-size: .74rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.cust-name  { font-weight: 600; color: $text-primary; font-size: .84rem; margin: 0 0 1px; }
+.cust-email { font-size: .72rem; color: $text-light; margin: 0; }
+
+.vrm-product { display: flex; align-items: center; gap: 8px; }
+
+.product-thumb {
+  flex-shrink: 0; width: 34px; height: 34px;
+  border-radius: $radius-sm;
+  background: $surface2; border: 1px solid $border;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+
+  img { width: 24px; height: 24px; object-fit: contain; }
+}
+
+.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; }
+
+// ─── Badges ──────────────────────────────────────────────────────────────────
+.vrm-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.status-pill {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px;
+  border-radius: $radius-pill;
+  font-size: .67rem; font-weight: 700;
+
+  &--new      { background: $accent-bg; color: $accent; }
+  &--read     { background: $slate-bg;  color: $text-mid; }
+  &--approved { background: $green-bg;  color: $green; }
+  &--featured { background: $purple-bg; color: $purple; }
+  &--flagged  { background: $red-bg;    color: $red; }
+}
+
+.verified-pill {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 9px;
+  border-radius: $radius-pill;
+  font-size: .65rem; font-weight: 700;
+
+  &--yes { background: $green-bg; color: $green; }
+  &--no  { background: $slate-bg; color: $text-light; }
+}
+
+.reported-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 22px; padding: 0 9px;
+  border-radius: $radius-pill;
+  background: $red-bg; color: $red;
+  font-size: .65rem; font-weight: 700;
+}
+
+// ─── Rating / title / body ────────────────────────────────────────────────────
+.vrm-rating-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+
+.star-rating { display: inline-flex; align-items: center; gap: 2px; }
+.star { color: $border2; &--filled { color: $amber; } }
+.star-rating__num { margin-left: 4px; font-size: .8rem; font-weight: 700; color: $text-mid; }
+
+.vrm-date { font-size: .74rem; color: $text-light; }
+
+.vrm-title {
+  font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0;
+}
+
+.vrm-body-text {
+  font-size: .86rem; color: $text-mid; line-height: 1.65; margin: 0;
+}
+
+.vrm-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.vrm-meta-field { display: flex; flex-direction: column; gap: 3px; }
+.vrm-meta-label { font-size: .66rem; font-weight: 600; color: $text-light; text-transform: uppercase; letter-spacing: .06em; }
+.vrm-meta-value { font-size: .82rem; color: $text-primary; font-weight: 500; }
+.vrm-meta-value--mono { font-family: 'Courier New', monospace; font-size: .76rem; }
+
+// ─── Divider / section title ──────────────────────────────────────────────────
+.vrm-divider { height: 1px; background: $border; }
+.vrm-section-title {
+  font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: $text-light; margin: 0;
+}
+
+// ─── Timeline ─────────────────────────────────────────────────────────────────
+.vrm-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vrm-timeline__item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-left: 2px solid $border;
+  padding-left: 16px;
+  margin-left: 4px;
+  position: relative;
+  animation: vrm-item-in .25s $ease both;
+
+  &:last-child { border-left-color: transparent; }
+}
+
+.vrm-timeline__dot {
+  position: absolute;
+  left: -6px;
+  top: 14px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: $accent;
+  border: 2px solid $surface;
+}
+
+.vrm-timeline__content { flex: 1; min-width: 0; }
+
+.vrm-timeline__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.vrm-timeline__action { font-size: .82rem; font-weight: 600; color: $text-primary; margin: 0; }
+.vrm-timeline__date   { font-size: .7rem; color: $text-light; white-space: nowrap; }
+.vrm-timeline__actor  { font-size: .74rem; color: $text-mid; margin: 2px 0 0; }
+.vrm-timeline__note   {
+  font-size: .78rem; color: $text-mid; line-height: 1.5;
+  margin: 6px 0 0; padding: 8px 10px;
+  background: $surface2; border-radius: $radius-sm;
+}
+
+.vrm-timeline__empty { font-size: .82rem; color: $text-light; text-align: center; padding: 16px 0; }
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+.vrm-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid $border;
+  background: $surface;
+}
+
+.btn-ghost {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $surface; border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
+  &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
+}
+
+.btn-danger {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $red; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
+}
+
+@media (max-width: 640px) {
+  .vrm-header, .vrm-body, .vrm-footer { padding: 16px; }
+  .vrm-meta-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vrm-backdrop, .vrm-modal, .vrm-timeline__item {
+    animation: none !important;
+    transition: none !important;
+  }
+}

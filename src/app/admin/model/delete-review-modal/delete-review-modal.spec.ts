@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewReviewModal } from './view-review-modal';
+import { DeleteReviewModal } from './delete-review-modal';
 
-describe('ViewReviewModal', () => {
-  let component: ViewReviewModal;
-  let fixture: ComponentFixture<ViewReviewModal>;
+describe('DeleteReviewModal', () => {
+  let component: DeleteReviewModal;
+  let fixture: ComponentFixture<DeleteReviewModal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ViewReviewModal],
+      imports: [DeleteReviewModal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ViewReviewModal);
+    fixture = TestBed.createComponent(DeleteReviewModal);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

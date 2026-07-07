@@ -1,1 +1,134 @@
-<p>view-review-modal works!</p>
+<div class="vrm-backdrop" [class.vrm-backdrop--closing]="closing()" (click)="onBackdropClick()">
+  <div
+    class="vrm-modal"
+    [class.vrm-modal--closing]="closing()"
+    (click)="stop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="vrm-title"
+  >
+    <!-- ── Header ─────────────────────────────────────────────────────── -->
+    <header class="vrm-header">
+      <div class="vrm-header__left">
+        <div class="vrm-header__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="vrm-header__title" id="vrm-title">Review Details</h2>
+          <p class="vrm-header__sub">{{ review.productName }}</p>
+        </div>
+      </div>
+      <button class="vrm-close" (click)="requestClose()" aria-label="Close" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ── Body ───────────────────────────────────────────────────────── -->
+    <div class="vrm-body">
+
+      <!-- Customer + product summary -->
+      <div class="vrm-summary">
+        <div class="vrm-customer">
+          <span class="cust-avatar">{{ initialsFor(review.customerName) }}</span>
+          <div>
+            <p class="cust-name">{{ review.customerName }}</p>
+            <p class="cust-email">{{ review.customerEmail }}</p>
+          </div>
+        </div>
+
+        <div class="vrm-product">
+          <div class="product-thumb">
+            <img [src]="review.productImage" [alt]="review.productName" />
+          </div>
+          <span class="product-name">{{ review.productName }}</span>
+        </div>
+      </div>
+
+      <!-- Badges row -->
+      <div class="vrm-badges">
+        <span class="status-pill status-pill--{{ review.status }}">{{ statusLabel(review.status) }}</span>
+        @if (review.verifiedPurchase) {
+          <span class="verified-pill verified-pill--yes">Verified Purchase</span>
+        } @else {
+          <span class="verified-pill verified-pill--no">Not Verified</span>
+        }
+        @if (review.reported) {
+          <span class="reported-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Reported
+          </span>
+        }
+      </div>
+
+      <!-- Rating + title -->
+      <div class="vrm-rating-row">
+        <div class="star-rating">
+          @for (s of starsFor(review.rating); track $index) {
+            <svg class="star" [class.star--filled]="s.filled" width="16" height="16" viewBox="0 0 24 24" [attr.fill]="s.filled ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.6">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          }
+          <span class="star-rating__num">{{ review.rating }}.0</span>
+        </div>
+        <span class="vrm-date">{{ formatDateTime(review.createdAt) }}</span>
+      </div>
+
+      <h3 class="vrm-title">{{ review.title }}</h3>
+      <p class="vrm-body-text">{{ review.review }}</p>
+
+      <div class="vrm-meta-grid">
+        <div class="vrm-meta-field">
+          <span class="vrm-meta-label">Helpful Votes</span>
+          <span class="vrm-meta-value">{{ review.helpfulVotes }}</span>
+        </div>
+        <div class="vrm-meta-field">
+          <span class="vrm-meta-label">Product ID</span>
+          <span class="vrm-meta-value vrm-meta-value--mono">{{ review.productId }}</span>
+        </div>
+      </div>
+
+      <!-- Moderation history -->
+      <div class="vrm-divider"></div>
+      <h3 class="vrm-section-title">Moderation History</h3>
+
+      <div class="vrm-timeline">
+        @for (entry of review.moderationHistory; track trackByHistoryId($index, entry)) {
+          <div class="vrm-timeline__item">
+            <span class="vrm-timeline__dot"></span>
+            <div class="vrm-timeline__content">
+              <div class="vrm-timeline__top">
+                <p class="vrm-timeline__action">{{ entry.action }}</p>
+                <span class="vrm-timeline__date">{{ formatDateTime(entry.date) }}</span>
+              </div>
+              <p class="vrm-timeline__actor">by {{ entry.actor }}</p>
+              @if (entry.note) {
+                <p class="vrm-timeline__note">{{ entry.note }}</p>
+              }
+            </div>
+          </div>
+        }
+        @if (review.moderationHistory.length === 0) {
+          <p class="vrm-timeline__empty">No moderation activity recorded yet.</p>
+        }
+      </div>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────── -->
+    <footer class="vrm-footer">
+      <button class="btn-ghost" type="button" (click)="requestClose()">Close</button>
+      <button class="btn-danger" type="button" (click)="requestDelete()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Delete Review
+      </button>
+    </footer>
+  </div>
+</div>
