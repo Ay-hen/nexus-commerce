@@ -199,12 +199,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 .toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  width: 100%;
-  min-width: 0;
+  flex-wrap: wrap; // add this to the existing .toolbar rule too
 }
 
 .toolbar__left-scroll {
@@ -214,19 +209,16 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   display: flex;
   align-items: center;
   gap: 10px;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  white-space: nowrap;
-
-  &::-webkit-scrollbar { height: 6px; }
-  &::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: $radius-pill; }
-  &::-webkit-scrollbar-track { background: transparent; }
+  flex-wrap: wrap; // was overflow-x: auto + white-space: nowrap — that's what caused the side-scroll
 }
 
-.toolbar__right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
+.toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
 // Search
 .search-wrap { position: relative; flex: 0 0 220px; display: flex; align-items: center; }
 .search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
@@ -358,20 +350,15 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   max-width: 100%;
   min-width: 0;
 
-  overflow-x: hidden;
-  overflow-y: auto;
-
-
-  &--scroll {
-    overflow-y: auto;
-    max-height: calc(56px * 5 + 42px); // 5 rows + header
-  }
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .data-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: .82rem;
+  font-size: 0.82rem;
 
   thead {
     position: sticky; top: 0; z-index: 2;
@@ -398,7 +385,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     border-bottom: 1px solid $border;
     color: $text-mid;
     vertical-align: middle;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
 
     &.td--check   { width: 40px; }
     &.td--actions { text-align: right; }
@@ -691,3 +679,30 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   .reviews-page, .stat-card, .table-card, .table-row, .review-card, .empty-state,
   .pagination, .action-menu, .admin-toast, .bulk-bar, .star { animation: none !important; transition: none !important; }
 }
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.data-table td,
+.data-table th {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+// Remove the nowrap here — with table-layout: fixed the column has a set width,
+// so nowrap just pushes the table wider. Let it wrap instead.
+.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; } // drop white-space: nowrap
+
+// Simplify — the global td/th rule at the bottom of the file already wraps
+// and breaks words, so the ellipsis approach conflicts with it and isn't needed.
+.td-email { color: $text-mid; } 
