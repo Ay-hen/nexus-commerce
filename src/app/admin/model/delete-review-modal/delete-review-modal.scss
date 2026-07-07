@@ -1,0 +1,123 @@
+$surface:       #FFFFFF;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.08);
+
+$radius-sm:     8px;
+$radius-lg:     18px;
+
+$shadow-modal:  0 24px 56px rgba(16,24,40,.18);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+$z-modal: 1000;
+
+* { box-sizing: border-box; }
+
+@keyframes drm-backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drm-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes drm-modal-in {
+  from { opacity: 0; transform: scale(.94) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes drm-modal-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(.94) translateY(8px); }
+}
+
+.drm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  background: rgba(17,24,39,.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: drm-backdrop-in .2s $ease both;
+  font-family: 'Inter', -apple-system, sans-serif;
+
+  &--closing { animation: drm-backdrop-out .18s $ease both; }
+}
+
+.drm-modal {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 28px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: $shadow-modal;
+  text-align: center;
+  animation: drm-modal-in .25s $ease-spring both;
+
+  &--closing { animation: drm-modal-out .18s $ease both; }
+}
+
+.drm-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: $red-bg;
+  color: $red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.drm-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 10px;
+}
+
+.drm-body {
+  font-size: .85rem;
+  color: $text-mid;
+  line-height: 1.65;
+  margin-bottom: 22px;
+
+  strong { color: $text-primary; }
+}
+
+.drm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-ghost {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $surface; border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
+  &:hover { background: #F5F7FA; color: $text-primary; border-color: #9CA3AF; }
+}
+
+.btn-danger {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $red; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drm-backdrop, .drm-modal { animation: none !important; }
+}

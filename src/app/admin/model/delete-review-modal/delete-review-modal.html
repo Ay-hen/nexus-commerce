@@ -1,1 +1,43 @@
-<p>delete-review-modal works!</p>
+<div class="drm-backdrop" [class.drm-backdrop--closing]="closing()" (click)="onBackdropClick()">
+  <div
+    class="drm-modal"
+    [class.drm-modal--closing]="closing()"
+    (click)="stop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="drm-title"
+  >
+    <div class="drm-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        <path d="M10 11v6M14 11v6"/>
+        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      </svg>
+    </div>
+
+    @if (!isBulk() && review) {
+      <h2 class="drm-title" id="drm-title">Delete Review</h2>
+      <p class="drm-body">
+        Are you sure you want to delete the review by <strong>{{ review.customerName }}</strong>
+        for <strong>{{ review.productName }}</strong>? This action cannot be undone.
+      </p>
+    } @else {
+      <h2 class="drm-title" id="drm-title">Delete {{ bulkCount }} Reviews</h2>
+      <p class="drm-body">
+        Are you sure you want to delete <strong>{{ bulkCount }}</strong> selected reviews?
+        This action cannot be undone.
+      </p>
+    }
+
+    <div class="drm-actions">
+      <button class="btn-ghost" (click)="requestCancel()">Cancel</button>
+      <button class="btn-danger" (click)="confirmDelete()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        {{ isBulk() ? 'Delete Reviews' : 'Delete Review' }}
+      </button>
+    </div>
+  </div>
+</div>

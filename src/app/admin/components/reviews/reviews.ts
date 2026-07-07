@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminReview, ReviewStatus } from '../../model/review-model';
 import { AdminReviewDetail, toReviewDetail } from '../../model/review-detail-model';
-import { ViewReviewModal } from './view-review-modal/view-review-modal';
-import { DeleteReviewModal } from './delete-review-modal/delete-review-modal';
+import { ViewReviewModal } from '../../model/view-review-modal/view-review-modal';
+import { DeleteReviewModal } from '../../model/delete-review-modal/delete-review-modal';
 
 export type SearchField = 'all' | 'customer' | 'email' | 'product' | 'title' | 'review';
 export type RatingFilter = 'all' | 5 | 4 | 3 | 2 | 1;
