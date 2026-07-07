@@ -220,13 +220,6 @@
         </button>
       </div>
 
-      <!-- Rows per page -->
-      <div class="select-wrap">
-        <select class="toolbar-select" [value]="pageSize()" (change)="setPageSize(+$any($event.target).value)">
-          @for (size of pageSizeOptions; track size) { <option [value]="size">{{ size }} / page</option> }
-        </select>
-        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
     </div>
   </div>
 
@@ -302,7 +295,6 @@
                 <th>Product</th>
                 <th>Rating</th>
                 <th>Status</th>
-                <th>Verified</th>
                 <th>Date</th>
                 <th class="th--actions"></th>
               </tr>
@@ -356,15 +348,6 @@
                   <!-- Status -->
                   <td>
                     <span class="status-pill status-pill--{{ r.status }}">{{ statusLabel(r.status) }}</span>
-                  </td>
-
-                  <!-- Verified -->
-                  <td>
-                    @if (r.verifiedPurchase) {
-                      <span class="verified-pill verified-pill--yes">Verified Purchase</span>
-                    } @else {
-                      <span class="verified-pill verified-pill--no">Not Verified</span>
-                    }
                   </td>
 
                   <!-- Helpful -->

@@ -85,7 +85,7 @@ export class Reviews {
   ];
 
   // ── Pagination ───────────────────────────────────────────────────────────
-  pageSize = signal(10);
+  pageSize = signal(9);
   currentPage = signal(1);
   pageSizeOptions = [5, 10, 20];
 
