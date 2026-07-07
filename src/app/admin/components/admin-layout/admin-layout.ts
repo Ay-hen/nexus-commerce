@@ -1,15 +1,18 @@
 // admin-layout.component.ts
 import {
-  Component, signal, computed, inject, HostListener
+  Component, ElementRef, HostListener, computed, inject, signal, ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminAuthService } from '../../services/admin-auth';
 import { NavItem } from '../../model/admin-models.model';
+// Adjust this path to wherever notification-dropdown actually lives in your project —
+// it mirrors the same relative depth as the model imports above (two levels up to `app/`).
+import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown';
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [CommonModule, RouterModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterModule, RouterLink, RouterLinkActive, NotificationDropdownComponent],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
 })
@@ -21,6 +24,10 @@ export class AdminLayout {
   darkMode = signal(false);
   searchQuery = signal('');
   searchOpen = signal(false);
+
+  // ── Notification bell / dropdown ──────────────────────────────────────
+  notificationsOpen = signal(false);
+  @ViewChild('notifWrap') notifWrap?: ElementRef<HTMLElement>;
 
   currentAdmin = this.auth.currentAdmin;
 
@@ -36,8 +43,34 @@ export class AdminLayout {
 
   logout(): void { this.auth.logout(); }
 
+  // Toggle the bell dropdown. stopPropagation keeps the same click from
+  // immediately re-triggering the document:click listener below and closing
+  // it right after it opens.
+  toggleNotifications(event: Event): void {
+    event.stopPropagation();
+    this.notificationsOpen.update(v => !v);
+  }
+
+  closeNotifications(): void {
+    this.notificationsOpen.set(false);
+  }
+
+  // Close the dropdown on any click outside its wrapper (bell button + panel).
+  @HostListener('document:click', ['$event'])
+  onDocClick(event: MouseEvent): void {
+    if (!this.notificationsOpen()) return;
+    const wrap = this.notifWrap?.nativeElement;
+    if (wrap && !wrap.contains(event.target as Node)) {
+      this.closeNotifications();
+    }
+  }
+
   @HostListener('document:keydown.escape')
-  onEscape(): void { this.mobileSidebarOpen.set(false); this.searchOpen.set(false); }
+  onEscape(): void {
+    this.mobileSidebarOpen.set(false);
+    this.searchOpen.set(false);
+    this.closeNotifications();
+  }
 
   trackById(_: number, item: NavItem): string { return item.id; }
 
@@ -82,5 +115,3 @@ export class AdminLayout {
     },
   ];
 }
-
-

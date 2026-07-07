@@ -506,3 +506,13 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   .sidebar, .main-area, .page-content { animation: none; transition: none; }
 }
 
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-wrapper app-notification-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 9999;
+}
