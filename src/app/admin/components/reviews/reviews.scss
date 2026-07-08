@@ -1,5 +1,5 @@
 // reviews.scss
-// ─── Admin Design Tokens (matches categories/inventory exactly) ───────────────
+// ─── Admin Design Tokens───────────────
 $surface:       #FFFFFF;
 $surface2:      #F5F7FA;
 $surface3:      #F1F4F8;
@@ -57,13 +57,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   width: 100%;
   max-width: 100%;
   min-width: 0;
-
   overflow-x: hidden;
-  box-sizing: border-box;
-
-  font-family: 'Inter', -apple-system, sans-serif;
-  color: $text-primary;
-  animation: pop-in .25s $ease;
 }
 
 .reviews-page > * {
@@ -71,6 +65,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   max-width: 100%;
   min-width: 0;
 }
+
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 .admin-toast {
@@ -199,30 +194,43 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 .toolbar {
-  flex-wrap: wrap; // add this to the existing .toolbar rule too
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
-.toolbar__left-scroll {
-  flex: 1;
-  min-width: 0;
+.toolbar__left {
+    flex: 1;
+    min-width: 0;
 
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap; // was overflow-x: auto + white-space: nowrap — that's what caused the side-scroll
+    display: flex;
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    flex-wrap: nowrap;
+    white-space: nowrap;
+
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
-.toolbar__right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  margin-left: auto;
-}
+
 
 
 // Search
-.search-wrap { position: relative; flex: 0 0 220px; display: flex; align-items: center; }
+.search-wrap {
+    flex: 1 1 240px;
+    min-width: 180px;
+    max-width: 320px;
+}
+
 .search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
 
 .search-input {
@@ -404,6 +412,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--selected td { background: rgba($accent, .05); }
   &:has(.action-menu) { position: relative; z-index: 5; }
 }
+
 
 .td-mid   { color: $text-mid; }
 .td-light { color: $text-light; font-size: .76rem; }
@@ -704,3 +713,65 @@ body {
 .product-name { font-size: .8rem; color: $text-primary; font-weight: 500; } 
 
 .td-email { color: $text-mid; } 
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.search-wrap { position: relative; flex: 0 0 240px; display: flex; align-items: center; @media (max-width: 600px) { flex: 1 1 100%; } }
+
+.search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
+
+.search-input {
+  width: 100%; height: 38px;
+  padding: 0 12px 0 34px;
+  background: $surface; border: 1.5px solid $border;
+  border-radius: $radius-pill;
+  font: inherit; font-size: .82rem; color: $text-primary;
+  transition: border-color .15s $ease, box-shadow .15s;
+
+  &::placeholder { color: $text-light; }
+  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+  &::-webkit-search-cancel-button { display: none; }
+}
+
+.select-wrap { position: relative; }
+
+.toolbar-select {
+  height: 38px;
+  padding: 0 30px 0 12px;
+  appearance: none;
+  cursor: pointer;
+  background: $surface;
+  border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; color: $text-mid;
+  transition: border-color .15s, background .15s;
+
+  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+}
+
+.toolbar__left-scroll {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
+.toolbar__left-scroll::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+.toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+
+/*.reviews-page > * {
+  width: 82%;
+}*/
