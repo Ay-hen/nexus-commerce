@@ -4,14 +4,21 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AdminProduct } from '../../model/admin-models.model';
 
 type ProductStatus = 'active' | 'draft' | 'archived';
-type SortField = 'name' | 'price' | 'stock' | 'sales' | 'status';
+type SortKey =
+  | 'nameAsc' | 'nameDesc'
+  | 'priceHigh' | 'priceLow'
+  | 'stockHigh' | 'stockLow'
+  | 'salesHigh' | 'salesLow'
+  | 'statusAsc';
+type ViewMode = 'table' | 'grid';
 
 @Component({
   selector: 'app-products',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './products.html',
   styleUrl: './products.scss',
@@ -21,24 +28,30 @@ export class Products implements OnInit {
   protected Math = Math;
   private router = inject(Router);
 
-  // ── State ──────────────────────────────────────────────────────────────────
+  // ── Loading ──────────────────────────────────────────────────────────────
   isLoading = signal(true);
+  skeletons = [1, 2, 3, 4, 5];
+
+  // ── Toast ────────────────────────────────────────────────────────────────
+  toastMsg = signal<string | null>(null);
+  private toastTimer: any;
+
+  // ── Search / filters / sort / view ───────────────────────────────────────
   searchQuery = signal('');
   activeStatus = signal<ProductStatus | 'all'>('all');
   activeCategory = signal('All');
-  sortField = signal<SortField>('name');
-  sortDir = signal<'asc' | 'desc'>('asc');
-  currentPage = signal(1);
-  pageSize = 10;
+  sortKey = signal<SortKey>('nameAsc');
+  viewMode = signal<ViewMode>('table');
 
+  // ── Pagination ───────────────────────────────────────────────────────────
+  currentPage = signal(1);
+  pageSize = signal(9);
+
+  // ── Modals / menus ───────────────────────────────────────────────────────
   showDeleteConfirm = signal(false);
   deleteTargetId = signal<number | null>(null);
-  sortDropdownOpen = signal(false);
-  bulkActionOpen = signal(false);
-
-  // Toast
-  toastMsg = signal<string | null>(null);
-  private toastTimer: any;
+  bulkDeleteCount = signal<number | null>(null);
+  openMenuId = signal<number | null>(null);
 
   categories = ['All', 'Electronics', 'Smartphones', 'Laptops', 'Audio', 'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion'];
 
@@ -47,6 +60,18 @@ export class Products implements OnInit {
     { key: 'active',   label: 'Active'       },
     { key: 'draft',    label: 'Draft'        },
     { key: 'archived', label: 'Archived'     },
+  ];
+
+  sortOptions: { key: SortKey; label: string }[] = [
+    { key: 'nameAsc',    label: 'Name (A–Z)' },
+    { key: 'nameDesc',   label: 'Name (Z–A)' },
+    { key: 'priceHigh',  label: 'Price: High to Low' },
+    { key: 'priceLow',   label: 'Price: Low to High' },
+    { key: 'stockHigh',  label: 'Stock: High to Low' },
+    { key: 'stockLow',   label: 'Stock: Low to High' },
+    { key: 'salesHigh',  label: 'Best Selling' },
+    { key: 'salesLow',   label: 'Least Selling' },
+    { key: 'statusAsc',  label: 'Status' },
   ];
 
   // ── Mock data ──────────────────────────────────────────────────────────────
@@ -65,19 +90,19 @@ export class Products implements OnInit {
     { id: 12, name: 'Sony WF-1000XM5',        brand: 'Sony',    category: 'Audio',       price: 279,  stock: 16,  status: 'archived', sales: 112, image: '/products/headphones.png',                     sku: 'SONY-WF1000X', featured: false },
   ]);
 
-  // ── Computed: filtered + sorted + paginated ────────────────────────────────
+  // ══════════════════════════════════════════════════════════════════════
+  // Computed pipeline: filter → sort → paginate
+  // ══════════════════════════════════════════════════════════════════════
+
   filtered = computed(() => {
     let list = [...this._products()];
 
-    // Status filter
     const s = this.activeStatus();
     if (s !== 'all') list = list.filter(p => p.status === s);
 
-    // Category filter
     const c = this.activeCategory();
     if (c !== 'All') list = list.filter(p => p.category === c);
 
-    // Search
     const q = this.searchQuery().trim().toLowerCase();
     if (q) list = list.filter(p =>
       p.name.toLowerCase().includes(q) ||
@@ -86,35 +111,70 @@ export class Products implements OnInit {
       p.category.toLowerCase().includes(q)
     );
 
-    // Sort
-    const field = this.sortField();
-    const dir   = this.sortDir() === 'asc' ? 1 : -1;
+    return list;
+  });
+
+  sorted = computed(() => {
+    const list = [...this.filtered()];
+    const key = this.sortKey();
+
     list.sort((a, b) => {
-      const av = a[field as keyof AdminProduct] as any;
-      const bv = b[field as keyof AdminProduct] as any;
-      return av < bv ? -dir : av > bv ? dir : 0;
+      switch (key) {
+        case 'nameAsc':   return a.name.localeCompare(b.name);
+        case 'nameDesc':  return b.name.localeCompare(a.name);
+        case 'priceHigh': return b.price - a.price;
+        case 'priceLow':  return a.price - b.price;
+        case 'stockHigh': return b.stock - a.stock;
+        case 'stockLow':  return a.stock - b.stock;
+        case 'salesHigh': return b.sales - a.sales;
+        case 'salesLow':  return a.sales - b.sales;
+        case 'statusAsc': return a.status.localeCompare(b.status);
+        default: return 0;
+      }
     });
 
     return list;
   });
 
-  totalPages = computed(() => Math.ceil(this.filtered().length / this.pageSize));
+  totalPages = computed(() => Math.max(1, Math.ceil(this.sorted().length / this.pageSize())));
 
   paginated = computed(() => {
     const page = this.currentPage();
-    const start = (page - 1) * this.pageSize;
-    return this.filtered().slice(start, start + this.pageSize);
+    const size = this.pageSize();
+    const start = (page - 1) * size;
+    return this.sorted().slice(start, start + size);
   });
 
-  pageNumbers = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, i) => i + 1)
-  );
+  pageRangeLabel = computed(() => {
+    const total = this.sorted().length;
+    if (total === 0) return '0 results';
+    const start = (this.currentPage() - 1) * this.pageSize() + 1;
+    const end = Math.min(start + this.pageSize() - 1, total);
+    return `${start}–${end} of ${total}`;
+  });
 
-  // Counts for tabs
+  pageNumbers = computed(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    const span = 1;
+    const range: number[] = [];
+    for (let i = Math.max(1, current - span); i <= Math.min(total, current + span); i++) range.push(i);
+    return range;
+  });
+
+  // Counts for status tabs
   countFor(status: ProductStatus | 'all'): number {
     if (status === 'all') return this._products().length;
     return this._products().filter(p => p.status === status).length;
   }
+
+  // ── Stats ────────────────────────────────────────────────────────────────
+  totalProducts    = computed(() => this._products().length);
+  activeCount      = computed(() => this._products().filter(p => p.status === 'active').length);
+  lowStockCount    = computed(() => this._products().filter(p => p.stock > 0 && p.stock <= 10).length);
+  outOfStockCount  = computed(() => this._products().filter(p => p.stock === 0).length);
+  featuredCount    = computed(() => this._products().filter(p => p.featured).length);
+  inventoryValue   = computed(() => this._products().reduce((sum, p) => sum + p.price * p.stock, 0));
 
   // ── Multi-select ──────────────────────────────────────────────────────────
   selectedIds = signal<Set<number>>(new Set());
@@ -123,8 +183,12 @@ export class Products implements OnInit {
     this.paginated().length > 0 &&
     this.paginated().every(p => this.selectedIds().has(p.id))
   );
+  somePageSelected = computed(() =>
+    this.paginated().some(p => this.selectedIds().has(p.id)) && !this.allPageSelected()
+  );
 
-  toggleSelect(id: number): void {
+  toggleSelect(id: number, event?: Event): void {
+    event?.stopPropagation();
     this.selectedIds.update(set => {
       const next = new Set(set);
       next.has(id) ? next.delete(id) : next.add(id);
@@ -133,43 +197,53 @@ export class Products implements OnInit {
   }
 
   toggleSelectAll(): void {
-    if (this.allPageSelected()) {
-      this.selectedIds.update(set => {
-        const next = new Set(set);
-        this.paginated().forEach(p => next.delete(p.id));
-        return next;
-      });
-    } else {
-      this.selectedIds.update(set => {
-        const next = new Set(set);
-        this.paginated().forEach(p => next.add(p.id));
-        return next;
-      });
-    }
+    const shouldSelect = !this.allPageSelected();
+    this.selectedIds.update(set => {
+      const next = new Set(set);
+      this.paginated().forEach(p => shouldSelect ? next.add(p.id) : next.delete(p.id));
+      return next;
+    });
   }
 
   isSelected(id: number): boolean { return this.selectedIds().has(id); }
+  clearSelection(): void { this.selectedIds.set(new Set()); }
 
-  // ── Sort ──────────────────────────────────────────────────────────────────
-  setSort(field: SortField): void {
-    if (this.sortField() === field) {
-      this.sortDir.update(d => d === 'asc' ? 'desc' : 'asc');
-    } else {
-      this.sortField.set(field);
-      this.sortDir.set('asc');
-    }
+  // ── Sort / view / page size ─────────────────────────────────────────────
+  setSort(key: SortKey): void { this.sortKey.set(key); }
+  setViewMode(mode: ViewMode): void { this.viewMode.set(mode); }
+  setPageSize(size: number): void { this.pageSize.set(size); this.currentPage.set(1); }
+
+  // ── Filters ───────────────────────────────────────────────────────────────
+  setStatus(s: ProductStatus | 'all'): void { this.activeStatus.set(s); this.currentPage.set(1); this.clearSelection(); }
+  setCategory(c: string): void { this.activeCategory.set(c); this.currentPage.set(1); }
+
+  hasAnyActiveFilter = computed(() =>
+    !!this.searchQuery() || this.activeCategory() !== 'All' || this.activeStatus() !== 'all'
+  );
+
+  clearFilters(): void {
+    this.searchQuery.set('');
+    this.activeCategory.set('All');
+    this.activeStatus.set('all');
     this.currentPage.set(1);
   }
 
-  // ── Filters ───────────────────────────────────────────────────────────────
-  setStatus(s: ProductStatus | 'all'): void { this.activeStatus.set(s); this.currentPage.set(1); this.selectedIds.set(new Set()); }
-  setCategory(c: string): void { this.activeCategory.set(c); this.currentPage.set(1); }
+  onSearch(value: string): void { this.searchQuery.set(value); this.currentPage.set(1); }
+
+  // ── Row menu ─────────────────────────────────────────────────────────────
+  toggleMenu(product: AdminProduct, event: Event): void {
+    event.stopPropagation();
+    this.openMenuId.update(id => id === product.id ? null : product.id);
+  }
+  closeMenu(): void { this.openMenuId.set(null); }
 
   // ── CRUD ──────────────────────────────────────────────────────────────────
-  editProduct(id: number): void { this.router.navigate(['/admin/product', id, 'edit']); }
+  editProduct(id: number): void { this.closeMenu(); this.router.navigate(['/admin/product', id, 'edit']); }
   addProduct():            void { this.router.navigate(['/admin/products/new']); }
 
-  duplicateProduct(product: AdminProduct): void {
+  duplicateProduct(product: AdminProduct, event?: Event): void {
+    event?.stopPropagation();
+    this.closeMenu();
     const copy: AdminProduct = {
       ...product,
       id: Date.now(),
@@ -182,7 +256,9 @@ export class Products implements OnInit {
     this.showToast(`"${product.name}" duplicated as draft`);
   }
 
-  toggleStatus(product: AdminProduct): void {
+  toggleStatus(product: AdminProduct, event?: Event): void {
+    event?.stopPropagation();
+    this.closeMenu();
     const next: ProductStatus = product.status === 'active' ? 'archived' : 'active';
     this._products.update(list =>
       list.map(p => p.id === product.id ? { ...p, status: next } : p)
@@ -191,48 +267,92 @@ export class Products implements OnInit {
     // Spring Boot: PUT /api/admin/products/{id}/status { status: next }
   }
 
-  confirmDelete(id: number): void {
+  confirmDelete(id: number, event?: Event): void {
+    event?.stopPropagation();
+    this.closeMenu();
     this.deleteTargetId.set(id);
     this.showDeleteConfirm.set(true);
   }
 
   executeDelete(): void {
     const id = this.deleteTargetId();
-    if (!id) return;
-    const product = this._products().find(p => p.id === id);
-    this._products.update(list => list.filter(p => p.id !== id));
-    this.showDeleteConfirm.set(false);
-    this.deleteTargetId.set(null);
-    this.showToast(`"${product?.name}" deleted`);
-    // Spring Boot: DELETE /api/admin/products/{id}
+    if (id !== null) {
+      const product = this._products().find(p => p.id === id);
+      this._products.update(list => list.filter(p => p.id !== id));
+      this.selectedIds.update(set => { const next = new Set(set); next.delete(id); return next; });
+      this.showToast(`"${product?.name}" deleted`);
+      this.showDeleteConfirm.set(false);
+      this.deleteTargetId.set(null);
+      // Spring Boot: DELETE /api/admin/products/{id}
+      return;
+    }
+
+    if (this.bulkDeleteCount() !== null) {
+      const ids = this.selectedIds();
+      this._products.update(list => list.filter(p => !ids.has(p.id)));
+      this.showToast(`${ids.size} product${ids.size === 1 ? '' : 's'} deleted`);
+      this.clearSelection();
+      this.bulkDeleteCount.set(null);
+      this.showDeleteConfirm.set(false);
+    }
   }
 
-  cancelDelete(): void { this.showDeleteConfirm.set(false); this.deleteTargetId.set(null); }
+  cancelDelete(): void {
+    this.showDeleteConfirm.set(false);
+    this.deleteTargetId.set(null);
+    this.bulkDeleteCount.set(null);
+  }
 
   // ── Bulk actions ──────────────────────────────────────────────────────────
   bulkDelete(): void {
-    const ids = this.selectedIds();
-    this._products.update(list => list.filter(p => !ids.has(p.id)));
-    this.showToast(`${ids.size} product${ids.size > 1 ? 's' : ''} deleted`);
-    this.selectedIds.set(new Set());
-    this.bulkActionOpen.set(false);
+    const count = this.selectedIds().size;
+    if (!count) return;
+    this.bulkDeleteCount.set(count);
+    this.showDeleteConfirm.set(true);
   }
 
   bulkSetStatus(status: ProductStatus): void {
     const ids = this.selectedIds();
+    if (!ids.size) return;
     this._products.update(list =>
       list.map(p => ids.has(p.id) ? { ...p, status } : p)
     );
     this.showToast(`${ids.size} product${ids.size > 1 ? 's' : ''} set to ${status}`);
-    this.selectedIds.set(new Set());
-    this.bulkActionOpen.set(false);
+    this.clearSelection();
   }
 
   // ── Pagination ────────────────────────────────────────────────────────────
   goToPage(page: number): void {
     if (page < 1 || page > this.totalPages()) return;
     this.currentPage.set(page);
-    this.selectedIds.set(new Set());
+  }
+
+  // ── Export ────────────────────────────────────────────────────────────────
+  private toCsv(rows: AdminProduct[]): string {
+    const header = ['Name', 'Brand', 'Category', 'Price', 'Stock', 'Status', 'Sales', 'SKU', 'Featured'];
+    const escape = (val: string | number) => `"${String(val).replace(/"/g, '""')}"`;
+
+    const lines = rows.map(p => [
+      p.name, p.brand, p.category, p.price, p.stock, p.status, p.sales, p.sku, p.featured ? 'Yes' : 'No',
+    ].map(escape).join(','));
+
+    return [header.map(escape).join(','), ...lines].join('\n');
+  }
+
+  private downloadFile(content: string, filename: string, mime: string): void {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  exportCsv(): void {
+    const csv = this.toCsv(this.sorted());
+    this.downloadFile(csv, `products-export-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
+    this.showToast('Products exported');
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
@@ -247,14 +367,16 @@ export class Products implements OnInit {
   showToast(msg: string): void {
     clearTimeout(this.toastTimer);
     this.toastMsg.set(msg);
-    this.toastTimer = setTimeout(() => this.toastMsg.set(null), 3000);
+    this.toastTimer = setTimeout(() => this.toastMsg.set(null), 2800);
   }
+
+  @HostListener('document:click')
+  onDocClick(): void { this.closeMenu(); }
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
+    this.closeMenu();
     this.cancelDelete();
-    this.sortDropdownOpen.set(false);
-    this.bulkActionOpen.set(false);
   }
 
   ngOnInit(): void {

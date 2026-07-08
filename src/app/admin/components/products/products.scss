@@ -1,5 +1,5 @@
 // admin-products.component.scss
-// ─── Tokens (Light — shared across all admin pages) ────────────────────────────
+// ─── Admin Design Tokens (shared with Reviews) ─────────────────────────────
 $surface:       #FFFFFF;
 $surface2:      #F5F7FA;
 $surface3:      #F1F4F8;
@@ -11,7 +11,6 @@ $text-mid:      #6B7280;
 $text-light:    #9CA3AF;
 
 $accent:        #4F46E5;
-$accent-light:  #6366F1;
 $accent-bg:     rgba(79,70,229,.08);
 $accent-glow:   rgba(79,70,229,.18);
 
@@ -21,6 +20,9 @@ $red:           #EF4444;
 $red-bg:        rgba(239,68,68,.08);
 $amber:         #F59E0B;
 $amber-bg:      rgba(245,158,11,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
+$slate-bg:      #F1F4F8;
 
 $radius-sm:     8px;
 $radius-md:     12px;
@@ -28,31 +30,23 @@ $radius-lg:     18px;
 $radius-pill:   999px;
 
 $shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
+$shadow-menu:   0 8px 24px rgba(16,24,40,.12), 0 2px 6px rgba(16,24,40,.06);
 
 $ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+$ease-menu:     cubic-bezier(.16,1,.3,1);
 
-// ─── Keyframes ─────────────────────────────────────────────────────────────────
-@keyframes pop-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+// ─── Keyframes ─────────────────────────────────────────────────────────────
+@keyframes pop-in     { from { opacity:0; transform: translateY(8px) scale(.98);} to { opacity:1; transform: translateY(0) scale(1);} }
+@keyframes shimmer    { 0% { background-position: -600px 0;} 100% { background-position: 600px 0;} }
+@keyframes toast-in   { from { opacity:0; transform: translateX(-50%) translateY(-10px);} to { opacity:1; transform: translateX(-50%) translateY(0);} }
+@keyframes dialog-in  { from { opacity:0; transform: translate(-50%,-50%) scale(.94);} to { opacity:1; transform: translate(-50%,-50%) scale(1);} }
+@keyframes row-in     { from { opacity:0; transform: translateX(-6px);} to { opacity:1; transform: none;} }
+@keyframes menu-in    { from { opacity:0; transform: translateY(-8px);} to { opacity:1; transform: translateY(0);} }
+@keyframes menu-in-up { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+@keyframes bar-in     { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform: translateY(0);} }
 
-@keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position:  600px 0; }
-}
-
-@keyframes toast-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-@keyframes dialog-in {
-  from { opacity: 0; transform: translate(-50%,-50%) scale(.94); }
-  to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 .products-page {
@@ -61,26 +55,30 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   gap: 20px;
   font-family: 'Inter', -apple-system, sans-serif;
   color: $text-primary;
-  animation: pop-in .25s $ease;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────
 .admin-toast {
   position: fixed;
-  top: 76px;
-  left: 50%;
+  top: 76px; left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: $text-primary;
-  border: 1px solid $text-primary;
-  color: #fff;
-  font-size: .8rem;
-  font-weight: 600;
-  padding: 10px 18px;
-  border-radius: $radius-pill;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: $text-primary; border: 1px solid $text-primary; color: #fff;
+  font-size: .8rem; font-weight: 600;
+  padding: 10px 18px; border-radius: $radius-pill;
   box-shadow: 0 12px 28px rgba(16,24,40,.22);
   white-space: nowrap;
   animation: toast-in .2s $ease;
@@ -88,7 +86,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   svg { color: $green; }
 }
 
-// ─── Confirm dialog ───────────────────────────────────────────────────────────
+// ─── Confirm dialog ────────────────────────────────────────────────────────
 .dialog-backdrop {
   position: fixed; inset: 0;
   background: rgba(17,24,39,.4);
@@ -112,7 +110,6 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0;
 }
 
 .confirm-icon {
@@ -120,9 +117,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border-radius: 50%;
   background: $red-bg;
   color: $red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   margin-bottom: 14px;
 }
 
@@ -152,26 +147,30 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   &:hover { background: darken($red, 8%); }
 }
 
-// ─── Page header ──────────────────────────────────────────────────────────────
+// ─── Page header ─────────────────────────────────────────────────────────
 .page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  background: $surface; border: 1px solid $border;
+  padding: 12px 16px;
+  border-radius: $radius-md;
 }
 
-.page-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -.025em;
-  color: $text-primary;
-  margin: 0 0 3px;
+.page-title-group { display: flex; align-items: center; gap: 12px; }
+
+.page-icon {
+  width: 40px; height: 40px;
+  border-radius: $radius-md;
+  background: $accent-bg;
+  border: 1px solid rgba($accent, .15);
+  color: $accent;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 
-.page-sub { font-size: .82rem; color: $text-light; }
-
-.header-actions { display: flex; gap: 8px; align-items: center; }
+.page-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -.025em; margin: 0 0 2px; }
+.page-sub   { font-size: .82rem; color: $text-light; }
+.page-header__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 .btn-ghost {
   height: 36px; padding: 0 14px;
@@ -180,7 +179,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .82rem; font-weight: 500;
   color: $text-mid; cursor: pointer;
-  transition: background .15s, color .15s, border-color .15s;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
   &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
 }
 
@@ -191,51 +191,87 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .82rem; font-weight: 600;
   color: #fff; cursor: pointer;
-  transition: background .15s, box-shadow .15s;
+  transition: background .15s $ease, box-shadow .15s;
+
   &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
 }
 
-// ─── Status tabs ──────────────────────────────────────────────────────────────
+// ─── Stat cards ─────────────────────────────────────────────────────────
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 20px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: $shadow-card;
+  position: relative; overflow: hidden;
+  transition: box-shadow .2s $ease, transform .2s $ease;
+  animation: pop-in .3s $ease both;
+
+  @for $i from 1 through 4 { &:nth-child(#{$i}) { animation-delay: #{($i - 1) * 0.06}s; } }
+
+  &:hover { box-shadow: $shadow-hover; transform: translateY(-2px); }
+
+  &::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.5px;
+    border-radius: $radius-lg $radius-lg 0 0;
+  }
+  &--blue   { &::before { background: $accent; } }
+  &--amber  { &::before { background: $amber;  } }
+  &--red    { &::before { background: $red;    } }
+  &--purple { &::before { background: $purple; } }
+
+  &__icon {
+    flex-shrink: 0; width: 42px; height: 42px;
+    border-radius: $radius-md;
+    display: flex; align-items: center; justify-content: center;
+  }
+  &--blue   .stat-card__icon { background: $accent-bg;  color: $accent;  }
+  &--amber  .stat-card__icon { background: $amber-bg;   color: $amber;   }
+  &--red    .stat-card__icon { background: $red-bg;     color: $red;     }
+  &--purple .stat-card__icon { background: $purple-bg;  color: $purple;  }
+
+  &__label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: $text-light; margin: 0 0 4px; }
+  &__value { font-size: 1.7rem; font-weight: 800; letter-spacing: -.04em; color: $text-primary; line-height: 1; margin: 0 0 2px; }
+  &__sub   { font-size: .72rem; color: $text-light; margin: 0; }
+}
+
+// ─── Status tabs ──────────────────────────────────────────────────────────
 .status-tabs {
   display: flex;
   gap: 2px;
   border-bottom: 1px solid $border;
-  padding-bottom: 0;
   overflow-x: auto;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 }
 
 .status-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: 36px;
-  padding: 0 14px;
-  background: transparent;
-  border: none;
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 36px; padding: 0 14px;
+  background: transparent; border: none;
   border-bottom: 2px solid transparent;
-  font: inherit;
-  font-size: .82rem;
-  font-weight: 500;
-  color: $text-light;
-  cursor: pointer;
-  white-space: nowrap;
+  font: inherit; font-size: .82rem; font-weight: 500;
+  color: $text-light; cursor: pointer; white-space: nowrap;
   transition: color .15s, border-color .15s;
   margin-bottom: -1px;
 
   &:hover { color: $text-mid; }
 
-  &--active {
-    color: $accent;
-    border-bottom-color: $accent;
-    font-weight: 600;
-  }
+  &--active { color: $accent; border-bottom-color: $accent; font-weight: 600; }
 }
 
 .tab-count {
-  font-size: .68rem;
-  font-weight: 700;
+  font-size: .68rem; font-weight: 700;
   background: $surface2;
   border-radius: $radius-pill;
   padding: 1px 7px;
@@ -244,45 +280,73 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   .status-tab--active & { background: $accent-bg; color: $accent; }
 }
 
-// ─── Toolbar ──────────────────────────────────────────────────────────────────
+// ─── Toolbar ──────────────────────────────────────────────────────────────
 .toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+
+    background: $surface; border: 1px solid $border;
+    padding: 12px 16px;
+    border-radius: $radius-md;
 }
 
-.search-wrap { position: relative; flex: 0 0 240px; @media (max-width: 600px) { flex: 1 1 100%; } }
+.toolbar__left {
+    flex: 1;
+    min-width: 0;
 
-.search-icon {
-  position: absolute; left: 11px; top: 50%;
-  transform: translateY(-50%);
-  color: $text-light; pointer-events: none;
+    display: flex;
+    gap: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    flex-wrap: nowrap;
+    white-space: nowrap;
+
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
+
+
+
+
+// Search
+.search-wrap {
+    flex: 1 1 240px;
+    min-width: 180px;
+    max-width: 320px;
+}
+
+.search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
+
 
 .search-input {
-  width: 100%; height: 36px;
+  width: 100%; height: 38px;
   padding: 0 12px 0 34px;
-  background: $surface2; border: 1.5px solid $border;
-  border-radius: $radius-sm;
+  background: $surface; border: 1.5px solid $border;
+  border-radius: $radius-pill;
   font: inherit; font-size: .82rem; color: $text-primary;
-  transition: border-color .15s, background .15s;
+  transition: border-color .15s $ease, box-shadow .15s;
 
   &::placeholder { color: $text-light; }
-  &:focus { outline: none; background: $surface; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
   &::-webkit-search-cancel-button { display: none; }
 }
 
 .cat-pills {
-  display: flex; gap: 5px;
-  overflow-x: auto; flex-wrap: nowrap;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  display: flex; gap: 5px; flex-shrink: 0;
+  overflow: visible;
 }
 
 .cat-pill {
-  height: 32px; padding: 0 12px;
-  background: $surface; border: 1px solid $border;
+  height: 34px; padding: 0 13px;
+  background: $surface; border: 1.5px solid $border;
   border-radius: $radius-pill;
   font: inherit; font-size: .76rem; font-weight: 500;
   color: $text-mid; cursor: pointer; white-space: nowrap;
@@ -292,69 +356,152 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   &.active { background: $accent; border-color: $accent; color: #fff; font-weight: 600; }
 }
 
-// Bulk dropdown
-.bulk-wrap { position: relative; margin-left: auto; }
+.clear-filters-btn {
+  height: 34px; padding: 0 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: $red-bg; border: 1.5px solid rgba($red, .25);
+  border-radius: $radius-pill;
+  font: inherit; font-size: .76rem; font-weight: 600;
+  color: $red; cursor: pointer; flex-shrink: 0;
+  transition: background .15s;
+
+  &:hover { background: rgba($red, .16); }
+}
+
+.select-wrap { position: relative; flex-shrink: 0; }
+
+.toolbar-select {
+  height: 38px; padding: 0 30px 0 12px;
+  appearance: none; cursor: pointer;
+  background: $surface; border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; color: $text-mid;
+  transition: border-color .15s, background .15s;
+
+  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+}
+
+.select-chevron { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: $text-light; pointer-events: none; }
+
+.view-toggle {
+  display: flex; background: $surface2; border: 1px solid $border;
+  border-radius: $radius-sm; overflow: hidden; flex-shrink: 0;
+}
+
+.view-btn {
+  width: 34px; height: 34px;
+  background: transparent; border: none;
+  color: $text-light;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &--active { background: $surface; color: $accent; box-shadow: 0 1px 3px rgba(16,24,40,.08); }
+  &:hover:not(.view-btn--active) { color: $text-primary; }
+}
+
+// ─── Bulk action bar ────────────────────────────────────────────────────
+.bulk-bar {
+  display: flex; align-items: center; gap: 14px;
+  background: $accent-bg;
+  border: 1.5px solid rgba($accent, .25);
+  border-radius: $radius-md;
+  padding: 10px 16px;
+  animation: bar-in .2s $ease-spring both;
+}
+
+.bulk-bar__count { font-size: .82rem; font-weight: 700; color: $accent; white-space: nowrap; }
+
+.bulk-bar__actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
 .bulk-btn {
-  height: 36px; padding: 0 14px;
+  height: 32px; padding: 0 12px;
   display: inline-flex; align-items: center; gap: 6px;
-  background: $accent-bg; border: 1px solid rgba($accent, .25);
+  background: $surface; border: 1px solid $border2;
   border-radius: $radius-sm;
-  font: inherit; font-size: .82rem; font-weight: 600;
+  font: inherit; font-size: .76rem; font-weight: 600;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+
+  &:hover { background: $surface2; color: $text-primary; border-color: $accent; }
+
+  &--danger {
+    color: $red; border-color: rgba($red, .25);
+    &:hover { background: $red-bg; border-color: $red; color: $red; }
+  }
+}
+
+.bulk-bar__clear {
+  margin-left: auto;
+  background: none; border: none;
+  font: inherit; font-size: .78rem; font-weight: 600;
   color: $accent; cursor: pointer;
-  transition: background .15s;
-  &:hover { background: rgba($accent, .14); }
-
-  svg { transition: transform .2s; &.open { transform: rotate(180deg); } }
+  padding: 4px 6px;
+  &:hover { text-decoration: underline; }
 }
 
-.bulk-dropdown {
-  position: absolute; top: calc(100% + 6px); right: 0;
-  min-width: 190px;
-  background: $surface; border: 1px solid $border;
+// ─── Skeleton ─────────────────────────────────────────────────────────────
+.shimmer {
+  background: linear-gradient(90deg, $surface2 0%, $surface3 40%, $surface2 80%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
   border-radius: $radius-md;
-  box-shadow: 0 12px 28px rgba(16,24,40,.14);
-  list-style: none; padding: 6px; z-index: 200;
 }
+.sk-stat  { height: 100px; border-radius: $radius-lg; }
+.sk-thead { height: 42px; border-radius: $radius-sm; margin-bottom: 6px; }
+.sk-row   { height: 56px; border-radius: $radius-sm; margin-bottom: 4px; }
+.sk-table { padding: 20px; display: flex; flex-direction: column; }
 
-.bulk-option {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px; border-radius: $radius-sm;
-  font-size: .82rem; color: $text-mid;
-  cursor: pointer;
-  transition: background .12s, color .12s;
-
-  &:hover { background: $surface2; color: $text-primary; }
-  &--danger { color: $red; &:hover { background: $red-bg; color: $red; } }
-}
-
-// ─── Table card ───────────────────────────────────────────────────────────────
+// ─── Table card ───────────────────────────────────────────────────────────
 .table-card {
-  background: $surface;
-  border: 1px solid $border;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: $surface; border: 1px solid $border;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
-.table-scroll { overflow-x: auto; }
+.table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Table max visible rows = 9 before scrolling kicks in inside the card.
+  &--scroll {
+    max-height: calc(48px + 9 * 58px);
+    overflow-y: auto;
+  }
+
+  &::-webkit-scrollbar { width: 8px; height: 8px; }
+  &::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
 
 .data-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: .82rem;
 
+  thead { position: sticky; top: 0; z-index: 2; }
   thead tr { border-bottom: 1px solid $border; background: $surface2; }
 
   th {
     padding: 12px 14px;
     text-align: left;
-    font-size: .68rem;
+    font-size: .64rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .08em;
+    letter-spacing: .07em;
     color: $text-light;
     white-space: nowrap;
+
+    &.th--check   { width: 40px; }
+    &.th--actions { width: 48px; }
   }
 
   td {
@@ -362,51 +509,56 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     border-bottom: 1px solid $border;
     vertical-align: middle;
     color: $text-mid;
+    white-space: normal;
+    word-break: break-word;
+
+    &.td--check   { width: 40px; }
+    &.td--actions { text-align: right; }
   }
 
-  tr:last-child td { border-bottom: none; }
-
-  tr.tr-selected td { background: $accent-bg; }
-  tr.tr-out-of-stock td { opacity: .6; }
-
-  tr:not(.tr-selected):hover td { background: #F9FAFB; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: $surface2; }
 }
 
-.th-check  { width: 44px; }
-.th-product{ width: auto; }
-.th-sortable {
+.table-row {
+  animation: row-in .3s $ease both;
+
+  &--selected td { background: rgba($accent, .05); }
+  &--muted td { opacity: .55; }
+}
+
+.td-price { font-weight: 700; color: $text-primary; }
+.td-sales { font-weight: 600; color: $text-primary; }
+.td-sku   { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
+
+// ─── Checkbox ─────────────────────────────────────────────────────────────
+.checkbox-sm {
+  display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; user-select: none;
-  white-space: nowrap;
 
-  // th must stay display:table-cell for column layout to work —
-  // align the label + sort icon inline instead of with flex.
-  svg {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-    opacity: .35;
-    transition: opacity .15s;
+  input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  &__box {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid $border2;
+    background: $surface;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    transition: background .15s $ease, border-color .15s $ease;
+
+    svg { opacity: 0; transform: scale(.5); transition: opacity .12s $ease, transform .12s $ease; }
   }
-  .sort-active { opacity: 1; color: $accent; }
-  &:hover svg { opacity: .7; }
+
+  input:checked ~ .checkbox-sm__box,
+  input:indeterminate ~ .checkbox-sm__box {
+    background: $accent; border-color: $accent;
+    svg { opacity: 1; transform: scale(1); }
+  }
 }
 
-.td-check  { width: 44px; }
-.td-price  { font-weight: 700; color: $text-primary; }
-.td-sales  { font-weight: 600; color: $text-primary; }
-.td-sku    { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
-
-.cb {
-  width: 16px; height: 16px;
-  accent-color: $accent;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-// Product cell
-.product-cell {
-  display: flex; align-items: center; gap: 12px;
-}
+// ─── Product cell (table) ─────────────────────────────────────────────────
+.product-cell { display: flex; align-items: center; gap: 12px; }
 
 .product-img-wrap {
   position: relative;
@@ -416,11 +568,10 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   background: $surface2;
   border: 1px solid $border;
   display: flex; align-items: center; justify-content: center;
-  overflow: visible;
 }
 
 .product-img {
-  width: 32px; height: 32px;
+  width: 30px; height: 30px;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(16,24,40,.10));
 }
@@ -443,20 +594,21 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 .product-meta { font-size: .72rem; color: $text-light; margin: 0; }
 
-// Status pill
+// ─── Status pill ──────────────────────────────────────────────────────────
 .status-pill {
   display: inline-flex; align-items: center;
   height: 22px; padding: 0 9px;
   border-radius: $radius-pill;
   font-size: .68rem; font-weight: 700;
   text-transform: capitalize;
+  white-space: nowrap;
 
-  &--active   { background: $green-bg;   color: $green;       }
-  &--draft    { background: $amber-bg;   color: $amber;       }
-  &--archived { background: #F1F4F8; color: #6B7280; }
+  &--active   { background: $green-bg;  color: $green;    }
+  &--draft    { background: $amber-bg;  color: $amber;    }
+  &--archived { background: $slate-bg;  color: $text-mid; }
 }
 
-// Stock badge
+// ─── Stock badge ──────────────────────────────────────────────────────────
 .stock-badge {
   display: inline-flex; align-items: center;
   height: 22px; padding: 0 9px;
@@ -464,109 +616,257 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   font-size: .72rem; font-weight: 600;
   white-space: nowrap;
 
-  &--green { background: $green-bg; color: $green;  }
-  &--amber { background: $amber-bg; color: $amber;  }
-  &--red   { background: $red-bg;   color: $red;    }
+  &--green { background: $green-bg; color: $green; }
+  &--amber { background: $amber-bg; color: $amber; }
+  &--red   { background: $red-bg;   color: $red;   }
 }
 
-// Action buttons
-.td-actions { white-space: nowrap; }
+// ─── Action menu ──────────────────────────────────────────────────────────
+.action-menu-wrap { position: relative; display: inline-flex; justify-content: flex-end; }
 
-.action-group {
-  display: flex; align-items: center; gap: 4px;
-  opacity: 0;
-  transition: opacity .15s;
-
-  tr:hover & { opacity: 1; }
-  // Always show on touch devices
-  @media (hover: none) { opacity: 1; }
-}
-
-.action-btn {
+.action-trigger {
   width: 30px; height: 30px;
-  background: $surface2; border: 1px solid $border;
+  background: transparent; border: 1px solid transparent;
   border-radius: $radius-sm;
-  color: $text-mid;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-
-  &:hover { background: $surface3; color: $text-primary; }
-  &--danger:hover { background: $red-bg; color: $red; border-color: rgba($red, .25); }
-}
-
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
-.shimmer {
-  background: linear-gradient(90deg, $surface2 0%, $surface3 40%, $surface2 80%);
-  background-size: 600px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
-}
-
-.sk-row {
-  height: 62px;
-  border-bottom: 1px solid $border;
-  border-radius: 0;
-}
-
-// ─── Empty state ──────────────────────────────────────────────────────────────
-.empty-state {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center;
-  padding: 64px 24px;
-}
-
-.empty-icon {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: $surface2;
   color: $text-light;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+
+  &:hover, &[aria-expanded="true"] { background: $surface2; border-color: $border; color: $text-primary; }
 }
 
-.empty-title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 6px; }
-.empty-sub   { font-size: .82rem; color: $text-light; }
-
-// ─── Pagination ───────────────────────────────────────────────────────────────
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-top: 1px solid $border;
-  flex-wrap: wrap;
-  gap: 10px;
+.action-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 20;
+  background: $surface; border: 1px solid $border;
+  border-radius: $radius-md; box-shadow: $shadow-menu;
+  width: 180px; overflow: hidden;
+  transform-origin: top right;
+  animation: menu-in .2s $ease-menu both;
 }
 
-.pag-info { font-size: .78rem; color: $text-light; }
+.action-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 14px;
+  font: inherit; font-size: .8rem; font-weight: 500;
+  color: $text-mid; background: none; border: none;
+  width: 100%; text-align: left; cursor: pointer; text-decoration: none;
+  transition: background .12s, color .12s;
 
-.pag-controls { display: flex; align-items: center; gap: 4px; }
+  &:hover { background: $surface2; color: $text-primary; }
+  &--danger { color: $red; &:hover { background: $red-bg; color: $red; } }
+}
 
-.pag-btn {
-  width: 32px; height: 32px;
+.action-divider { height: 1px; background: $border; margin: 3px 0; }
+
+.table-row:nth-last-child(-n+2) .action-menu {
+  top: auto; bottom: calc(100% + 6px);
+  transform-origin: bottom right;
+  animation-name: menu-in-up;
+}
+
+// ─── Empty state ──────────────────────────────────────────────────────────
+.empty-state {
+  background: $surface; border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 72px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  text-align: center;
+  animation: pop-in .3s $ease both;
+}
+
+.empty-state__orb {
+  width: 72px; height: 72px; border-radius: 50%;
   background: $surface2; border: 1px solid $border;
-  border-radius: $radius-sm;
+  color: $text-light;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 6px;
+}
+
+.empty-state__title { font-size: 1.05rem; font-weight: 700; color: $text-primary; margin: 0; }
+.empty-state__sub { font-size: .84rem; color: $text-light; margin: 0 0 6px; max-width: 320px; }
+
+// ─── Product grid (grid view) ──────────────────────────────────────────────
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+
+  &--scroll {
+    max-height: calc(360px * 2 + 16px);
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+}
+
+.product-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: $shadow-card;
+  transition: box-shadow .25s $ease, transform .25s $ease, border-color .2s;
+  animation: pop-in .3s $ease both;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+    transform: translateY(-3px);
+
+    .product-card__img { transform: scale(1.08); }
+    .product-card__overlay { opacity: 1; }
+  }
+
+  &--selected { border-color: rgba($accent, .4); background: rgba($accent, .03); }
+  &--muted { .product-card__img { opacity: .55; } }
+}
+
+.product-card__media {
+  position: relative;
+  height: 150px;
+  background: $surface2;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+.product-card__check {
+  position: absolute; top: 10px; left: 10px; z-index: 3;
+}
+
+.product-card__status {
+  position: absolute; top: 10px; right: 10px; z-index: 3;
+}
+
+.featured-badge {
+  position: absolute; bottom: 10px; left: 10px; z-index: 3;
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 20px; padding: 0 8px;
+  background: rgba(17,24,39,.75);
+  color: #fff; backdrop-filter: blur(4px);
+  border-radius: $radius-pill;
+  font-size: .62rem; font-weight: 700;
+  svg { color: $amber; }
+}
+
+.product-card__img {
+  width: 84px; height: 84px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(16,24,40,.14));
+  transition: transform .35s $ease;
+}
+
+.product-card__overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(180deg, rgba(17,24,39,0) 30%, rgba(17,24,39,.45) 100%);
+  opacity: 0;
+  transition: opacity .2s $ease;
+}
+
+.overlay-btn {
+  width: 34px; height: 34px;
+  background: $surface; border: none;
+  border-radius: 50%;
   color: $text-mid;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  box-shadow: 0 4px 10px rgba(16,24,40,.18);
+  transition: background .15s, color .15s, transform .15s;
 
-  &:hover:not(:disabled) { background: $surface3; color: $text-primary; }
-  &:disabled { opacity: .4; cursor: not-allowed; }
+  &:hover { background: $accent; color: #fff; transform: scale(1.08); }
+  &--danger:hover { background: $red; }
 }
 
-.pag-num {
-  min-width: 32px; height: 32px; padding: 0 6px;
-  background: transparent; border: none;
+.product-card__body {
+  padding: 14px 16px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.product-card__cat {
+  font-size: .64rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: $text-light;
+}
+
+.product-card__name {
+  font-size: .9rem; font-weight: 700; color: $text-primary;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.product-card__brand { font-size: .74rem; color: $text-light; margin-bottom: 6px; }
+
+.product-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 8px; border-top: 1px solid $border;
+  margin-top: 4px;
+}
+
+.product-card__price { font-size: 1.05rem; font-weight: 800; color: $text-primary; letter-spacing: -.02em; }
+
+.product-card__actions {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
+}
+
+.product-card__sales { font-size: .72rem; color: $text-light; font-weight: 600; }
+
+.btn-mini {
+  height: 28px; padding: 0 10px;
+  background: $surface2; border: 1px solid $border;
   border-radius: $radius-sm;
-  font: inherit; font-size: .8rem; font-weight: 500;
+  font: inherit; font-size: .72rem; font-weight: 600;
   color: $text-mid; cursor: pointer;
   transition: background .15s, color .15s;
 
-  &:hover { background: $surface2; color: $text-primary; }
-  &--active { background: $accent; color: #fff; font-weight: 700; }
+  &:hover { background: $surface3; color: $text-primary; }
+}
+
+// ─── Pagination ───────────────────────────────────────────────────────────
+.pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; padding: 4px 0;
+  animation: pop-in .3s .1s $ease both;
+
+  @media (max-width: 600px) { justify-content: center; }
+}
+
+.pagination__label { font-size: .78rem; color: $text-light; @media (max-width: 600px) { display: none; } }
+.pagination__controls { display: flex; align-items: center; gap: 4px; }
+
+.page-btn {
+  min-width: 34px; height: 34px; padding: 0 8px;
+  background: $surface; border: 1px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .12s, color .12s, border-color .12s;
+
+  &:hover:not(:disabled):not(.page-btn--active) { background: $surface2; color: $text-primary; border-color: $border2; }
+  &--active { background: $accent; border-color: $accent; color: #fff; font-weight: 700; pointer-events: none; }
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+.page-ellipsis { width: 28px; text-align: center; font-size: .82rem; color: $text-light; }
+
+// ─── Responsive ───────────────────────────────────────────────────────────
+@media (max-width: 900px) {
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar__right { justify-content: space-between; }
+}
+
+@media (max-width: 600px) {
+  .page-header { align-items: flex-start; }
+  .bulk-bar { flex-wrap: wrap; }
+  .bulk-bar__clear { margin-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .products-page, .admin-toast, .confirm-dialog { animation: none; }
+  .products-page, .stat-card, .table-card, .table-row, .product-card, .empty-state,
+  .pagination, .action-menu, .admin-toast, .bulk-bar, .confirm-dialog { animation: none !important; transition: none !important; }
 }
+
+.toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
+.toolbar__left-scroll::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+.toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }

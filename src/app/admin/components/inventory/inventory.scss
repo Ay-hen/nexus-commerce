@@ -101,9 +101,9 @@ $z-modal: 1000;
   justify-content: space-between; 
   gap: 16px; 
   flex-wrap: wrap; 
-  background: $surface;
-  padding: 16px 20px;
-  border-radius: 8px;
+  background: $surface; border: 1px solid $border;
+  padding: 12px 16px;
+  border-radius: $radius-md;
 }
 .page-title-group { display: flex; align-items: center; gap: 12px; }
 

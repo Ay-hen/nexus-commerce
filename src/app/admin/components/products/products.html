@@ -1,5 +1,5 @@
 <!-- admin-products.component.html -->
-<div class="products-page" (click)="sortDropdownOpen.set(false); bulkActionOpen.set(false)">
+<div class="products-page" (click)="closeMenu()">
 
   <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
   @if (toastMsg()) {
@@ -19,28 +19,35 @@
           <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
         </svg>
       </div>
-      <h3 class="confirm-title">Delete product?</h3>
-      <p class="confirm-sub">This action cannot be undone. The product will be permanently removed.</p>
+      <h3 class="confirm-title">{{ bulkDeleteCount() !== null ? 'Delete ' + bulkDeleteCount() + ' products?' : 'Delete product?' }}</h3>
+      <p class="confirm-sub">This action cannot be undone. {{ bulkDeleteCount() !== null ? 'The selected products' : 'The product' }} will be permanently removed.</p>
       <div class="confirm-actions">
         <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
-        <button class="btn-danger" (click)="executeDelete()">Delete Product</button>
+        <button class="btn-danger" (click)="executeDelete()">Delete {{ bulkDeleteCount() !== null ? 'Products' : 'Product' }}</button>
       </div>
     </div>
   }
 
   <!-- ── PAGE HEADER ─────────────────────────────────────────────────────── -->
   <div class="page-header">
-    <div>
-      <h1 class="page-title">Products</h1>
-      <p class="page-sub">{{ filtered().length }} product{{ filtered().length === 1 ? '' : 's' }} total</p>
-    </div>
-    <div class="header-actions">
-      <button class="btn-ghost">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
         </svg>
-        Export
+      </div>
+      <div>
+        <h1 class="page-title">Products</h1>
+        <p class="page-sub">{{ filtered().length }} product{{ filtered().length === 1 ? '' : 's' }} total</p>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn-ghost" (click)="exportCsv()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Export CSV
       </button>
       <button class="btn-primary" (click)="addProduct()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -50,6 +57,68 @@
       </button>
     </div>
   </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Total Products</p>
+          <p class="stat-card__value">{{ totalProducts() | number }}</p>
+          <p class="stat-card__sub">{{ activeCount() }} active</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--amber">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Inventory Value</p>
+          <p class="stat-card__value">${{ inventoryValue() | number }}</p>
+          <p class="stat-card__sub">across all in-stock units</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--red">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Low Stock Alerts</p>
+          <p class="stat-card__value">{{ lowStockCount() | number }}</p>
+          <p class="stat-card__sub">{{ outOfStockCount() }} out of stock</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--purple">
+        <div class="stat-card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="stat-card__body">
+          <p class="stat-card__label">Featured Products</p>
+          <p class="stat-card__value">{{ featuredCount() | number }}</p>
+          <p class="stat-card__sub">shown on storefront</p>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- ── STATUS TABS ─────────────────────────────────────────────────────── -->
   <div class="status-tabs" role="tablist">
@@ -69,142 +138,156 @@
 
   <!-- ── TOOLBAR ─────────────────────────────────────────────────────────── -->
   <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left">
 
-    <!-- Search -->
-    <div class="search-wrap">
-      <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input
-        class="search-input"
-        type="search"
-        placeholder="Search name, brand, SKU…"
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value); currentPage.set(1)"
-        aria-label="Search products"
-      />
-    </div>
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          class="search-input"
+          type="search"
+          placeholder="Search name, brand, SKU…"
+          [value]="searchQuery()"
+          (input)="onSearch($any($event.target).value)"
+          aria-label="Search products"
+        />
+      </div>
 
-    <!-- Category filter -->
-    <div class="cat-pills">
-      @for (cat of categories; track cat) {
-        <button class="cat-pill" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">{{ cat }}</button>
+      <!-- Category filter -->
+      <div class="cat-pills">
+        @for (cat of categories; track cat) {
+          <button class="cat-pill" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">{{ cat }}</button>
+        }
+      </div>
+
+      @if (hasAnyActiveFilter()) {
+        <button class="clear-filters-btn" (click)="clearFilters()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          Clear
+        </button>
       }
     </div>
 
-    <!-- Bulk actions -->
-    @if (selectedCount() > 0) {
-      <div class="bulk-wrap" (click)="$event.stopPropagation()">
-        <button class="bulk-btn" (click)="bulkActionOpen.update(v => !v)">
-          {{ selectedCount() }} selected
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.open]="bulkActionOpen()">
-            <polyline points="6 9 12 15 18 9"/>
+    <div class="toolbar__right">
+      <!-- Sort -->
+      <div class="select-wrap">
+        <select class="toolbar-select" [value]="sortKey()" (change)="setSort($any($event.target).value)">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- View toggle -->
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/>
           </svg>
         </button>
-        @if (bulkActionOpen()) {
-          <ul class="bulk-dropdown">
-            <li class="bulk-option" (click)="bulkSetStatus('active')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              Set Active
-            </li>
-            <li class="bulk-option" (click)="bulkSetStatus('archived')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
-              </svg>
-              Archive
-            </li>
-            <li class="bulk-option bulk-option--danger" (click)="bulkDelete()">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-              </svg>
-              Delete Selected
-            </li>
-          </ul>
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BULK ACTION BAR ───────────────────────────────────────────────────── -->
+  @if (selectedCount() > 0) {
+    <div class="bulk-bar" (click)="$event.stopPropagation()">
+      <span class="bulk-bar__count">{{ selectedCount() }} selected</span>
+      <div class="bulk-bar__actions">
+        <button class="bulk-btn" (click)="bulkSetStatus('active')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"/></svg>
+          Set Active
+        </button>
+        <button class="bulk-btn" (click)="bulkSetStatus('archived')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+          Archive
+        </button>
+        <button class="bulk-btn bulk-btn--danger" (click)="bulkDelete()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete Selected
+        </button>
+      </div>
+      <button class="bulk-bar__clear" (click)="clearSelection()">Clear</button>
+    </div>
+  }
+
+  <!-- ── SKELETON ─────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) { <div class="sk-row shimmer" [style.animation-delay]="(i * 0.06) + 's'"></div> }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (paginated().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          </svg>
+        </div>
+        <h3 class="empty-state__title">No products found</h3>
+        <p class="empty-state__sub">Try adjusting your search or filters.</p>
+        @if (hasAnyActiveFilter()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        } @else {
+          <button class="btn-primary" (click)="addProduct()">Add your first product</button>
         }
       </div>
     }
 
-  </div>
-
-  <!-- ── SKELETON ─────────────────────────────────────────────────────────── -->
-  @if (isLoading()) {
-    <div class="table-card" aria-busy="true">
-      @for (i of [1,2,3,4,5,6,7,8]; track i) {
-        <div class="sk-row shimmer"></div>
-      }
-    </div>
-  }
-
-  <!-- ── PRODUCTS TABLE ───────────────────────────────────────────────────── -->
-  @if (!isLoading()) {
-    <div class="table-card">
-
-      @if (paginated().length === 0) {
-        <div class="empty-state">
-          <div class="empty-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-            </svg>
-          </div>
-          <p class="empty-title">No products found</p>
-          <p class="empty-sub">Try adjusting your search or filters.</p>
-          <button class="btn-primary" style="margin-top: 16px" (click)="addProduct()">Add your first product</button>
-        </div>
-      } @else {
-
-        <div class="table-scroll">
+    <!-- ══════════════════════════════ TABLE VIEW ══════════════════════════════ -->
+    @if (viewMode() === 'table' && paginated().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap" [class.table-wrap--scroll]="paginated().length > 9">
           <table class="data-table" aria-label="Products table">
             <thead>
               <tr>
-                <th class="th-check">
-                  <input type="checkbox" class="cb" [checked]="allPageSelected()" (change)="toggleSelectAll()" aria-label="Select all" />
+                <th class="th--check">
+                  <label class="checkbox-sm">
+                    <input type="checkbox" [checked]="allPageSelected()" [indeterminate]="somePageSelected()" (change)="toggleSelectAll()" aria-label="Select all" />
+                    <span class="checkbox-sm__box">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </label>
                 </th>
-                <th class="th-product">Product</th>
-                <th class="th-sortable" (click)="setSort('status')">
-                  Status
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.sort-active]="sortField() === 'status'">
-                    <polyline [attr.points]="sortDir() === 'asc' && sortField() === 'status' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
-                  </svg>
-                </th>
-                <th class="th-sortable" (click)="setSort('price')">
-                  Price
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.sort-active]="sortField() === 'price'">
-                    <polyline [attr.points]="sortDir() === 'asc' && sortField() === 'price' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
-                  </svg>
-                </th>
-                <th class="th-sortable" (click)="setSort('stock')">
-                  Stock
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.sort-active]="sortField() === 'stock'">
-                    <polyline [attr.points]="sortDir() === 'asc' && sortField() === 'stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
-                  </svg>
-                </th>
-                <th class="th-sortable" (click)="setSort('sales')">
-                  Sales
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.sort-active]="sortField() === 'sales'">
-                    <polyline [attr.points]="sortDir() === 'asc' && sortField() === 'sales' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
-                  </svg>
-                </th>
+                <th>Product</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Sales</th>
                 <th>SKU</th>
-                <th>Actions</th>
+                <th class="th--actions"></th>
               </tr>
             </thead>
             <tbody>
               @for (product of paginated(); track trackById($index, product)) {
-                <tr [class.tr-selected]="isSelected(product.id)" [class.tr-out-of-stock]="product.stock === 0">
+                <tr class="table-row" [class.table-row--selected]="isSelected(product.id)" [class.table-row--muted]="product.stock === 0" [style.animation-delay]="($index * 0.03) + 's'">
 
-                  <!-- Checkbox -->
-                  <td class="td-check">
-                    <input
-                      type="checkbox"
-                      class="cb"
-                      [checked]="isSelected(product.id)"
-                      (change)="toggleSelect(product.id)"
-                      [attr.aria-label]="'Select ' + product.name"
-                    />
+                  <td class="td--check">
+                    <label class="checkbox-sm">
+                      <input type="checkbox" [checked]="isSelected(product.id)" (change)="toggleSelect(product.id)" (click)="$event.stopPropagation()" [attr.aria-label]="'Select ' + product.name" />
+                      <span class="checkbox-sm__box">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                    </label>
                   </td>
 
                   <!-- Product info -->
-                  <td class="td-product">
+                  <td>
                     <div class="product-cell">
                       <div class="product-img-wrap">
                         <img [src]="product.image" [alt]="product.name" class="product-img" loading="lazy" />
@@ -241,71 +324,155 @@
                   <td class="td-sku">{{ product.sku }}</td>
 
                   <!-- Actions -->
-                  <td class="td-actions">
-                    <div class="action-group">
-                      <button class="action-btn" (click)="editProduct(product.id)" title="Edit product" aria-label="Edit">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(product, $event)" [attr.aria-expanded]="openMenuId() === product.id" aria-label="Product actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                         </svg>
                       </button>
-                      <button class="action-btn" (click)="duplicateProduct(product)" title="Duplicate" aria-label="Duplicate">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                        </svg>
-                      </button>
-                      <button class="action-btn" (click)="toggleStatus(product)" [title]="product.status === 'active' ? 'Archive' : 'Activate'" [attr.aria-label]="product.status === 'active' ? 'Archive' : 'Activate'">
-                        @if (product.status === 'active') {
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
-                          </svg>
-                        } @else {
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
-                        }
-                      </button>
-                      <button class="action-btn action-btn--danger" (click)="confirmDelete(product.id)" title="Delete product" aria-label="Delete">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <polyline points="3 6 5 6 21 6"/>
-                          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                          <path d="M10 11v6M14 11v6"/>
-                        </svg>
-                      </button>
+
+                      @if (openMenuId() === product.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="editProduct(product.id)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit Product
+                          </a>
+                          <a class="action-item" (click)="duplicateProduct(product, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            Duplicate
+                          </a>
+                          <a class="action-item" (click)="toggleStatus(product, $event)" role="menuitem">
+                            @if (product.status === 'active') {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                              </svg>
+                              Archive
+                            } @else {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                              </svg>
+                              Activate
+                            }
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="confirmDelete(product.id, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
                     </div>
                   </td>
-
                 </tr>
               }
             </tbody>
           </table>
         </div>
+      </div>
+    }
 
-        <!-- Pagination -->
-        @if (totalPages() > 1) {
-          <div class="pagination">
-            <span class="pag-info">
-              Showing
-                {{ (currentPage() - 1) * pageSize + 1 }}–
-                {{ Math.min(currentPage() * pageSize, filtered().length) }}
-                of {{ filtered().length }}
-            </span>
-            <div class="pag-controls">
-              <button class="pag-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" aria-label="Previous page">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              @for (p of pageNumbers(); track p) {
-                <button class="pag-num" [class.pag-num--active]="currentPage() === p" (click)="goToPage(p)">{{ p }}</button>
+    <!-- ══════════════════════════════ GRID VIEW ══════════════════════════════ -->
+    @if (viewMode() === 'grid' && paginated().length > 0) {
+      <div class="product-grid" [class.product-grid--scroll]="paginated().length > 9">
+        @for (product of paginated(); track trackById($index, product)) {
+          <div class="product-card" [class.product-card--selected]="isSelected(product.id)" [class.product-card--muted]="product.stock === 0" [style.animation-delay]="($index * 0.04) + 's'">
+
+            <div class="product-card__media">
+              <label class="checkbox-sm product-card__check" (click)="$event.stopPropagation()">
+                <input type="checkbox" [checked]="isSelected(product.id)" (change)="toggleSelect(product.id)" />
+                <span class="checkbox-sm__box">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </label>
+
+              <span class="status-pill status-pill--{{ product.status }} product-card__status">{{ product.status }}</span>
+              @if (product.featured) {
+                <span class="featured-badge" title="Featured">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  Featured
+                </span>
               }
-              <button class="pag-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" aria-label="Next page">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
+
+              <img [src]="product.image" [alt]="product.name" class="product-card__img" loading="lazy" />
+
+              <div class="product-card__overlay">
+                <button class="overlay-btn" (click)="editProduct(product.id)" title="Edit" aria-label="Edit">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button class="overlay-btn" (click)="duplicateProduct(product, $event)" title="Duplicate" aria-label="Duplicate">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                </button>
+                <button class="overlay-btn overlay-btn--danger" (click)="confirmDelete(product.id, $event)" title="Delete" aria-label="Delete">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="product-card__body">
+              <p class="product-card__cat">{{ product.category }}</p>
+              <p class="product-card__name">{{ product.name }}</p>
+              <p class="product-card__brand">{{ product.brand }} · {{ product.sku }}</p>
+
+              <div class="product-card__footer">
+                <span class="product-card__price">${{ product.price | number }}</span>
+                <span class="stock-badge stock-badge--{{ stockColor(product.stock) }}">
+                  @if (product.stock === 0) { Out of stock } @else { {{ product.stock }} units }
+                </span>
+              </div>
+
+              <div class="product-card__actions">
+                <button class="btn-mini" (click)="toggleStatus(product, $event)">
+                  {{ product.status === 'active' ? 'Archive' : 'Activate' }}
+                </button>
+                <span class="product-card__sales">{{ product.sales | number }} sold</span>
+              </div>
             </div>
           </div>
         }
+      </div>
+    }
 
-      }
-    </div>
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (sorted().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
   }
 
 </div>
