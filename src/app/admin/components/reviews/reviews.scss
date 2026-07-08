@@ -219,6 +219,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   flex-shrink: 0;
   margin-left: auto;
 }
+
+
 // Search
 .search-wrap { position: relative; flex: 0 0 220px; display: flex; align-items: center; }
 .search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
@@ -699,10 +701,6 @@ body {
   overflow-wrap: anywhere;
 }
 
-// Remove the nowrap here — with table-layout: fixed the column has a set width,
-// so nowrap just pushes the table wider. Let it wrap instead.
-.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; } // drop white-space: nowrap
+.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; } 
 
-// Simplify — the global td/th rule at the bottom of the file already wraps
-// and breaks words, so the ellipsis approach conflicts with it and isn't needed.
 .td-email { color: $text-mid; } 
