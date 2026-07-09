@@ -1,5 +1,12 @@
-// admin-products.component.scss
-// ─── Admin Design Tokens (shared with Reviews) ─────────────────────────────
+// products.scss  (aka admin-products.component.scss)
+// Changes from your original:
+//   - `.action-menu` is now `position: fixed` (was `absolute`, which got
+//     clipped by `.table-wrap`'s `overflow-x/y`). Top/left now come from
+//     inline styles set in the TS file (toggleMenu()), not CSS `top: calc(...)`.
+//   - Removed the `.table-row:nth-last-child(-n+2) .action-menu` flip hack;
+//     replaced with a proper `.action-menu--up` class toggled from TS based
+//     on real available viewport space.
+
 $surface:       #FFFFFF;
 $surface2:      #F5F7FA;
 $surface3:      #F1F4F8;
@@ -313,18 +320,15 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     }
 }
 
-
-
-
 // Search
 .search-wrap {
     flex: 1 1 240px;
     min-width: 180px;
     max-width: 320px;
+    position: relative;
 }
 
-.search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
-
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: $text-light; pointer-events: none; }
 
 .search-input {
   width: 100%; height: 38px;
@@ -621,7 +625,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--red   { background: $red-bg;   color: $red;   }
 }
 
-// ─── Action menu ──────────────────────────────────────────────────────────
+// ─── Action menu trigger ────────────────────────────────────────────────
 .action-menu-wrap { position: relative; display: inline-flex; justify-content: flex-end; }
 
 .action-trigger {
@@ -636,13 +640,25 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover, &[aria-expanded="true"] { background: $surface2; border-color: $border; color: $text-primary; }
 }
 
+// ─── Action menu (dropdown) ─────────────────────────────────────────────
+// Rendered once, outside the scrollable table markup, and positioned with
+// `position: fixed` using top/left computed in TS from the trigger button's
+// real bounding rect. This is what fixes the clipping/cut-off bug — fixed
+// positioning escapes `.table-wrap`'s overflow clipping entirely, and the
+// TS math keeps it inside the viewport on all four sides.
 .action-menu {
-  position: absolute; top: calc(100% + 6px); right: 0; z-index: 20;
+  position: fixed;
+  z-index: 2000;
   background: $surface; border: 1px solid $border;
   border-radius: $radius-md; box-shadow: $shadow-menu;
   width: 180px; overflow: hidden;
   transform-origin: top right;
-  animation: menu-in .2s $ease-menu both;
+  animation: menu-in .16s $ease-menu both;
+
+  &--up {
+    transform-origin: bottom right;
+    animation-name: menu-in-up;
+  }
 }
 
 .action-item {
@@ -658,12 +674,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 }
 
 .action-divider { height: 1px; background: $border; margin: 3px 0; }
-
-.table-row:nth-last-child(-n+2) .action-menu {
-  top: auto; bottom: calc(100% + 6px);
-  transform-origin: bottom right;
-  animation-name: menu-in-up;
-}
 
 // ─── Empty state ──────────────────────────────────────────────────────────
 .empty-state {

@@ -1,4 +1,13 @@
-// admin-products.component.ts
+// products.component.ts  (aka admin-products.component.ts)
+// Changes from your original:
+//   1. `editProduct()` now opens <app-edit-product-modal> instead of router.navigate.
+//   2. `toggleMenu()` computes a viewport-aware FIXED position from the button's
+//      real coordinates instead of relying on CSS `position: absolute` + the
+//      `:nth-last-child(-n+2)` flip hack — that's what was causing the "more"
+//      popup to get clipped by the scrollable table container / cut off at
+//      the edge of the screen.
+//   3. Menu closes on scroll/resize so it never goes stale.
+
 import {
   Component, signal, computed, OnInit, inject, HostListener
 } from '@angular/core';
@@ -6,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminProduct } from '../../model/admin-models.model';
+import { EditProductModal } from '../../model/edit-product-modal/edit-product-modal';
 
 type ProductStatus = 'active' | 'draft' | 'archived';
 type SortKey =
@@ -16,10 +26,12 @@ type SortKey =
   | 'statusAsc';
 type ViewMode = 'table' | 'grid';
 
+interface MenuPosition { top: number; left: number; openUp: boolean; }
+
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, EditProductModal],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
@@ -51,7 +63,13 @@ export class Products implements OnInit {
   showDeleteConfirm = signal(false);
   deleteTargetId = signal<number | null>(null);
   bulkDeleteCount = signal<number | null>(null);
+
   openMenuId = signal<number | null>(null);
+  menuPosition = signal<MenuPosition | null>(null);
+  menuProduct = computed(() => this._products().find(p => p.id === this.openMenuId()) ?? null);
+
+  // Edit modal — holds the full product being edited (null = closed)
+  editingProduct = signal<AdminProduct | null>(null);
 
   categories = ['All', 'Electronics', 'Smartphones', 'Laptops', 'Audio', 'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion'];
 
@@ -231,15 +249,63 @@ export class Products implements OnInit {
   onSearch(value: string): void { this.searchQuery.set(value); this.currentPage.set(1); }
 
   // ── Row menu ─────────────────────────────────────────────────────────────
+  // Computes a fixed, viewport-clamped position from the trigger button so the
+  // menu is never clipped by the table's scroll container and never runs off
+  // the bottom/right edge of the screen.
   toggleMenu(product: AdminProduct, event: Event): void {
     event.stopPropagation();
-    this.openMenuId.update(id => id === product.id ? null : product.id);
+
+    if (this.openMenuId() === product.id) {
+      this.closeMenu();
+      return;
+    }
+
+    const btn = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const MENU_WIDTH = 180;
+    const MENU_HEIGHT = 176; // approx height for 4 items + divider
+    const GAP = 6;
+
+    const spaceBelow = window.innerHeight - btn.bottom;
+    const openUp = spaceBelow < MENU_HEIGHT + GAP && btn.top > MENU_HEIGHT + GAP;
+
+    const left = Math.min(
+      Math.max(8, btn.right - MENU_WIDTH),
+      window.innerWidth - MENU_WIDTH - 8
+    );
+    const top = openUp ? (btn.top - GAP) : (btn.bottom + GAP);
+
+    this.menuPosition.set({ top, left, openUp });
+    this.openMenuId.set(product.id);
   }
-  closeMenu(): void { this.openMenuId.set(null); }
+
+  closeMenu(): void {
+    this.openMenuId.set(null);
+    this.menuPosition.set(null);
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void { this.closeMenu(); }
 
   // ── CRUD ──────────────────────────────────────────────────────────────────
-  editProduct(id: number): void { this.closeMenu(); this.router.navigate(['/admin/product', id, 'edit']); }
-  addProduct():            void { this.router.navigate(['/admin/products/new']); }
+  addProduct(): void { this.router.navigate(['/admin/products/new']); }
+
+  /** Opens the Edit Product modal for this product instead of navigating away. */
+  editProduct(id: number): void {
+    this.closeMenu();
+    const product = this._products().find(p => p.id === id) ?? null;
+    this.editingProduct.set(product);
+  }
+
+  closeEditModal(): void {
+    this.editingProduct.set(null);
+  }
+
+  onProductSaved(updated: AdminProduct): void {
+    this._products.update(list => list.map(p => p.id === updated.id ? { ...p, ...updated } : p));
+    this.editingProduct.set(null);
+    this.showToast(`"${updated.name}" updated`);
+    // Spring Boot: PUT /api/admin/products/{id}
+  }
 
   duplicateProduct(product: AdminProduct, event?: Event): void {
     event?.stopPropagation();
@@ -377,6 +443,8 @@ export class Products implements OnInit {
   onEscape(): void {
     this.closeMenu();
     this.cancelDelete();
+    // Note: the edit modal has its own Escape handler and will close itself
+    // first (it stops at the lightbox, then the dialog) — no extra call needed here.
   }
 
   ngOnInit(): void {

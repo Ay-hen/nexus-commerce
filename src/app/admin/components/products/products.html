@@ -1,5 +1,14 @@
-<!-- admin-products.component.html -->
+<!-- products.html  (aka admin-products.component.html) -->
 <div class="products-page" (click)="closeMenu()">
+
+  <!-- ── EDIT PRODUCT MODAL ───────────────────────────────────────────────── -->
+  @if (editingProduct()) {
+    <app-edit-product-modal
+      [product]="editingProduct()!"
+      (closed)="closeEditModal()"
+      (saved)="onProductSaved($event)">
+    </app-edit-product-modal>
+  }
 
   <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
   @if (toastMsg()) {
@@ -252,7 +261,7 @@
     <!-- ══════════════════════════════ TABLE VIEW ══════════════════════════════ -->
     @if (viewMode() === 'table' && paginated().length > 0) {
       <div class="table-card">
-        <div class="table-wrap" [class.table-wrap--scroll]="paginated().length > 9">
+        <div class="table-wrap" [class.table-wrap--scroll]="paginated().length > 9" (scroll)="closeMenu()">
           <table class="data-table" aria-label="Products table">
             <thead>
               <tr>
@@ -331,44 +340,6 @@
                           <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                         </svg>
                       </button>
-
-                      @if (openMenuId() === product.id) {
-                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
-                          <a class="action-item" (click)="editProduct(product.id)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                            </svg>
-                            Edit Product
-                          </a>
-                          <a class="action-item" (click)="duplicateProduct(product, $event)" role="menuitem">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                            Duplicate
-                          </a>
-                          <a class="action-item" (click)="toggleStatus(product, $event)" role="menuitem">
-                            @if (product.status === 'active') {
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
-                              </svg>
-                              Archive
-                            } @else {
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"/>
-                              </svg>
-                              Activate
-                            }
-                          </a>
-                          <div class="action-divider"></div>
-                          <button class="action-item action-item--danger" role="menuitem" (click)="confirmDelete(product.id, $event)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            </svg>
-                            Delete
-                          </button>
-                        </div>
-                      }
                     </div>
                   </td>
                 </tr>
@@ -377,6 +348,54 @@
           </table>
         </div>
       </div>
+    }
+
+    <!-- ── ACTION MENU (rendered once, fixed-positioned via TS-computed coords) ─────
+         Lives outside the table so it can never be clipped by table-wrap's
+         overflow, and always lands correctly regardless of scroll position. -->
+    @if (openMenuId() !== null && menuPosition()) {
+      @if (menuProduct(); as activeProduct) {
+        <div class="action-menu"
+          [class.action-menu--up]="menuPosition()!.openUp"
+          [style.top.px]="menuPosition()!.top"
+          [style.left.px]="menuPosition()!.left"
+          role="menu"
+          (click)="$event.stopPropagation()">
+          <a class="action-item" (click)="editProduct(activeProduct.id)" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit Product
+          </a>
+          <a class="action-item" (click)="duplicateProduct(activeProduct, $event)" role="menuitem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Duplicate
+          </a>
+          <a class="action-item" (click)="toggleStatus(activeProduct, $event)" role="menuitem">
+            @if (activeProduct.status === 'active') {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+              </svg>
+              Archive
+            } @else {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Activate
+            }
+          </a>
+          <div class="action-divider"></div>
+          <button class="action-item action-item--danger" role="menuitem" (click)="confirmDelete(activeProduct.id, $event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            </svg>
+            Delete
+          </button>
+        </div>
+      }
     }
 
     <!-- ══════════════════════════════ GRID VIEW ══════════════════════════════ -->
