@@ -92,11 +92,13 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
 // ─── Page header ──────────────────────────────────────────────────────────────
 .page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  background: $surface;
+  padding: 16px 20px;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
 }
 
 .page-title-group {
