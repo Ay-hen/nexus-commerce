@@ -57,7 +57,7 @@ export class Categories {
   viewMode = signal<'table' | 'grid'>('table');
 
   // ── Pagination ────────────────────────────────────────────────────────────
-  pageSize    = signal(6);
+  pageSize    = signal(8);
   currentPage = signal(1);
 
   // ── Row menu ───────────────────────────────────────────────────────────────
