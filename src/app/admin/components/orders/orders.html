@@ -425,12 +425,7 @@
 
       <!-- Search + search-by -->
       <div class="search-group">
-        <div class="select-wrap">
-          <select class="toolbar-select toolbar-select--tight" [ngModel]="searchBy()" (ngModelChange)="setSearchBy($any($event))">
-            @for (opt of searchByOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
-          </select>
-          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        
         <div class="search-wrap">
           <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           <input class="search-input" type="search" placeholder="Search orders…" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
@@ -472,7 +467,6 @@
     </div>
 
     <div class="toolbar__right">
-      <span class="results-label">{{ pageRangeLabel() }}</span>
 
       <!-- Sort -->
       <div class="select-wrap">
@@ -530,14 +524,11 @@
             <thead>
               <tr>
                 <th>Customer</th>
-                <th>Items</th>
                 <th>Order Date</th>
-                <th>Payment Method</th>
                 <th>Payment Status</th>
                 <th>Shipping Status</th>
                 <th>Total</th>
                 <th>Status</th>
-                <th>Employee</th>
                 <th class="th--actions"></th>
               </tr>
             </thead>
@@ -553,14 +544,12 @@
                       </div>
                     </div>
                   </td>
-                  <td class="text-mid">{{ availableItemCount(o) }}</td>
                   <td class="td-light">{{ formatDate(o.orderDate) }}</td>
-                  <td class="text-mid">{{ o.paymentMethod }}</td>
                   <td><span class="payment-pill payment-pill--{{ o.paymentStatus }}">{{ paymentStatusLabel(o.paymentStatus) }}</span></td>
                   <td><span class="ship-pill ship-pill--{{ o.shippingStatus }}">{{ shippingStatusLabel(o.shippingStatus) }}</span></td>
                   <td class="font-bold">{{ formatCurrency(o.total) }}</td>
                   <td><span class="status-pill status-pill--{{ o.status }}"><span class="status-dot"></span>{{ statusLabel(o.status) }}</span></td>
-                  <td class="text-mid">{{ o.assignedEmployee }}</td>
+                  
 
                   <td class="td--actions">
                     <div class="action-menu-wrap">
