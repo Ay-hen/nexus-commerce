@@ -1,0 +1,181 @@
+// delete-admin-modal.scss
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.08);
+
+$navy-grad:     linear-gradient(135deg, #1E2338, #0A0E1A);
+$blue:          #3B82F6;
+$blue-bg:       rgba(59,130,246,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.08);
+
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-pill:   999px;
+
+$shadow-modal:  0 24px 56px rgba(16,24,40,.18);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+* { box-sizing: border-box; }
+
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in    { from { opacity: 0; transform: scale(.94) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(17,24,39,.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: backdrop-in .2s $ease;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.modal {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 28px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: $shadow-modal;
+  text-align: center;
+  animation: modal-in .25s $ease-spring;
+}
+
+.modal__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: $red-bg;
+  color: $red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.modal__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0 0 16px;
+}
+
+.admin-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.admin-preview__avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $navy-grad;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-preview__info { min-width: 0; }
+.admin-preview__name { font-size: .88rem; font-weight: 700; color: $text-primary; margin: 0 0 4px; }
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: $radius-pill;
+  font-size: .64rem;
+  font-weight: 700;
+
+  &--super   { background: $navy-grad; color: #fff; }
+  &--admin   { background: $blue-bg;   color: $blue; }
+  &--manager { background: $purple-bg; color: $purple; }
+  &--support { background: $green-bg;  color: $green; }
+}
+
+.modal__body {
+  font-size: .85rem;
+  color: $text-mid;
+  line-height: 1.65;
+  margin: 0 0 22px;
+
+  strong { color: $text-primary; }
+}
+
+.modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-ghost {
+  height: 38px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $surface;
+  border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 500;
+  color: $text-mid;
+  cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s;
+
+  &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
+}
+
+.btn-danger {
+  height: 38px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $red;
+  border: none;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop, .modal { animation: none !important; }
+}
