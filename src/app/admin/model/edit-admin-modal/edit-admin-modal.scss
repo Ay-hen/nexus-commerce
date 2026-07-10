@@ -1,0 +1,262 @@
+// edit-admin-modal.scss
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$accent:        #4F46E5;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
+
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.08);
+$red:           #EF4444;
+$red-bg:        rgba(239,68,68,.08);
+
+$navy-grad:     linear-gradient(135deg, #1E2338, #0A0E1A);
+
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-pill:   999px;
+
+$shadow-modal:  0 24px 56px rgba(16,24,40,.18);
+
+$ease:          cubic-bezier(.25,.1,.25,1);
+$ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+* { box-sizing: border-box; }
+
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in    { from { opacity: 0; transform: scale(.94) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes spin        { to { transform: rotate(360deg); } }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(17,24,39,.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: backdrop-in .2s $ease;
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow-y: auto;
+}
+
+.modal {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 28px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: $shadow-modal;
+  animation: modal-in .25s $ease-spring;
+  position: relative;
+
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $border2; border-radius: $radius-pill; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 32px; height: 32px;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  &:hover { background: $red-bg; color: $red; }
+}
+
+.modal__icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: $accent-bg; color: $accent;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+
+.modal__title { font-size: 1.1rem; font-weight: 800; color: $text-primary; margin: 0 0 4px; letter-spacing: -.01em; }
+.modal-sub { font-size: .82rem; color: $text-light; margin-bottom: 22px; }
+
+// ── Form ──────────────────────────────────────────────────────────────────
+.form { display: flex; flex-direction: column; gap: 18px; }
+
+.avatar-row {
+  display: flex; align-items: center; gap: 14px;
+  background: $surface2; border: 1px solid $border; border-radius: $radius-md;
+  padding: 12px 14px;
+}
+
+.avatar-preview {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: $navy-grad;
+  color: #fff;
+  font-size: .84rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.avatar-hint__title { font-size: .82rem; font-weight: 700; color: $text-primary; margin: 0 0 2px; }
+.avatar-hint__sub { font-size: .72rem; color: $text-light; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; @media (max-width: 480px) { grid-template-columns: 1fr; } }
+
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: .75rem; font-weight: 600; color: $text-mid; }
+
+.form-input {
+  width: 100%; height: 42px; padding: 0 12px;
+  background: $surface2; border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .85rem; color: $text-primary;
+  transition: border-color .15s $ease, box-shadow .15s, background .15s;
+
+  &::placeholder { color: $text-light; }
+  &:focus { outline: none; background: $surface; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+  &--error { border-color: $red; }
+  &--error:focus { box-shadow: 0 0 0 3px rgba($red, .18); }
+}
+
+.form-error { font-size: .74rem; color: $red; margin-top: -8px; }
+
+// Role pills
+.role-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.role-pill {
+  height: 34px; padding: 0 14px;
+  background: $surface2; border: 1.5px solid $border;
+  border-radius: $radius-pill;
+  font: inherit; font-size: .78rem; font-weight: 600;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+
+  &:hover:not(.role-pill--active) { background: $surface3; }
+  &--active { background: $accent-bg; border-color: rgba($accent, .3); color: $accent; }
+}
+
+// Permission grid
+.permission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  @media (max-width: 480px) { grid-template-columns: 1fr; }
+}
+
+.permission-toggle {
+  display: flex; align-items: center; gap: 9px;
+  height: 38px; padding: 0 12px;
+  background: $surface2; border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .78rem; font-weight: 500;
+  color: $text-mid; cursor: pointer; text-align: left;
+  transition: background .15s, border-color .15s, color .15s;
+
+  &:hover { background: $surface3; }
+  &--active { background: $accent-bg; border-color: rgba($accent, .3); color: $accent; font-weight: 600; }
+}
+
+.permission-toggle__check {
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid $border2;
+  background: $surface;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+
+  .permission-toggle--active & { background: $accent; border-color: $accent; }
+}
+
+// Switch row (2FA)
+.switch-row {
+  display: flex; align-items: center; gap: 12px;
+  background: $surface2; border: 1px solid $border; border-radius: $radius-md;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.switch { position: relative; flex-shrink: 0; display: inline-flex;
+  input { position: absolute; opacity: 0; width: 0; height: 0; }
+}
+.switch__track { width: 40px; height: 22px; border-radius: $radius-pill; background: $border2; position: relative; transition: background .2s $ease; }
+.switch__thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,24,40,.25); transition: transform .2s $ease-spring; }
+.switch input:checked ~ .switch__track { background: $green; }
+.switch input:checked ~ .switch__track .switch__thumb { transform: translateX(18px); }
+
+.switch-row__title { display: block; font-size: .82rem; font-weight: 700; color: $text-primary; }
+.switch-row__sub { display: block; font-size: .72rem; color: $text-light; margin-top: 2px; }
+
+// ── Actions ───────────────────────────────────────────────────────────────
+.modal__actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+.btn-ghost {
+  height: 40px; padding: 0 18px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $surface; border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s, opacity .15s;
+
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+.btn-primary {
+  height: 40px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover:not(:disabled) { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  &:disabled { opacity: .65; cursor: not-allowed; }
+}
+
+.btn-spinner {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop, .modal, .btn-spinner { animation: none !important; }
+}
+
+@media (max-width: 600px) {
+  .modal { max-height: 100vh; border-radius: 0; padding: 20px; }
+}
+
+// ── Read-only note ────────────────────────────────────────────────────────
+.readonly-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: $surface3;
+  border: 1px dashed $border2;
+  border-radius: $radius-md;
+  padding: 10px 12px;
+  font-size: .74rem;
+  color: $text-light;
+}

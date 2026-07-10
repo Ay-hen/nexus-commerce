@@ -1,1 +1,100 @@
-<p>edit-admin-modal works!</p>
+<div class="modal-backdrop" (click)="cancel()" role="dialog" aria-modal="true" aria-labelledby="edit-admin-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <button class="modal-close" (click)="cancel()" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="modal__icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+    </div>
+    <h2 class="modal__title" id="edit-admin-title">Edit Admin</h2>
+    <p class="modal-sub">Update account details, role and permissions.</p>
+
+    <div class="form">
+
+      <div class="avatar-row">
+        <div class="avatar-preview">{{ avatarInitials() }}</div>
+        <div class="avatar-hint">
+          <p class="avatar-hint__title">{{ admin.fullName }}</p>
+          <p class="avatar-hint__sub">Created {{ formatDate(admin.createdAt) }} &middot; {{ admin.loginCount | number }} logins (read-only)</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" [class.form-input--error]="touched() && !firstName().trim()" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" [class.form-input--error]="touched() && !lastName().trim()" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" [class.form-input--error]="touched() && !email().trim()" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="text" [ngModel]="phone()" (ngModelChange)="phone.set($event)" [class.form-input--error]="touched() && !phone().trim()" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Role</label>
+        <div class="role-pills">
+          @for (r of roles; track r) {
+            <button type="button" class="role-pill" [class.role-pill--active]="role() === r" (click)="setRole(r)">{{ r }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Permissions</label>
+        <div class="permission-grid">
+          @for (p of allPermissions; track p) {
+            <button type="button" class="permission-toggle" [class.permission-toggle--active]="isPermissionSelected(p)" (click)="togglePermission(p)">
+              <span class="permission-toggle__check">
+                @if (isPermissionSelected(p)) {
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                }
+              </span>
+              {{ p }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <label class="switch-row">
+        <span class="switch">
+          <input type="checkbox" [checked]="twoFactorEnabled()" (change)="twoFactorEnabled.set($any($event.target).checked)" />
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+        </span>
+        <span class="switch-row__text">
+          <span class="switch-row__title">Two-Factor Authentication</span>
+          <span class="switch-row__sub">{{ twoFactorEnabled() ? 'Enabled for this account' : 'Disabled for this account' }}</span>
+        </span>
+      </label>
+
+      <div class="readonly-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Login history and activity timeline cannot be edited.
+      </div>
+
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn-ghost" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn-primary" type="button" (click)="save()" [disabled]="saving()">
+        @if (saving()) { <span class="btn-spinner"></span> Saving… } @else { Save Changes }
+      </button>
+    </div>
+
+  </div>
+</div>
