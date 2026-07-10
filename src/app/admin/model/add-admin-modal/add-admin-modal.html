@@ -1,1 +1,110 @@
-<p>add-admin-modal works!</p>
+<div class="modal-backdrop" (click)="cancel()" role="dialog" aria-modal="true" aria-labelledby="add-admin-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <button class="modal-close" (click)="cancel()" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="modal__icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/>
+        <line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
+      </svg>
+    </div>
+    <h2 class="modal__title" id="add-admin-title">Add Admin</h2>
+    <p class="modal-sub">Create a new administrator account with role-based access.</p>
+
+    <div class="form">
+
+      <!-- Avatar preview -->
+      <div class="avatar-row">
+        <div class="avatar-preview">{{ avatarInitials() }}</div>
+        <div class="avatar-hint">
+          <p class="avatar-hint__title">Profile Avatar</p>
+          <p class="avatar-hint__sub">Generated automatically from the admin's initials.</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" placeholder="Ayoub" [class.form-input--error]="touched() && !firstName().trim()" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" placeholder="Hennani" [class.form-input--error]="touched() && !lastName().trim()" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" placeholder="admin@nexus-admin.com" [class.form-input--error]="touched() && !email().trim()" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="text" [ngModel]="phone()" (ngModelChange)="phone.set($event)" placeholder="+212 6 00 00 00 00" [class.form-input--error]="touched() && !phone().trim()" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Role</label>
+        <div class="role-pills">
+          @for (r of roles; track r) {
+            <button type="button" class="role-pill" [class.role-pill--active]="role() === r" (click)="setRole(r)">{{ r }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" [ngModel]="password()" (ngModelChange)="password.set($event)" placeholder="Minimum 8 characters" [class.form-input--error]="touched() && password().length < 8" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-input" type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" placeholder="Re-enter password" [class.form-input--error]="touched() && !passwordsMatch()" />
+        </div>
+      </div>
+      @if (touched() && !passwordsMatch()) {
+        <p class="form-error">Passwords do not match.</p>
+      }
+
+      <div class="form-field">
+        <label class="form-label">Permissions</label>
+        <div class="permission-grid">
+          @for (p of allPermissions; track p) {
+            <button type="button" class="permission-toggle" [class.permission-toggle--active]="isPermissionSelected(p)" (click)="togglePermission(p)">
+              <span class="permission-toggle__check">
+                @if (isPermissionSelected(p)) {
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                }
+              </span>
+              {{ p }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <label class="switch-row">
+        <span class="switch">
+          <input type="checkbox" [checked]="twoFactorEnabled()" (change)="twoFactorEnabled.set($any($event.target).checked)" />
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+        </span>
+        <span class="switch-row__text">
+          <span class="switch-row__title">Enable Two-Factor Authentication</span>
+          <span class="switch-row__sub">Require a verification code on every sign-in.</span>
+        </span>
+      </label>
+
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn-ghost" type="button" (click)="cancel()" [disabled]="submitting()">Cancel</button>
+      <button class="btn-primary" type="button" (click)="submit()" [disabled]="submitting()">
+        @if (submitting()) { <span class="btn-spinner"></span> Creating… } @else { Create Admin }
+      </button>
+    </div>
+
+  </div>
+</div>
