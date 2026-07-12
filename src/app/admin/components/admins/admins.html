@@ -1,1 +1,493 @@
-<p>admins works!</p>
+<div class="admins-page" (click)="closeMenu()">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── VIEW ADMIN MODAL ──────────────────────────────────────────────────── -->
+  @if (viewingAdmin()) {
+    <app-view-admin-modal
+      [admin]="viewingAdmin()!"
+      (closed)="closeView()"
+      (editRequested)="onEditFromView($event)"
+    />
+  }
+
+  <!-- ── ADD ADMIN MODAL ───────────────────────────────────────────────────── -->
+  @if (addingAdmin()) {
+    <app-add-admin-modal
+      (cancelled)="closeAdd()"
+      (created)="onAdminCreated($event)"
+    />
+  }
+
+  <!-- ── EDIT ADMIN MODAL ──────────────────────────────────────────────────── -->
+  @if (editingAdmin()) {
+    <app-edit-admin-modal
+      [admin]="editingAdmin()!"
+      (cancelled)="closeEdit()"
+      (saved)="onAdminSaved($event)"
+    />
+  }
+
+  <!-- ── DELETE ADMIN MODAL ────────────────────────────────────────────────── -->
+  @if (pendingDelete()) {
+    <app-delete-admin-modal
+      [admin]="pendingDelete()!"
+      (cancelled)="cancelDelete()"
+      (confirmed)="confirmDelete()"
+    />
+  }
+
+  <!-- ── RESET PASSWORD CONFIRM ────────────────────────────────────────────── -->
+  @if (pendingReset(); as ra) {
+    <div class="modal-backdrop" (click)="cancelReset()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--accent">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h2 class="modal__title">Reset Password</h2>
+        <p class="modal__body">
+          Send a password reset link to <strong>{{ ra.fullName }}</strong> at {{ ra.email }}?
+          They will be required to set a new password on next sign-in.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelReset()">Cancel</button>
+          <button class="btn-primary" (click)="confirmReset()">Send Reset Link</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── DISABLE ACCOUNT CONFIRM ───────────────────────────────────────────── -->
+  @if (pendingDisable(); as da) {
+    <div class="modal-backdrop" (click)="cancelDisable()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/>
+          </svg>
+        </div>
+        <h2 class="modal__title">Disable Account</h2>
+        <p class="modal__body">
+          <strong>{{ da.fullName }}</strong> will lose access to the admin dashboard immediately.
+          You can re-enable their account at any time.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelDisable()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDisable()">Disable Account</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Admin Users</h1>
+        <p class="page-sub">Manage administrator accounts, permissions and activity.</p>
+      </div>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="export-wrap" (click)="$event.stopPropagation()">
+        <button class="btn-ghost" (click)="exportMenuOpen = !exportMenuOpen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+        @if (exportMenuOpen) {
+          <div class="export-menu">
+            <button class="export-menu__item" (click)="exportCsv(); exportMenuOpen = false">Export as CSV</button>
+            <button class="export-menu__item" (click)="exportPdf(); exportMenuOpen = false">Export as PDF</button>
+          </div>
+        }
+      </div>
+      <button class="btn-primary" (click)="openAdd()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Admin
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Total Admins</p>
+          <p class="stat-value">{{ totalAdmins() }}</p>
+          <p class="stat-sub">registered accounts</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--navy">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Super Admins</p>
+          <p class="stat-value">{{ superAdminCount() }}</p>
+          <p class="stat-sub">full access accounts</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--green">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Currently Online</p>
+          <p class="stat-value">{{ onlineCount() }}</p>
+          <p class="stat-sub">active right now</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--amber">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">2FA Enabled</p>
+          <p class="stat-value">{{ twoFaEnabledCount() }}</p>
+          <p class="stat-sub">secured accounts</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left">
+
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="search-input" type="search" placeholder="Search by name, email, phone, role…" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
+        @if (searchQuery()) {
+          <button class="search-clear" (click)="onSearch('')" aria-label="Clear search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        }
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="roleFilter()" (ngModelChange)="setRoleFilter($any($event))">
+          @for (opt of roleOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="statusFilter()" (ngModelChange)="setStatusFilter($any($event))">
+          @for (opt of statusOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="twoFaFilter()" (ngModelChange)="setTwoFaFilter($any($event))">
+          @for (opt of twoFaOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+    </div>
+
+    <div class="toolbar__right">
+      <span class="results-label">{{ pageRangeLabel() }}</span>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select toolbar-select--narrow" [ngModel]="pageSize()" (ngModelChange)="setPageSize($any($event))">
+          @for (n of rowsPerPageOptions; track n) { <option [value]="n">{{ n }} rows</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+        </button>
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BULK TOOLBAR ──────────────────────────────────────────────────────── -->
+  @if (selectedCount() > 0) {
+    <div class="bulk-toolbar" (click)="$event.stopPropagation()">
+      <span class="bulk-toolbar__count">{{ selectedCount() }} selected</span>
+      <div class="bulk-toolbar__actions">
+        <button class="bulk-btn" (click)="bulkEnable()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"/></svg>
+          Enable
+        </button>
+        <button class="bulk-btn" (click)="bulkDisable()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+          Disable
+        </button>
+        <button class="bulk-btn" (click)="bulkExport()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+        <button class="bulk-btn bulk-btn--danger" (click)="bulkDelete()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+      </div>
+      <button class="bulk-toolbar__clear" (click)="clearSelection()">Clear</button>
+    </div>
+  }
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) { <div class="sk-row shimmer" [style.animation-delay]="(i * 0.06) + 's'"></div> }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (pagedAdmins().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <h3 class="empty-state__title">No administrators found</h3>
+        <p class="empty-state__sub">Try adjusting your search or filters.</p>
+        @if (hasActiveFilters()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        } @else {
+          <button class="btn-primary" (click)="openAdd()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Admin
+          </button>
+        }
+      </div>
+    }
+
+    <!-- ══════════════════════════ TABLE VIEW ══════════════════════════ -->
+    @if (viewMode() === 'table' && pagedAdmins().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--check">
+                  <button class="checkbox" [class.checkbox--checked]="allOnPageSelected()" (click)="toggleSelectAllOnPage()" aria-label="Select all on page">
+                    @if (allOnPageSelected()) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
+                  </button>
+                </th>
+                <th class="th--avatar"></th>
+                <th>
+                  <button class="th-sort" (click)="setSort('name')">
+                    Name
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'name'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>Email</th>
+                <th>
+                  <button class="th-sort" (click)="setSort('role')">
+                    Role
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'role'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>Status</th>
+                <th>
+                  <button class="th-sort" (click)="setSort('last-online')">
+                    Last Online
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'last-online'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>
+                  <button class="th-sort" (click)="setSort('newest')">
+                    Created
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'newest' || sortKey() === 'oldest'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of pagedAdmins(); track trackById($index, a)) {
+                <tr class="table-row" [class.table-row--selected]="isSelected(a)" [style.animation-delay]="($index * 0.03) + 's'">
+
+                  <td class="td--check">
+                    <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" aria-label="Select admin">
+                      @if (isSelected(a)) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
+                    </button>
+                  </td>
+
+                  <td class="td--avatar">
+                    <div class="avatar-wrap">
+                      <div class="row-avatar">{{ a.avatar }}</div>
+                      <span class="row-avatar__dot row-avatar__dot--{{ a.status }}"></span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <a class="admin-name-link" (click)="showDetails(a, $event)">{{ a.fullName }}</a>
+                  </td>
+
+                  <td class="text-mid td-email">{{ a.email }}</td>
+
+                  <td>
+                    <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ a.role }}</span>
+                  </td>
+
+                  <td>
+                    <span class="status-pill status-pill--{{ a.status }}">
+                      <span class="status-dot" [class.status-dot--pulse]="a.status === 'online'"></span>
+                      {{ statusLabel(a.status) }}
+                    </span>
+                  </td>
+
+                  <td class="td-light">{{ formatLastOnline(a.lastOnline, a.status) }}</td>
+                  <td class="td-light">{{ formatDate(a.createdAt) }}</td>
+
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" aria-label="Admin actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                      </button>
+
+                      @if (openMenuId() === a.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(a)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View Details
+                          </a>
+                          <a class="action-item" (click)="editAdmin(a)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            Edit Admin
+                          </a>
+                          <a class="action-item" (click)="requestReset(a, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Reset Password
+                          </a>
+                          <div class="action-divider"></div>
+                          <button class="action-item" role="menuitem" (click)="requestDisable(a, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+                            Disable Account
+                          </button>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(a, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                            Delete Admin
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════ GRID VIEW ══════════════════════════ -->
+    @if (viewMode() === 'grid' && pagedAdmins().length > 0) {
+      <div class="admin-grid">
+        @for (a of pagedAdmins(); track trackById($index, a)) {
+          <div class="admin-card" [class.admin-card--selected]="isSelected(a)">
+            <div class="admin-card__top">
+              <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" aria-label="Select admin">
+                @if (isSelected(a)) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
+              </button>
+              <div class="action-menu-wrap">
+                <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" aria-label="Admin actions">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                </button>
+                @if (openMenuId() === a.id) {
+                  <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                    <a class="action-item" (click)="showDetails(a)" role="menuitem">View Details</a>
+                    <a class="action-item" (click)="editAdmin(a)" role="menuitem">Edit Admin</a>
+                    <a class="action-item" (click)="requestReset(a, $event)" role="menuitem">Reset Password</a>
+                    <div class="action-divider"></div>
+                    <button class="action-item" role="menuitem" (click)="requestDisable(a, $event)">Disable Account</button>
+                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(a, $event)">Delete Admin</button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="admin-card__center">
+              <div class="avatar-wrap avatar-wrap--lg">
+                <div class="row-avatar row-avatar--lg">{{ a.avatar }}</div>
+                <span class="row-avatar__dot row-avatar__dot--{{ a.status }}"></span>
+              </div>
+              <a class="admin-name-link admin-name-link--card" (click)="showDetails(a, $event)">{{ a.fullName }}</a>
+              <p class="admin-card__email">{{ a.email }}</p>
+              <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ a.role }}</span>
+            </div>
+
+            <div class="admin-card__footer">
+              <div class="admin-card__stat">
+                <span class="admin-card__stat-label">Status</span>
+                <span class="status-pill status-pill--{{ a.status }} status-pill--sm">
+                  <span class="status-dot" [class.status-dot--pulse]="a.status === 'online'"></span>
+                  {{ statusLabel(a.status) }}
+                </span>
+              </div>
+              <div class="admin-card__stat">
+                <span class="admin-card__stat-label">Last Online</span>
+                <span class="admin-card__stat-value">{{ formatLastOnline(a.lastOnline, a.status) }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (sortedAdmins().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }
+
+</div>
