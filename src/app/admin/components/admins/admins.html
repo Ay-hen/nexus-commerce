@@ -204,18 +204,10 @@
     </div>
 
     <div class="toolbar__right">
-      <span class="results-label">{{ pageRangeLabel() }}</span>
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
           @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
-        </select>
-        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-
-      <div class="select-wrap">
-        <select class="toolbar-select toolbar-select--narrow" [ngModel]="pageSize()" (ngModelChange)="setPageSize($any($event))">
-          @for (n of rowsPerPageOptions; track n) { <option [value]="n">{{ n }} rows</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
