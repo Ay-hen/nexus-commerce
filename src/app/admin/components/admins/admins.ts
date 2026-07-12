@@ -3,12 +3,12 @@ import { Component, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { AdminUser, AdminRole, AdminStatus, generateMockAdmins } from './admin.model';
-import { AdminUserDetail, toAdminDetail } from './admin-detail.model';
+import { AdminUser, AdminRole, AdminStatus, generateMockAdmins } from '../../model/admin.model';
+import { AdminUserDetail, toAdminDetail } from '../../model/admin-detail.model';
 
-import { ViewAdminModal } from '../../modelview-admin-modal/view-admin-modal';
-import { AddAdminModal } from '../../modeladd-admin-modal/add-admin-modal';
-import { EditAdminModal } from '../../modeledit-admin-modal/edit-admin-modal';
+import { ViewAdminModal } from '../../model/view-admin-modal/view-admin-modal';
+import { AddAdminModal } from '../../model/add-admin-modal/add-admin-modal';
+import { EditAdminModal } from '../../model/edit-admin-modal/edit-admin-modal';
 import { DeleteAdminModal } from '../../model/delete-admin-modal/delete-admin-modal';
 
 export type RoleFilter = 'all' | AdminRole;
