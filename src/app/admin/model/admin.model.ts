@@ -31,7 +31,7 @@ const FIRST_NAMES = [
 ];
 
 const LAST_NAMES = [
-  'Hennani', 'Idrissi', 'Mansouri', 'Boudali', 'Alami', 'Cherkaoui', 'Fassi',
+  'Kunii', 'Idrissi', 'Mansouri', 'Boudali', 'Alami', 'Cherkaoui', 'Fassi',
   'Bennis', 'Ziani', 'Tazi', 'Berrada', 'Sabir', 'Kabbaj', 'Amrani', 'Ouahbi',
   'Chraibi', 'Naciri', 'Squalli', 'Bouzid', 'Lahlou', 'Benjelloun', 'Ktiri',
   'Belghiti', 'Guessous', 'Skalli', 'Fahmi', 'Bakkali', 'Zniber', 'Rifai', 'Alaoui',
