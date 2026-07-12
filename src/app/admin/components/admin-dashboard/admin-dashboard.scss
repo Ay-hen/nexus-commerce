@@ -67,11 +67,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
 // ─── Page header ──────────────────────────────────────────────────────────────
 .dash-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  background: $surface; border: 1px solid $border;
+  padding: 16px 20px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
 }
 
 .dash-title {
