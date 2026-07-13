@@ -34,6 +34,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'notifications',   loadComponent: () => import('./components/notifications/notifications').then(m => m.Notifications) },
       { path: 'reviews',   loadComponent: () => import('./components/reviews/reviews').then(m => m.Reviews) },
       { path: 'admins',   loadComponent: () => import('./components/admins/admins').then(m => m.Admins) },
+      { path: 'logs',   loadComponent: () => import('./components/activity-logs/activity-logs').then(m => m.ActivityLogs) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     
     ],
