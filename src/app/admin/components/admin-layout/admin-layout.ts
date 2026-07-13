@@ -101,8 +101,9 @@ export class AdminLayout {
     {
       section: 'Content',
       items: [
-        { id: 'reviews',      label: 'Reviews',      route: '/admin/reviews',      icon: 'reviews',   },
-        { id: 'notifications',label: 'Notifications',route: '/admin/notifications',icon: 'bell'       },
+        { id: 'reviews',            label: 'Reviews',             route: '/admin/reviews',             icon: 'reviews' },
+        { id: 'notifications',      label: 'Notifications',       route: '/admin/notifications',       icon: 'bell'    },
+        { id: 'push-notifications', label: 'Push Notifications',  route: '/admin/push-notifications',  icon: 'push'    },
       ],
     },
     {
