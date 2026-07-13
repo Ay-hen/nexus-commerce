@@ -1,1 +1,374 @@
-<p>activity-logs works!</p>
+<div class="logs-page" (click)="closeMenu()">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── VIEW ACTIVITY MODAL ───────────────────────────────────────────────── -->
+  @if (viewingLog()) {
+    <app-view-activity-modal
+      [log]="viewingLog()!"
+      (closed)="closeView()"
+    />
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Activity Logs</h1>
+        <p class="page-sub">Track every important action performed throughout the administration system.</p>
+      </div>
+    </div>
+
+    <div class="page-header__actions">
+      <div class="export-wrap" (click)="$event.stopPropagation()">
+        <button class="btn-ghost" (click)="exportMenuOpen = !exportMenuOpen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Logs
+        </button>
+        @if (exportMenuOpen) {
+          <div class="export-menu">
+            <button class="export-menu__item" (click)="exportCsv(); exportMenuOpen = false">Export as CSV</button>
+            <button class="export-menu__item" (click)="exportPdf(); exportMenuOpen = false">Export as PDF</button>
+          </div>
+        }
+      </div>
+      <button class="btn-primary" (click)="downloadReport()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Report
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Total Activities</p>
+          <p class="stat-value">{{ totalActivities() | number }}</p>
+          <p class="stat-sub">all recorded events</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--purple">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Today's Activities</p>
+          <p class="stat-value">{{ todaysActivities() }}</p>
+          <p class="stat-sub">since midnight</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--green">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Successful Actions</p>
+          <p class="stat-value">{{ successfulActions() | number }}</p>
+          <p class="stat-sub">completed without error</p>
+        </div>
+      </div>
+
+      <div class="stat-card stat-card--red">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="stat-body">
+          <p class="stat-label">Failed Actions</p>
+          <p class="stat-value">{{ failedActions() | number }}</p>
+          <p class="stat-sub">need attention</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left">
+
+      <div class="search-group">
+        <div class="select-wrap">
+          <select class="toolbar-select toolbar-select--tight" [ngModel]="searchBy()" (ngModelChange)="setSearchBy($any($event))">
+            @for (opt of searchByOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          </select>
+          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="search-wrap">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input class="search-input" type="search" [placeholder]="'Search by ' + searchBy() + '…'" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
+        </div>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="moduleFilter()" (ngModelChange)="setModuleFilter($any($event))">
+          @for (opt of moduleOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="actionFilter()" (ngModelChange)="setActionFilter($any($event))">
+          @for (opt of actionOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="statusFilter()" (ngModelChange)="setStatusFilter($any($event))">
+          @for (opt of statusOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="roleFilter()" (ngModelChange)="setRoleFilter($any($event))">
+          @for (opt of roleOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="dateFilter()" (ngModelChange)="setDateFilter($any($event))">
+          @for (opt of dateOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+    </div>
+
+    <div class="toolbar__right">
+      <span class="results-label">{{ pageRangeLabel() }}</span>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select toolbar-select--narrow" [ngModel]="pageSize()" (ngModelChange)="setPageSize($any($event))">
+          @for (n of rowsPerPageOptions; track n) { <option [value]="n">{{ n }} rows</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+        </button>
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) { <div class="sk-row shimmer" [style.animation-delay]="(i * 0.05) + 's'"></div> }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (pagedLogs().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3 class="empty-state__title">No activity logs found</h3>
+        <p class="empty-state__sub">Try adjusting your search or filters.</p>
+        @if (hasActiveFilters()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        }
+      </div>
+    }
+
+    <!-- ══════════════════════════ TABLE VIEW ══════════════════════════ -->
+    @if (viewMode() === 'table' && pagedLogs().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--avatar"></th>
+                <th>
+                  <button class="th-sort" (click)="setSort('admin')">Admin
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'admin'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>Role</th>
+                <th>
+                  <button class="th-sort" (click)="setSort('action')">Action
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'action'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>
+                  <button class="th-sort" (click)="setSort('module')">Module
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'module'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>Entity</th>
+                <th>
+                  <button class="th-sort" (click)="setSort('status')">Status
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'status'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th>
+                  <button class="th-sort" (click)="setSort('newest')">Time
+                    <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'newest' || sortKey() === 'oldest'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                </th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of pagedLogs(); track trackById($index, log)) {
+                <tr class="table-row" [style.animation-delay]="($index * 0.025) + 's'">
+
+                  <td class="td--avatar">
+                    <div class="row-avatar">{{ log.adminAvatar }}</div>
+                  </td>
+
+                  <td>
+                    <p class="admin-name">{{ log.adminName }}</p>
+                    <p class="admin-ip">{{ log.ipAddress }}</p>
+                  </td>
+
+                  <td>
+                    <span class="role-chip">{{ log.role }}</span>
+                  </td>
+
+                  <td>
+                    <span class="action-badge" [ngClass]="actionBadgeClass(log.action)">
+                      <span class="action-badge__dot"></span>
+                      {{ log.action }}
+                    </span>
+                  </td>
+
+                  <td><span class="module-pill">{{ log.module }}</span></td>
+
+                  <td class="td-entity">{{ log.entityName }}</td>
+
+                  <td>
+                    <span class="status-pill" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
+                      <span class="status-dot"></span>
+                      {{ log.success ? 'Success' : 'Failed' }}
+                    </span>
+                  </td>
+
+                  <td class="td-light">{{ formatTime(log.createdAt) }}</td>
+
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(log, $event)" [attr.aria-expanded]="openMenuId() === log.id" aria-label="Log actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                      </button>
+                      @if (openMenuId() === log.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(log)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View Details
+                          </a>
+                          <div class="action-note">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Immutable audit record
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════ GRID VIEW ══════════════════════════ -->
+    @if (viewMode() === 'grid' && pagedLogs().length > 0) {
+      <div class="log-grid">
+        @for (log of pagedLogs(); track trackById($index, log)) {
+          <div class="log-card" (click)="showDetails(log, $event)">
+            <div class="log-card__top">
+              <div class="row-avatar">{{ log.adminAvatar }}</div>
+              <div class="log-card__admin">
+                <p class="admin-name">{{ log.adminName }}</p>
+                <span class="role-chip">{{ log.role }}</span>
+              </div>
+              <span class="status-pill status-pill--sm" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
+                <span class="status-dot"></span>
+                {{ log.success ? 'Success' : 'Failed' }}
+              </span>
+            </div>
+
+            <p class="log-card__desc">{{ log.description }}</p>
+
+            <div class="log-card__pills">
+              <span class="action-badge" [ngClass]="actionBadgeClass(log.action)">
+                <span class="action-badge__dot"></span>
+                {{ log.action }}
+              </span>
+              <span class="module-pill">{{ log.module }}</span>
+            </div>
+
+            <div class="log-card__footer">
+              <span class="td-light">{{ formatTime(log.createdAt) }}</span>
+              <span class="td-light">{{ log.ipAddress }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (sortedLogs().length > pageSize()) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }
+
+</div>
