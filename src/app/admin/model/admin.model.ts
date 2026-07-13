@@ -24,7 +24,7 @@ export interface AdminUser {
 // ─── Mock data generation ─────────────────────────────────────────────────
 
 const FIRST_NAMES = [
-  'Ayoub', 'Sara', 'Karim', 'Leila', 'Youssef', 'Nadia', 'Omar', 'Ines',
+  'Kaizo', 'Sara', 'Karim', 'Leila', 'Youssef', 'Nadia', 'Omar', 'Ines',
   'Hamza', 'Salma', 'Amine', 'Yasmine', 'Reda', 'Zineb', 'Bilal', 'Imane',
   'Othmane', 'Rania', 'Marouane', 'Fatima Zahra', 'Anas', 'Meryem', 'Adil',
   'Hind', 'Soufiane', 'Dounia', 'Yassine', 'Kenza', 'Mehdi', 'Chaimae',
