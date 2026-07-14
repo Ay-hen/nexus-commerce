@@ -28,7 +28,7 @@ export class ActivityLogs {
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
-  skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   // ── Toast ──────────────────────────────────────────────────────────────
   toastMsg = signal<string | null>(null);
@@ -48,8 +48,7 @@ export class ActivityLogs {
   sortKey = signal<SortKey>('newest');
 
   // ── Pagination ─────────────────────────────────────────────────────────
-  pageSize = signal(10);
-  rowsPerPageOptions = [10, 25, 50, 100];
+  pageSize = signal(9);
   currentPage = signal(1);
 
   // ── Row menu ───────────────────────────────────────────────────────────

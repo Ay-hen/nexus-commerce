@@ -102,12 +102,7 @@
     <div class="toolbar__left">
 
       <div class="search-group">
-        <div class="select-wrap">
-          <select class="toolbar-select toolbar-select--tight" [ngModel]="searchBy()" (ngModelChange)="setSearchBy($any($event))">
-            @for (opt of searchByOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
-          </select>
-          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        
         <div class="search-wrap">
           <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           <input class="search-input" type="search" [placeholder]="'Search by ' + searchBy() + '…'" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
@@ -152,18 +147,10 @@
     </div>
 
     <div class="toolbar__right">
-      <span class="results-label">{{ pageRangeLabel() }}</span>
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
           @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
-        </select>
-        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-
-      <div class="select-wrap">
-        <select class="toolbar-select toolbar-select--narrow" [ngModel]="pageSize()" (ngModelChange)="setPageSize($any($event))">
-          @for (n of rowsPerPageOptions; track n) { <option [value]="n">{{ n }} rows</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
