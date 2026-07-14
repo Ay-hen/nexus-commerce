@@ -1,1 +1,140 @@
-<p>view-activity-modal works!</p>
+<div class="modal-backdrop" (click)="close()" role="dialog" aria-modal="true" aria-labelledby="view-activity-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <button class="modal-close" (click)="close()" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Header -->
+    <div class="ac-head">
+      <div class="ac-head__avatar">{{ log.adminAvatar }}</div>
+      <div class="ac-head__info">
+        <div class="ac-head__name-row">
+          <h2 class="ac-head__name" id="view-activity-title">{{ log.adminName }}</h2>
+          <span class="role-chip">{{ log.role }}</span>
+        </div>
+        <div class="ac-head__badges">
+          <span class="action-badge" [ngClass]="actionBadgeClass(log.action)">
+            <span class="action-badge__dot"></span>
+            {{ log.action }}
+          </span>
+          <span class="module-pill">{{ log.module }}</span>
+          <span class="status-pill" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
+            <span class="status-dot"></span>
+            {{ log.success ? 'Success' : 'Failed' }}
+          </span>
+        </div>
+        <p class="ac-head__meta">{{ formatDate(log.createdAt) }} &middot; {{ formatTime(log.createdAt) }}</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="ac-tabs">
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'details'" (click)="setTab('details')" type="button">Details</button>
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'technical'" (click)="setTab('technical')" type="button">Technical Details</button>
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'timeline'" (click)="setTab('timeline')" type="button">Execution Timeline</button>
+    </div>
+
+    <div class="ac-body">
+
+      <!-- DETAILS TAB -->
+      @if (activeTab() === 'details') {
+        <section class="ac-section">
+          <h3 class="ac-section__title">Action Details</h3>
+          <div class="detail-card">
+            <div class="detail-card__row">
+              <div class="detail-field"><span class="detail-label">Action</span><span class="detail-value">{{ log.action }}</span></div>
+              <div class="detail-field"><span class="detail-label">Module</span><span class="detail-value">{{ log.module }}</span></div>
+              <div class="detail-field"><span class="detail-label">Entity</span><span class="detail-value">{{ log.entityName }}</span></div>
+              <div class="detail-field"><span class="detail-label">Status</span>
+                <span class="detail-value">
+                  <span class="status-pill" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
+                    <span class="status-dot"></span>{{ log.success ? 'Success' : 'Failed' }}
+                  </span>
+                </span>
+              </div>
+              <div class="detail-field"><span class="detail-label">Date</span><span class="detail-value">{{ formatDate(log.createdAt) }}</span></div>
+              <div class="detail-field"><span class="detail-label">Time</span><span class="detail-value">{{ formatTime(log.createdAt) }}</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="ac-section">
+          <h3 class="ac-section__title">Description</h3>
+          <p class="ac-description">{{ log.description }}</p>
+        </section>
+      }
+
+      <!-- TECHNICAL TAB -->
+      @if (activeTab() === 'technical') {
+        <section class="ac-section">
+          <h3 class="ac-section__title">Technical Details</h3>
+          <div class="detail-card">
+            <div class="detail-card__row">
+              <div class="detail-field">
+                <span class="detail-label">IP Address</span>
+                <span class="detail-value detail-value--mono">{{ log.ipAddress }}</span>
+              </div>
+              <div class="detail-field"><span class="detail-label">Browser</span><span class="detail-value">{{ log.browser }}</span></div>
+              <div class="detail-field"><span class="detail-label">Operating System</span><span class="detail-value">{{ log.operatingSystem }}</span></div>
+              <div class="detail-field"><span class="detail-label">Device</span><span class="detail-value">{{ log.device }}</span></div>
+              <div class="detail-field"><span class="detail-label">Location</span>
+                <span class="detail-value">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {{ log.location }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-card detail-card--ids">
+            <div class="detail-field">
+              <span class="detail-label">Session ID</span>
+              <span class="detail-value detail-value--mono">{{ log.sessionId }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Request ID</span>
+              <span class="detail-value detail-value--mono">{{ log.requestId }}</span>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- TIMELINE TAB -->
+      @if (activeTab() === 'timeline') {
+        <section class="ac-section">
+          <h3 class="ac-section__title">Execution Timeline</h3>
+          <div class="timeline">
+            @for (step of log.timeline; track step.id; let last = $last) {
+              <div class="timeline-item">
+                <div class="timeline-item__dot" [ngClass]="timelineIconClass(step.icon)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                    @switch (step.icon) {
+                      @case ('request')  { <path d="M4 4h16v16H4z"/><path d="M4 9h16"/> }
+                      @case ('auth')     { <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/> }
+                      @case ('database') { <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/> }
+                      @case ('audit')    { <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/> }
+                      @case ('response') { <path d="M20 6L9 17l-5-5"/> }
+                      @case ('error')    { <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/> }
+                    }
+                  </svg>
+                </div>
+                <div class="timeline-item__body">
+                  <p class="timeline-item__label">{{ step.label }}</p>
+                  <p class="timeline-item__time">{{ formatTime(step.time) }}</p>
+                </div>
+              </div>
+              @if (!last) { <div class="timeline-connector"></div> }
+            }
+          </div>
+        </section>
+      }
+
+    </div>
+
+    <footer class="ac-footer">
+      <button class="btn-ghost" (click)="close()">Close</button>
+    </footer>
+
+  </div>
+</div>
