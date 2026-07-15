@@ -1,1 +1,722 @@
-<p>push-notifications works!</p>
+<div class="push-page" (click)="closeMenu()">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── DELETE CONFIRM (single) ───────────────────────────────────────────── -->
+  @if (pendingDelete(); as pd) {
+    <div class="modal-backdrop" (click)="cancelDelete()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>
+          </svg>
+        </div>
+        <h2 class="modal__title">Delete Notification</h2>
+
+        <div class="notif-preview">
+          <div class="notif-preview__icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="notif-preview__info">
+            <p class="notif-preview__title">{{ pd.title }}</p>
+            <div class="notif-preview__meta">
+              <span class="audience-badge" [ngClass]="audienceBadgeClass(pd.audience)">{{ pd.audience }}</span>
+              <span class="status-badge" [ngClass]="statusBadgeClass(pd.status)"><span class="status-badge__dot"></span>{{ pd.status }}</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="modal__body">
+          Are you sure you want to permanently delete this notification?
+          This is an immutable action and <strong>cannot be undone</strong>.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDelete()">Delete Notification</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── DELETE CONFIRM (bulk) ─────────────────────────────────────────────── -->
+  @if (pendingBulkDelete()) {
+    <div class="modal-backdrop" (click)="cancelBulkDelete()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>
+          </svg>
+        </div>
+        <h2 class="modal__title">Delete {{ selectedCount() }} Notifications</h2>
+        <p class="modal__body">
+          Are you sure you want to permanently delete <strong>{{ selectedCount() }}</strong> selected notifications?
+          This action cannot be undone.
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelBulkDelete()">Cancel</button>
+          <button class="btn-danger" (click)="confirmBulkDelete()">Delete All</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── VIEW NOTIFICATION MODAL ────────────────────────────────────────────── -->
+  @if (viewingNotification(); as v) {
+    <div class="modal-backdrop" (click)="closeView()" role="dialog" aria-modal="true">
+      <div class="modal modal--xl" (click)="$event.stopPropagation()">
+
+        <button class="modal-close" (click)="closeView()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+
+        <!-- Header -->
+        <div class="vn-head">
+          <div class="vn-head__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="vn-head__info">
+            <h2 class="vn-head__title">{{ v.title }}</h2>
+            <p class="vn-head__meta">
+              <span class="vn-head__by">
+                <span class="mini-avatar">{{ v.createdBy.avatar }}</span>
+                {{ v.createdBy.name }}
+              </span>
+              &middot; {{ formatDate(v.createdAt) }}
+            </p>
+          </div>
+          <div class="vn-head__badges">
+            <span class="status-badge" [ngClass]="statusBadgeClass(v.status)"><span class="status-badge__dot"></span>{{ v.status }}</span>
+            <span class="audience-badge" [ngClass]="audienceBadgeClass(v.audience)">{{ v.audience }}</span>
+          </div>
+        </div>
+
+        <div class="vn-body">
+
+          <!-- Phone preview + details grid -->
+          <div class="vn-grid">
+
+            <!-- Phone mockup -->
+            <div class="phone-mock">
+              <div class="phone-mock__notch"></div>
+              <div class="phone-mock__screen">
+                <div class="phone-mock__time">9:41</div>
+                <div class="notif-card">
+                  <div class="notif-card__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+                  <div class="notif-card__body">
+                    <div class="notif-card__top">
+                      <span class="notif-card__app">Nexus</span>
+                      <span class="notif-card__now">now</span>
+                    </div>
+                    <p class="notif-card__title">{{ v.title }}</p>
+                    <p class="notif-card__text">{{ v.body }}</p>
+                    @if (v.imageUrl) {
+                      <div class="notif-card__image"><img [src]="v.imageUrl" alt="" /></div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="vn-details">
+              <section class="ac-section">
+                <h3 class="ac-section__title">Notification Details</h3>
+                <div class="detail-card">
+                  <div class="detail-card__row">
+                    <div class="detail-field"><span class="detail-label">Title</span><span class="detail-value">{{ v.title }}</span></div>
+                    <div class="detail-field detail-field--full"><span class="detail-label">Body</span><span class="detail-value">{{ v.body }}</span></div>
+                    <div class="detail-field"><span class="detail-label">Deep Link</span><span class="detail-value detail-value--mono">{{ v.deepLink || '—' }}</span></div>
+                    <div class="detail-field"><span class="detail-label">Target Screen</span><span class="detail-value">{{ v.targetScreen || '—' }}</span></div>
+                    <div class="detail-field"><span class="detail-label">Priority</span><span class="detail-value">{{ v.priority }}</span></div>
+                    <div class="detail-field"><span class="detail-label">TTL</span><span class="detail-value">{{ v.ttlHours }}h</span></div>
+                    <div class="detail-field"><span class="detail-label">Campaign</span><span class="detail-value">{{ v.campaignName }}</span></div>
+                    <div class="detail-field"><span class="detail-label">Sound</span><span class="detail-value">{{ v.silent ? 'Silent' : (v.sound || 'Default') }}</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="ac-section">
+                <h3 class="ac-section__title">Audience</h3>
+                <div class="detail-card">
+                  <div class="detail-card__row">
+                    <div class="detail-field">
+                      <span class="detail-label">Target Audience</span>
+                      <span class="detail-value"><span class="audience-badge" [ngClass]="audienceBadgeClass(v.audience)">{{ v.audience }}</span></span>
+                    </div>
+                    <div class="detail-field"><span class="detail-label">Estimated Recipients</span><span class="detail-value">{{ v.delivery.totalRecipients | number }}</span></div>
+                  </div>
+                  @if (v.audience === 'Custom Segment' && v.customSegmentDescription) {
+                    <p class="segment-desc">{{ v.customSegmentDescription }}</p>
+                  }
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <!-- Delivery -->
+          @if (v.status === 'Sent' || v.status === 'Sending' || v.status === 'Failed') {
+            <section class="ac-section">
+              <h3 class="ac-section__title">Delivery</h3>
+              <div class="delivery-grid">
+                <div class="delivery-stat">
+                  <span class="delivery-stat__label">Delivered</span>
+                  <span class="delivery-stat__value">{{ v.delivery.delivered | number }}</span>
+                  <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--green" [style.width.%]="deliveryPercent(v)"></div></div>
+                </div>
+                <div class="delivery-stat">
+                  <span class="delivery-stat__label">Opened</span>
+                  <span class="delivery-stat__value">{{ v.delivery.opened | number }}</span>
+                  <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--blue" [style.width.%]="(v.delivery.opened / v.delivery.totalRecipients) * 100"></div></div>
+                </div>
+                <div class="delivery-stat">
+                  <span class="delivery-stat__label">CTR</span>
+                  <span class="delivery-stat__value">{{ v.delivery.ctr }}%</span>
+                  <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--purple" [style.width.%]="v.delivery.ctr"></div></div>
+                </div>
+                <div class="delivery-stat">
+                  <span class="delivery-stat__label">Failed</span>
+                  <span class="delivery-stat__value">{{ v.delivery.failed | number }}</span>
+                  <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--red" [style.width.%]="(v.delivery.failed / v.delivery.totalRecipients) * 100"></div></div>
+                </div>
+                @if (v.delivery.pending > 0) {
+                  <div class="delivery-stat">
+                    <span class="delivery-stat__label">Pending</span>
+                    <span class="delivery-stat__value">{{ v.delivery.pending | number }}</span>
+                    <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--amber" [style.width.%]="(v.delivery.pending / v.delivery.totalRecipients) * 100"></div></div>
+                  </div>
+                }
+              </div>
+            </section>
+          }
+
+          <!-- Timeline -->
+          <section class="ac-section">
+            <h3 class="ac-section__title">Timeline</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-item__dot timeline-item__dot--created"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="3"/></svg></div>
+                <div class="timeline-item__body"><p class="timeline-item__label">Created</p><p class="timeline-item__time">{{ formatDate(v.timeline.created) }} &middot; {{ formatTime(v.timeline.created) }}</p></div>
+              </div>
+              @if (v.timeline.scheduled) {
+                <div class="timeline-connector"></div>
+                <div class="timeline-item">
+                  <div class="timeline-item__dot timeline-item__dot--scheduled"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
+                  <div class="timeline-item__body"><p class="timeline-item__label">Scheduled</p><p class="timeline-item__time">{{ formatDate(v.timeline.scheduled) }} &middot; {{ formatTime(v.timeline.scheduled) }}</p></div>
+                </div>
+              }
+              @if (v.timeline.startedSending) {
+                <div class="timeline-connector"></div>
+                <div class="timeline-item">
+                  <div class="timeline-item__dot timeline-item__dot--sending"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                  <div class="timeline-item__body"><p class="timeline-item__label">Started Sending</p><p class="timeline-item__time">{{ formatDate(v.timeline.startedSending) }} &middot; {{ formatTime(v.timeline.startedSending) }}</p></div>
+                </div>
+              }
+              @if (v.timeline.completed) {
+                <div class="timeline-connector"></div>
+                <div class="timeline-item">
+                  <div class="timeline-item__dot" [class.timeline-item__dot--completed]="v.status === 'Sent'" [class.timeline-item__dot--failed]="v.status === 'Failed'">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                      @if (v.status === 'Failed') { <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/> } @else { <path d="M20 6L9 17l-5-5"/> }
+                    </svg>
+                  </div>
+                  <div class="timeline-item__body"><p class="timeline-item__label">{{ v.status === 'Failed' ? 'Failed' : 'Completed' }}</p><p class="timeline-item__time">{{ formatDate(v.timeline.completed) }} &middot; {{ formatTime(v.timeline.completed) }}</p></div>
+                </div>
+              }
+            </div>
+          </section>
+
+        </div>
+
+        <footer class="vn-footer">
+          <button class="btn-ghost" (click)="closeView()">Close</button>
+          <button class="btn-ghost" (click)="duplicateFromView(v)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Duplicate
+          </button>
+          <button class="btn-danger" (click)="deleteFromView(v)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Delete
+          </button>
+        </footer>
+
+      </div>
+    </div>
+  }
+
+  <!-- ── CREATE NOTIFICATION MODAL ─────────────────────────────────────────── -->
+  @if (creating()) {
+    <div class="modal-backdrop" (click)="closeCreate()" role="dialog" aria-modal="true">
+      <div class="modal modal--xl" (click)="$event.stopPropagation()">
+
+        <button class="modal-close" (click)="closeCreate()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="cn-head">
+          <div class="cn-head__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div>
+            <h2 class="cn-head__title">Create Notification</h2>
+            <p class="cn-head__sub">Compose a push notification and preview it live before sending.</p>
+          </div>
+        </div>
+
+        <div class="cn-body">
+          <div class="cn-grid">
+
+            <!-- Form column -->
+            <div class="cn-form">
+
+              <section class="form-section">
+                <h3 class="form-section__title">Basic Information</h3>
+                <div class="form-field">
+                  <label class="form-label">Notification Title</label>
+                  <input class="form-input" type="text" [ngModel]="form().title" (ngModelChange)="updateForm('title', $event)" placeholder="Your order has shipped! 📦" [class.form-input--error]="formTouched() && !form().title.trim()" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Message Body</label>
+                  <textarea class="form-textarea" rows="3" [ngModel]="form().body" (ngModelChange)="updateForm('body', $event)" placeholder="Track your package and see the estimated delivery date." [class.form-input--error]="formTouched() && !form().body.trim()"></textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-label">Campaign Name</label>
+                    <input class="form-input" type="text" [ngModel]="form().campaignName" (ngModelChange)="updateForm('campaignName', $event)" placeholder="Summer Sale Blast" [class.form-input--error]="formTouched() && !form().campaignName.trim()" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Image URL (optional)</label>
+                    <input class="form-input" type="text" [ngModel]="form().imageUrl" (ngModelChange)="updateForm('imageUrl', $event)" placeholder="https://…/image.png" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-label">Deep Link</label>
+                    <input class="form-input" type="text" [ngModel]="form().deepLink" (ngModelChange)="updateForm('deepLink', $event)" placeholder="app://orders/10291" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Target Screen</label>
+                    <div class="select-wrap select-wrap--block">
+                      <select class="form-select" [ngModel]="form().targetScreen" (ngModelChange)="updateForm('targetScreen', $event)">
+                        @for (s of formTargetScreens; track s) { <option [value]="s">{{ s }}</option> }
+                      </select>
+                      <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <h3 class="form-section__title">Audience</h3>
+                <div class="radio-grid">
+                  @for (a of formAudienceOptions; track a) {
+                    <label class="radio-tile" [class.radio-tile--active]="form().audience === a">
+                      <input type="radio" name="audience" [value]="a" [checked]="form().audience === a" (change)="updateForm('audience', a)" />
+                      <span class="radio-tile__dot"></span>
+                      {{ a }}
+                    </label>
+                  }
+                </div>
+                @if (form().audience === 'Custom Segment') {
+                  <div class="form-field" style="margin-top: 12px;">
+                    <label class="form-label">Segment Description</label>
+                    <textarea class="form-textarea" rows="2" [ngModel]="form().customSegmentDescription" (ngModelChange)="updateForm('customSegmentDescription', $event)" placeholder="Users who purchased in the last 30 days…"></textarea>
+                  </div>
+                }
+                <p class="audience-estimate">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  Estimated recipients: <strong>{{ estimatedRecipientsFor(form().audience) | number }}</strong>
+                </p>
+              </section>
+
+              <section class="form-section">
+                <h3 class="form-section__title">Schedule</h3>
+                <div class="segmented">
+                  <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'now'" (click)="updateForm('scheduleMode', 'now')">Send Now</button>
+                  <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'later'" (click)="updateForm('scheduleMode', 'later')">Schedule Later</button>
+                </div>
+                @if (form().scheduleMode === 'later') {
+                  <div class="form-row" style="margin-top: 12px;">
+                    <div class="form-field">
+                      <label class="form-label">Date</label>
+                      <input class="form-input" type="date" [ngModel]="form().scheduledDate" (ngModelChange)="updateForm('scheduledDate', $event)" [class.form-input--error]="formTouched() && form().scheduleMode === 'later' && !form().scheduledDate" />
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label">Time</label>
+                      <input class="form-input" type="time" [ngModel]="form().scheduledTime" (ngModelChange)="updateForm('scheduledTime', $event)" [class.form-input--error]="formTouched() && form().scheduleMode === 'later' && !form().scheduledTime" />
+                    </div>
+                  </div>
+                  <div class="form-field" style="margin-top: 12px;">
+                    <label class="form-label">Timezone</label>
+                    <input class="form-input" type="text" [ngModel]="form().timezone" (ngModelChange)="updateForm('timezone', $event)" />
+                  </div>
+                }
+              </section>
+
+              <section class="form-section">
+                <h3 class="form-section__title">Advanced</h3>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-label">Priority</label>
+                    <div class="select-wrap select-wrap--block">
+                      <select class="form-select" [ngModel]="form().priority" (ngModelChange)="updateForm('priority', $any($event))">
+                        @for (p of formPriorityOptions; track p) { <option [value]="p">{{ p }}</option> }
+                      </select>
+                      <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">TTL (hours)</label>
+                    <input class="form-input" type="number" min="1" max="72" [ngModel]="form().ttlHours" (ngModelChange)="updateForm('ttlHours', $event)" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label class="form-label">Badge Count (optional)</label>
+                    <input class="form-input" type="number" min="0" [ngModel]="form().badgeCount" (ngModelChange)="updateForm('badgeCount', $event)" placeholder="—" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Sound</label>
+                    <div class="select-wrap select-wrap--block">
+                      <select class="form-select" [ngModel]="form().sound" (ngModelChange)="updateForm('sound', $event)" [disabled]="form().silent">
+                        @for (s of formSoundOptions; track s) { <option [value]="s">{{ s }}</option> }
+                      </select>
+                      <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <label class="switch-row">
+                  <span class="switch">
+                    <input type="checkbox" [checked]="form().silent" (change)="updateForm('silent', $any($event.target).checked)" />
+                    <span class="switch__track"><span class="switch__thumb"></span></span>
+                  </span>
+                  <span class="switch-row__text">
+                    <span class="switch-row__title">Silent Notification</span>
+                    <span class="switch-row__sub">Delivers without sound or vibration.</span>
+                  </span>
+                </label>
+              </section>
+
+            </div>
+
+            <!-- Preview column -->
+            <div class="cn-preview">
+              <p class="cn-preview__label">Live Preview</p>
+              <div class="phone-mock">
+                <div class="phone-mock__notch"></div>
+                <div class="phone-mock__screen">
+                  <div class="phone-mock__time">9:41</div>
+                  <div class="notif-card">
+                    <div class="notif-card__icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+                    <div class="notif-card__body">
+                      <div class="notif-card__top">
+                        <span class="notif-card__app">Nexus</span>
+                        <span class="notif-card__now">now</span>
+                      </div>
+                      <p class="notif-card__title">{{ previewTitle() }}</p>
+                      <p class="notif-card__text">{{ previewBody() }}</p>
+                      @if (form().imageUrl) {
+                        <div class="notif-card__image"><img [src]="form().imageUrl" alt="" /></div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cn-preview__meta">
+                <span class="audience-badge" [ngClass]="audienceBadgeClass(form().audience)">{{ form().audience }}</span>
+                <span class="priority-chip" [class.priority-chip--high]="form().priority === 'High'" [class.priority-chip--critical]="form().priority === 'Critical'">{{ form().priority }} priority</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="cn-footer">
+          <button class="btn-ghost" type="button" (click)="closeCreate()" [disabled]="formSaving()">Cancel</button>
+          <button class="btn-ghost" type="button" (click)="saveDraft()" [disabled]="formSaving()">Save Draft</button>
+          <button class="btn-primary" type="button" (click)="submitCreate()" [disabled]="formSaving()">
+            @if (formSaving()) {
+              <span class="btn-spinner"></span> {{ form().scheduleMode === 'later' ? 'Scheduling…' : 'Sending…' }}
+            } @else {
+              {{ form().scheduleMode === 'later' ? 'Schedule' : 'Send Now' }}
+            }
+          </button>
+        </footer>
+
+      </div>
+    </div>
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Push Notifications</h1>
+        <p class="page-sub">Create and manage push notifications sent to mobile devices and the website.</p>
+      </div>
+    </div>
+
+    <div class="page-header__actions">
+      <button class="btn-ghost" (click)="refresh()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refresh
+      </button>
+      <button class="btn-ghost" (click)="exportCsv()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+      <button class="btn-primary" (click)="openCreate()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Create Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ── STAT CARDS ────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) { <div class="sk-stat shimmer"></div> }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <div class="stat-body"><p class="stat-label">Total Notifications</p><p class="stat-value">{{ totalNotifications() }}</p><p class="stat-sub">all campaigns</p></div>
+      </div>
+      <div class="stat-card stat-card--green">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="stat-body"><p class="stat-label">Sent</p><p class="stat-value">{{ sentCount() }}</p><p class="stat-sub">delivered to users</p></div>
+      </div>
+      <div class="stat-card stat-card--indigo">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
+        <div class="stat-body"><p class="stat-label">Scheduled</p><p class="stat-value">{{ scheduledCount() }}</p><p class="stat-sub">waiting to be sent</p></div>
+      </div>
+      <div class="stat-card stat-card--amber">
+        <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <div class="stat-body"><p class="stat-label">Drafts</p><p class="stat-value">{{ draftCount() }}</p><p class="stat-sub">saved, not sent</p></div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
+  <div class="toolbar" (click)="$event.stopPropagation()">
+    <div class="toolbar__left">
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="search-input" type="search" placeholder="Search title, body, campaign, admin…" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="statusFilter()" (ngModelChange)="setStatusFilter($any($event))">
+          @for (opt of statusOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="audienceFilter()" (ngModelChange)="setAudienceFilter($any($event))">
+          @for (opt of audienceOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="toolbar__right">
+      <span class="results-label">{{ pageRangeLabel() }}</span>
+      <div class="select-wrap">
+        <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BULK TOOLBAR ──────────────────────────────────────────────────────── -->
+  @if (selectedCount() > 0) {
+    <div class="bulk-toolbar" (click)="$event.stopPropagation()">
+      <span class="bulk-toolbar__count">{{ selectedCount() }} selected</span>
+      <div class="bulk-toolbar__actions">
+        <button class="bulk-btn" (click)="bulkDuplicate()">Duplicate</button>
+        <button class="bulk-btn" (click)="bulkMarkDraft()">Mark Draft</button>
+        <button class="bulk-btn" (click)="bulkCancelSchedule()">Cancel Schedule</button>
+        <button class="bulk-btn bulk-btn--danger" (click)="requestBulkDelete()">Delete</button>
+      </div>
+      <button class="bulk-toolbar__clear" (click)="clearSelection()">Clear</button>
+    </div>
+  }
+
+  <!-- ── SKELETON ──────────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="table-card">
+      <div class="sk-table">
+        <div class="sk-thead shimmer"></div>
+        @for (i of skeletons; track i) { <div class="sk-row shimmer" [style.animation-delay]="(i * 0.05) + 's'"></div> }
+      </div>
+    </div>
+  }
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  @if (!isLoading()) {
+
+    @if (pagedNotifications().length === 0) {
+      <div class="empty-state">
+        <div class="empty-state__orb">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3 class="empty-state__title">No push notifications yet</h3>
+        <p class="empty-state__sub">
+          @if (hasActiveFilters()) { Try adjusting your search or filters. } @else { Create your first notification to reach your users. }
+        </p>
+        @if (hasActiveFilters()) {
+          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        } @else {
+          <button class="btn-primary" (click)="openCreate()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Notification
+          </button>
+        }
+      </div>
+    }
+
+    @if (pagedNotifications().length > 0) {
+      <div class="table-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="th--check">
+                  <button class="checkbox" [class.checkbox--checked]="allOnPageSelected()" (click)="toggleSelectAllOnPage()" aria-label="Select all on page">
+                    @if (allOnPageSelected()) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
+                  </button>
+                </th>
+                <th>Notification</th>
+                <th>Audience</th>
+                <th>Status</th>
+                <th class="th--delivery">Delivery</th>
+                <th>Created By</th>
+                <th>Scheduled</th>
+                <th>Created</th>
+                <th class="th--actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (n of pagedNotifications(); track trackById($index, n)) {
+                <tr class="table-row" [class.table-row--selected]="isSelected(n)" [style.animation-delay]="($index * 0.03) + 's'">
+
+                  <td class="td--check">
+                    <button class="checkbox" [class.checkbox--checked]="isSelected(n)" (click)="toggleSelect(n, $event)" aria-label="Select notification">
+                      @if (isSelected(n)) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
+                    </button>
+                  </td>
+
+                  <td class="td-notif">
+                    <div class="notif-cell">
+                      <div class="notif-cell__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+                      <div class="notif-cell__text">
+                        <a class="notif-cell__title" (click)="showDetails(n, $event)">{{ n.title }}</a>
+                        <p class="notif-cell__sub">{{ n.campaignName }}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td><span class="audience-badge" [ngClass]="audienceBadgeClass(n.audience)">{{ n.audience }}</span></td>
+
+                  <td><span class="status-badge" [ngClass]="statusBadgeClass(n.status)"><span class="status-badge__dot"></span>{{ n.status }}</span></td>
+
+                  <td class="td-delivery">
+                    @if (n.status === 'Sent' || n.status === 'Sending' || n.status === 'Failed') {
+                      <p class="delivery-numbers">{{ n.delivery.delivered | number }} / {{ n.delivery.totalRecipients | number }}</p>
+                      <p class="delivery-percent">{{ deliveryPercent(n) }}%</p>
+                      <div class="progress-bar progress-bar--sm">
+                        <div class="progress-bar__fill" [class.progress-bar__fill--green]="n.status === 'Sent'" [class.progress-bar__fill--blue]="n.status === 'Sending'" [class.progress-bar__fill--red]="n.status === 'Failed'" [style.width.%]="deliveryPercent(n)"></div>
+                      </div>
+                    } @else {
+                      <span class="td-light">—</span>
+                    }
+                  </td>
+
+                  <td>
+                    <div class="created-by">
+                      <span class="mini-avatar">{{ n.createdBy.avatar }}</span>
+                      {{ n.createdBy.name }}
+                    </div>
+                  </td>
+
+                  <td class="td-light">
+                    @if (n.scheduledAt) { {{ formatDate(n.scheduledAt) }}<br />{{ formatTime(n.scheduledAt) }} } @else { — }
+                  </td>
+
+                  <td class="td-light">{{ formatDate(n.createdAt) }}</td>
+
+                  <td class="td--actions">
+                    <div class="action-menu-wrap">
+                      <button class="action-trigger" (click)="toggleMenu(n, $event)" [attr.aria-expanded]="openMenuId() === n.id" aria-label="Notification actions">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+                      </button>
+                      @if (openMenuId() === n.id) {
+                        <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
+                          <a class="action-item" (click)="showDetails(n)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View
+                          </a>
+                          <a class="action-item" (click)="duplicate(n, $event)" role="menuitem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            Duplicate
+                          </a>
+                          @if (n.status === 'Scheduled') {
+                            <a class="action-item" (click)="cancelSchedule(n, $event)" role="menuitem">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+                              Cancel Schedule
+                            </a>
+                          }
+                          <div class="action-divider"></div>
+                          <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(n, $event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                            Delete
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ── PAGINATION ──────────────────────────────────────────────────────── -->
+    @if (sortedNotifications().length > pageSize) {
+      <div class="pagination">
+        <span class="pagination__label">{{ pageRangeLabel() }}</span>
+        <div class="pagination__controls">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          @if (currentPage() > 2) {
+            <button class="page-btn" (click)="goToPage(1)">1</button>
+            @if (currentPage() > 3) { <span class="page-ellipsis">…</span> }
+          }
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn" [class.page-btn--active]="p === currentPage()" (click)="goToPage(p)">{{ p }}</button>
+          }
+          @if (currentPage() < totalPages() - 1) {
+            @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
+            <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    }
+
+  }
+
+</div>
