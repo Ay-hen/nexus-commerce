@@ -62,7 +62,7 @@ function emptyForm(): CreateFormState {
   templateUrl: './push-notifications.html',
   styleUrl: './push-notifications.scss',
 })
-export class PushNotificationsComponent {
+export class PushNotifications {
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
