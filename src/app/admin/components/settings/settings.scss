@@ -297,7 +297,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   &:focus { outline: none; background: $surface; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
   &--error { border-color: $red; }
   &--error:focus { box-shadow: 0 0 0 3px rgba($red, .18); }
-  &:disabled { opacity: .55; cursor: not-allowed; }
+  &:disabled { opacity: .55;  }
 }
 
 .form-input { height: 42px; padding: 0 12px; }
@@ -601,4 +601,24 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 @media (max-width: 600px) {
   .settings-card { padding: 16px; }
   .form-grid { gap: 12px; }
+}
+
+.form-input:disabled {
+  background: $surface3;
+  color: $text-mid;
+  border-color: $border;
+  opacity: 1;
+  user-select: none;
+
+  &:focus {
+    border-color: $border;
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+.form-input:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+  font-weight: 500;
 }

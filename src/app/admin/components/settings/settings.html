@@ -159,8 +159,8 @@
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">Store Name</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.storeName" (ngModelChange)="updateGeneral('storeName', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeName']" />
+                <label class="form-label" >Store Name</label>
+                <input class="form-input" type="text" [ngModel]="draft().general.storeName" (ngModelChange)="updateGeneral('storeName', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeName']" disabled />
                 @if (formTouched() && generalErrors()['storeName']) { <span class="field-error">{{ generalErrors()['storeName'] }}</span> }
               </div>
               <div class="form-field form-field--full">
@@ -184,7 +184,7 @@
               </div>
               <div class="form-field">
                 <label class="form-label">Website</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.website" (ngModelChange)="updateGeneral('website', $event)" placeholder="https://…" [class.form-input--error]="formTouched() && generalErrors()['website']" />
+                <input class="form-input" type="text" [ngModel]="draft().general.website" (ngModelChange)="updateGeneral('website', $event)" placeholder="https://…" [class.form-input--error]="formTouched() && generalErrors()['website']" disabled />
                 @if (formTouched() && generalErrors()['website']) { <span class="field-error">{{ generalErrors()['website'] }}</span> }
               </div>
               <div class="form-field form-field--full">

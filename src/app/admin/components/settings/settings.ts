@@ -24,7 +24,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
-export class SettingsComponent {
+export class Settings {
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);

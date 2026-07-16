@@ -163,10 +163,10 @@ export function generateMockSettings(): SettingsModel {
       website: 'https://nexus-commerce.com',
       businessAddress: '128 Boulevard Zerktouni, Casablanca, Morocco',
       country: 'Morocco',
-      currency: 'USD',
+      currency: 'MAD',
       timezone: 'GMT+1 (Casablanca)',
       language: 'English',
-      dateFormat: 'MMM D, YYYY',
+      dateFormat: 'DD/MM/YYYY',
     },
 
     profile: {
@@ -246,7 +246,7 @@ export function generateMockSettings(): SettingsModel {
 
     system: {
       applicationVersion: '3.4.1',
-      angularVersion: '20.0.2',
+      angularVersion: '22.0.2',
       backendVersion: '2.1.8',
       databaseStatus: 'Operational',
       storageUsedGb: 42.7,
