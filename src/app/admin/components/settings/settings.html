@@ -1,1 +1,885 @@
-<p>settings works!</p>
+<div class="settings-page">
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────────────── -->
+  @if (toastMsg()) {
+    <div class="admin-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      {{ toastMsg() }}
+    </div>
+  }
+
+  <!-- ── TERMINATE SESSION CONFIRM ─────────────────────────────────────────── -->
+  @if (pendingTerminateSession(); as ts) {
+    <div class="modal-backdrop" (click)="cancelTerminateSession()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+        </div>
+        <h2 class="modal__title">Terminate Session</h2>
+        <p class="modal__body">
+          Are you sure you want to sign out <strong>{{ ts.device }}</strong> ({{ ts.browser }} &middot; {{ ts.location }})?
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelTerminateSession()">Cancel</button>
+          <button class="btn-danger" (click)="confirmTerminateSession()">Terminate Session</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── TERMINATE ALL CONFIRM ─────────────────────────────────────────────── -->
+  @if (pendingTerminateAll()) {
+    <div class="modal-backdrop" (click)="cancelTerminateAll()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+        </div>
+        <h2 class="modal__title">Terminate All Other Sessions</h2>
+        <p class="modal__body">This will sign you out of every device except this one. You'll need to log in again on those devices.</p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelTerminateAll()">Cancel</button>
+          <button class="btn-danger" (click)="confirmTerminateAll()">Terminate All</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── DANGER ZONE CONFIRM ────────────────────────────────────────────────── -->
+  @if (pendingDangerAction(); as da) {
+    <div class="modal-backdrop" (click)="cancelDangerAction()" role="dialog" aria-modal="true">
+      <div class="modal modal--sm" (click)="$event.stopPropagation()">
+        <div class="modal__icon modal__icon--danger">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <h2 class="modal__title">{{ dangerActionLabel(da) }}</h2>
+        <p class="modal__body">
+          {{ dangerActionDescription(da) }}
+          <strong>This action cannot be undone.</strong>
+        </p>
+        <div class="modal__actions">
+          <button class="btn-ghost" (click)="cancelDangerAction()">Cancel</button>
+          <button class="btn-danger" (click)="confirmDangerAction()">{{ dangerActionLabel(da) }}</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── PAGE HEADER ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-sub">Manage your store configuration and administrator preferences.</p>
+      </div>
+    </div>
+
+    <div class="page-header__actions">
+      @if (isDirty()) {
+        <span class="unsaved-pill">
+          <span class="unsaved-pill__dot"></span>
+          Unsaved changes
+        </span>
+      }
+      <button class="btn-ghost" (click)="refresh()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refresh
+      </button>
+      <button class="btn-ghost" (click)="resetChanges()" [disabled]="!isDirty()">Reset</button>
+      <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS LAYOUT ───────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="settings-layout">
+      <div class="settings-nav">
+        @for (i of [1,2,3,4,5,6,7,8,9]; track i) { <div class="sk-nav-item shimmer" [style.animation-delay]="(i * 0.04) + 's'"></div> }
+      </div>
+      <div class="settings-content">
+        <div class="sk-card shimmer"></div>
+        <div class="sk-card shimmer" style="animation-delay:.05s"></div>
+        <div class="sk-card shimmer" style="animation-delay:.1s"></div>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    <div class="settings-layout">
+
+      <!-- Mobile category toggle -->
+      <button class="mobile-nav-toggle" (click)="toggleMobileNav()">
+        <span>{{ activeCategoryLabel() }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.rotated]="mobileNavOpen()"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <!-- Sidebar nav -->
+      <nav class="settings-nav" [class.settings-nav--open]="mobileNavOpen()">
+        @for (item of navItems; track item.id) {
+          <button class="settings-nav__item" [class.settings-nav__item--active]="activeCategory() === item.id" (click)="setCategory(item.id)">
+            <span class="settings-nav__icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                @switch (item.icon) {
+                  @case ('general')       { <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/> }
+                  @case ('profile')       { <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/> }
+                  @case ('security')      { <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/> }
+                  @case ('store')         { <path d="M3 9l1-5h16l1 5"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M4 9v10a1 1 0 0 0 1 1h4v-6h6v6h4a1 1 0 0 0 1-1V9"/> }
+                  @case ('payments')      { <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/> }
+                  @case ('email')         { <path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/> }
+                  @case ('notifications') { <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/> }
+                  @case ('appearance')    { <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/> }
+                  @case ('system')        { <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/> }
+                }
+              </svg>
+            </span>
+            {{ item.label }}
+          </button>
+        }
+      </nav>
+
+      <!-- Content panel -->
+      <div class="settings-content">
+
+        <!-- ══════════════════ GENERAL ══════════════════ -->
+        @if (activeCategory() === 'general') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Store Information</h2>
+              <p class="settings-card__sub">Basic details about your store, shown to customers and used across the platform.</p>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Store Name</label>
+                <input class="form-input" type="text" [ngModel]="draft().general.storeName" (ngModelChange)="updateGeneral('storeName', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeName']" />
+                @if (formTouched() && generalErrors()['storeName']) { <span class="field-error">{{ generalErrors()['storeName'] }}</span> }
+              </div>
+              <div class="form-field form-field--full">
+                <label class="form-label">Store Description</label>
+                <textarea class="form-textarea" rows="2" [ngModel]="draft().general.storeDescription" (ngModelChange)="updateGeneral('storeDescription', $event)"></textarea>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Store Email</label>
+                <input class="form-input" type="email" [ngModel]="draft().general.storeEmail" (ngModelChange)="updateGeneral('storeEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeEmail']" />
+                @if (formTouched() && generalErrors()['storeEmail']) { <span class="field-error">{{ generalErrors()['storeEmail'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Support Email</label>
+                <input class="form-input" type="email" [ngModel]="draft().general.supportEmail" (ngModelChange)="updateGeneral('supportEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['supportEmail']" />
+                @if (formTouched() && generalErrors()['supportEmail']) { <span class="field-error">{{ generalErrors()['supportEmail'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Phone Number</label>
+                <input class="form-input" type="text" [ngModel]="draft().general.phoneNumber" (ngModelChange)="updateGeneral('phoneNumber', $event)" [class.form-input--error]="formTouched() && generalErrors()['phoneNumber']" />
+                @if (formTouched() && generalErrors()['phoneNumber']) { <span class="field-error">{{ generalErrors()['phoneNumber'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Website</label>
+                <input class="form-input" type="text" [ngModel]="draft().general.website" (ngModelChange)="updateGeneral('website', $event)" placeholder="https://…" [class.form-input--error]="formTouched() && generalErrors()['website']" />
+                @if (formTouched() && generalErrors()['website']) { <span class="field-error">{{ generalErrors()['website'] }}</span> }
+              </div>
+              <div class="form-field form-field--full">
+                <label class="form-label">Business Address</label>
+                <input class="form-input" type="text" [ngModel]="draft().general.businessAddress" (ngModelChange)="updateGeneral('businessAddress', $event)" />
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Country</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().general.country" (ngModelChange)="updateGeneral('country', $event)">
+                    @for (c of countryOptions; track c) { <option [value]="c">{{ c }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Currency</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().general.currency" (ngModelChange)="updateGeneral('currency', $event)">
+                    @for (c of currencyOptions; track c) { <option [value]="c">{{ c }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Timezone</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().general.timezone" (ngModelChange)="updateGeneral('timezone', $event)">
+                    @for (t of timezoneOptions; track t) { <option [value]="t">{{ t }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Language</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().general.language" (ngModelChange)="updateGeneral('language', $event)">
+                    @for (l of languageOptions; track l) { <option [value]="l">{{ l }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Date Format</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().general.dateFormat" (ngModelChange)="updateGeneral('dateFormat', $event)">
+                    @for (d of dateFormatOptions; track d) { <option [value]="d">{{ d }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save General Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ PROFILE ══════════════════ -->
+        @if (activeCategory() === 'profile') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Administrator Profile</h2>
+              <p class="settings-card__sub">Your personal information as it appears across the admin dashboard.</p>
+            </div>
+
+            <div class="avatar-upload">
+              <div class="avatar-upload__preview">{{ draft().profile.avatar }}</div>
+              <div class="avatar-upload__actions">
+                <button class="btn-ghost btn-ghost--sm">Upload New Photo</button>
+                <p class="avatar-upload__hint">JPG, PNG or GIF. Max 2MB.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Name</label>
+                <input class="form-input" type="text" [ngModel]="draft().profile.name" (ngModelChange)="updateProfile('name', $event)" [class.form-input--error]="formTouched() && profileErrors()['name']" />
+                @if (formTouched() && profileErrors()['name']) { <span class="field-error">{{ profileErrors()['name'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" [ngModel]="draft().profile.email" (ngModelChange)="updateProfile('email', $event)" [class.form-input--error]="formTouched() && profileErrors()['email']" />
+                @if (formTouched() && profileErrors()['email']) { <span class="field-error">{{ profileErrors()['email'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Username</label>
+                <input class="form-input" type="text" [ngModel]="draft().profile.username" (ngModelChange)="updateProfile('username', $event)" [class.form-input--error]="formTouched() && profileErrors()['username']" />
+                @if (formTouched() && profileErrors()['username']) { <span class="field-error">{{ profileErrors()['username'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Job Title</label>
+                <input class="form-input" type="text" [ngModel]="draft().profile.jobTitle" (ngModelChange)="updateProfile('jobTitle', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Phone</label>
+                <input class="form-input" type="text" [ngModel]="draft().profile.phone" (ngModelChange)="updateProfile('phone', $event)" [class.form-input--error]="formTouched() && profileErrors()['phone']" />
+                @if (formTouched() && profileErrors()['phone']) { <span class="field-error">{{ profileErrors()['phone'] }}</span> }
+              </div>
+              <div class="form-field form-field--full">
+                <label class="form-label">Bio</label>
+                <textarea class="form-textarea" rows="3" [ngModel]="draft().profile.bio" (ngModelChange)="updateProfile('bio', $event)"></textarea>
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Profile</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ SECURITY ══════════════════ -->
+        @if (activeCategory() === 'security') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Change Password</h2>
+              <p class="settings-card__sub">Use a strong password you don't use anywhere else.</p>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">New Password</label>
+                <input class="form-input" type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" placeholder="Enter new password" />
+                @if (newPassword()) {
+                  <div class="strength-meter">
+                    <div class="strength-meter__bar">
+                      <div class="strength-meter__fill" [class]="'strength-meter__fill--' + passwordStrength()" [style.width.%]="passwordStrength() * 25"></div>
+                    </div>
+                    <span class="strength-meter__label">{{ passwordStrengthLabel() }}</span>
+                  </div>
+                }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Confirm Password</label>
+                <input class="form-input" type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" placeholder="Re-enter new password" [class.form-input--error]="!passwordsMatch()" />
+                @if (!passwordsMatch()) { <span class="field-error">Passwords do not match.</span> }
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="updatePassword()" [disabled]="!newPassword() || !confirmPassword()">Update Password</button>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Security Preferences</h2>
+              <p class="settings-card__sub">Control how your account handles authentication and session activity.</p>
+            </div>
+            <div class="toggle-list">
+              <label class="toggle-row">
+                <span class="toggle-row__text">
+                  <span class="toggle-row__title">Two-Factor Authentication</span>
+                  <span class="toggle-row__sub">Require a verification code in addition to your password.</span>
+                </span>
+                <span class="switch">
+                  <input type="checkbox" [checked]="draft().security.twoFactorEnabled" (change)="updateSecurity('twoFactorEnabled', $any($event.target).checked)" />
+                  <span class="switch__track"><span class="switch__thumb"></span></span>
+                </span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text">
+                  <span class="toggle-row__title">Remember Login</span>
+                  <span class="toggle-row__sub">Stay signed in on this device between visits.</span>
+                </span>
+                <span class="switch">
+                  <input type="checkbox" [checked]="draft().security.rememberLogin" (change)="updateSecurity('rememberLogin', $any($event.target).checked)" />
+                  <span class="switch__track"><span class="switch__thumb"></span></span>
+                </span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text">
+                  <span class="toggle-row__title">Login Alerts</span>
+                  <span class="toggle-row__sub">Get notified by email whenever a new device signs in.</span>
+                </span>
+                <span class="switch">
+                  <input type="checkbox" [checked]="draft().security.loginAlerts" (change)="updateSecurity('loginAlerts', $any($event.target).checked)" />
+                  <span class="switch__track"><span class="switch__thumb"></span></span>
+                </span>
+              </label>
+            </div>
+            <div class="form-field" style="max-width: 260px; margin-top: 4px;">
+              <label class="form-label">Session Timeout (minutes)</label>
+              <input class="form-input" type="number" min="5" max="480" [ngModel]="draft().security.sessionTimeoutMinutes" (ngModelChange)="updateSecurity('sessionTimeoutMinutes', $event)" />
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <div class="settings-card__head-row">
+                <div>
+                  <h2 class="settings-card__title">Active Sessions</h2>
+                  <p class="settings-card__sub">Devices currently signed in to your administrator account.</p>
+                </div>
+                <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateAll()">Terminate All Sessions</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Device</th><th>Browser</th><th>IP Address</th><th>Location</th><th>Last Activity</th><th class="th--actions"></th></tr>
+                </thead>
+                <tbody>
+                  @for (s of draft().security.sessions; track s.id) {
+                    <tr class="table-row">
+                      <td class="td-strong">{{ s.device }} @if (s.current) { <span class="current-pill">This device</span> }</td>
+                      <td class="text-mid">{{ s.browser }}</td>
+                      <td class="td-mono">{{ s.ip }}</td>
+                      <td class="text-mid">{{ s.location }}</td>
+                      <td class="td-light">{{ formatRelative(s.lastActivity) }}</td>
+                      <td class="td--actions">
+                        @if (!s.current) {
+                          <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateSession(s)">Terminate</button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ STORE ══════════════════ -->
+        @if (activeCategory() === 'store') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Store Branding</h2>
+              <p class="settings-card__sub">Visual assets shown across your storefront.</p>
+            </div>
+            <div class="asset-grid">
+              <div class="asset-upload">
+                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.logoUrl" alt="Store logo" /></div>
+                <p class="asset-upload__label">Store Logo</p>
+                <button class="btn-ghost btn-ghost--sm">Upload</button>
+              </div>
+              <div class="asset-upload">
+                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.faviconUrl" alt="Favicon" /></div>
+                <p class="asset-upload__label">Favicon</p>
+                <button class="btn-ghost btn-ghost--sm">Upload</button>
+              </div>
+              <div class="asset-upload asset-upload--wide">
+                <div class="asset-upload__preview asset-upload__preview--wide"><img [src]="draft().store.bannerUrl" alt="Store banner" /></div>
+                <p class="asset-upload__label">Store Banner</p>
+                <button class="btn-ghost btn-ghost--sm">Upload</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Store Status</h2>
+              <p class="settings-card__sub">Control whether customers can browse and purchase right now.</p>
+            </div>
+            <label class="toggle-row">
+              <span class="toggle-row__text">
+                <span class="toggle-row__title">Maintenance Mode</span>
+                <span class="toggle-row__sub">Temporarily disable the storefront for customers while you make changes.</span>
+              </span>
+              <span class="switch">
+                <input type="checkbox" [checked]="draft().store.maintenanceMode" (change)="updateStore('maintenanceMode', $any($event.target).checked)" />
+                <span class="switch__track"><span class="switch__thumb"></span></span>
+              </span>
+            </label>
+            <div class="form-field" style="max-width: 280px; margin-top: 14px;">
+              <label class="form-label">Store Status</label>
+              <div class="segmented">
+                @for (s of storeStatusOptions; track s) {
+                  <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().store.storeStatus === s" (click)="updateStore('storeStatus', s)">{{ s }}</button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Pricing &amp; Shipping</h2>
+              <p class="settings-card__sub">Default values applied at checkout.</p>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Tax Percentage</label>
+                <input class="form-input" type="number" min="0" max="100" step="0.1" [ngModel]="draft().store.taxPercentage" (ngModelChange)="updateStore('taxPercentage', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Shipping Fee</label>
+                <input class="form-input" type="number" min="0" step="0.01" [ngModel]="draft().store.shippingFee" (ngModelChange)="updateStore('shippingFee', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Free Shipping Threshold</label>
+                <input class="form-input" type="number" min="0" step="1" [ngModel]="draft().store.freeShippingThreshold" (ngModelChange)="updateStore('freeShippingThreshold', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Default Warehouse</label>
+                <div class="select-wrap select-wrap--block">
+                  <select class="form-select" [ngModel]="draft().store.defaultWarehouse" (ngModelChange)="updateStore('defaultWarehouse', $event)">
+                    @for (w of warehouseOptions; track w) { <option [value]="w">{{ w }}</option> }
+                  </select>
+                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Store Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ PAYMENTS ══════════════════ -->
+        @if (activeCategory() === 'payments') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Payment Methods</h2>
+              <p class="settings-card__sub">Enable and configure the payment gateways available at checkout.</p>
+            </div>
+
+            <div class="payment-gateway-list">
+              @for (pg of draft().payments; track pg.id) {
+                <div class="gateway-card" [class.gateway-card--enabled]="pg.enabled">
+                  <div class="gateway-card__head">
+                    <div class="gateway-card__icon">
+                      @switch (pg.id) {
+                        @case ('stripe') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> }
+                        @case ('paypal') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/></svg> }
+                        @case ('cod') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> }
+                        @default { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-4 7 4M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"/></svg> }
+                      }
+                    </div>
+                    <div class="gateway-card__name">
+                      <p class="gateway-card__title">{{ pg.name }}</p>
+                      @if (pg.requiresKeys) { <span class="gateway-card__mode">{{ pg.testMode ? 'Test Mode' : 'Live Mode' }}</span> }
+                    </div>
+                    <span class="switch">
+                      <input type="checkbox" [checked]="pg.enabled" (change)="updatePaymentGateway(pg.id, 'enabled', $any($event.target).checked)" />
+                      <span class="switch__track"><span class="switch__thumb"></span></span>
+                    </span>
+                  </div>
+
+                  @if (pg.requiresKeys && pg.enabled) {
+                    <div class="gateway-card__body">
+                      <div class="form-grid">
+                        <div class="form-field">
+                          <label class="form-label">API Key</label>
+                          <div class="masked-input">
+                            <input class="form-input" [type]="isRevealed(pg.id + '-api') ? 'text' : 'password'" [ngModel]="pg.apiKey" (ngModelChange)="updatePaymentGateway(pg.id, 'apiKey', $event)" />
+                            <button type="button" class="masked-input__toggle" (click)="toggleReveal(pg.id + '-api')">
+                              @if (isRevealed(pg.id + '-api')) { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.77 21.77 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> }
+                              @else { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> }
+                            </button>
+                          </div>
+                        </div>
+                        <div class="form-field">
+                          <label class="form-label">Secret Key</label>
+                          <div class="masked-input">
+                            <input class="form-input" [type]="isRevealed(pg.id + '-secret') ? 'text' : 'password'" [ngModel]="pg.secretKey" (ngModelChange)="updatePaymentGateway(pg.id, 'secretKey', $event)" />
+                            <button type="button" class="masked-input__toggle" (click)="toggleReveal(pg.id + '-secret')">
+                              @if (isRevealed(pg.id + '-secret')) { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.77 21.77 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> }
+                              @else { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> }
+                            </button>
+                          </div>
+                        </div>
+                        <div class="form-field form-field--full">
+                          <label class="form-label">Webhook URL</label>
+                          <input class="form-input" type="text" [ngModel]="pg.webhookUrl" (ngModelChange)="updatePaymentGateway(pg.id, 'webhookUrl', $event)" />
+                        </div>
+                      </div>
+                      <label class="toggle-row toggle-row--tight">
+                        <span class="toggle-row__text">
+                          <span class="toggle-row__title">Test Mode</span>
+                          <span class="toggle-row__sub">Use sandbox credentials — no real charges will be made.</span>
+                        </span>
+                        <span class="switch">
+                          <input type="checkbox" [checked]="pg.testMode" (change)="updatePaymentGateway(pg.id, 'testMode', $any($event.target).checked)" />
+                          <span class="switch__track"><span class="switch__thumb"></span></span>
+                        </span>
+                      </label>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Payment Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ EMAIL ══════════════════ -->
+        @if (activeCategory() === 'email') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">SMTP Configuration</h2>
+              <p class="settings-card__sub">Used to send transactional and marketing emails from your store.</p>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">SMTP Host</label>
+                <input class="form-input" type="text" [ngModel]="draft().email.smtpHost" (ngModelChange)="updateEmail('smtpHost', $event)" [class.form-input--error]="formTouched() && emailErrors()['smtpHost']" />
+                @if (formTouched() && emailErrors()['smtpHost']) { <span class="field-error">{{ emailErrors()['smtpHost'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">SMTP Port</label>
+                <input class="form-input" type="number" [ngModel]="draft().email.smtpPort" (ngModelChange)="updateEmail('smtpPort', $event)" [class.form-input--error]="formTouched() && emailErrors()['smtpPort']" />
+                @if (formTouched() && emailErrors()['smtpPort']) { <span class="field-error">{{ emailErrors()['smtpPort'] }}</span> }
+              </div>
+              <div class="form-field">
+                <label class="form-label">Username</label>
+                <input class="form-input" type="text" [ngModel]="draft().email.username" (ngModelChange)="updateEmail('username', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Password</label>
+                <div class="masked-input">
+                  <input class="form-input" [type]="isRevealed('smtp-pw') ? 'text' : 'password'" [ngModel]="draft().email.password" (ngModelChange)="updateEmail('password', $event)" />
+                  <button type="button" class="masked-input__toggle" (click)="toggleReveal('smtp-pw')">
+                    @if (isRevealed('smtp-pw')) { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.77 21.77 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> }
+                    @else { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> }
+                  </button>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Encryption</label>
+                <div class="segmented">
+                  @for (e of encryptionOptions; track e) {
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().email.encryption === e" (click)="updateEmail('encryption', e)">{{ e }}</button>
+                  }
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Sender Name</label>
+                <input class="form-input" type="text" [ngModel]="draft().email.senderName" (ngModelChange)="updateEmail('senderName', $event)" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Sender Email</label>
+                <input class="form-input" type="email" [ngModel]="draft().email.senderEmail" (ngModelChange)="updateEmail('senderEmail', $event)" [class.form-input--error]="formTouched() && emailErrors()['senderEmail']" />
+                @if (formTouched() && emailErrors()['senderEmail']) { <span class="field-error">{{ emailErrors()['senderEmail'] }}</span> }
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-ghost" (click)="sendTestEmail()">Send Test Email</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Email Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ NOTIFICATIONS ══════════════════ -->
+        @if (activeCategory() === 'notifications') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Notification Channels</h2>
+              <p class="settings-card__sub">Choose how you and your team receive alerts.</p>
+            </div>
+            <div class="toggle-list">
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Email Notifications</span><span class="toggle-row__sub">Receive alerts via email.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.emailNotifications" (change)="updateNotifications('emailNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Push Notifications</span><span class="toggle-row__sub">Receive alerts as push notifications in the admin app.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.pushNotifications" (change)="updateNotifications('pushNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">SMS Notifications</span><span class="toggle-row__sub">Receive critical alerts via text message.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.smsNotifications" (change)="updateNotifications('smsNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Activity Alerts</h2>
+              <p class="settings-card__sub">Fine-tune which events trigger a notification.</p>
+            </div>
+            <div class="toggle-list">
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Order Notifications</span><span class="toggle-row__sub">New orders, status changes, and cancellations.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.orderNotifications" (change)="updateNotifications('orderNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Customer Notifications</span><span class="toggle-row__sub">New account signups and profile updates.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.customerNotifications" (change)="updateNotifications('customerNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Inventory Alerts</span><span class="toggle-row__sub">Stock adjustments and warehouse changes.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.inventoryAlerts" (change)="updateNotifications('inventoryAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Low Stock Alerts</span><span class="toggle-row__sub">When a product falls below its reorder threshold.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.lowStockAlerts" (change)="updateNotifications('lowStockAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Review Alerts</span><span class="toggle-row__sub">New product reviews awaiting moderation.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.reviewAlerts" (change)="updateNotifications('reviewAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Admin Login Alerts</span><span class="toggle-row__sub">Every time an administrator signs in.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.adminLoginAlerts" (change)="updateNotifications('adminLoginAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Activity Log Alerts</span><span class="toggle-row__sub">Summaries of sensitive actions taken across the system.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().notifications.activityLogAlerts" (change)="updateNotifications('activityLogAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Notification Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ APPEARANCE ══════════════════ -->
+        @if (activeCategory() === 'appearance') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Theme</h2>
+              <p class="settings-card__sub">Choose how the admin dashboard looks for you.</p>
+            </div>
+            <div class="segmented segmented--lg">
+              @for (t of themeOptions; track t) {
+                <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.theme === t" (click)="updateAppearance('theme', t)">{{ t }}</button>
+              }
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Primary Color</h2>
+              <p class="settings-card__sub">Sets the accent color used for buttons, links, and highlights.</p>
+            </div>
+            <div class="color-swatches">
+              @for (c of primaryColorSwatches; track c) {
+                <button type="button" class="color-swatch" [class.color-swatch--active]="draft().appearance.primaryColor === c" [style.background]="c" (click)="updateAppearance('primaryColor', c)" [attr.aria-label]="c"></button>
+              }
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Layout &amp; Density</h2>
+              <p class="settings-card__sub">Adjust how compact the interface feels.</p>
+            </div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Sidebar Style</label>
+                <div class="segmented">
+                  @for (s of sidebarStyleOptions; track s) {
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.sidebarStyle === s" (click)="updateAppearance('sidebarStyle', s)">{{ s }}</button>
+                  }
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Font Size</label>
+                <div class="segmented">
+                  @for (f of fontSizeOptions; track f) {
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.fontSize === f" (click)="updateAppearance('fontSize', f)">{{ f }}</button>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="toggle-list" style="margin-top: 16px;">
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Rounded Cards</span><span class="toggle-row__sub">Use softer, more rounded corners throughout the UI.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().appearance.roundedCards" (change)="updateAppearance('roundedCards', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Animations</span><span class="toggle-row__sub">Enable hover, fade, and slide animations across the dashboard.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().appearance.animations" (change)="updateAppearance('animations', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-row__text"><span class="toggle-row__title">Reduced Motion</span><span class="toggle-row__sub">Minimize motion for accessibility.</span></span>
+                <span class="switch"><input type="checkbox" [checked]="draft().appearance.reducedMotion" (change)="updateAppearance('reducedMotion', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Live Preview</h2>
+              <p class="settings-card__sub">A preview of your current appearance settings.</p>
+            </div>
+            <div class="appearance-preview" [class.appearance-preview--dark]="draft().appearance.theme === 'Dark'" [class.appearance-preview--compact]="draft().appearance.sidebarStyle === 'Compact'">
+              <div class="appearance-preview__sidebar" [style.background]="draft().appearance.primaryColor + '14'">
+                <div class="appearance-preview__dot" [style.background]="draft().appearance.primaryColor"></div>
+                <div class="appearance-preview__line"></div>
+                <div class="appearance-preview__line" style="width: 60%;"></div>
+                <div class="appearance-preview__line" style="width: 75%;"></div>
+              </div>
+              <div class="appearance-preview__main">
+                <div class="appearance-preview__card" [class.appearance-preview__card--rounded]="draft().appearance.roundedCards">
+                  <div class="appearance-preview__btn" [style.background]="draft().appearance.primaryColor">Primary Button</div>
+                  <p class="appearance-preview__text" [class]="'fs-' + draft().appearance.fontSize.toLowerCase()">The quick brown fox jumps over the lazy dog.</p>
+                </div>
+              </div>
+            </div>
+            <div class="settings-card__footer">
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Appearance Settings</button>
+            </div>
+          </div>
+        }
+
+        <!-- ══════════════════ SYSTEM ══════════════════ -->
+        @if (activeCategory() === 'system') {
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">System Information</h2>
+              <p class="settings-card__sub">Current environment and infrastructure status.</p>
+            </div>
+            <div class="system-grid">
+              <div class="system-stat"><span class="system-stat__label">Application Version</span><span class="system-stat__value">{{ draft().system.applicationVersion }}</span></div>
+              <div class="system-stat"><span class="system-stat__label">Angular Version</span><span class="system-stat__value">{{ draft().system.angularVersion }}</span></div>
+              <div class="system-stat"><span class="system-stat__label">Backend Version</span><span class="system-stat__value">{{ draft().system.backendVersion }}</span></div>
+              <div class="system-stat">
+                <span class="system-stat__label">Database Status</span>
+                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.databaseStatus)"></span>{{ draft().system.databaseStatus }}</span>
+              </div>
+              <div class="system-stat">
+                <span class="system-stat__label">Server Status</span>
+                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.serverStatus)"></span>{{ draft().system.serverStatus }}</span>
+              </div>
+              <div class="system-stat">
+                <span class="system-stat__label">Environment</span>
+                <span class="env-pill" [class.env-pill--prod]="draft().system.environment === 'Production'">{{ draft().system.environment }}</span>
+              </div>
+            </div>
+            <div class="storage-meter">
+              <div class="storage-meter__head">
+                <span class="storage-meter__label">Storage Used</span>
+                <span class="storage-meter__value">{{ draft().system.storageUsedGb }} GB / {{ draft().system.storageTotalGb }} GB</span>
+              </div>
+              <div class="progress-bar"><div class="progress-bar__fill" [style.width.%]="storagePercent()"></div></div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title">Maintenance Tools</h2>
+              <p class="settings-card__sub">Utility actions for keeping the platform running smoothly.</p>
+            </div>
+            <div class="tool-grid">
+              <button class="tool-btn" (click)="clearCache()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Clear Cache
+              </button>
+              <button class="tool-btn" (click)="rebuildIndex()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                Rebuild Index
+              </button>
+              <button class="tool-btn" (click)="optimizeImages()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                Optimize Images
+              </button>
+              <button class="tool-btn" (click)="backupDatabase()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+                Backup Database
+              </button>
+              <button class="tool-btn" (click)="exportSettings()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export Settings
+              </button>
+              <button class="tool-btn" (click)="importSettings()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Import Settings
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-card settings-card--danger">
+            <div class="settings-card__head">
+              <h2 class="settings-card__title settings-card__title--danger">Danger Zone</h2>
+              <p class="settings-card__sub">These actions are destructive and cannot be undone.</p>
+            </div>
+            <div class="danger-list">
+              <div class="danger-row">
+                <div>
+                  <p class="danger-row__title">Delete All Logs</p>
+                  <p class="danger-row__sub">Permanently remove every activity log entry.</p>
+                </div>
+                <button class="btn-danger-outline" (click)="requestDangerAction('delete-logs')">Delete Logs</button>
+              </div>
+              <div class="danger-row">
+                <div>
+                  <p class="danger-row__title">Delete Cache</p>
+                  <p class="danger-row__sub">Clear all cached data across the platform.</p>
+                </div>
+                <button class="btn-danger-outline" (click)="requestDangerAction('delete-cache')">Delete Cache</button>
+              </div>
+              <div class="danger-row">
+                <div>
+                  <p class="danger-row__title">Reset All Settings</p>
+                  <p class="danger-row__sub">Restore every setting on this page to its factory default.</p>
+                </div>
+                <button class="btn-danger-outline" (click)="requestDangerAction('factory-reset')">Factory Reset</button>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  }
+
+</div>
