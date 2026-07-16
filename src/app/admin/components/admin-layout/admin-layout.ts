@@ -86,15 +86,15 @@ export class AdminLayout {
     {
       section: 'Catalog',
       items: [
-        { id: 'products',   label: 'Products',     route: '/admin/products',   icon: 'products',   badge: 0 },
+        { id: 'products',   label: 'Products',     route: '/admin/products',   icon: 'products' },
         { id: 'categories', label: 'Categories',   route: '/admin/categories', icon: 'categories' },
-        { id: 'inventory',  label: 'Inventory',    route: '/admin/inventory',  icon: 'inventory',  badge: 3 },
+        { id: 'inventory',  label: 'Inventory',    route: '/admin/inventory',  icon: 'inventory' },
       ],
     },
     {
       section: 'Commerce',
       items: [
-        { id: 'orders',     label: 'Orders',       route: '/admin/orders',     icon: 'orders',     badge: 12 },
+        { id: 'orders',     label: 'Orders',       route: '/admin/orders',     icon: 'orders' },
         { id: 'customers',  label: 'Customers',    route: '/admin/customers',  icon: 'customers'  },
       ],
     },
