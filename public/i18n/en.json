@@ -1,0 +1,758 @@
+{
+  "common": {
+    "appName": "Nexus",
+    "adminBadge": "Admin",
+    "search": "Search",
+    "searchPlaceholder": "Search…",
+    "filters": "Filters",
+    "clearFilters": "Clear Filters",
+    "clear": "Clear",
+    "allStatuses": "All Statuses",
+    "allCategories": "All Categories",
+    "allRoles": "All Roles",
+    "allTypes": "All Types",
+    "allTime": "All Time",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days",
+    "last90Days": "Last 90 Days",
+    "lastMonth": "Last Month",
+    "customRange": "Custom Range",
+    "sortBy": "Sort",
+    "viewTable": "Table view",
+    "viewGrid": "Grid view",
+    "loading": "Loading…",
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} minute(s) ago",
+    "hoursAgo": "{{count}} hour(s) ago",
+    "daysAgo": "{{count}} day(s) ago",
+    "onlineNow": "Online now",
+    "results": "results",
+    "of": "of",
+    "selected": "selected",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft",
+    "archived": "Archived",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "yes": "Yes",
+    "no": "No",
+    "none": "None",
+    "unknown": "Unknown",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "optional": "optional",
+    "required": "required"
+  },
+
+  "buttons": {
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "saveDraft": "Save as Draft",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "viewDetails": "View Details",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "confirm": "Confirm",
+    "close": "Close",
+    "reset": "Reset",
+    "resetFilters": "Reset Filters",
+    "export": "Export",
+    "exportCsv": "Export as CSV",
+    "exportPdf": "Export as PDF",
+    "exportExcel": "Export Excel",
+    "print": "Print",
+    "download": "Download",
+    "downloadReport": "Download Report",
+    "refresh": "Refresh",
+    "duplicate": "Duplicate",
+    "archive": "Archive",
+    "activate": "Activate",
+    "approve": "Approve",
+    "reject": "Reject",
+    "flag": "Flag",
+    "markRead": "Mark Read",
+    "markUnread": "Mark Unread",
+    "markSelectedRead": "Mark Selected Read",
+    "deleteSelected": "Delete Selected",
+    "sendEmail": "Send Email",
+    "sendNow": "Send Now",
+    "schedule": "Schedule",
+    "generateReport": "Generate Report",
+    "clearSelection": "Clear",
+    "signOut": "Sign Out"
+  },
+
+  "dialogs": {
+    "areYouSure": "Are you sure?",
+    "cannotBeUndone": "This action cannot be undone.",
+    "keepEditing": "Keep Editing",
+    "discardChanges": "Discard Changes",
+    "discardTitle": "Discard unsaved changes?",
+    "discardBody": "You've made changes that haven't been saved yet.",
+    "unsavedChanges": "Unsaved changes"
+  },
+
+  "toasts": {
+    "savedSuccessfully": "Saved successfully",
+    "deletedSuccessfully": "Deleted successfully",
+    "updatedSuccessfully": "Updated successfully",
+    "createdSuccessfully": "Created successfully",
+    "changesReverted": "Changes reverted",
+    "settingsRefreshed": "Settings refreshed",
+    "exportStarted": "Exporting…"
+  },
+
+  "validation": {
+    "required": "This field is required.",
+    "invalidEmail": "Enter a valid email address.",
+    "invalidPhone": "Enter a valid phone number.",
+    "invalidUrl": "Enter a valid URL (https://…).",
+    "minLength": "Must be at least {{min}} characters.",
+    "maxLength": "Must be at most {{max}} characters.",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "passwordTooWeak": "Choose a stronger password.",
+    "mustBePositive": "Must be greater than 0.",
+    "invalidNumber": "Enter a valid number."
+  },
+
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Not found.",
+    "loadFailed": "Failed to load. Please try again."
+  },
+
+  "navigation": {
+    "sections": {
+      "overview": "Overview",
+      "catalog": "Catalog",
+      "commerce": "Commerce",
+      "content": "Content",
+      "system": "System"
+    },
+    "dashboard": "Dashboard",
+    "reports": "Reports",
+    "products": "Products",
+    "categories": "Categories",
+    "inventory": "Inventory",
+    "orders": "Orders",
+    "customers": "Customers",
+    "reviews": "Reviews",
+    "notifications": "Notifications",
+    "pushNotifications": "Push Notifications",
+    "admins": "Admins",
+    "activityLogs": "Activity Logs",
+    "settings": "Settings",
+    "searchGlobalPlaceholder": "Search products, orders, customers…"
+  },
+
+  "language": {
+    "label": "Language",
+    "select": "Select language",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Welcome back — here's what's happening today.",
+    "addProduct": "Add Product",
+    "export": "Export",
+    "stats": {
+      "totalRevenue": "Total Revenue",
+      "totalOrders": "Total Orders",
+      "products": "Products",
+      "customers": "Customers",
+      "pendingOrders": "Pending Orders",
+      "salesToday": "Sales Today",
+      "lowStockItems": "Low Stock Items",
+      "avgRating": "Avg Rating",
+      "vsLastMonth": "vs last month",
+      "vsYesterday": "vs yesterday",
+      "vsLastWeek": "vs last week",
+      "newThisMonth": "new this month"
+    },
+    "revenueOverview": "Revenue Overview",
+    "revenueOverviewSub": "Monthly revenue for the past 12 months",
+    "legendRevenue": "Revenue",
+    "legendProfit": "Profit",
+    "topCategories": "Top Categories",
+    "topCategoriesSub": "Sales distribution",
+    "recentOrders": "Recent Orders",
+    "viewAll": "View all →",
+    "topProducts": "Top Products",
+    "lowStock": "Low Stock",
+    "fix": "Fix →",
+    "quickActions": "Quick Actions",
+    "qa": {
+      "addProduct": "Add Product",
+      "newOrder": "New Order",
+      "sendNotification": "Send Notification",
+      "createCoupon": "Create Coupon",
+      "viewReports": "View Reports",
+      "manageInventory": "Manage Inventory"
+    },
+    "table": {
+      "order": "Order",
+      "customer": "Customer",
+      "items": "Items",
+      "total": "Total",
+      "status": "Status",
+      "date": "Date"
+    }
+  },
+
+  "products": {
+    "title": "Products",
+    "subtitle": "{{count}} products total",
+    "addProduct": "Add Product",
+    "editProduct": "Edit Product",
+    "productName": "Product Name",
+    "brand": "Brand",
+    "category": "Category",
+    "description": "Description",
+    "specifications": "Specifications",
+    "tags": "Tags",
+    "salePrice": "Sale Price ($)",
+    "originalPrice": "Original Price ($)",
+    "discount": "Discount (%)",
+    "stockQuantity": "Stock Quantity",
+    "sku": "SKU",
+    "barcode": "Barcode / ISBN",
+    "weight": "Weight",
+    "warranty": "Warranty",
+    "dimensions": "Dimensions (cm)",
+    "productImages": "Product Images",
+    "colorVariants": "Product has multiple color variants",
+    "colorVariantsSub": "Upload separate images for each color option",
+    "addColorVariant": "Add Color Variant",
+    "seoTitle": "SEO Title",
+    "seoDescription": "SEO Description",
+    "urlSlug": "URL Slug",
+    "status": {
+      "active": "Active",
+      "draft": "Draft",
+      "archived": "Archived"
+    },
+    "tabs": {
+      "all": "All Products",
+      "active": "Active",
+      "draft": "Draft",
+      "archived": "Archived"
+    },
+    "stats": {
+      "totalProducts": "Total Products",
+      "inventoryValue": "Inventory Value",
+      "lowStockAlerts": "Low Stock Alerts",
+      "featuredProducts": "Featured Products",
+      "outOfStock": "out of stock",
+      "activeSuffix": "active",
+      "newThisMonth": "new this month",
+      "shownOnStorefront": "shown on storefront"
+    },
+    "table": {
+      "product": "Product",
+      "status": "Status",
+      "price": "Price",
+      "stock": "Stock",
+      "sales": "Sales",
+      "sku": "SKU"
+    },
+    "empty": {
+      "title": "No products found",
+      "subtitle": "Try adjusting your search or filters.",
+      "cta": "Add your first product"
+    },
+    "outOfStock": "Out of stock",
+    "unitsSuffix": "units",
+    "publish": "Publish Product",
+    "createProduct": "Create Product",
+    "toasts": {
+      "updated": "\"{{name}}\" updated",
+      "duplicated": "\"{{name}}\" duplicated as draft",
+      "statusChanged": "\"{{name}}\" set to {{status}}",
+      "deleted": "\"{{name}}\" deleted",
+      "bulkDeleted": "{{count}} product(s) deleted",
+      "bulkStatusChanged": "{{count}} product(s) set to {{status}}",
+      "exported": "Products exported"
+    }
+  },
+
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Manage your product taxonomy",
+    "addCategory": "Add Category",
+    "editCategory": "Edit Category",
+    "categoryName": "Category Name",
+    "description": "Description",
+    "coverImage": "Cover Image",
+    "gallery": "Gallery",
+    "keywords": "Keywords",
+    "featured": "Featured category",
+    "stats": {
+      "totalCategories": "Total Categories",
+      "active": "Active",
+      "featured": "Featured",
+      "totalProducts": "Total Products",
+      "acrossAllSections": "across all sections",
+      "visibleInStore": "visible in store",
+      "onHomepage": "on homepage",
+      "catalogedItems": "catalogued items"
+    },
+    "table": {
+      "category": "Category",
+      "status": "Status",
+      "featured": "Featured",
+      "products": "Products",
+      "created": "Created"
+    },
+    "empty": {
+      "title": "No categories found",
+      "subtitleFiltered": "Try adjusting your search or filters.",
+      "subtitleEmpty": "Create your first category to organize your products."
+    },
+    "deleteConfirmTitle": "Delete Category",
+    "deleteConfirmBody": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone and may affect {{count}} products."
+  },
+
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Manage customer orders, payments, shipments, and fulfillment.",
+    "createOrder": "Create Order",
+    "exportOrders": "Export Orders",
+    "stats": {
+      "totalOrders": "Total Orders",
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "totalRevenue": "Total Revenue",
+      "avgOrderValue": "Avg Order Value"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "packed": "Packed",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "payment": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "failed": "Failed",
+      "refunded": "Refunded"
+    },
+    "shipping": {
+      "preparing": "Preparing",
+      "ready": "Ready",
+      "inTransit": "In Transit",
+      "delivered": "Delivered",
+      "returned": "Returned"
+    },
+    "table": {
+      "customer": "Customer",
+      "orderDate": "Order Date",
+      "paymentStatus": "Payment Status",
+      "shippingStatus": "Shipping Status",
+      "total": "Total",
+      "status": "Status"
+    },
+    "actions": {
+      "updateStatus": "Update Status",
+      "assignStaff": "Assign Staff",
+      "downloadInvoice": "Download Invoice",
+      "cancelOrder": "Cancel Order",
+      "trackShipment": "Track Shipment",
+      "printInvoice": "Print Invoice",
+      "downloadPdf": "Download PDF"
+    },
+    "empty": {
+      "title": "No orders found",
+      "subtitle": "Try changing filters or create a new order."
+    },
+    "cancelConfirmTitle": "Cancel Order",
+    "cancelConfirmBody": "Are you sure you want to cancel {{orderNumber}}? The customer will be notified automatically.",
+    "deleteConfirmTitle": "Delete Order",
+    "deleteConfirmBody": "Are you sure you want to permanently delete {{orderNumber}}? This action cannot be undone.",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shippingCost": "Shipping",
+    "tax": "Tax",
+    "grandTotal": "Grand Total"
+  },
+
+  "customers": {
+    "title": "Customers",
+    "subtitle": "Manage customers, monitor activity, and build long-term customer relationships.",
+    "stats": {
+      "totalCustomers": "Total Customers",
+      "newThisMonth": "New This Month",
+      "activeCustomers": "Active Customers",
+      "vipCustomers": "VIP Customers",
+      "returningCustomers": "Returning Customers",
+      "avgLifetimeValue": "Avg Lifetime Value",
+      "totalRevenue": "Total Revenue",
+      "avgOrdersPerCustomer": "Avg Orders / Customer"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "blocked": "Blocked",
+      "pendingVerification": "Pending Verification"
+    },
+    "type": {
+      "regular": "Regular",
+      "premium": "Premium",
+      "vip": "VIP",
+      "business": "Business"
+    },
+    "table": {
+      "customer": "Customer",
+      "customerId": "Customer ID",
+      "email": "Email",
+      "phone": "Phone",
+      "lifetimeValue": "Lifetime Value"
+    },
+    "actions": {
+      "viewProfile": "View Profile",
+      "editCustomer": "Edit Customer",
+      "viewOrders": "View Orders",
+      "viewWishlist": "View Wishlist",
+      "sendEmail": "Send Email",
+      "block": "Block",
+      "unblock": "Unblock"
+    },
+    "empty": {
+      "title": "No customers found",
+      "subtitle": "Try adjusting your filters or add a new customer."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "orders": "Orders",
+      "addresses": "Addresses",
+      "payments": "Payments",
+      "wishlist": "Wishlist",
+      "activity": "Activity",
+      "notes": "Notes",
+      "insights": "Insights"
+    },
+    "blockConfirmTitle": "Block Customer",
+    "unblockConfirmTitle": "Unblock Customer",
+    "deleteConfirmTitle": "Delete Customer"
+  },
+
+  "inventory": {
+    "title": "Inventory",
+    "subtitle": "Monitor product stock, warehouses, movements and inventory health",
+    "addItem": "Add Inventory Item",
+    "stats": {
+      "totalProducts": "Total Products",
+      "totalStockUnits": "Total Stock Units",
+      "lowStockItems": "Low Stock Items",
+      "outOfStock": "Out of Stock",
+      "inventoryValue": "Inventory Value",
+      "avgStockLevel": "Avg Stock Level"
+    },
+    "status": {
+      "inStock": "In Stock",
+      "lowStock": "Low Stock",
+      "outOfStock": "Out of Stock",
+      "overstock": "Overstock",
+      "critical": "Critical"
+    },
+    "attention": "Items Requiring Attention",
+    "restock": "Restock",
+    "table": {
+      "product": "Product",
+      "sku": "SKU",
+      "warehouse": "Warehouse",
+      "stock": "Stock",
+      "value": "Value",
+      "status": "Status"
+    },
+    "actions": {
+      "adjustStock": "Adjust Stock",
+      "transfer": "Transfer",
+      "stockHistory": "Stock History"
+    },
+    "empty": {
+      "title": "No inventory records found",
+      "subtitle": "Try changing your filters."
+    },
+    "removeConfirmTitle": "Remove from Inventory",
+    "removeConfirmBody": "Are you sure you want to remove \"{{name}}\" from inventory tracking? This action cannot be undone."
+  },
+
+  "reviews": {
+    "title": "Reviews",
+    "subtitle": "Manage customer reviews and moderation.",
+    "stats": {
+      "totalReviews": "Total Reviews",
+      "averageRating": "Average Rating",
+      "pendingModeration": "Pending Moderation",
+      "featuredReviews": "Featured Reviews"
+    },
+    "status": {
+      "new": "New",
+      "read": "Read",
+      "approved": "Approved",
+      "featured": "Featured",
+      "flagged": "Flagged"
+    },
+    "actions": {
+      "viewReview": "View Review",
+      "markRead": "Mark Read",
+      "approve": "Approve",
+      "feature": "Feature",
+      "flag": "Flag"
+    },
+    "empty": {
+      "title": "No reviews found",
+      "subtitle": "Try adjusting your filters or search."
+    },
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "deleteConfirmTitle": "Delete Review",
+    "deleteConfirmBodySingle": "Are you sure you want to delete the review by {{name}} for {{product}}? This action cannot be undone.",
+    "deleteConfirmBodyBulk": "Are you sure you want to delete {{count}} selected reviews? This action cannot be undone."
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Monitor every activity across your store.",
+    "markAllRead": "Mark All Read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread"
+    },
+    "empty": {
+      "title": "No notifications found",
+      "caughtUp": "You're all caught up",
+      "caughtUpSub": "No {{filter}}notifications right now.",
+      "genericSub": "You're all caught up — new activity will appear here."
+    },
+    "viewAll": "View All Notifications",
+    "stats": {
+      "unread": "Unread Notifications",
+      "today": "Today",
+      "thisWeek": "This Week",
+      "highPriority": "High Priority"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "type": {
+      "order": "Order",
+      "customer": "Customer",
+      "inventory": "Inventory",
+      "product": "Product",
+      "payment": "Payment",
+      "system": "System",
+      "warning": "Warning",
+      "success": "Success",
+      "info": "Info"
+    }
+  },
+
+  "pushNotifications": {
+    "title": "Push Notifications",
+    "subtitle": "Compose a push notification and preview it live before sending.",
+    "notificationTitle": "Notification Title",
+    "messageBody": "Message Body",
+    "campaignName": "Campaign Name",
+    "imageUrl": "Image URL (optional)",
+    "deepLink": "Deep Link",
+    "targetScreen": "Target Screen",
+    "audience": "Audience",
+    "schedule": "Schedule",
+    "sendNow": "Send Now",
+    "scheduleLater": "Schedule Later",
+    "advanced": "Advanced",
+    "priority": "Priority",
+    "ttl": "TTL (hours)",
+    "silentNotification": "Silent Notification",
+    "livePreview": "Live Preview",
+    "estimatedRecipients": "Estimated recipients"
+  },
+
+  "admins": {
+    "title": "Admin Users",
+    "subtitle": "Manage administrator accounts, permissions and activity.",
+    "addAdmin": "Add Admin",
+    "editAdmin": "Edit Admin",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "permissions": "Permissions",
+    "twoFactor": "Two-Factor Authentication",
+    "roles": {
+      "superAdmin": "Super Admin",
+      "admin": "Admin",
+      "manager": "Manager",
+      "support": "Support"
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "busy": "Busy"
+    },
+    "stats": {
+      "totalAdmins": "Total Admins",
+      "superAdmins": "Super Admins",
+      "currentlyOnline": "Currently Online",
+      "twoFaEnabled": "2FA Enabled"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "lastOnline": "Last Online",
+      "created": "Created"
+    },
+    "actions": {
+      "resetPassword": "Reset Password",
+      "disableAccount": "Disable Account",
+      "deleteAdmin": "Delete Admin"
+    },
+    "empty": {
+      "title": "No administrators found",
+      "subtitle": "Try adjusting your search or filters."
+    },
+    "resetConfirmTitle": "Reset Password",
+    "disableConfirmTitle": "Disable Account",
+    "deleteConfirmTitle": "Delete Admin"
+  },
+
+  "activityLogs": {
+    "title": "Activity Logs",
+    "subtitle": "Track every important action performed throughout the administration system.",
+    "stats": {
+      "totalActivities": "Total Activities",
+      "todaysActivities": "Today's Activities",
+      "successfulActions": "Successful Actions",
+      "failedActions": "Failed Actions"
+    },
+    "table": {
+      "admin": "Admin",
+      "role": "Role",
+      "action": "Action",
+      "module": "Module",
+      "entity": "Entity",
+      "status": "Status",
+      "time": "Time"
+    },
+    "action": {
+      "create": "Create",
+      "update": "Update",
+      "delete": "Delete",
+      "login": "Login",
+      "logout": "Logout",
+      "export": "Export",
+      "import": "Import",
+      "approve": "Approve",
+      "reject": "Reject",
+      "view": "View"
+    },
+    "immutableNote": "Immutable audit record",
+    "empty": {
+      "title": "No activity logs found",
+      "subtitle": "Try adjusting your search or filters."
+    }
+  },
+
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your store configuration and administrator preferences.",
+    "nav": {
+      "general": "General",
+      "profile": "Profile",
+      "security": "Security",
+      "store": "Store",
+      "payments": "Payments",
+      "email": "Email",
+      "notifications": "Notifications",
+      "appearance": "Appearance",
+      "system": "System"
+    },
+    "general": {
+      "title": "Store Information",
+      "subtitle": "Basic details about your store, shown to customers and used across the platform.",
+      "storeName": "Store Name",
+      "storeDescription": "Store Description",
+      "storeEmail": "Store Email",
+      "supportEmail": "Support Email",
+      "phone": "Phone Number",
+      "website": "Website",
+      "address": "Business Address",
+      "country": "Country",
+      "currency": "Currency",
+      "timezone": "Timezone",
+      "language": "Language",
+      "dateFormat": "Date Format"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "primaryColor": "Primary Color",
+      "sidebarStyle": "Sidebar Style",
+      "compact": "Compact",
+      "normal": "Normal",
+      "fontSize": "Font Size",
+      "roundedCards": "Rounded Cards",
+      "animations": "Animations",
+      "reducedMotion": "Reduced Motion"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "twoFactor": "Two-Factor Authentication",
+      "sessionTimeout": "Session Timeout (minutes)",
+      "activeSessions": "Active Sessions",
+      "terminateSession": "Terminate",
+      "terminateAll": "Terminate All Sessions",
+      "thisDevice": "This device"
+    },
+    "unsavedPill": "Unsaved changes"
+  },
+
+  "tables": {
+    "noResults": "No results found",
+    "rowsPerPage": "Rows per page",
+    "showing": "Showing",
+    "page": "Page"
+  },
+
+  "forms": {
+    "dragAndDrop": "Click or drag & drop",
+    "maxFileSize": "Max {{size}} MB",
+    "addImage": "Add image",
+    "replaceImage": "Replace image",
+    "removeImage": "Remove image"
+  }
+}
