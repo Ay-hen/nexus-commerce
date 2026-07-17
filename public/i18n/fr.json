@@ -1,0 +1,758 @@
+{
+  "common": {
+    "appName": "Nexus",
+    "adminBadge": "Admin",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher…",
+    "filters": "Filtres",
+    "clearFilters": "Effacer les filtres",
+    "clear": "Effacer",
+    "allStatuses": "Tous les statuts",
+    "allCategories": "Toutes les catégories",
+    "allRoles": "Tous les rôles",
+    "allTypes": "Tous les types",
+    "allTime": "Toutes les périodes",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "last7Days": "7 derniers jours",
+    "last30Days": "30 derniers jours",
+    "last90Days": "90 derniers jours",
+    "lastMonth": "Le mois dernier",
+    "customRange": "Plage personnalisée",
+    "sortBy": "Trier",
+    "viewTable": "Vue tableau",
+    "viewGrid": "Vue grille",
+    "loading": "Chargement…",
+    "justNow": "À l'instant",
+    "minutesAgo": "il y a {{count}} minute(s)",
+    "hoursAgo": "il y a {{count}} heure(s)",
+    "daysAgo": "il y a {{count}} jour(s)",
+    "onlineNow": "En ligne",
+    "results": "résultats",
+    "of": "sur",
+    "selected": "sélectionné(s)",
+    "actions": "Actions",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "draft": "Brouillon",
+    "archived": "Archivé",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "yes": "Oui",
+    "no": "Non",
+    "none": "Aucun",
+    "unknown": "Inconnu",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "optional": "facultatif",
+    "required": "requis"
+  },
+
+  "buttons": {
+    "save": "Enregistrer",
+    "saveChanges": "Enregistrer les modifications",
+    "saveDraft": "Enregistrer comme brouillon",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "viewDetails": "Voir les détails",
+    "add": "Ajouter",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "reset": "Réinitialiser",
+    "resetFilters": "Réinitialiser les filtres",
+    "export": "Exporter",
+    "exportCsv": "Exporter en CSV",
+    "exportPdf": "Exporter en PDF",
+    "exportExcel": "Exporter en Excel",
+    "print": "Imprimer",
+    "download": "Télécharger",
+    "downloadReport": "Télécharger le rapport",
+    "refresh": "Actualiser",
+    "duplicate": "Dupliquer",
+    "archive": "Archiver",
+    "activate": "Activer",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "flag": "Signaler",
+    "markRead": "Marquer comme lu",
+    "markUnread": "Marquer comme non lu",
+    "markSelectedRead": "Marquer la sélection comme lue",
+    "deleteSelected": "Supprimer la sélection",
+    "sendEmail": "Envoyer un e-mail",
+    "sendNow": "Envoyer maintenant",
+    "schedule": "Planifier",
+    "generateReport": "Générer le rapport",
+    "clearSelection": "Effacer",
+    "signOut": "Se déconnecter"
+  },
+
+  "dialogs": {
+    "areYouSure": "Êtes-vous sûr ?",
+    "cannotBeUndone": "Cette action est irréversible.",
+    "keepEditing": "Continuer la modification",
+    "discardChanges": "Annuler les modifications",
+    "discardTitle": "Abandonner les modifications non enregistrées ?",
+    "discardBody": "Vous avez apporté des modifications qui n'ont pas encore été enregistrées.",
+    "unsavedChanges": "Modifications non enregistrées"
+  },
+
+  "toasts": {
+    "savedSuccessfully": "Enregistré avec succès",
+    "deletedSuccessfully": "Supprimé avec succès",
+    "updatedSuccessfully": "Mis à jour avec succès",
+    "createdSuccessfully": "Créé avec succès",
+    "changesReverted": "Modifications annulées",
+    "settingsRefreshed": "Paramètres actualisés",
+    "exportStarted": "Exportation en cours…"
+  },
+
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "invalidEmail": "Saisissez une adresse e-mail valide.",
+    "invalidPhone": "Saisissez un numéro de téléphone valide.",
+    "invalidUrl": "Saisissez une URL valide (https://…).",
+    "minLength": "Doit contenir au moins {{min}} caractères.",
+    "maxLength": "Doit contenir au plus {{max}} caractères.",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
+    "passwordTooWeak": "Choisissez un mot de passe plus fort.",
+    "mustBePositive": "Doit être supérieur à 0.",
+    "invalidNumber": "Saisissez un nombre valide."
+  },
+
+  "errors": {
+    "generic": "Une erreur est survenue. Veuillez réessayer.",
+    "notFound": "Introuvable.",
+    "loadFailed": "Échec du chargement. Veuillez réessayer."
+  },
+
+  "navigation": {
+    "sections": {
+      "overview": "Aperçu",
+      "catalog": "Catalogue",
+      "commerce": "Commerce",
+      "content": "Contenu",
+      "system": "Système"
+    },
+    "dashboard": "Tableau de bord",
+    "reports": "Rapports",
+    "products": "Produits",
+    "categories": "Catégories",
+    "inventory": "Inventaire",
+    "orders": "Commandes",
+    "customers": "Clients",
+    "reviews": "Avis",
+    "notifications": "Notifications",
+    "pushNotifications": "Notifications push",
+    "admins": "Administrateurs",
+    "activityLogs": "Journaux d'activité",
+    "settings": "Paramètres",
+    "searchGlobalPlaceholder": "Rechercher produits, commandes, clients…"
+  },
+
+  "language": {
+    "label": "Langue",
+    "select": "Choisir la langue",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español"
+  },
+
+  "dashboard": {
+    "title": "Tableau de bord",
+    "subtitle": "Bon retour — voici ce qui se passe aujourd'hui.",
+    "addProduct": "Ajouter un produit",
+    "export": "Exporter",
+    "stats": {
+      "totalRevenue": "Revenu total",
+      "totalOrders": "Commandes totales",
+      "products": "Produits",
+      "customers": "Clients",
+      "pendingOrders": "Commandes en attente",
+      "salesToday": "Ventes du jour",
+      "lowStockItems": "Articles en stock faible",
+      "avgRating": "Note moyenne",
+      "vsLastMonth": "vs le mois dernier",
+      "vsYesterday": "vs hier",
+      "vsLastWeek": "vs la semaine dernière",
+      "newThisMonth": "nouveaux ce mois-ci"
+    },
+    "revenueOverview": "Aperçu des revenus",
+    "revenueOverviewSub": "Revenus mensuels des 12 derniers mois",
+    "legendRevenue": "Revenu",
+    "legendProfit": "Profit",
+    "topCategories": "Meilleures catégories",
+    "topCategoriesSub": "Répartition des ventes",
+    "recentOrders": "Commandes récentes",
+    "viewAll": "Tout voir →",
+    "topProducts": "Meilleurs produits",
+    "lowStock": "Stock faible",
+    "fix": "Corriger →",
+    "quickActions": "Actions rapides",
+    "qa": {
+      "addProduct": "Ajouter un produit",
+      "newOrder": "Nouvelle commande",
+      "sendNotification": "Envoyer une notification",
+      "createCoupon": "Créer un coupon",
+      "viewReports": "Voir les rapports",
+      "manageInventory": "Gérer l'inventaire"
+    },
+    "table": {
+      "order": "Commande",
+      "customer": "Client",
+      "items": "Articles",
+      "total": "Total",
+      "status": "Statut",
+      "date": "Date"
+    }
+  },
+
+  "products": {
+    "title": "Produits",
+    "subtitle": "{{count}} produits au total",
+    "addProduct": "Ajouter un produit",
+    "editProduct": "Modifier le produit",
+    "productName": "Nom du produit",
+    "brand": "Marque",
+    "category": "Catégorie",
+    "description": "Description",
+    "specifications": "Spécifications",
+    "tags": "Étiquettes",
+    "salePrice": "Prix de vente ($)",
+    "originalPrice": "Prix d'origine ($)",
+    "discount": "Remise (%)",
+    "stockQuantity": "Quantité en stock",
+    "sku": "Référence (SKU)",
+    "barcode": "Code-barres / ISBN",
+    "weight": "Poids",
+    "warranty": "Garantie",
+    "dimensions": "Dimensions (cm)",
+    "productImages": "Images du produit",
+    "colorVariants": "Le produit a plusieurs variantes de couleur",
+    "colorVariantsSub": "Téléversez des images distinctes pour chaque couleur",
+    "addColorVariant": "Ajouter une variante de couleur",
+    "seoTitle": "Titre SEO",
+    "seoDescription": "Description SEO",
+    "urlSlug": "Slug URL",
+    "status": {
+      "active": "Actif",
+      "draft": "Brouillon",
+      "archived": "Archivé"
+    },
+    "tabs": {
+      "all": "Tous les produits",
+      "active": "Actifs",
+      "draft": "Brouillons",
+      "archived": "Archivés"
+    },
+    "stats": {
+      "totalProducts": "Total des produits",
+      "inventoryValue": "Valeur de l'inventaire",
+      "lowStockAlerts": "Alertes de stock faible",
+      "featuredProducts": "Produits en vedette",
+      "outOfStock": "en rupture de stock",
+      "activeSuffix": "actifs",
+      "newThisMonth": "nouveaux ce mois-ci",
+      "shownOnStorefront": "affichés en boutique"
+    },
+    "table": {
+      "product": "Produit",
+      "status": "Statut",
+      "price": "Prix",
+      "stock": "Stock",
+      "sales": "Ventes",
+      "sku": "Référence"
+    },
+    "empty": {
+      "title": "Aucun produit trouvé",
+      "subtitle": "Essayez d'ajuster votre recherche ou vos filtres.",
+      "cta": "Ajouter votre premier produit"
+    },
+    "outOfStock": "Rupture de stock",
+    "unitsSuffix": "unités",
+    "publish": "Publier le produit",
+    "createProduct": "Créer le produit",
+    "toasts": {
+      "updated": "« {{name}} » mis à jour",
+      "duplicated": "« {{name}} » dupliqué en brouillon",
+      "statusChanged": "« {{name}} » défini sur {{status}}",
+      "deleted": "« {{name}} » supprimé",
+      "bulkDeleted": "{{count}} produit(s) supprimé(s)",
+      "bulkStatusChanged": "{{count}} produit(s) défini(s) sur {{status}}",
+      "exported": "Produits exportés"
+    }
+  },
+
+  "categories": {
+    "title": "Catégories",
+    "subtitle": "Gérez la taxonomie de vos produits",
+    "addCategory": "Ajouter une catégorie",
+    "editCategory": "Modifier la catégorie",
+    "categoryName": "Nom de la catégorie",
+    "description": "Description",
+    "coverImage": "Image de couverture",
+    "gallery": "Galerie",
+    "keywords": "Mots-clés",
+    "featured": "Catégorie en vedette",
+    "stats": {
+      "totalCategories": "Total des catégories",
+      "active": "Actives",
+      "featured": "En vedette",
+      "totalProducts": "Total des produits",
+      "acrossAllSections": "dans toutes les sections",
+      "visibleInStore": "visibles en boutique",
+      "onHomepage": "en page d'accueil",
+      "catalogedItems": "articles catalogués"
+    },
+    "table": {
+      "category": "Catégorie",
+      "status": "Statut",
+      "featured": "En vedette",
+      "products": "Produits",
+      "created": "Créée le"
+    },
+    "empty": {
+      "title": "Aucune catégorie trouvée",
+      "subtitleFiltered": "Essayez d'ajuster votre recherche ou vos filtres.",
+      "subtitleEmpty": "Créez votre première catégorie pour organiser vos produits."
+    },
+    "deleteConfirmTitle": "Supprimer la catégorie",
+    "deleteConfirmBody": "Voulez-vous vraiment supprimer « {{name}} » ? Cette action est irréversible et peut affecter {{count}} produits."
+  },
+
+  "orders": {
+    "title": "Commandes",
+    "subtitle": "Gérez les commandes, paiements, expéditions et exécutions des clients.",
+    "createOrder": "Créer une commande",
+    "exportOrders": "Exporter les commandes",
+    "stats": {
+      "totalOrders": "Commandes totales",
+      "pending": "En attente",
+      "processing": "En traitement",
+      "shipped": "Expédiées",
+      "delivered": "Livrées",
+      "cancelled": "Annulées",
+      "totalRevenue": "Revenu total",
+      "avgOrderValue": "Panier moyen"
+    },
+    "status": {
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "processing": "En traitement",
+      "packed": "Emballée",
+      "shipped": "Expédiée",
+      "delivered": "Livrée",
+      "cancelled": "Annulée",
+      "refunded": "Remboursée"
+    },
+    "payment": {
+      "paid": "Payée",
+      "pending": "En attente",
+      "failed": "Échouée",
+      "refunded": "Remboursée"
+    },
+    "shipping": {
+      "preparing": "En préparation",
+      "ready": "Prête",
+      "inTransit": "En transit",
+      "delivered": "Livrée",
+      "returned": "Retournée"
+    },
+    "table": {
+      "customer": "Client",
+      "orderDate": "Date de commande",
+      "paymentStatus": "Statut du paiement",
+      "shippingStatus": "Statut de l'expédition",
+      "total": "Total",
+      "status": "Statut"
+    },
+    "actions": {
+      "updateStatus": "Mettre à jour le statut",
+      "assignStaff": "Assigner un employé",
+      "downloadInvoice": "Télécharger la facture",
+      "cancelOrder": "Annuler la commande",
+      "trackShipment": "Suivre l'expédition",
+      "printInvoice": "Imprimer la facture",
+      "downloadPdf": "Télécharger le PDF"
+    },
+    "empty": {
+      "title": "Aucune commande trouvée",
+      "subtitle": "Modifiez les filtres ou créez une nouvelle commande."
+    },
+    "cancelConfirmTitle": "Annuler la commande",
+    "cancelConfirmBody": "Voulez-vous vraiment annuler {{orderNumber}} ? Le client sera notifié automatiquement.",
+    "deleteConfirmTitle": "Supprimer la commande",
+    "deleteConfirmBody": "Voulez-vous vraiment supprimer définitivement {{orderNumber}} ? Cette action est irréversible.",
+    "orderSummary": "Résumé de la commande",
+    "subtotal": "Sous-total",
+    "shippingCost": "Livraison",
+    "tax": "Taxe",
+    "grandTotal": "Total général"
+  },
+
+  "customers": {
+    "title": "Clients",
+    "subtitle": "Gérez vos clients, suivez leur activité et construisez des relations durables.",
+    "stats": {
+      "totalCustomers": "Total des clients",
+      "newThisMonth": "Nouveaux ce mois-ci",
+      "activeCustomers": "Clients actifs",
+      "vipCustomers": "Clients VIP",
+      "returningCustomers": "Clients fidèles",
+      "avgLifetimeValue": "Valeur vie moyenne",
+      "totalRevenue": "Revenu total",
+      "avgOrdersPerCustomer": "Commandes moy. / client"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "blocked": "Bloqué",
+      "pendingVerification": "Vérification en attente"
+    },
+    "type": {
+      "regular": "Standard",
+      "premium": "Premium",
+      "vip": "VIP",
+      "business": "Entreprise"
+    },
+    "table": {
+      "customer": "Client",
+      "customerId": "ID client",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "lifetimeValue": "Valeur vie"
+    },
+    "actions": {
+      "viewProfile": "Voir le profil",
+      "editCustomer": "Modifier le client",
+      "viewOrders": "Voir les commandes",
+      "viewWishlist": "Voir la liste de souhaits",
+      "sendEmail": "Envoyer un e-mail",
+      "block": "Bloquer",
+      "unblock": "Débloquer"
+    },
+    "empty": {
+      "title": "Aucun client trouvé",
+      "subtitle": "Ajustez vos filtres ou ajoutez un nouveau client."
+    },
+    "tabs": {
+      "overview": "Aperçu",
+      "orders": "Commandes",
+      "addresses": "Adresses",
+      "payments": "Paiements",
+      "wishlist": "Liste de souhaits",
+      "activity": "Activité",
+      "notes": "Notes",
+      "insights": "Analyses"
+    },
+    "blockConfirmTitle": "Bloquer le client",
+    "unblockConfirmTitle": "Débloquer le client",
+    "deleteConfirmTitle": "Supprimer le client"
+  },
+
+  "inventory": {
+    "title": "Inventaire",
+    "subtitle": "Surveillez le stock, les entrepôts, les mouvements et la santé de l'inventaire",
+    "addItem": "Ajouter un article",
+    "stats": {
+      "totalProducts": "Total des produits",
+      "totalStockUnits": "Unités en stock",
+      "lowStockItems": "Articles en stock faible",
+      "outOfStock": "En rupture de stock",
+      "inventoryValue": "Valeur de l'inventaire",
+      "avgStockLevel": "Niveau de stock moyen"
+    },
+    "status": {
+      "inStock": "En stock",
+      "lowStock": "Stock faible",
+      "outOfStock": "Rupture de stock",
+      "overstock": "Surstock",
+      "critical": "Critique"
+    },
+    "attention": "Articles nécessitant une attention",
+    "restock": "Réapprovisionner",
+    "table": {
+      "product": "Produit",
+      "sku": "Référence",
+      "warehouse": "Entrepôt",
+      "stock": "Stock",
+      "value": "Valeur",
+      "status": "Statut"
+    },
+    "actions": {
+      "adjustStock": "Ajuster le stock",
+      "transfer": "Transférer",
+      "stockHistory": "Historique du stock"
+    },
+    "empty": {
+      "title": "Aucun enregistrement d'inventaire trouvé",
+      "subtitle": "Essayez de modifier vos filtres."
+    },
+    "removeConfirmTitle": "Retirer de l'inventaire",
+    "removeConfirmBody": "Voulez-vous vraiment retirer « {{name}} » du suivi d'inventaire ? Cette action est irréversible."
+  },
+
+  "reviews": {
+    "title": "Avis",
+    "subtitle": "Gérez les avis clients et leur modération.",
+    "stats": {
+      "totalReviews": "Total des avis",
+      "averageRating": "Note moyenne",
+      "pendingModeration": "En attente de modération",
+      "featuredReviews": "Avis en vedette"
+    },
+    "status": {
+      "new": "Nouveau",
+      "read": "Lu",
+      "approved": "Approuvé",
+      "featured": "En vedette",
+      "flagged": "Signalé"
+    },
+    "actions": {
+      "viewReview": "Voir l'avis",
+      "markRead": "Marquer comme lu",
+      "approve": "Approuver",
+      "feature": "Mettre en vedette",
+      "flag": "Signaler"
+    },
+    "empty": {
+      "title": "Aucun avis trouvé",
+      "subtitle": "Ajustez vos filtres ou votre recherche."
+    },
+    "verified": "Vérifié",
+    "notVerified": "Non vérifié",
+    "deleteConfirmTitle": "Supprimer l'avis",
+    "deleteConfirmBodySingle": "Voulez-vous vraiment supprimer l'avis de {{name}} pour {{product}} ? Cette action est irréversible.",
+    "deleteConfirmBodyBulk": "Voulez-vous vraiment supprimer les {{count}} avis sélectionnés ? Cette action est irréversible."
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Suivez toute l'activité de votre boutique.",
+    "markAllRead": "Tout marquer comme lu",
+    "tabs": {
+      "all": "Toutes",
+      "unread": "Non lues"
+    },
+    "empty": {
+      "title": "Aucune notification trouvée",
+      "caughtUp": "Vous êtes à jour",
+      "caughtUpSub": "Aucune notification {{filter}}pour le moment.",
+      "genericSub": "Vous êtes à jour — les nouvelles activités apparaîtront ici."
+    },
+    "viewAll": "Voir toutes les notifications",
+    "stats": {
+      "unread": "Notifications non lues",
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
+      "highPriority": "Priorité haute"
+    },
+    "priority": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute"
+    },
+    "type": {
+      "order": "Commande",
+      "customer": "Client",
+      "inventory": "Inventaire",
+      "product": "Produit",
+      "payment": "Paiement",
+      "system": "Système",
+      "warning": "Avertissement",
+      "success": "Succès",
+      "info": "Info"
+    }
+  },
+
+  "pushNotifications": {
+    "title": "Notifications push",
+    "subtitle": "Composez une notification push et prévisualisez-la en direct avant l'envoi.",
+    "notificationTitle": "Titre de la notification",
+    "messageBody": "Corps du message",
+    "campaignName": "Nom de la campagne",
+    "imageUrl": "URL de l'image (facultatif)",
+    "deepLink": "Lien profond",
+    "targetScreen": "Écran cible",
+    "audience": "Audience",
+    "schedule": "Planification",
+    "sendNow": "Envoyer maintenant",
+    "scheduleLater": "Planifier plus tard",
+    "advanced": "Avancé",
+    "priority": "Priorité",
+    "ttl": "TTL (heures)",
+    "silentNotification": "Notification silencieuse",
+    "livePreview": "Aperçu en direct",
+    "estimatedRecipients": "Destinataires estimés"
+  },
+
+  "admins": {
+    "title": "Administrateurs",
+    "subtitle": "Gérez les comptes administrateurs, les permissions et l'activité.",
+    "addAdmin": "Ajouter un administrateur",
+    "editAdmin": "Modifier l'administrateur",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "role": "Rôle",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "permissions": "Permissions",
+    "twoFactor": "Authentification à deux facteurs",
+    "roles": {
+      "superAdmin": "Super administrateur",
+      "admin": "Administrateur",
+      "manager": "Responsable",
+      "support": "Support"
+    },
+    "status": {
+      "online": "En ligne",
+      "offline": "Hors ligne",
+      "busy": "Occupé"
+    },
+    "stats": {
+      "totalAdmins": "Total des administrateurs",
+      "superAdmins": "Super administrateurs",
+      "currentlyOnline": "Actuellement en ligne",
+      "twoFaEnabled": "2FA activée"
+    },
+    "table": {
+      "name": "Nom",
+      "email": "E-mail",
+      "role": "Rôle",
+      "status": "Statut",
+      "lastOnline": "Dernière connexion",
+      "created": "Créé le"
+    },
+    "actions": {
+      "resetPassword": "Réinitialiser le mot de passe",
+      "disableAccount": "Désactiver le compte",
+      "deleteAdmin": "Supprimer l'administrateur"
+    },
+    "empty": {
+      "title": "Aucun administrateur trouvé",
+      "subtitle": "Ajustez votre recherche ou vos filtres."
+    },
+    "resetConfirmTitle": "Réinitialiser le mot de passe",
+    "disableConfirmTitle": "Désactiver le compte",
+    "deleteConfirmTitle": "Supprimer l'administrateur"
+  },
+
+  "activityLogs": {
+    "title": "Journaux d'activité",
+    "subtitle": "Suivez chaque action importante effectuée dans le système d'administration.",
+    "stats": {
+      "totalActivities": "Total des activités",
+      "todaysActivities": "Activités du jour",
+      "successfulActions": "Actions réussies",
+      "failedActions": "Actions échouées"
+    },
+    "table": {
+      "admin": "Administrateur",
+      "role": "Rôle",
+      "action": "Action",
+      "module": "Module",
+      "entity": "Entité",
+      "status": "Statut",
+      "time": "Heure"
+    },
+    "action": {
+      "create": "Créer",
+      "update": "Mettre à jour",
+      "delete": "Supprimer",
+      "login": "Connexion",
+      "logout": "Déconnexion",
+      "export": "Exporter",
+      "import": "Importer",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "view": "Voir"
+    },
+    "immutableNote": "Enregistrement d'audit immuable",
+    "empty": {
+      "title": "Aucun journal d'activité trouvé",
+      "subtitle": "Ajustez votre recherche ou vos filtres."
+    }
+  },
+
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez la configuration de votre boutique et vos préférences administrateur.",
+    "nav": {
+      "general": "Général",
+      "profile": "Profil",
+      "security": "Sécurité",
+      "store": "Boutique",
+      "payments": "Paiements",
+      "email": "E-mail",
+      "notifications": "Notifications",
+      "appearance": "Apparence",
+      "system": "Système"
+    },
+    "general": {
+      "title": "Informations sur la boutique",
+      "subtitle": "Détails de base sur votre boutique, visibles par les clients et utilisés sur la plateforme.",
+      "storeName": "Nom de la boutique",
+      "storeDescription": "Description de la boutique",
+      "storeEmail": "E-mail de la boutique",
+      "supportEmail": "E-mail du support",
+      "phone": "Numéro de téléphone",
+      "website": "Site web",
+      "address": "Adresse professionnelle",
+      "country": "Pays",
+      "currency": "Devise",
+      "timezone": "Fuseau horaire",
+      "language": "Langue",
+      "dateFormat": "Format de date"
+    },
+    "appearance": {
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "primaryColor": "Couleur principale",
+      "sidebarStyle": "Style de la barre latérale",
+      "compact": "Compact",
+      "normal": "Normal",
+      "fontSize": "Taille de police",
+      "roundedCards": "Cartes arrondies",
+      "animations": "Animations",
+      "reducedMotion": "Mouvement réduit"
+    },
+    "security": {
+      "changePassword": "Changer le mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "twoFactor": "Authentification à deux facteurs",
+      "sessionTimeout": "Délai d'expiration de session (minutes)",
+      "activeSessions": "Sessions actives",
+      "terminateSession": "Terminer",
+      "terminateAll": "Terminer toutes les sessions",
+      "thisDevice": "Cet appareil"
+    },
+    "unsavedPill": "Modifications non enregistrées"
+  },
+
+  "tables": {
+    "noResults": "Aucun résultat trouvé",
+    "rowsPerPage": "Lignes par page",
+    "showing": "Affichage",
+    "page": "Page"
+  },
+
+  "forms": {
+    "dragAndDrop": "Cliquez ou glissez-déposez",
+    "maxFileSize": "Max {{size}} Mo",
+    "addImage": "Ajouter une image",
+    "replaceImage": "Remplacer l'image",
+    "removeImage": "Supprimer l'image"
+  }
+}
