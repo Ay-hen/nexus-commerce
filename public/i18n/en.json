@@ -711,7 +711,8 @@
       "currency": "Currency",
       "timezone": "Timezone",
       "language": "Language",
-      "dateFormat": "Date Format"
+      "dateFormat": "Date Format",
+      "saveButton": "Save"
     },
     "appearance": {
       "theme": "Theme",
