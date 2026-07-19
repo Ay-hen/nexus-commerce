@@ -401,7 +401,7 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 }
 
 .toggle-row__text { display: flex; flex-direction: column; gap: 2px; }
-.toggle-row__title { font-size: .86rem; font-weight: 700; color: $text-primary; }
+.toggle-row__title { font-size: .75rem; font-weight: 700; color: $text-primary; }
 .toggle-row__sub { font-size: .74rem; color: $text-light; }
 
 .switch { position: relative; flex-shrink: 0; display: inline-flex; input { position: absolute; opacity: 0; width: 0; height: 0; } }
@@ -698,6 +698,10 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   &:disabled { opacity: .5; cursor: not-allowed; }
   &--sm { height: 32px; padding: 0 12px; font-size: .76rem; width: 130px; }
   &--wide { width: 190px; }   // for longer labels like "Send Test Email"
+}
+
+.btn-ghost--sm_terminate{
+  width : 240px;
 }
 
 .btn-primary {

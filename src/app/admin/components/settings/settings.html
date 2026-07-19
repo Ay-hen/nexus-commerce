@@ -376,7 +376,7 @@
                   <h2 class="settings-card__title">{{ 'settings.security.activeSessions' | translate }}</h2>
                   <p class="settings-card__sub">{{ 'settings.security.activeSessionsSub' | translate }}</p>
                 </div>
-                <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateAll()">{{ 'settings.security.terminateAll' | translate }}</button>
+                <button class="btn-ghost btn-ghost--sm_terminate" (click)="requestTerminateAll()">{{ 'settings.security.terminateAll' | translate }}</button>
               </div>
             </div>
             <div class="table-wrap">
@@ -384,7 +384,6 @@
                 <thead>
                   <tr>
                     <th>{{ 'settings.security.table.device' | translate }}</th>
-                    <th>{{ 'settings.security.table.browser' | translate }}</th>
                     <th>{{ 'settings.security.table.ipAddress' | translate }}</th>
                     <th>{{ 'settings.security.table.location' | translate }}</th>
                     <th>{{ 'settings.security.table.lastActivity' | translate }}</th>
@@ -395,7 +394,6 @@
                   @for (s of draft().security.sessions; track s.id) {
                     <tr class="table-row">
                       <td class="td-strong">{{ s.device }} @if (s.current) { <span class="current-pill">{{ 'settings.security.thisDevice' | translate }}</span> }</td>
-                      <td class="text-mid">{{ s.browser }}</td>
                       <td class="td-mono">{{ s.ip }}</td>
                       <td class="text-mid">{{ s.location }}</td>
                       <td class="td-light">{{ formatRelative(s.lastActivity) }}</td>
@@ -627,7 +625,7 @@
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-ghost" (click)="sendTestEmail()">{{ 'settings.email.sendTestEmail' | translate }}</button>
+              <button class="btn-ghost test_email" (click)="sendTestEmail()">{{ 'settings.email.sendTestEmail' | translate }}</button>
               <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.email.saveButton' | translate }}</button>
             </div>
           </div>
