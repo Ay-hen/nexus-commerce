@@ -16,6 +16,8 @@ export interface GeneralSettings {
   country: string;
   currency: string;
   timezone: string;
+  // Holds a LanguageCode ('en' | 'fr' | 'de' | 'es') so it can drive the
+  // real admin UI language via LanguageService, not just display text.
   language: string;
   dateFormat: string;
 }
@@ -165,7 +167,7 @@ export function generateMockSettings(): SettingsModel {
       country: 'Morocco',
       currency: 'MAD',
       timezone: 'GMT+1 (Casablanca)',
-      language: 'English',
+      language: 'en',
       dateFormat: 'DD/MM/YYYY',
     },
 
@@ -260,6 +262,9 @@ export function generateMockSettings(): SettingsModel {
 export const COUNTRY_OPTIONS = ['Morocco', 'France', 'Spain', 'United Arab Emirates', 'Canada', 'Germany', 'United States'];
 export const CURRENCY_OPTIONS = ['USD', 'EUR', 'MAD', 'AED', 'GBP', 'CAD'];
 export const TIMEZONE_OPTIONS = ['GMT+1 (Casablanca)', 'GMT+0 (London)', 'GMT+1 (Paris)', 'GMT+4 (Dubai)', 'GMT-5 (New York)'];
+// No longer used by the Settings > General > Language field (that now reads
+// from LanguageService.availableLanguages() so it can drive the real UI
+// language). Left here in case other parts of your app still reference it.
 export const LANGUAGE_OPTIONS = ['English', 'French', 'Arabic', 'Spanish'];
 export const DATE_FORMAT_OPTIONS = ['MMM D, YYYY', 'DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD'];
 export const WAREHOUSE_OPTIONS = ['Casablanca Central Warehouse', 'Rabat Distribution Hub', 'Tangier Port Facility'];
