@@ -1,5 +1,5 @@
 // settings.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,8 +7,11 @@ import {
   SettingsModel, SettingsCategory, PaymentGatewayId, PaymentGateway, AdminSession,
   StoreStatus, SmtpEncryption, ThemeMode, SidebarStyle, FontSize, Environment,
   generateMockSettings,
-  COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, LANGUAGE_OPTIONS, DATE_FORMAT_OPTIONS, WAREHOUSE_OPTIONS,
+  COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, DATE_FORMAT_OPTIONS, WAREHOUSE_OPTIONS,
 } from '../../model/settings.model';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageCode, isSupportedLanguage } from '../../../localization/language.model';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -20,11 +23,13 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
 export class Settings {
+
+  lang = inject(LanguageService);
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -37,16 +42,17 @@ export class Settings {
   activeCategory = signal<SettingsCategory>('general');
   mobileNavOpen = signal(false);
 
+  // label now holds a translation key (resolved against settings.nav.*).
   navItems: NavItem[] = [
-    { id: 'general',       label: 'General',       icon: 'general' },
-    { id: 'profile',       label: 'Profile',       icon: 'profile' },
-    { id: 'security',      label: 'Security',      icon: 'security' },
-    { id: 'store',         label: 'Store',         icon: 'store' },
-    { id: 'payments',      label: 'Payments',      icon: 'payments' },
-    { id: 'email',         label: 'Email',         icon: 'email' },
-    { id: 'notifications', label: 'Notifications', icon: 'notifications' },
-    { id: 'appearance',    label: 'Appearance',    icon: 'appearance' },
-    { id: 'system',        label: 'System',        icon: 'system' },
+    { id: 'general',       label: 'settings.nav.general',       icon: 'general' },
+    { id: 'profile',       label: 'settings.nav.profile',       icon: 'profile' },
+    { id: 'security',      label: 'settings.nav.security',      icon: 'security' },
+    { id: 'store',         label: 'settings.nav.store',         icon: 'store' },
+    { id: 'payments',      label: 'settings.nav.payments',      icon: 'payments' },
+    { id: 'email',         label: 'settings.nav.email',         icon: 'email' },
+    { id: 'notifications', label: 'settings.nav.notifications', icon: 'notifications' },
+    { id: 'appearance',    label: 'settings.nav.appearance',    icon: 'appearance' },
+    { id: 'system',        label: 'settings.nav.system',        icon: 'system' },
   ];
 
   // ── Data: saved vs draft (for dirty tracking) ──────────────────────────
@@ -59,7 +65,6 @@ export class Settings {
   countryOptions = COUNTRY_OPTIONS;
   currencyOptions = CURRENCY_OPTIONS;
   timezoneOptions = TIMEZONE_OPTIONS;
-  languageOptions = LANGUAGE_OPTIONS;
   dateFormatOptions = DATE_FORMAT_OPTIONS;
   warehouseOptions = WAREHOUSE_OPTIONS;
   storeStatusOptions: StoreStatus[] = ['Open', 'Closed', 'Coming Soon'];
@@ -69,6 +74,33 @@ export class Settings {
   fontSizeOptions: FontSize[] = ['Small', 'Medium', 'Large'];
   environmentOptions: Environment[] = ['Production', 'Development'];
   primaryColorSwatches = ['#4F46E5', '#2563EB', '#7C3AED', '#DB2777', '#EA580C', '#0D9488', '#10B981', '#111827'];
+
+  // ── Translation-key helpers for enum-style values ───────────────────────
+  // These only build a translation key string from a data value — no
+  // behavior or bound value changes, same pattern as statusColor() below.
+  storeStatusKey(s: StoreStatus): string {
+    const map: Record<StoreStatus, string> = { 'Open': 'open', 'Closed': 'closed', 'Coming Soon': 'comingSoon' };
+    return 'settings.store.status.' + map[s];
+  }
+  themeKey(t: ThemeMode): string {
+    return 'settings.appearance.' + t.toLowerCase();
+  }
+  sidebarStyleKey(s: SidebarStyle): string {
+    return 'settings.appearance.' + s.toLowerCase();
+  }
+  fontSizeKey(f: FontSize): string {
+    return 'settings.appearance.' + f.toLowerCase();
+  }
+  encryptionKey(e: SmtpEncryption): string {
+    const map: Record<SmtpEncryption, string> = { 'None': 'none', 'SSL': 'ssl', 'TLS': 'tls' };
+    return 'settings.email.encryptionOptions.' + map[e];
+  }
+  systemStatusKey(s: string): string {
+    return 'settings.system.status.' + s.toLowerCase();
+  }
+  environmentKey(e: string): string {
+    return 'settings.system.env.' + e.toLowerCase();
+  }
 
   // ── Security: change-password local state (not part of saved model) ────
   newPassword = signal('');
@@ -87,7 +119,8 @@ export class Settings {
 
   passwordStrengthLabel = computed(() => {
     const s = this.passwordStrength();
-    return ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'][s];
+    const keys = ['veryWeak', 'weak', 'fair', 'good', 'strong'];
+    return this.lang.translate('settings.security.strength.' + keys[s]);
   });
 
   passwordsMatch = computed(() => !this.confirmPassword() || this.newPassword() === this.confirmPassword());
@@ -103,30 +136,30 @@ export class Settings {
   generalErrors = computed(() => {
     const g = this.draft().general;
     const errors: Record<string, string> = {};
-    if (!g.storeName.trim()) errors['storeName'] = 'Store name is required.';
-    if (!EMAIL_RE.test(g.storeEmail)) errors['storeEmail'] = 'Enter a valid email address.';
-    if (!EMAIL_RE.test(g.supportEmail)) errors['supportEmail'] = 'Enter a valid email address.';
-    if (!PHONE_RE.test(g.phoneNumber)) errors['phoneNumber'] = 'Enter a valid phone number.';
-    if (g.website && !URL_RE.test(g.website)) errors['website'] = 'Enter a valid URL (https://…).';
+    if (!g.storeName.trim()) errors['storeName'] = this.lang.translate('settings.general.errors.storeNameRequired');
+    if (!EMAIL_RE.test(g.storeEmail)) errors['storeEmail'] = this.lang.translate('validation.invalidEmail');
+    if (!EMAIL_RE.test(g.supportEmail)) errors['supportEmail'] = this.lang.translate('validation.invalidEmail');
+    if (!PHONE_RE.test(g.phoneNumber)) errors['phoneNumber'] = this.lang.translate('validation.invalidPhone');
+    if (g.website && !URL_RE.test(g.website)) errors['website'] = this.lang.translate('validation.invalidUrl');
     return errors;
   });
 
   profileErrors = computed(() => {
     const p = this.draft().profile;
     const errors: Record<string, string> = {};
-    if (!p.name.trim()) errors['name'] = 'Name is required.';
-    if (!EMAIL_RE.test(p.email)) errors['email'] = 'Enter a valid email address.';
-    if (!p.username.trim()) errors['username'] = 'Username is required.';
-    if (p.phone && !PHONE_RE.test(p.phone)) errors['phone'] = 'Enter a valid phone number.';
+    if (!p.name.trim()) errors['name'] = this.lang.translate('settings.profile.errors.nameRequired');
+    if (!EMAIL_RE.test(p.email)) errors['email'] = this.lang.translate('validation.invalidEmail');
+    if (!p.username.trim()) errors['username'] = this.lang.translate('settings.profile.errors.usernameRequired');
+    if (p.phone && !PHONE_RE.test(p.phone)) errors['phone'] = this.lang.translate('validation.invalidPhone');
     return errors;
   });
 
   emailErrors = computed(() => {
     const e = this.draft().email;
     const errors: Record<string, string> = {};
-    if (!e.smtpHost.trim()) errors['smtpHost'] = 'SMTP host is required.';
-    if (!e.smtpPort || e.smtpPort < 1) errors['smtpPort'] = 'Enter a valid port number.';
-    if (!EMAIL_RE.test(e.senderEmail)) errors['senderEmail'] = 'Enter a valid email address.';
+    if (!e.smtpHost.trim()) errors['smtpHost'] = this.lang.translate('settings.email.errors.smtpHostRequired');
+    if (!e.smtpPort || e.smtpPort < 1) errors['smtpPort'] = this.lang.translate('settings.email.errors.invalidPort');
+    if (!EMAIL_RE.test(e.senderEmail)) errors['senderEmail'] = this.lang.translate('validation.invalidEmail');
     return errors;
   });
 
@@ -164,29 +197,47 @@ export class Settings {
       || Object.keys(this.emailErrors()).length > 0;
 
     if (hasErrors) {
-      this.showToast('Please fix the highlighted fields before saving');
+      this.showToast(this.lang.translate('settings.toasts.fixFieldsBeforeSaving'));
       return;
     }
 
     this.saved.set(JSON.parse(JSON.stringify(this.draft())));
-    this.showToast('Settings saved successfully');
+    this.showToast(this.lang.translate('toasts.savedSuccessfully'));
+
+    // Full reload so every route/component in the app re-initializes against
+    // the language currently active (already persisted to localStorage by
+    // updateGeneralLanguage() / LanguageService.changeLanguage()). This is a
+    // deliberate blunt-force guarantee that the whole app reflects the chosen
+    // language consistently, not just the components already mounted.
+    // Short delay so the "Saved successfully" toast is visible before reload.
+    setTimeout(() => window.location.reload(), 500);
   }
 
   resetChanges(): void {
     this.draft.set(JSON.parse(JSON.stringify(this.saved())));
     this.formTouched.set(false);
-    this.showToast('Changes reverted');
+    this.showToast(this.lang.translate('toasts.changesReverted'));
   }
 
   refresh(): void {
     this.isLoading.set(true);
     setTimeout(() => this.isLoading.set(false), 600);
-    this.showToast('Settings refreshed');
+    this.showToast(this.lang.translate('toasts.settingsRefreshed'));
   }
 
   // ── Generic update helpers ─────────────────────────────────────────────
   updateGeneral<K extends keyof SettingsModel['general']>(key: K, value: SettingsModel['general'][K]): void {
     this.draft.update(d => ({ ...d, general: { ...d.general, [key]: value } }));
+  }
+
+  // Store config field AND live admin UI language switch. Selecting a
+  // language here takes effect immediately via LanguageService, same as the
+  // navbar switcher — it doesn't wait for "Save Changes".
+  updateGeneralLanguage(code: string): void {
+    this.updateGeneral('language', code);
+    if (isSupportedLanguage(code)) {
+      this.lang.changeLanguage(code as LanguageCode);
+    }
   }
 
   updateProfile<K extends keyof SettingsModel['profile']>(key: K, value: SettingsModel['profile'][K]): void {
@@ -224,10 +275,10 @@ export class Settings {
   sendTestEmail(): void {
     if (Object.keys(this.emailErrors()).length > 0) {
       this.formTouched.set(true);
-      this.showToast('Fix the SMTP settings before sending a test email');
+      this.showToast(this.lang.translate('settings.toasts.fixSmtpBeforeTest'));
       return;
     }
-    this.showToast(`Test email sent to ${this.draft().profile.email}`);
+    this.showToast(this.lang.translate('settings.toasts.testEmailSent', { email: this.draft().profile.email }));
   }
 
   maskedKey(value: string): string {
@@ -248,7 +299,7 @@ export class Settings {
 
   // ── Security sessions ──────────────────────────────────────────────────
   requestTerminateSession(session: AdminSession): void {
-    if (session.current) { this.showToast("You can't terminate your current session"); return; }
+    if (session.current) { this.showToast(this.lang.translate('settings.toasts.cantTerminateCurrent')); return; }
     this.pendingTerminateSession.set(session);
   }
   cancelTerminateSession(): void { this.pendingTerminateSession.set(null); }
@@ -257,7 +308,7 @@ export class Settings {
     if (!target) return;
     this.draft.update(d => ({ ...d, security: { ...d.security, sessions: d.security.sessions.filter(s => s.id !== target.id) } }));
     this.saved.update(s => ({ ...s, security: { ...s.security, sessions: s.security.sessions.filter(x => x.id !== target.id) } }));
-    this.showToast(`Session on ${target.device} terminated`);
+    this.showToast(this.lang.translate('settings.toasts.sessionTerminated', { device: target.device }));
     this.pendingTerminateSession.set(null);
   }
 
@@ -267,73 +318,73 @@ export class Settings {
     const keepCurrent = (sessions: AdminSession[]) => sessions.filter(s => s.current);
     this.draft.update(d => ({ ...d, security: { ...d.security, sessions: keepCurrent(d.security.sessions) } }));
     this.saved.update(s => ({ ...s, security: { ...s.security, sessions: keepCurrent(s.security.sessions) } }));
-    this.showToast('All other sessions terminated');
+    this.showToast(this.lang.translate('settings.toasts.allSessionsTerminated'));
     this.pendingTerminateAll.set(false);
   }
 
   updatePassword(): void {
-    if (this.passwordStrength() < 2) { this.showToast('Choose a stronger password'); return; }
-    if (!this.passwordsMatch()) { this.showToast('Passwords do not match'); return; }
+    if (this.passwordStrength() < 2) { this.showToast(this.lang.translate('validation.passwordTooWeak')); return; }
+    if (!this.passwordsMatch()) { this.showToast(this.lang.translate('validation.passwordsDoNotMatch')); return; }
     this.newPassword.set('');
     this.confirmPassword.set('');
-    this.showToast('Password updated successfully');
+    this.showToast(this.lang.translate('settings.toasts.passwordUpdated'));
   }
 
   // ── System actions ─────────────────────────────────────────────────────
-  clearCache(): void { this.showToast('Cache cleared successfully'); }
-  rebuildIndex(): void { this.showToast('Search index rebuild started'); }
-  optimizeImages(): void { this.showToast('Image optimization started'); }
-  backupDatabase(): void { this.showToast('Database backup started — you\'ll be notified when it\'s ready'); }
-  exportSettings(): void { this.showToast('Settings exported to JSON'); }
-  importSettings(): void { this.showToast('Select a settings file to import'); }
+  clearCache(): void { this.showToast(this.lang.translate('settings.toasts.cacheCleared')); }
+  rebuildIndex(): void { this.showToast(this.lang.translate('settings.toasts.indexRebuildStarted')); }
+  optimizeImages(): void { this.showToast(this.lang.translate('settings.toasts.imageOptimizationStarted')); }
+  backupDatabase(): void { this.showToast(this.lang.translate('settings.toasts.backupStarted')); }
+  exportSettings(): void { this.showToast(this.lang.translate('settings.toasts.settingsExported')); }
+  importSettings(): void { this.showToast(this.lang.translate('settings.toasts.selectImportFile')); }
 
   requestDangerAction(action: DangerAction): void { this.pendingDangerAction.set(action); }
   cancelDangerAction(): void { this.pendingDangerAction.set(null); }
 
   confirmDangerAction(): void {
     const action = this.pendingDangerAction();
-    const messages: Record<Exclude<DangerAction, null>, string> = {
-      'delete-logs': 'All activity logs have been deleted',
-      'delete-cache': 'Cache has been cleared',
-      'factory-reset': 'All settings have been reset to factory defaults',
+    const messageKeys: Record<Exclude<DangerAction, null>, string> = {
+      'delete-logs': 'settings.toasts.logsDeleted',
+      'delete-cache': 'settings.toasts.cacheDeleted',
+      'factory-reset': 'settings.toasts.factoryResetDone',
     };
     if (action === 'factory-reset') {
       const fresh = generateMockSettings();
       this.saved.set(fresh);
       this.draft.set(JSON.parse(JSON.stringify(fresh)));
     }
-    if (action) this.showToast(messages[action]);
+    if (action) this.showToast(this.lang.translate(messageKeys[action]));
     this.pendingDangerAction.set(null);
   }
 
   dangerActionLabel(action: DangerAction): string {
     const map: Record<Exclude<DangerAction, null>, string> = {
-      'delete-logs': 'Delete All Logs',
-      'delete-cache': 'Delete Cache',
-      'factory-reset': 'Factory Reset',
+      'delete-logs': 'settings.system.deleteLogsTitle',
+      'delete-cache': 'settings.system.deleteCacheTitle',
+      'factory-reset': 'settings.system.factoryResetTitle',
     };
-    return action ? map[action] : '';
+    return action ? this.lang.translate(map[action]) : '';
   }
 
   dangerActionDescription(action: DangerAction): string {
     const map: Record<Exclude<DangerAction, null>, string> = {
-      'delete-logs': 'This will permanently delete every activity log entry across the entire admin system.',
-      'delete-cache': 'This will clear all cached data. The store may respond slower until the cache rebuilds.',
-      'factory-reset': 'This will reset every setting in this page back to its default value, discarding all customization.',
+      'delete-logs': 'settings.system.deleteLogsSub',
+      'delete-cache': 'settings.system.deleteCacheSub',
+      'factory-reset': 'settings.system.factoryResetSub',
     };
-    return action ? map[action] : '';
+    return action ? this.lang.translate(map[action]) : '';
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   formatRelative(iso: string): string {
     const now = Date.now();
     const diffMin = Math.round((now - new Date(iso).getTime()) / 60000);
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+    if (diffMin < 1) return this.lang.translate('common.justNow');
+    if (diffMin < 60) return this.lang.translate('common.minutesAgo', { count: diffMin });
     const diffHours = Math.round(diffMin / 60);
-    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    if (diffHours < 24) return this.lang.translate('common.hoursAgo', { count: diffHours });
     const diffDays = Math.round(diffHours / 24);
-    return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+    return this.lang.translate('common.daysAgo', { count: diffDays });
   }
 
   statusDotClass(status: string): string {
