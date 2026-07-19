@@ -9,15 +9,19 @@ import { NavItem } from '../../model/admin-models.model';
 // Adjust this path to wherever notification-dropdown actually lives in your project —
 // it mirrors the same relative depth as the model imports above (two levels up to `app/`).
 import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageCode } from '../../../localization/language.model';
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [CommonModule, RouterModule, RouterLink, RouterLinkActive, NotificationDropdownComponent],
+  imports: [CommonModule, RouterModule, RouterLink, RouterLinkActive, NotificationDropdownComponent, TranslatePipe],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
 })
 export class AdminLayout {
   auth = inject(AdminAuthService);
+  lang = inject(LanguageService);
 
   sidebarCollapsed = signal(false);
   mobileSidebarOpen = signal(false);
@@ -28,6 +32,10 @@ export class AdminLayout {
   // ── Notification bell / dropdown ──────────────────────────────────────
   notificationsOpen = signal(false);
   @ViewChild('notifWrap') notifWrap?: ElementRef<HTMLElement>;
+
+  // ── Language switcher ────────────────────────────────────────────────
+  languageMenuOpen = signal(false);
+  @ViewChild('langWrap') langWrap?: ElementRef<HTMLElement>;
 
   currentAdmin = this.auth.currentAdmin;
 
@@ -55,13 +63,36 @@ export class AdminLayout {
     this.notificationsOpen.set(false);
   }
 
-  // Close the dropdown on any click outside its wrapper (bell button + panel).
+  // Same pattern as the notification bell — stopPropagation so the opening
+  // click doesn't immediately trigger onDocClick and close the menu.
+  toggleLanguageMenu(event: Event): void {
+    event.stopPropagation();
+    this.languageMenuOpen.update(v => !v);
+  }
+
+  closeLanguageMenu(): void {
+    this.languageMenuOpen.set(false);
+  }
+
+  selectLanguage(code: LanguageCode): void {
+    this.lang.changeLanguage(code);
+    this.closeLanguageMenu();
+  }
+
+  // Close the dropdowns on any click outside their wrapper.
   @HostListener('document:click', ['$event'])
   onDocClick(event: MouseEvent): void {
-    if (!this.notificationsOpen()) return;
-    const wrap = this.notifWrap?.nativeElement;
-    if (wrap && !wrap.contains(event.target as Node)) {
-      this.closeNotifications();
+    if (this.notificationsOpen()) {
+      const wrap = this.notifWrap?.nativeElement;
+      if (wrap && !wrap.contains(event.target as Node)) {
+        this.closeNotifications();
+      }
+    }
+    if (this.languageMenuOpen()) {
+      const wrap = this.langWrap?.nativeElement;
+      if (wrap && !wrap.contains(event.target as Node)) {
+        this.closeLanguageMenu();
+      }
     }
   }
 
@@ -70,48 +101,50 @@ export class AdminLayout {
     this.mobileSidebarOpen.set(false);
     this.searchOpen.set(false);
     this.closeNotifications();
+    this.closeLanguageMenu();
   }
 
   trackById(_: number, item: NavItem): string { return item.id; }
 
   // ─── Navigation structure ──────────────────────────────────────────────────
+  // section / label now hold translation keys instead of literal English text.
   navSections: { section: string; items: NavItem[] }[] = [
     {
-      section: 'Overview',
+      section: 'navigation.sections.overview',
       items: [
-        { id: 'dashboard',  label: 'Dashboard',    route: '/admin/dashboard',  icon: 'dashboard'  },
-        { id: 'reports',    label: 'Reports',       route: '/admin/reports',    icon: 'reports'    },
+        { id: 'dashboard',  label: 'navigation.dashboard',    route: '/admin/dashboard',  icon: 'dashboard'  },
+        { id: 'reports',    label: 'navigation.reports',       route: '/admin/reports',    icon: 'reports'    },
       ],
     },
     {
-      section: 'Catalog',
+      section: 'navigation.sections.catalog',
       items: [
-        { id: 'products',   label: 'Products',     route: '/admin/products',   icon: 'products' },
-        { id: 'categories', label: 'Categories',   route: '/admin/categories', icon: 'categories' },
-        { id: 'inventory',  label: 'Inventory',    route: '/admin/inventory',  icon: 'inventory' },
+        { id: 'products',   label: 'navigation.products',     route: '/admin/products',   icon: 'products' },
+        { id: 'categories', label: 'navigation.categories',   route: '/admin/categories', icon: 'categories' },
+        { id: 'inventory',  label: 'navigation.inventory',    route: '/admin/inventory',  icon: 'inventory' },
       ],
     },
     {
-      section: 'Commerce',
+      section: 'navigation.sections.commerce',
       items: [
-        { id: 'orders',     label: 'Orders',       route: '/admin/orders',     icon: 'orders' },
-        { id: 'customers',  label: 'Customers',    route: '/admin/customers',  icon: 'customers'  },
+        { id: 'orders',     label: 'navigation.orders',       route: '/admin/orders',     icon: 'orders' },
+        { id: 'customers',  label: 'navigation.customers',    route: '/admin/customers',  icon: 'customers'  },
       ],
     },
     {
-      section: 'Content',
+      section: 'navigation.sections.content',
       items: [
-        { id: 'reviews',            label: 'Reviews',             route: '/admin/reviews',             icon: 'reviews' },
-        { id: 'notifications',      label: 'Notifications',       route: '/admin/notifications',       icon: 'bell'    },
-        { id: 'push-notifications', label: 'Push Notifications',  route: '/admin/push-notifications',  icon: 'push'    },
+        { id: 'reviews',            label: 'navigation.reviews',             route: '/admin/reviews',             icon: 'reviews' },
+        { id: 'notifications',      label: 'navigation.notifications',       route: '/admin/notifications',       icon: 'bell'    },
+        { id: 'push-notifications', label: 'navigation.pushNotifications',  route: '/admin/push-notifications',  icon: 'push'    },
       ],
     },
     {
-      section: 'System',
+      section: 'navigation.sections.system',
       items: [
-        { id: 'admins',    label: 'Admins',       route: '/admin/admins',     icon: 'admins'    },
-        { id: 'logs',      label: 'Activity Logs',route: '/admin/logs',       icon: 'logs'      },
-        { id: 'settings',  label: 'Settings',     route: '/admin/settings',   icon: 'settings'  },
+        { id: 'admins',    label: 'navigation.admins',       route: '/admin/admins',     icon: 'admins'    },
+        { id: 'logs',      label: 'navigation.activityLogs', route: '/admin/logs',       icon: 'logs'      },
+        { id: 'settings',  label: 'navigation.settings',     route: '/admin/settings',   icon: 'settings'  },
       ],
     },
   ];
