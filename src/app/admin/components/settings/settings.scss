@@ -674,3 +674,123 @@ $ease-spring:   cubic-bezier(.34,1.56,.64,1);
   &:last-child { border-bottom: none; }
   &--tight { padding: 10px 0 0; border-bottom: none; margin-top: 4px; min-height: 0; }
 }
+
+// ─── Shared buttons ───────────────────────────────────────────────────────────
+.btn-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.btn-ghost {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 120px;
+  flex-shrink: 0;
+  background: $surface; border: 1px solid $border2;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 500;
+  color: $text-mid; cursor: pointer;
+  transition: background .15s $ease, color .15s, border-color .15s, opacity .15s;
+
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+  &--sm { height: 32px; padding: 0 12px; font-size: .76rem; width: 130px; }
+  &--wide { width: 190px; }   // for longer labels like "Send Test Email"
+}
+
+.btn-primary {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 190px;
+  flex-shrink: 0;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s, opacity .15s;
+
+  &:hover:not(:disabled) { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  &:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+}
+
+.btn-danger {
+  height: 38px; padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: 150px;
+  flex-shrink: 0;
+  background: $red; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
+}
+
+.btn-danger-outline {
+  height: 36px; padding: 0 14px;
+  width: 170px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: $surface; border: 1.5px solid rgba($red, .3);
+  border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; font-weight: 600;
+  color: $red; cursor: pointer;
+  transition: background .15s, border-color .15s;
+  flex-shrink: 0;
+
+  &:hover { background: $red-bg; border-color: $red; }
+}
+
+.tool-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 18px 12px;
+  min-height: 84px;
+  text-align: center;
+  background: $surface2; border: 1px solid $border; border-radius: $radius-md;
+  font: inherit; font-size: .78rem; font-weight: 600; color: $text-mid;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .15s, color .15s;
+
+  .btn-label { max-width: 100%; }
+
+  &:hover { background: $surface3; border-color: $border2; transform: translateY(-2px); color: $text-primary; }
+}
+
+.settings-nav__icon { flex-shrink: 0; display: flex; align-items: center; color: $text-light; }
+
+.settings-nav__label {
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.unsaved-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 12px;
+  background: $amber-bg; color: $amber;
+  border: 1px solid rgba($amber, .25);
+  border-radius: $radius-pill;
+  font-size: .76rem; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+  animation: slide-fade .2s $ease;
+}
+
+.current-pill {
+  display: inline-flex; align-items: center;
+  height: 18px; padding: 0 7px; margin-left: 6px;
+  background: $green-bg; color: $green;
+  border-radius: $radius-pill; font-size: .6rem; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+.env-pill {
+  display: inline-flex; align-items: center; width: fit-content;
+  height: 20px; padding: 0 9px;
+  background: $slate-bg; color: $text-mid;
+  border-radius: $radius-pill; font-size: .66rem; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+  &--prod { background: $green-bg; color: $green; }
+}
+
+.gateway-card__mode { font-size: .7rem; color: $text-light; white-space: nowrap; }
