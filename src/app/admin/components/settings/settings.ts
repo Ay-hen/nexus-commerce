@@ -56,8 +56,17 @@ export class Settings {
   ];
 
   // ── Data: saved vs draft (for dirty tracking) ──────────────────────────
-  private saved = signal<SettingsModel>(generateMockSettings());
-  draft = signal<SettingsModel>(generateMockSettings());
+  private saved = signal<SettingsModel>(this.syncLanguage(generateMockSettings()));
+  draft = signal<SettingsModel>(this.syncLanguage(generateMockSettings()));
+
+  // generateMockSettings() always seeds general.language as 'en'. LanguageService
+  // is the real source of truth (persisted in localStorage, already resolved by
+  // APP_INITIALIZER before this component exists), so overwrite the mock's
+  // language with the actually active one. Applied to both saved and draft so
+  // isDirty() doesn't report "dirty" just because the page loaded in French.
+  private syncLanguage(model: SettingsModel): SettingsModel {
+    return { ...model, general: { ...model.general, language: this.lang.currentLanguage() } };
+  }
 
   isDirty = computed(() => JSON.stringify(this.saved()) !== JSON.stringify(this.draft()));
 
@@ -397,4 +406,6 @@ export class Settings {
     this.toastMsg.set(msg);
     this.toastTimer = setTimeout(() => this.toastMsg.set(null), 3000);
   }
+
+  
 }
