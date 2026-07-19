@@ -626,7 +626,7 @@
             </div>
             <div class="settings-card__footer">
               <button class="btn-ghost test_email" (click)="sendTestEmail()">{{ 'settings.email.sendTestEmail' | translate }}</button>
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.email.saveButton' | translate }}</button>
+              <button class="btn-primary test_email" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.email.saveButton' | translate }}</button>
             </div>
           </div>
         }
