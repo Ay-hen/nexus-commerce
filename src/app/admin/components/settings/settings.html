@@ -15,13 +15,13 @@
         <div class="modal__icon modal__icon--danger">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
         </div>
-        <h2 class="modal__title">Terminate Session</h2>
+        <h2 class="modal__title">{{ 'settings.security.terminateSessionModalTitle' | translate }}</h2>
         <p class="modal__body">
-          Are you sure you want to sign out <strong>{{ ts.device }}</strong> ({{ ts.browser }} &middot; {{ ts.location }})?
+          {{ 'settings.security.terminateSessionModalBody' | translate: { device: ts.device, browser: ts.browser, location: ts.location } }}
         </p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelTerminateSession()">Cancel</button>
-          <button class="btn-danger" (click)="confirmTerminateSession()">Terminate Session</button>
+          <button class="btn-ghost" (click)="cancelTerminateSession()">{{ 'buttons.cancel' | translate }}</button>
+          <button class="btn-danger" (click)="confirmTerminateSession()">{{ 'settings.security.terminateSessionModalTitle' | translate }}</button>
         </div>
       </div>
     </div>
@@ -34,11 +34,11 @@
         <div class="modal__icon modal__icon--danger">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
         </div>
-        <h2 class="modal__title">Terminate All Other Sessions</h2>
-        <p class="modal__body">This will sign you out of every device except this one. You'll need to log in again on those devices.</p>
+        <h2 class="modal__title">{{ 'settings.security.terminateAllModalTitle' | translate }}</h2>
+        <p class="modal__body">{{ 'settings.security.terminateAllModalBody' | translate }}</p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelTerminateAll()">Cancel</button>
-          <button class="btn-danger" (click)="confirmTerminateAll()">Terminate All</button>
+          <button class="btn-ghost" (click)="cancelTerminateAll()">{{ 'buttons.cancel' | translate }}</button>
+          <button class="btn-danger" (click)="confirmTerminateAll()">{{ 'settings.security.terminateAllConfirm' | translate }}</button>
         </div>
       </div>
     </div>
@@ -56,10 +56,10 @@
         <h2 class="modal__title">{{ dangerActionLabel(da) }}</h2>
         <p class="modal__body">
           {{ dangerActionDescription(da) }}
-          <strong>This action cannot be undone.</strong>
+          <strong>{{ 'dialogs.cannotBeUndone' | translate }}</strong>
         </p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelDangerAction()">Cancel</button>
+          <button class="btn-ghost" (click)="cancelDangerAction()">{{ 'buttons.cancel' | translate }}</button>
           <button class="btn-danger" (click)="confirmDangerAction()">{{ dangerActionLabel(da) }}</button>
         </div>
       </div>
@@ -76,8 +76,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Settings</h1>
-        <p class="page-sub">Manage your store configuration and administrator preferences.</p>
+        <h1 class="page-title">{{ 'settings.title' | translate }}</h1>
+        <p class="page-sub">{{ 'settings.subtitle' | translate }}</p>
       </div>
     </div>
 
@@ -85,17 +85,17 @@
       @if (isDirty()) {
         <span class="unsaved-pill">
           <span class="unsaved-pill__dot"></span>
-          Unsaved changes
+          {{ 'settings.unsavedPill' | translate }}
         </span>
       }
       <button class="btn-ghost" (click)="refresh()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-        Refresh
+        {{ 'buttons.refresh' | translate }}
       </button>
-      <button class="btn-ghost" (click)="resetChanges()" [disabled]="!isDirty()">Reset</button>
+      <button class="btn-ghost" (click)="resetChanges()" [disabled]="!isDirty()">{{ 'buttons.reset' | translate }}</button>
       <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        Save Changes
+        {{ 'buttons.saveChanges' | translate }}
       </button>
     </div>
   </div>
@@ -119,7 +119,7 @@
 
       <!-- Mobile category toggle -->
       <button class="mobile-nav-toggle" (click)="toggleMobileNav()">
-        <span>{{ activeCategoryLabel() }}</span>
+        <span>{{ activeCategoryLabel() | translate }}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.rotated]="mobileNavOpen()"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
@@ -142,7 +142,7 @@
                 }
               </svg>
             </span>
-            {{ item.label }}
+            {{ item.label | translate }}
           </button>
         }
       </nav>
@@ -154,46 +154,46 @@
         @if (activeCategory() === 'general') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Store Information</h2>
-              <p class="settings-card__sub">Basic details about your store, shown to customers and used across the platform.</p>
+              <h2 class="settings-card__title">{{ 'settings.general.title' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.general.subtitle' | translate }}</p>
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label" >Store Name</label>
+                <label class="form-label" >{{ 'settings.general.storeName' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().general.storeName" (ngModelChange)="updateGeneral('storeName', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeName']" disabled />
                 @if (formTouched() && generalErrors()['storeName']) { <span class="field-error">{{ generalErrors()['storeName'] }}</span> }
               </div>
               <div class="form-field form-field--full">
-                <label class="form-label">Store Description</label>
+                <label class="form-label">{{ 'settings.general.storeDescription' | translate }}</label>
                 <textarea class="form-textarea" rows="2" [ngModel]="draft().general.storeDescription" (ngModelChange)="updateGeneral('storeDescription', $event)"></textarea>
               </div>
               <div class="form-field">
-                <label class="form-label">Store Email</label>
+                <label class="form-label">{{ 'settings.general.storeEmail' | translate }}</label>
                 <input class="form-input" type="email" [ngModel]="draft().general.storeEmail" (ngModelChange)="updateGeneral('storeEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeEmail']" />
                 @if (formTouched() && generalErrors()['storeEmail']) { <span class="field-error">{{ generalErrors()['storeEmail'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Support Email</label>
+                <label class="form-label">{{ 'settings.general.supportEmail' | translate }}</label>
                 <input class="form-input" type="email" [ngModel]="draft().general.supportEmail" (ngModelChange)="updateGeneral('supportEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['supportEmail']" />
                 @if (formTouched() && generalErrors()['supportEmail']) { <span class="field-error">{{ generalErrors()['supportEmail'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Phone Number</label>
+                <label class="form-label">{{ 'settings.general.phone' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().general.phoneNumber" (ngModelChange)="updateGeneral('phoneNumber', $event)" [class.form-input--error]="formTouched() && generalErrors()['phoneNumber']" />
                 @if (formTouched() && generalErrors()['phoneNumber']) { <span class="field-error">{{ generalErrors()['phoneNumber'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Website</label>
+                <label class="form-label">{{ 'settings.general.website' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().general.website" (ngModelChange)="updateGeneral('website', $event)" placeholder="https://…" [class.form-input--error]="formTouched() && generalErrors()['website']" disabled />
                 @if (formTouched() && generalErrors()['website']) { <span class="field-error">{{ generalErrors()['website'] }}</span> }
               </div>
               <div class="form-field form-field--full">
-                <label class="form-label">Business Address</label>
+                <label class="form-label">{{ 'settings.general.address' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().general.businessAddress" (ngModelChange)="updateGeneral('businessAddress', $event)" />
               </div>
 
               <div class="form-field">
-                <label class="form-label">Country</label>
+                <label class="form-label">{{ 'settings.general.country' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
                   <select class="form-select" [ngModel]="draft().general.country" (ngModelChange)="updateGeneral('country', $event)">
                     @for (c of countryOptions; track c) { <option [value]="c">{{ c }}</option> }
@@ -202,7 +202,7 @@
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Currency</label>
+                <label class="form-label">{{ 'settings.general.currency' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
                   <select class="form-select" [ngModel]="draft().general.currency" (ngModelChange)="updateGeneral('currency', $event)">
                     @for (c of currencyOptions; track c) { <option [value]="c">{{ c }}</option> }
@@ -211,7 +211,7 @@
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Timezone</label>
+                <label class="form-label">{{ 'settings.general.timezone' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
                   <select class="form-select" [ngModel]="draft().general.timezone" (ngModelChange)="updateGeneral('timezone', $event)">
                     @for (t of timezoneOptions; track t) { <option [value]="t">{{ t }}</option> }
@@ -220,16 +220,16 @@
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Language</label>
+                <label class="form-label">{{ 'settings.general.language' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.language" (ngModelChange)="updateGeneral('language', $event)">
-                    @for (l of languageOptions; track l) { <option [value]="l">{{ l }}</option> }
+                  <select class="form-select" [ngModel]="draft().general.language" (ngModelChange)="updateGeneralLanguage($event)">
+                    @for (l of lang.availableLanguages(); track l.code) { <option [value]="l.code">{{ l.flag }} {{ l.label }}</option> }
                   </select>
                   <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Date Format</label>
+                <label class="form-label">{{ 'settings.general.dateFormat' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
                   <select class="form-select" [ngModel]="draft().general.dateFormat" (ngModelChange)="updateGeneral('dateFormat', $event)">
                     @for (d of dateFormatOptions; track d) { <option [value]="d">{{ d }}</option> }
@@ -239,7 +239,7 @@
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save General Settings</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.general.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -248,50 +248,50 @@
         @if (activeCategory() === 'profile') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Administrator Profile</h2>
-              <p class="settings-card__sub">Your personal information as it appears across the admin dashboard.</p>
+              <h2 class="settings-card__title">{{ 'settings.profile.title' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.profile.subtitle' | translate }}</p>
             </div>
 
             <div class="avatar-upload">
               <div class="avatar-upload__preview">{{ draft().profile.avatar }}</div>
               <div class="avatar-upload__actions">
-                <button class="btn-ghost btn-ghost--sm">Upload New Photo</button>
-                <p class="avatar-upload__hint">JPG, PNG or GIF. Max 2MB.</p>
+                <button class="btn-ghost btn-ghost--sm">{{ 'settings.profile.uploadPhoto' | translate }}</button>
+                <p class="avatar-upload__hint">{{ 'settings.profile.uploadHint' | translate }}</p>
               </div>
             </div>
 
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">Name</label>
+                <label class="form-label">{{ 'settings.profile.name' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().profile.name" (ngModelChange)="updateProfile('name', $event)" [class.form-input--error]="formTouched() && profileErrors()['name']" />
                 @if (formTouched() && profileErrors()['name']) { <span class="field-error">{{ profileErrors()['name'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Email</label>
+                <label class="form-label">{{ 'admins.email' | translate }}</label>
                 <input class="form-input" type="email" [ngModel]="draft().profile.email" (ngModelChange)="updateProfile('email', $event)" [class.form-input--error]="formTouched() && profileErrors()['email']" />
                 @if (formTouched() && profileErrors()['email']) { <span class="field-error">{{ profileErrors()['email'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Username</label>
+                <label class="form-label">{{ 'settings.profile.username' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().profile.username" (ngModelChange)="updateProfile('username', $event)" [class.form-input--error]="formTouched() && profileErrors()['username']" />
                 @if (formTouched() && profileErrors()['username']) { <span class="field-error">{{ profileErrors()['username'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Job Title</label>
+                <label class="form-label">{{ 'settings.profile.jobTitle' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().profile.jobTitle" (ngModelChange)="updateProfile('jobTitle', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Phone</label>
+                <label class="form-label">{{ 'admins.phone' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().profile.phone" (ngModelChange)="updateProfile('phone', $event)" [class.form-input--error]="formTouched() && profileErrors()['phone']" />
                 @if (formTouched() && profileErrors()['phone']) { <span class="field-error">{{ profileErrors()['phone'] }}</span> }
               </div>
               <div class="form-field form-field--full">
-                <label class="form-label">Bio</label>
+                <label class="form-label">{{ 'settings.profile.bio' | translate }}</label>
                 <textarea class="form-textarea" rows="3" [ngModel]="draft().profile.bio" (ngModelChange)="updateProfile('bio', $event)"></textarea>
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Profile</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.profile.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -300,13 +300,13 @@
         @if (activeCategory() === 'security') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Change Password</h2>
-              <p class="settings-card__sub">Use a strong password you don't use anywhere else.</p>
+              <h2 class="settings-card__title">{{ 'settings.security.changePassword' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.security.changePasswordSub' | translate }}</p>
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">New Password</label>
-                <input class="form-input" type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" placeholder="Enter new password" />
+                <label class="form-label">{{ 'settings.security.newPassword' | translate }}</label>
+                <input class="form-input" type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" [placeholder]="'settings.security.newPasswordPlaceholder' | translate" />
                 @if (newPassword()) {
                   <div class="strength-meter">
                     <div class="strength-meter__bar">
@@ -317,26 +317,26 @@
                 }
               </div>
               <div class="form-field">
-                <label class="form-label">Confirm Password</label>
-                <input class="form-input" type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" placeholder="Re-enter new password" [class.form-input--error]="!passwordsMatch()" />
-                @if (!passwordsMatch()) { <span class="field-error">Passwords do not match.</span> }
+                <label class="form-label">{{ 'settings.security.confirmPassword' | translate }}</label>
+                <input class="form-input" type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" [placeholder]="'settings.security.confirmPasswordPlaceholder' | translate" [class.form-input--error]="!passwordsMatch()" />
+                @if (!passwordsMatch()) { <span class="field-error">{{ 'validation.passwordsDoNotMatch' | translate }}</span> }
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="updatePassword()" [disabled]="!newPassword() || !confirmPassword()">Update Password</button>
+              <button class="btn-primary" (click)="updatePassword()" [disabled]="!newPassword() || !confirmPassword()">{{ 'settings.security.updatePasswordButton' | translate }}</button>
             </div>
           </div>
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Security Preferences</h2>
-              <p class="settings-card__sub">Control how your account handles authentication and session activity.</p>
+              <h2 class="settings-card__title">{{ 'settings.security.preferencesTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.security.preferencesSub' | translate }}</p>
             </div>
             <div class="toggle-list">
               <label class="toggle-row">
                 <span class="toggle-row__text">
-                  <span class="toggle-row__title">Two-Factor Authentication</span>
-                  <span class="toggle-row__sub">Require a verification code in addition to your password.</span>
+                  <span class="toggle-row__title">{{ 'settings.security.twoFactor' | translate }}</span>
+                  <span class="toggle-row__sub">{{ 'settings.security.twoFactorSub' | translate }}</span>
                 </span>
                 <span class="switch">
                   <input type="checkbox" [checked]="draft().security.twoFactorEnabled" (change)="updateSecurity('twoFactorEnabled', $any($event.target).checked)" />
@@ -345,8 +345,8 @@
               </label>
               <label class="toggle-row">
                 <span class="toggle-row__text">
-                  <span class="toggle-row__title">Remember Login</span>
-                  <span class="toggle-row__sub">Stay signed in on this device between visits.</span>
+                  <span class="toggle-row__title">{{ 'settings.security.rememberLogin' | translate }}</span>
+                  <span class="toggle-row__sub">{{ 'settings.security.rememberLoginSub' | translate }}</span>
                 </span>
                 <span class="switch">
                   <input type="checkbox" [checked]="draft().security.rememberLogin" (change)="updateSecurity('rememberLogin', $any($event.target).checked)" />
@@ -355,8 +355,8 @@
               </label>
               <label class="toggle-row">
                 <span class="toggle-row__text">
-                  <span class="toggle-row__title">Login Alerts</span>
-                  <span class="toggle-row__sub">Get notified by email whenever a new device signs in.</span>
+                  <span class="toggle-row__title">{{ 'settings.security.loginAlerts' | translate }}</span>
+                  <span class="toggle-row__sub">{{ 'settings.security.loginAlertsSub' | translate }}</span>
                 </span>
                 <span class="switch">
                   <input type="checkbox" [checked]="draft().security.loginAlerts" (change)="updateSecurity('loginAlerts', $any($event.target).checked)" />
@@ -365,7 +365,7 @@
               </label>
             </div>
             <div class="form-field" style="max-width: 260px; margin-top: 4px;">
-              <label class="form-label">Session Timeout (minutes)</label>
+              <label class="form-label">{{ 'settings.security.sessionTimeout' | translate }}</label>
               <input class="form-input" type="number" min="5" max="480" [ngModel]="draft().security.sessionTimeoutMinutes" (ngModelChange)="updateSecurity('sessionTimeoutMinutes', $event)" />
             </div>
           </div>
@@ -374,28 +374,35 @@
             <div class="settings-card__head">
               <div class="settings-card__head-row">
                 <div>
-                  <h2 class="settings-card__title">Active Sessions</h2>
-                  <p class="settings-card__sub">Devices currently signed in to your administrator account.</p>
+                  <h2 class="settings-card__title">{{ 'settings.security.activeSessions' | translate }}</h2>
+                  <p class="settings-card__sub">{{ 'settings.security.activeSessionsSub' | translate }}</p>
                 </div>
-                <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateAll()">Terminate All Sessions</button>
+                <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateAll()">{{ 'settings.security.terminateAll' | translate }}</button>
               </div>
             </div>
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
-                  <tr><th>Device</th><th>Browser</th><th>IP Address</th><th>Location</th><th>Last Activity</th><th class="th--actions"></th></tr>
+                  <tr>
+                    <th>{{ 'settings.security.table.device' | translate }}</th>
+                    <th>{{ 'settings.security.table.browser' | translate }}</th>
+                    <th>{{ 'settings.security.table.ipAddress' | translate }}</th>
+                    <th>{{ 'settings.security.table.location' | translate }}</th>
+                    <th>{{ 'settings.security.table.lastActivity' | translate }}</th>
+                    <th class="th--actions"></th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (s of draft().security.sessions; track s.id) {
                     <tr class="table-row">
-                      <td class="td-strong">{{ s.device }} @if (s.current) { <span class="current-pill">This device</span> }</td>
+                      <td class="td-strong">{{ s.device }} @if (s.current) { <span class="current-pill">{{ 'settings.security.thisDevice' | translate }}</span> }</td>
                       <td class="text-mid">{{ s.browser }}</td>
                       <td class="td-mono">{{ s.ip }}</td>
                       <td class="text-mid">{{ s.location }}</td>
                       <td class="td-light">{{ formatRelative(s.lastActivity) }}</td>
                       <td class="td--actions">
                         @if (!s.current) {
-                          <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateSession(s)">Terminate</button>
+                          <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateSession(s)">{{ 'settings.security.terminateSession' | translate }}</button>
                         }
                       </td>
                     </tr>
@@ -410,37 +417,37 @@
         @if (activeCategory() === 'store') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Store Branding</h2>
-              <p class="settings-card__sub">Visual assets shown across your storefront.</p>
+              <h2 class="settings-card__title">{{ 'settings.store.brandingTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.store.brandingSub' | translate }}</p>
             </div>
             <div class="asset-grid">
               <div class="asset-upload">
-                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.logoUrl" alt="Store logo" /></div>
-                <p class="asset-upload__label">Store Logo</p>
-                <button class="btn-ghost btn-ghost--sm">Upload</button>
+                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.logoUrl" [alt]="'settings.store.logo' | translate" /></div>
+                <p class="asset-upload__label">{{ 'settings.store.logo' | translate }}</p>
+                <button class="btn-ghost btn-ghost--sm">{{ 'settings.store.uploadButton' | translate }}</button>
               </div>
               <div class="asset-upload">
-                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.faviconUrl" alt="Favicon" /></div>
-                <p class="asset-upload__label">Favicon</p>
-                <button class="btn-ghost btn-ghost--sm">Upload</button>
+                <div class="asset-upload__preview asset-upload__preview--square"><img [src]="draft().store.faviconUrl" [alt]="'settings.store.favicon' | translate" /></div>
+                <p class="asset-upload__label">{{ 'settings.store.favicon' | translate }}</p>
+                <button class="btn-ghost btn-ghost--sm">{{ 'settings.store.uploadButton' | translate }}</button>
               </div>
               <div class="asset-upload asset-upload--wide">
-                <div class="asset-upload__preview asset-upload__preview--wide"><img [src]="draft().store.bannerUrl" alt="Store banner" /></div>
-                <p class="asset-upload__label">Store Banner</p>
-                <button class="btn-ghost btn-ghost--sm">Upload</button>
+                <div class="asset-upload__preview asset-upload__preview--wide"><img [src]="draft().store.bannerUrl" [alt]="'settings.store.banner' | translate" /></div>
+                <p class="asset-upload__label">{{ 'settings.store.banner' | translate }}</p>
+                <button class="btn-ghost btn-ghost--sm">{{ 'settings.store.uploadButton' | translate }}</button>
               </div>
             </div>
           </div>
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Store Status</h2>
-              <p class="settings-card__sub">Control whether customers can browse and purchase right now.</p>
+              <h2 class="settings-card__title">{{ 'settings.store.statusTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.store.statusSub' | translate }}</p>
             </div>
             <label class="toggle-row">
               <span class="toggle-row__text">
-                <span class="toggle-row__title">Maintenance Mode</span>
-                <span class="toggle-row__sub">Temporarily disable the storefront for customers while you make changes.</span>
+                <span class="toggle-row__title">{{ 'settings.store.maintenanceMode' | translate }}</span>
+                <span class="toggle-row__sub">{{ 'settings.store.maintenanceModeSub' | translate }}</span>
               </span>
               <span class="switch">
                 <input type="checkbox" [checked]="draft().store.maintenanceMode" (change)="updateStore('maintenanceMode', $any($event.target).checked)" />
@@ -448,10 +455,10 @@
               </span>
             </label>
             <div class="form-field" style="max-width: 280px; margin-top: 14px;">
-              <label class="form-label">Store Status</label>
+              <label class="form-label">{{ 'settings.store.statusTitle' | translate }}</label>
               <div class="segmented">
                 @for (s of storeStatusOptions; track s) {
-                  <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().store.storeStatus === s" (click)="updateStore('storeStatus', s)">{{ s }}</button>
+                  <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().store.storeStatus === s" (click)="updateStore('storeStatus', s)">{{ storeStatusKey(s) | translate }}</button>
                 }
               </div>
             </div>
@@ -459,24 +466,24 @@
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Pricing &amp; Shipping</h2>
-              <p class="settings-card__sub">Default values applied at checkout.</p>
+              <h2 class="settings-card__title">{{ 'settings.store.pricingShippingTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.store.pricingShippingSub' | translate }}</p>
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">Tax Percentage</label>
+                <label class="form-label">{{ 'settings.store.taxPercentage' | translate }}</label>
                 <input class="form-input" type="number" min="0" max="100" step="0.1" [ngModel]="draft().store.taxPercentage" (ngModelChange)="updateStore('taxPercentage', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Shipping Fee</label>
+                <label class="form-label">{{ 'settings.store.shippingFee' | translate }}</label>
                 <input class="form-input" type="number" min="0" step="0.01" [ngModel]="draft().store.shippingFee" (ngModelChange)="updateStore('shippingFee', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Free Shipping Threshold</label>
+                <label class="form-label">{{ 'settings.store.freeShippingThreshold' | translate }}</label>
                 <input class="form-input" type="number" min="0" step="1" [ngModel]="draft().store.freeShippingThreshold" (ngModelChange)="updateStore('freeShippingThreshold', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Default Warehouse</label>
+                <label class="form-label">{{ 'settings.store.defaultWarehouse' | translate }}</label>
                 <div class="select-wrap select-wrap--block">
                   <select class="form-select" [ngModel]="draft().store.defaultWarehouse" (ngModelChange)="updateStore('defaultWarehouse', $event)">
                     @for (w of warehouseOptions; track w) { <option [value]="w">{{ w }}</option> }
@@ -486,7 +493,7 @@
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Store Settings</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.store.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -495,8 +502,8 @@
         @if (activeCategory() === 'payments') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Payment Methods</h2>
-              <p class="settings-card__sub">Enable and configure the payment gateways available at checkout.</p>
+              <h2 class="settings-card__title">{{ 'settings.payments.title' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.payments.subtitle' | translate }}</p>
             </div>
 
             <div class="payment-gateway-list">
@@ -513,7 +520,7 @@
                     </div>
                     <div class="gateway-card__name">
                       <p class="gateway-card__title">{{ pg.name }}</p>
-                      @if (pg.requiresKeys) { <span class="gateway-card__mode">{{ pg.testMode ? 'Test Mode' : 'Live Mode' }}</span> }
+                      @if (pg.requiresKeys) { <span class="gateway-card__mode">{{ (pg.testMode ? 'settings.payments.testMode' : 'settings.payments.liveMode') | translate }}</span> }
                     </div>
                     <span class="switch">
                       <input type="checkbox" [checked]="pg.enabled" (change)="updatePaymentGateway(pg.id, 'enabled', $any($event.target).checked)" />
@@ -525,7 +532,7 @@
                     <div class="gateway-card__body">
                       <div class="form-grid">
                         <div class="form-field">
-                          <label class="form-label">API Key</label>
+                          <label class="form-label">{{ 'settings.payments.apiKey' | translate }}</label>
                           <div class="masked-input">
                             <input class="form-input" [type]="isRevealed(pg.id + '-api') ? 'text' : 'password'" [ngModel]="pg.apiKey" (ngModelChange)="updatePaymentGateway(pg.id, 'apiKey', $event)" />
                             <button type="button" class="masked-input__toggle" (click)="toggleReveal(pg.id + '-api')">
@@ -535,7 +542,7 @@
                           </div>
                         </div>
                         <div class="form-field">
-                          <label class="form-label">Secret Key</label>
+                          <label class="form-label">{{ 'settings.payments.secretKey' | translate }}</label>
                           <div class="masked-input">
                             <input class="form-input" [type]="isRevealed(pg.id + '-secret') ? 'text' : 'password'" [ngModel]="pg.secretKey" (ngModelChange)="updatePaymentGateway(pg.id, 'secretKey', $event)" />
                             <button type="button" class="masked-input__toggle" (click)="toggleReveal(pg.id + '-secret')">
@@ -545,14 +552,14 @@
                           </div>
                         </div>
                         <div class="form-field form-field--full">
-                          <label class="form-label">Webhook URL</label>
+                          <label class="form-label">{{ 'settings.payments.webhookUrl' | translate }}</label>
                           <input class="form-input" type="text" [ngModel]="pg.webhookUrl" (ngModelChange)="updatePaymentGateway(pg.id, 'webhookUrl', $event)" />
                         </div>
                       </div>
                       <label class="toggle-row toggle-row--tight">
                         <span class="toggle-row__text">
-                          <span class="toggle-row__title">Test Mode</span>
-                          <span class="toggle-row__sub">Use sandbox credentials — no real charges will be made.</span>
+                          <span class="toggle-row__title">{{ 'settings.payments.testMode' | translate }}</span>
+                          <span class="toggle-row__sub">{{ 'settings.payments.testModeSub' | translate }}</span>
                         </span>
                         <span class="switch">
                           <input type="checkbox" [checked]="pg.testMode" (change)="updatePaymentGateway(pg.id, 'testMode', $any($event.target).checked)" />
@@ -565,7 +572,7 @@
               }
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Payment Settings</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.payments.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -574,26 +581,26 @@
         @if (activeCategory() === 'email') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">SMTP Configuration</h2>
-              <p class="settings-card__sub">Used to send transactional and marketing emails from your store.</p>
+              <h2 class="settings-card__title">{{ 'settings.email.title' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.email.subtitle' | translate }}</p>
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">SMTP Host</label>
+                <label class="form-label">{{ 'settings.email.smtpHost' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().email.smtpHost" (ngModelChange)="updateEmail('smtpHost', $event)" [class.form-input--error]="formTouched() && emailErrors()['smtpHost']" />
                 @if (formTouched() && emailErrors()['smtpHost']) { <span class="field-error">{{ emailErrors()['smtpHost'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">SMTP Port</label>
+                <label class="form-label">{{ 'settings.email.smtpPort' | translate }}</label>
                 <input class="form-input" type="number" [ngModel]="draft().email.smtpPort" (ngModelChange)="updateEmail('smtpPort', $event)" [class.form-input--error]="formTouched() && emailErrors()['smtpPort']" />
                 @if (formTouched() && emailErrors()['smtpPort']) { <span class="field-error">{{ emailErrors()['smtpPort'] }}</span> }
               </div>
               <div class="form-field">
-                <label class="form-label">Username</label>
+                <label class="form-label">{{ 'settings.profile.username' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().email.username" (ngModelChange)="updateEmail('username', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Password</label>
+                <label class="form-label">{{ 'admins.password' | translate }}</label>
                 <div class="masked-input">
                   <input class="form-input" [type]="isRevealed('smtp-pw') ? 'text' : 'password'" [ngModel]="draft().email.password" (ngModelChange)="updateEmail('password', $event)" />
                   <button type="button" class="masked-input__toggle" (click)="toggleReveal('smtp-pw')">
@@ -603,26 +610,26 @@
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Encryption</label>
+                <label class="form-label">{{ 'settings.email.encryption' | translate }}</label>
                 <div class="segmented">
                   @for (e of encryptionOptions; track e) {
-                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().email.encryption === e" (click)="updateEmail('encryption', e)">{{ e }}</button>
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().email.encryption === e" (click)="updateEmail('encryption', e)">{{ encryptionKey(e) | translate }}</button>
                   }
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Sender Name</label>
+                <label class="form-label">{{ 'settings.email.senderName' | translate }}</label>
                 <input class="form-input" type="text" [ngModel]="draft().email.senderName" (ngModelChange)="updateEmail('senderName', $event)" />
               </div>
               <div class="form-field">
-                <label class="form-label">Sender Email</label>
+                <label class="form-label">{{ 'settings.email.senderEmail' | translate }}</label>
                 <input class="form-input" type="email" [ngModel]="draft().email.senderEmail" (ngModelChange)="updateEmail('senderEmail', $event)" [class.form-input--error]="formTouched() && emailErrors()['senderEmail']" />
                 @if (formTouched() && emailErrors()['senderEmail']) { <span class="field-error">{{ emailErrors()['senderEmail'] }}</span> }
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-ghost" (click)="sendTestEmail()">Send Test Email</button>
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Email Settings</button>
+              <button class="btn-ghost" (click)="sendTestEmail()">{{ 'settings.email.sendTestEmail' | translate }}</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.email.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -631,20 +638,20 @@
         @if (activeCategory() === 'notifications') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Notification Channels</h2>
-              <p class="settings-card__sub">Choose how you and your team receive alerts.</p>
+              <h2 class="settings-card__title">{{ 'settings.notifications.channelsTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.notifications.channelsSub' | translate }}</p>
             </div>
             <div class="toggle-list">
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Email Notifications</span><span class="toggle-row__sub">Receive alerts via email.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.email' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.emailSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.emailNotifications" (change)="updateNotifications('emailNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Push Notifications</span><span class="toggle-row__sub">Receive alerts as push notifications in the admin app.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.push' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.pushSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.pushNotifications" (change)="updateNotifications('pushNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">SMS Notifications</span><span class="toggle-row__sub">Receive critical alerts via text message.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.sms' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.smsSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.smsNotifications" (change)="updateNotifications('smsNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
             </div>
@@ -652,41 +659,41 @@
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Activity Alerts</h2>
-              <p class="settings-card__sub">Fine-tune which events trigger a notification.</p>
+              <h2 class="settings-card__title">{{ 'settings.notifications.activityAlertsTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.notifications.activityAlertsSub' | translate }}</p>
             </div>
             <div class="toggle-list">
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Order Notifications</span><span class="toggle-row__sub">New orders, status changes, and cancellations.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.order' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.orderSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.orderNotifications" (change)="updateNotifications('orderNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Customer Notifications</span><span class="toggle-row__sub">New account signups and profile updates.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.customer' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.customerSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.customerNotifications" (change)="updateNotifications('customerNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Inventory Alerts</span><span class="toggle-row__sub">Stock adjustments and warehouse changes.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.inventory' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.inventorySub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.inventoryAlerts" (change)="updateNotifications('inventoryAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Low Stock Alerts</span><span class="toggle-row__sub">When a product falls below its reorder threshold.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.lowStock' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.lowStockSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.lowStockAlerts" (change)="updateNotifications('lowStockAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Review Alerts</span><span class="toggle-row__sub">New product reviews awaiting moderation.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.review' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.reviewSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.reviewAlerts" (change)="updateNotifications('reviewAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Admin Login Alerts</span><span class="toggle-row__sub">Every time an administrator signs in.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.adminLogin' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.adminLoginSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.adminLoginAlerts" (change)="updateNotifications('adminLoginAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Activity Log Alerts</span><span class="toggle-row__sub">Summaries of sensitive actions taken across the system.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.activityLog' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.activityLogSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().notifications.activityLogAlerts" (change)="updateNotifications('activityLogAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Notification Settings</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.notifications.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -695,20 +702,20 @@
         @if (activeCategory() === 'appearance') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Theme</h2>
-              <p class="settings-card__sub">Choose how the admin dashboard looks for you.</p>
+              <h2 class="settings-card__title">{{ 'settings.appearance.theme' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.appearance.themeSub' | translate }}</p>
             </div>
             <div class="segmented segmented--lg">
               @for (t of themeOptions; track t) {
-                <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.theme === t" (click)="updateAppearance('theme', t)">{{ t }}</button>
+                <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.theme === t" (click)="updateAppearance('theme', t)">{{ themeKey(t) | translate }}</button>
               }
             </div>
           </div>
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Primary Color</h2>
-              <p class="settings-card__sub">Sets the accent color used for buttons, links, and highlights.</p>
+              <h2 class="settings-card__title">{{ 'settings.appearance.primaryColor' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.appearance.primaryColorSub' | translate }}</p>
             </div>
             <div class="color-swatches">
               @for (c of primaryColorSwatches; track c) {
@@ -719,38 +726,38 @@
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Layout &amp; Density</h2>
-              <p class="settings-card__sub">Adjust how compact the interface feels.</p>
+              <h2 class="settings-card__title">{{ 'settings.appearance.layoutDensityTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.appearance.layoutDensitySub' | translate }}</p>
             </div>
             <div class="form-grid">
               <div class="form-field">
-                <label class="form-label">Sidebar Style</label>
+                <label class="form-label">{{ 'settings.appearance.sidebarStyle' | translate }}</label>
                 <div class="segmented">
                   @for (s of sidebarStyleOptions; track s) {
-                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.sidebarStyle === s" (click)="updateAppearance('sidebarStyle', s)">{{ s }}</button>
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.sidebarStyle === s" (click)="updateAppearance('sidebarStyle', s)">{{ sidebarStyleKey(s) | translate }}</button>
                   }
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-label">Font Size</label>
+                <label class="form-label">{{ 'settings.appearance.fontSize' | translate }}</label>
                 <div class="segmented">
                   @for (f of fontSizeOptions; track f) {
-                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.fontSize === f" (click)="updateAppearance('fontSize', f)">{{ f }}</button>
+                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.fontSize === f" (click)="updateAppearance('fontSize', f)">{{ fontSizeKey(f) | translate }}</button>
                   }
                 </div>
               </div>
             </div>
             <div class="toggle-list" style="margin-top: 16px;">
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Rounded Cards</span><span class="toggle-row__sub">Use softer, more rounded corners throughout the UI.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.roundedCards' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.roundedCardsSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().appearance.roundedCards" (change)="updateAppearance('roundedCards', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Animations</span><span class="toggle-row__sub">Enable hover, fade, and slide animations across the dashboard.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.animations' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.animationsSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().appearance.animations" (change)="updateAppearance('animations', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
               <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">Reduced Motion</span><span class="toggle-row__sub">Minimize motion for accessibility.</span></span>
+                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.reducedMotion' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.reducedMotionSub' | translate }}</span></span>
                 <span class="switch"><input type="checkbox" [checked]="draft().appearance.reducedMotion" (change)="updateAppearance('reducedMotion', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
               </label>
             </div>
@@ -758,8 +765,8 @@
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Live Preview</h2>
-              <p class="settings-card__sub">A preview of your current appearance settings.</p>
+              <h2 class="settings-card__title">{{ 'settings.appearance.livePreviewTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.appearance.livePreviewSub' | translate }}</p>
             </div>
             <div class="appearance-preview" [class.appearance-preview--dark]="draft().appearance.theme === 'Dark'" [class.appearance-preview--compact]="draft().appearance.sidebarStyle === 'Compact'">
               <div class="appearance-preview__sidebar" [style.background]="draft().appearance.primaryColor + '14'">
@@ -770,13 +777,13 @@
               </div>
               <div class="appearance-preview__main">
                 <div class="appearance-preview__card" [class.appearance-preview__card--rounded]="draft().appearance.roundedCards">
-                  <div class="appearance-preview__btn" [style.background]="draft().appearance.primaryColor">Primary Button</div>
-                  <p class="appearance-preview__text" [class]="'fs-' + draft().appearance.fontSize.toLowerCase()">The quick brown fox jumps over the lazy dog.</p>
+                  <div class="appearance-preview__btn" [style.background]="draft().appearance.primaryColor">{{ 'settings.appearance.previewButtonLabel' | translate }}</div>
+                  <p class="appearance-preview__text" [class]="'fs-' + draft().appearance.fontSize.toLowerCase()">{{ 'settings.appearance.previewSampleText' | translate }}</p>
                 </div>
               </div>
             </div>
             <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">Save Appearance Settings</button>
+              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.appearance.saveButton' | translate }}</button>
             </div>
           </div>
         }
@@ -785,29 +792,29 @@
         @if (activeCategory() === 'system') {
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">System Information</h2>
-              <p class="settings-card__sub">Current environment and infrastructure status.</p>
+              <h2 class="settings-card__title">{{ 'settings.system.infoTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.system.infoSub' | translate }}</p>
             </div>
             <div class="system-grid">
-              <div class="system-stat"><span class="system-stat__label">Application Version</span><span class="system-stat__value">{{ draft().system.applicationVersion }}</span></div>
-              <div class="system-stat"><span class="system-stat__label">Angular Version</span><span class="system-stat__value">{{ draft().system.angularVersion }}</span></div>
-              <div class="system-stat"><span class="system-stat__label">Backend Version</span><span class="system-stat__value">{{ draft().system.backendVersion }}</span></div>
+              <div class="system-stat"><span class="system-stat__label">{{ 'settings.system.applicationVersion' | translate }}</span><span class="system-stat__value">{{ draft().system.applicationVersion }}</span></div>
+              <div class="system-stat"><span class="system-stat__label">{{ 'settings.system.angularVersion' | translate }}</span><span class="system-stat__value">{{ draft().system.angularVersion }}</span></div>
+              <div class="system-stat"><span class="system-stat__label">{{ 'settings.system.backendVersion' | translate }}</span><span class="system-stat__value">{{ draft().system.backendVersion }}</span></div>
               <div class="system-stat">
-                <span class="system-stat__label">Database Status</span>
-                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.databaseStatus)"></span>{{ draft().system.databaseStatus }}</span>
+                <span class="system-stat__label">{{ 'settings.system.databaseStatus' | translate }}</span>
+                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.databaseStatus)"></span>{{ systemStatusKey(draft().system.databaseStatus) | translate }}</span>
               </div>
               <div class="system-stat">
-                <span class="system-stat__label">Server Status</span>
-                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.serverStatus)"></span>{{ draft().system.serverStatus }}</span>
+                <span class="system-stat__label">{{ 'settings.system.serverStatus' | translate }}</span>
+                <span class="system-stat__value"><span class="status-dot" [ngClass]="statusDotClass(draft().system.serverStatus)"></span>{{ systemStatusKey(draft().system.serverStatus) | translate }}</span>
               </div>
               <div class="system-stat">
-                <span class="system-stat__label">Environment</span>
-                <span class="env-pill" [class.env-pill--prod]="draft().system.environment === 'Production'">{{ draft().system.environment }}</span>
+                <span class="system-stat__label">{{ 'settings.system.environment' | translate }}</span>
+                <span class="env-pill" [class.env-pill--prod]="draft().system.environment === 'Production'">{{ environmentKey(draft().system.environment) | translate }}</span>
               </div>
             </div>
             <div class="storage-meter">
               <div class="storage-meter__head">
-                <span class="storage-meter__label">Storage Used</span>
+                <span class="storage-meter__label">{{ 'settings.system.storageUsed' | translate }}</span>
                 <span class="storage-meter__value">{{ draft().system.storageUsedGb }} GB / {{ draft().system.storageTotalGb }} GB</span>
               </div>
               <div class="progress-bar"><div class="progress-bar__fill" [style.width.%]="storagePercent()"></div></div>
@@ -816,63 +823,63 @@
 
           <div class="settings-card">
             <div class="settings-card__head">
-              <h2 class="settings-card__title">Maintenance Tools</h2>
-              <p class="settings-card__sub">Utility actions for keeping the platform running smoothly.</p>
+              <h2 class="settings-card__title">{{ 'settings.system.maintenanceToolsTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.system.maintenanceToolsSub' | translate }}</p>
             </div>
             <div class="tool-grid">
               <button class="tool-btn" (click)="clearCache()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                Clear Cache
+                {{ 'settings.system.clearCache' | translate }}
               </button>
               <button class="tool-btn" (click)="rebuildIndex()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                Rebuild Index
+                {{ 'settings.system.rebuildIndex' | translate }}
               </button>
               <button class="tool-btn" (click)="optimizeImages()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                Optimize Images
+                {{ 'settings.system.optimizeImages' | translate }}
               </button>
               <button class="tool-btn" (click)="backupDatabase()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
-                Backup Database
+                {{ 'settings.system.backupDatabase' | translate }}
               </button>
               <button class="tool-btn" (click)="exportSettings()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Export Settings
+                {{ 'settings.system.exportSettings' | translate }}
               </button>
               <button class="tool-btn" (click)="importSettings()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                Import Settings
+                {{ 'settings.system.importSettings' | translate }}
               </button>
             </div>
           </div>
 
           <div class="settings-card settings-card--danger">
             <div class="settings-card__head">
-              <h2 class="settings-card__title settings-card__title--danger">Danger Zone</h2>
-              <p class="settings-card__sub">These actions are destructive and cannot be undone.</p>
+              <h2 class="settings-card__title settings-card__title--danger">{{ 'settings.system.dangerZoneTitle' | translate }}</h2>
+              <p class="settings-card__sub">{{ 'settings.system.dangerZoneSub' | translate }}</p>
             </div>
             <div class="danger-list">
               <div class="danger-row">
                 <div>
-                  <p class="danger-row__title">Delete All Logs</p>
-                  <p class="danger-row__sub">Permanently remove every activity log entry.</p>
+                  <p class="danger-row__title">{{ 'settings.system.deleteLogsTitle' | translate }}</p>
+                  <p class="danger-row__sub">{{ 'settings.system.deleteLogsSub' | translate }}</p>
                 </div>
-                <button class="btn-danger-outline" (click)="requestDangerAction('delete-logs')">Delete Logs</button>
+                <button class="btn-danger-outline" (click)="requestDangerAction('delete-logs')">{{ 'settings.system.deleteLogsButton' | translate }}</button>
               </div>
               <div class="danger-row">
                 <div>
-                  <p class="danger-row__title">Delete Cache</p>
-                  <p class="danger-row__sub">Clear all cached data across the platform.</p>
+                  <p class="danger-row__title">{{ 'settings.system.deleteCacheTitle' | translate }}</p>
+                  <p class="danger-row__sub">{{ 'settings.system.deleteCacheSub' | translate }}</p>
                 </div>
-                <button class="btn-danger-outline" (click)="requestDangerAction('delete-cache')">Delete Cache</button>
+                <button class="btn-danger-outline" (click)="requestDangerAction('delete-cache')">{{ 'settings.system.deleteCacheTitle' | translate }}</button>
               </div>
               <div class="danger-row">
                 <div>
-                  <p class="danger-row__title">Reset All Settings</p>
-                  <p class="danger-row__sub">Restore every setting on this page to its factory default.</p>
+                  <p class="danger-row__title">{{ 'settings.system.factoryResetRowTitle' | translate }}</p>
+                  <p class="danger-row__sub">{{ 'settings.system.factoryResetSub' | translate }}</p>
                 </div>
-                <button class="btn-danger-outline" (click)="requestDangerAction('factory-reset')">Factory Reset</button>
+                <button class="btn-danger-outline" (click)="requestDangerAction('factory-reset')">{{ 'settings.system.factoryResetTitle' | translate }}</button>
               </div>
             </div>
           </div>
