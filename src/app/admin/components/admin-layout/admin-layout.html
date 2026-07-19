@@ -7,7 +7,7 @@
   }
 
   <!-- ── SIDEBAR ───────────────────────────────────────────────────────────── -->
-  <aside class="sidebar" [class.sidebar--open]="mobileSidebarOpen()" role="navigation" aria-label="Admin navigation">
+  <aside class="sidebar" [class.sidebar--open]="mobileSidebarOpen()" role="navigation" [attr.aria-label]="'layout.adminNavigation' | translate">
 
     <!-- Logo -->
     <div class="sidebar-logo">
@@ -16,12 +16,12 @@
       </div>
       @if (!sidebarCollapsed()) {
         <div class="logo-text">
-          <span class="logo-name">Nexus</span>
-          <span class="logo-badge">Admin</span>
+          <span class="logo-name">{{ 'common.appName' | translate }}</span>
+          <span class="logo-badge">{{ 'common.adminBadge' | translate }}</span>
         </div>
       }
       <!-- Collapse toggle (desktop) -->
-      <button class="collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="sidebarCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'">
+      <button class="collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="(sidebarCollapsed() ? 'layout.expandSidebar' : 'layout.collapseSidebar') | translate">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           @if (sidebarCollapsed()) {
             <polyline points="9 18 15 12 9 6"/>
@@ -37,15 +37,15 @@
       @for (sec of navSections; track sec.section) {
         <div class="nav-section">
           @if (!sidebarCollapsed()) {
-            <p class="nav-section-label">{{ sec.section }}</p>
+            <p class="nav-section-label">{{ sec.section | translate }}</p>
           }
           @for (item of sec.items; track trackById($index, item)) {
             <a
               class="nav-item"
               [routerLink]="item.route"
               routerLinkActive="nav-item--active"
-              [attr.aria-label]="item.label"
-              [attr.title]="sidebarCollapsed() ? item.label : null"
+              [attr.aria-label]="item.label | translate"
+              [attr.title]="sidebarCollapsed() ? (item.label | translate) : null"
               (click)="closeMobileSidebar()"
             >
               <!-- Icon -->
@@ -123,7 +123,7 @@
               </span>
 
               @if (!sidebarCollapsed()) {
-                <span class="nav-label">{{ item.label }}</span>
+                <span class="nav-label">{{ item.label | translate }}</span>
                 @if (item.badge && item.badge > 0) {
                   <span class="nav-badge">{{ item.badge }}</span>
                 }
@@ -145,7 +145,7 @@
             <p class="admin-name">{{ currentAdmin()?.name }}</p>
             <p class="admin-role">{{ currentAdmin()?.role?.replace('_', ' ') }}</p>
           </div>
-          <button class="logout-btn" (click)="logout()" aria-label="Sign out">
+          <button class="logout-btn" (click)="logout()" [attr.aria-label]="'buttons.signOut' | translate">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
@@ -163,7 +163,7 @@
     <!-- Top navbar -->
     <header class="top-nav">
       <!-- Mobile menu -->
-      <button class="mobile-menu-btn" (click)="toggleMobileSidebar()" aria-label="Open navigation">
+      <button class="mobile-menu-btn" (click)="toggleMobileSidebar()" [attr.aria-label]="'layout.openNavigation' | translate">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
         </svg>
@@ -174,14 +174,14 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
         </svg>
-        <input type="search" class="top-search-input" placeholder="Search products, orders, customers…" aria-label="Global search" />
+        <input type="search" class="top-search-input" [placeholder]="'navigation.searchGlobalPlaceholder' | translate" [attr.aria-label]="'layout.globalSearch' | translate" />
         <kbd class="search-kbd">⌘K</kbd>
       </div>
 
       <!-- Right controls -->
       <div class="top-right">
         <!-- Dark mode toggle -->
-        <button class="top-icon-btn" (click)="toggleDarkMode()" [attr.aria-label]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="darkMode() ? 'Light mode' : 'Dark mode'">
+        <button class="top-icon-btn" (click)="toggleDarkMode()" [attr.aria-label]="(darkMode() ? 'layout.switchToLightMode' : 'layout.switchToDarkMode') | translate" [attr.title]="(darkMode() ? 'settings.appearance.light' : 'settings.appearance.dark') | translate">
           @if (darkMode()) {
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
               <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -196,13 +196,45 @@
           }
         </button>
 
+        <!-- Language switcher -->
+        <div class="language-wrapper" #langWrap>
+          <button
+            class="top-icon-btn top-lang-btn"
+            [attr.aria-label]="'language.select' | translate"
+            [attr.title]="'language.select' | translate"
+            (click)="toggleLanguageMenu($event)"
+          >
+            <span class="lang-flag">{{ lang.languageDefinition().flag }}</span>
+          </button>
+
+          @if (languageMenuOpen()) {
+            <div class="language-dropdown" role="menu">
+              @for (l of lang.availableLanguages(); track l.code) {
+                <button
+                  type="button"
+                  class="language-dropdown__item"
+                  [class.language-dropdown__item--active]="lang.currentLanguage() === l.code"
+                  (click)="selectLanguage(l.code)"
+                  role="menuitem"
+                >
+                  <span class="lang-flag">{{ l.flag }}</span>
+                  <span class="language-dropdown__label">{{ l.label }}</span>
+                  @if (lang.currentLanguage() === l.code) {
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="lang-check"><polyline points="20 6 9 17 4 12"/></svg>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+
         <!-- Notifications -->
         <div class="notification-wrapper" #notifWrap>
 
   <button
     class="top-icon-btn top-notif-btn"
-    aria-label="Notifications"
-    title="Notifications"
+    [attr.aria-label]="'navigation.notifications' | translate"
+    [attr.title]="'navigation.notifications' | translate"
     (click)="toggleNotifications($event)"
   >
     <svg
@@ -233,7 +265,7 @@
 </div>
 
         <!-- Admin avatar -->
-        <button class="top-avatar" (click)="logout()" aria-label="Admin menu" title="Sign out">
+        <button class="top-avatar" (click)="logout()" [attr.aria-label]="'layout.adminMenu' | translate" [attr.title]="'buttons.signOut' | translate">
           <span>{{ adminInitials() }}</span>
         </button>
       </div>
