@@ -4,22 +4,22 @@
   <!-- ── PAGE HEADER ─────────────────────────────────────────────────────── -->
   <div class="dash-header">
     <div>
-      <h1 class="dash-title">Dashboard</h1>
-      <p class="dash-sub">Welcome back — here's what's happening today.</p>
+      <h1 class="dash-title">{{ 'dashboard.title' | translate }}</h1>
+      <p class="dash-sub">{{ 'dashboard.subtitle' | translate }}</p>
     </div>
     <div class="dash-header-actions">
-      <button class="btn-ghost">
+      <button class="btn-ghost" [title]="'dashboard.export' | translate">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Export
+        <span class="btn-text">{{ 'dashboard.export' | translate }}</span>
       </button>
-      <button class="btn-primary-sm" (click)="addProduct()">
+      <button class="btn-primary-sm" (click)="addProduct()" [title]="'dashboard.addProduct' | translate">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        Add Product
+        <span class="btn-text">{{ 'dashboard.addProduct' | translate }}</span>
       </button>
     </div>
   </div>
@@ -82,7 +82,7 @@
           </div>
 
           <div class="stat-body">
-            <p class="stat-label">{{ card.label }}</p>
+            <p class="stat-label" [title]="card.label | translate">{{ card.label | translate }}</p>
             <p class="stat-value">
               {{ card.prefix }}{{ card.value | number }}{{ card.suffix }}
             </p>
@@ -96,8 +96,8 @@
                 <polyline points="6 9 12 15 18 9"/>
               }
             </svg>
-            {{ card.change > 0 ? '+' : '' }}{{ card.change }}%
-            <span class="change-label">{{ card.changeLabel }}</span>
+            {{ card.change > 0 ? '+' : '' }}{{ lang.formatNumber(card.change) }}%
+            <span class="change-label" [title]="card.changeLabel | translate">{{ card.changeLabel | translate }}</span>
           </div>
         </div>
       }
@@ -110,12 +110,12 @@
       <div class="chart-card chart-card--wide">
         <div class="chart-head">
           <div>
-            <h3 class="chart-title">Revenue Overview</h3>
-            <p class="chart-sub">Monthly revenue for the past 12 months</p>
+            <h3 class="chart-title">{{ 'dashboard.revenueOverview' | translate }}</h3>
+            <p class="chart-sub">{{ 'dashboard.revenueOverviewSub' | translate }}</p>
           </div>
           <div class="chart-legend">
-            <span class="legend-dot legend-dot--blue"></span> Revenue
-            <span class="legend-dot legend-dot--green" style="margin-left: 12px"></span> Profit
+            <span class="legend-dot legend-dot--blue"></span> {{ 'dashboard.legendRevenue' | translate }}
+            <span class="legend-dot legend-dot--green" style="margin-left: 12px"></span> {{ 'dashboard.legendProfit' | translate }}
           </div>
         </div>
 
@@ -123,8 +123,8 @@
           @for (pt of revenueData; track pt.month) {
             <div class="bar-col">
               <div class="bar-pair">
-                <div class="bar bar--blue"  [style.height.%]="barHeight(pt.revenue)" [attr.title]="'Revenue: $' + pt.revenue"></div>
-                <div class="bar bar--green" [style.height.%]="barHeight(pt.profit)"  [attr.title]="'Profit: $' + pt.profit"></div>
+                <div class="bar bar--blue"  [style.height.%]="barHeight(pt.revenue)" [attr.title]="revenueTooltip(pt)"></div>
+                <div class="bar bar--green" [style.height.%]="barHeight(pt.profit)"  [attr.title]="profitTooltip(pt)"></div>
               </div>
               <span class="bar-label">{{ pt.month }}</span>
             </div>
@@ -136,8 +136,8 @@
       <div class="chart-card">
         <div class="chart-head">
           <div>
-            <h3 class="chart-title">Top Categories</h3>
-            <p class="chart-sub">Sales distribution</p>
+            <h3 class="chart-title">{{ 'dashboard.topCategories' | translate }}</h3>
+            <p class="chart-sub">{{ 'dashboard.topCategoriesSub' | translate }}</p>
           </div>
         </div>
 
@@ -156,7 +156,7 @@
             }
             <!-- Center -->
             <text x="50" y="46" text-anchor="middle" class="donut-center-val">$84k</text>
-            <text x="50" y="57" text-anchor="middle" class="donut-center-lbl">Revenue</text>
+            <text x="50" y="57" text-anchor="middle" class="donut-center-lbl">{{ 'dashboard.legendRevenue' | translate }}</text>
           </svg>
         </div>
 
@@ -179,20 +179,20 @@
       <!-- Recent orders table -->
       <div class="table-card">
         <div class="table-head">
-          <h3 class="chart-title">Recent Orders</h3>
-          <a class="view-all-link" routerLink="/admin/orders">View all →</a>
+          <h3 class="chart-title">{{ 'dashboard.recentOrders' | translate }}</h3>
+          <a class="view-all-link" routerLink="/admin/orders">{{ 'dashboard.viewAll' | translate }}</a>
         </div>
 
         <div class="table-wrap">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Date</th>
+                <th>{{ 'dashboard.table.order' | translate }}</th>
+                <th>{{ 'dashboard.table.customer' | translate }}</th>
+                <th>{{ 'dashboard.table.items' | translate }}</th>
+                <th>{{ 'dashboard.table.total' | translate }}</th>
+                <th>{{ 'dashboard.table.status' | translate }}</th>
+                <th>{{ 'dashboard.table.date' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -209,10 +209,10 @@
                     </div>
                   </td>
                   <td class="text-mid">{{ order.items }}</td>
-                  <td class="font-bold">${{ order.total | number }}</td>
+                  <td class="font-bold">{{ lang.formatCurrency(order.total) }}</td>
                   <td>
-                    <span class="status-pill status-pill--{{ statusColor(order.status) }}">
-                      {{ order.status }}
+                    <span class="status-pill status-pill--{{ statusColor(order.status) }}" [title]="('orders.status.' + order.status) | translate">
+                      {{ ('orders.status.' + order.status) | translate }}
                     </span>
                   </td>
                   <td class="text-light">{{ order.date }}</td>
@@ -229,8 +229,8 @@
         <!-- Top products -->
         <div class="panel-card">
           <div class="table-head">
-            <h3 class="chart-title">Top Products</h3>
-            <a class="view-all-link" routerLink="/admin/products">View all →</a>
+            <h3 class="chart-title">{{ 'dashboard.topProducts' | translate }}</h3>
+            <a class="view-all-link" routerLink="/admin/products">{{ 'dashboard.viewAll' | translate }}</a>
           </div>
 
           <div class="top-products-list">
@@ -244,8 +244,8 @@
                   <p class="tp-brand">{{ p.brand }} · {{ p.category }}</p>
                 </div>
                 <div class="tp-right">
-                  <p class="tp-sales">{{ p.sales }} sold</p>
-                  <p class="tp-price">${{ p.price }}</p>
+                  <p class="tp-sales">{{ 'dashboard.soldCount' | translate: { count: p.sales } }}</p>
+                  <p class="tp-price">{{ lang.formatCurrency(p.price) }}</p>
                 </div>
               </div>
             }
@@ -261,15 +261,15 @@
                   <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                   <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
-                Low Stock
+                {{ 'dashboard.lowStock' | translate }}
               </h3>
-              <a class="view-all-link" routerLink="/admin/inventory">Fix →</a>
+              <a class="view-all-link" routerLink="/admin/inventory">{{ 'dashboard.fix' | translate }}</a>
             </div>
 
             @for (p of lowStockProducts(); track p.id) {
               <div class="low-stock-item">
                 <span class="ls-name">{{ p.name }}</span>
-                <span class="ls-stock" [class.ls-stock--critical]="p.stock <= 5">{{ p.stock }} left</span>
+                <span class="ls-stock" [class.ls-stock--critical]="p.stock <= 5" [title]="'dashboard.stockLeft' | translate: { count: p.stock }">{{ 'dashboard.stockLeft' | translate: { count: p.stock } }}</span>
               </div>
             }
           </div>
@@ -281,7 +281,7 @@
 
     <!-- ── QUICK ACTIONS ────────────────────────────────────────────────────── -->
     <div class="quick-actions">
-      <h3 class="qa-title">Quick Actions</h3>
+      <h3 class="qa-title">{{ 'dashboard.quickActions' | translate }}</h3>
       <div class="qa-grid">
         @for (action of quickActions; track action.label) {
           <a class="qa-card" [routerLink]="action.route">
@@ -290,7 +290,7 @@
                 <path [attr.d]="action.icon"/>
               </svg>
             </span>
-            <p class="qa-label">{{ action.label }}</p>
+            <p class="qa-label" [title]="action.label | translate">{{ action.label | translate }}</p>
           </a>
         }
       </div>
