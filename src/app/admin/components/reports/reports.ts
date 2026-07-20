@@ -1,7 +1,9 @@
 // reports.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type ReportType = 'sales' | 'orders' | 'products' | 'customers' | 'categories' | 'payment-methods';
@@ -35,11 +37,13 @@ const PALETTE = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#7C3AED', '#94A3B8
 
 @Component({
   selector: 'app-reports',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './reports.html',
   styleUrl: './reports.scss',
 })
 export class Reports {
+
+  lang = inject(LanguageService);
 
   // ── Loading / generating state ───────────────────────────────────────────
   isLoading    = signal(true);
@@ -65,28 +69,29 @@ export class Reports {
   private toastTimer: any;
 
   // ── Static option lists ──────────────────────────────────────────────────
+  // label now holds a translation key instead of literal English text.
   dateRangeOptions: { key: DateRangeKey; label: string }[] = [
-    { key: 'today', label: 'Today' },
-    { key: '7d',    label: 'Last 7 Days' },
-    { key: '30d',   label: 'Last 30 Days' },
-    { key: '90d',   label: 'Last 90 Days' },
-    { key: 'custom',label: 'Custom Range' },
+    { key: 'today', label: 'common.today' },
+    { key: '7d',    label: 'common.last7Days' },
+    { key: '30d',   label: 'common.last30Days' },
+    { key: '90d',   label: 'common.last90Days' },
+    { key: 'custom',label: 'common.customRange' },
   ];
 
   reportTypeOptions: { key: ReportType; label: string }[] = [
-    { key: 'sales',            label: 'Sales' },
-    { key: 'orders',           label: 'Orders' },
-    { key: 'products',         label: 'Products' },
-    { key: 'customers',        label: 'Customers' },
-    { key: 'categories',       label: 'Categories' },
-    { key: 'payment-methods',  label: 'Payment Methods' },
+    { key: 'sales',            label: 'reports.types.sales' },
+    { key: 'orders',           label: 'navigation.orders' },
+    { key: 'products',         label: 'navigation.products' },
+    { key: 'customers',        label: 'navigation.customers' },
+    { key: 'categories',       label: 'navigation.categories' },
+    { key: 'payment-methods',  label: 'reports.types.paymentMethods' },
   ];
 
   statusOptions: { key: StatusFilter; label: string }[] = [
-    { key: 'all',       label: 'All' },
-    { key: 'completed', label: 'Completed' },
-    { key: 'pending',   label: 'Pending' },
-    { key: 'cancelled', label: 'Cancelled' },
+    { key: 'all',       label: 'reports.status.all' },
+    { key: 'completed', label: 'reports.status.completed' },
+    { key: 'pending',   label: 'reports.status.pending' },
+    { key: 'cancelled', label: 'reports.status.cancelled' },
   ];
 
   // Which columns render for each report type
@@ -99,9 +104,10 @@ export class Reports {
     'payment-methods': ['date', 'orderId', 'paymentMethod', 'revenue', 'status'],
   };
 
+  // Values now hold translation keys instead of literal English text.
   columnLabels: Record<ColumnKey, string> = {
-    date: 'Date', orderId: 'Order ID', customer: 'Customer', products: 'Products',
-    paymentMethod: 'Payment Method', category: 'Category', revenue: 'Revenue', status: 'Status',
+    date: 'dashboard.table.date', orderId: 'reports.columns.orderId', customer: 'dashboard.table.customer', products: 'navigation.products',
+    paymentMethod: 'reports.columns.paymentMethod', category: 'products.category', revenue: 'dashboard.legendRevenue', status: 'dashboard.table.status',
   };
 
   visibleColumns = computed(() => this.reportTypeColumns[this.reportType()]);
@@ -210,6 +216,7 @@ export class Reports {
   }
 
   // ── Summary cards ─────────────────────────────────────────────────────────
+  // label now holds a translation key instead of literal English text.
   summary = computed(() => {
     const rows = this.filteredRows();
     const prev = this.previousPeriodRows();
@@ -224,10 +231,10 @@ export class Reports {
     const prevUnits   = prev.reduce((s, r) => s + r.unitsSold, 0);
 
     return [
-      { id: 'revenue',   label: 'Total Revenue',   value: revenue,   prefix: '$', icon: 'revenue',   color: 'blue',   change: this.pctChange(revenue, prevRev) },
-      { id: 'orders',    label: 'Total Orders',    value: orders,    prefix: '',  icon: 'orders',    color: 'green',  change: this.pctChange(orders, prevOrders) },
-      { id: 'customers', label: 'Total Customers', value: customers, prefix: '',  icon: 'customers', color: 'purple', change: this.pctChange(customers, prevCust) },
-      { id: 'products',  label: 'Products Sold',   value: unitsSold, prefix: '',  icon: 'products',  color: 'amber',  change: this.pctChange(unitsSold, prevUnits) },
+      { id: 'revenue',   label: 'dashboard.stats.totalRevenue',   value: revenue,   prefix: '$', icon: 'revenue',   color: 'blue',   change: this.pctChange(revenue, prevRev) },
+      { id: 'orders',    label: 'dashboard.stats.totalOrders',    value: orders,    prefix: '',  icon: 'orders',    color: 'green',  change: this.pctChange(orders, prevOrders) },
+      { id: 'customers', label: 'customers.stats.totalCustomers', value: customers, prefix: '',  icon: 'customers', color: 'purple', change: this.pctChange(customers, prevCust) },
+      { id: 'products',  label: 'reports.stats.productsSold',     value: unitsSold, prefix: '',  icon: 'products',  color: 'amber',  change: this.pctChange(unitsSold, prevUnits) },
     ];
   });
 
@@ -279,12 +286,15 @@ export class Reports {
     this.currentPage.set(page);
   }
 
+  // Now built from lang.formatNumber() + translation strings instead of a
+  // hand-rolled template literal, so the "0 results" / "X–Y of Z" phrasing
+  // is localizable and numbers render with the active locale's separators.
   pageRangeLabel = computed(() => {
     const total = this.sortedRows().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return `0 ${this.lang.translate('common.results')}`;
     const start = (this.currentPage() - 1) * this.pageSize + 1;
     const end = Math.min(start + this.pageSize - 1, total);
-    return `${start}–${end} of ${total}`;
+    return `${this.lang.formatNumber(start)}–${this.lang.formatNumber(end)} ${this.lang.translate('common.of')} ${this.lang.formatNumber(total)}`;
   });
 
   // ── Charts: revenue / orders trend ───────────────────────────────────────
@@ -307,7 +317,7 @@ export class Reports {
     return buckets.map((bucketRows, i) => {
       const d = new Date(start + i * bucketMs);
       return {
-        label: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        label: this.lang.formatDate(d, { month: 'short', day: 'numeric' }),
         value: valueFn(bucketRows),
       };
     });
@@ -326,6 +336,16 @@ export class Reports {
 
   barHeight(value: number, max: number): number {
     return Math.max(3, (value / max) * 100);
+  }
+
+  // Tooltip helpers — built from translation keys + locale-aware formatting,
+  // used instead of inline string concatenation in the template.
+  revenueBarTooltip(value: number): string {
+    return `${this.lang.translate('dashboard.legendRevenue')}: ${this.lang.formatCurrency(value)}`;
+  }
+
+  ordersBarTooltip(value: number): string {
+    return `${this.lang.formatNumber(value)} ${this.lang.translate('navigation.orders')}`;
   }
 
   // ── Charts: top products ─────────────────────────────────────────────────
@@ -378,7 +398,7 @@ export class Reports {
     this.currentPage.set(1);
     setTimeout(() => {
       this.isGenerating.set(false);
-      this.showToast('Report generated successfully');
+      this.showToast(this.lang.translate('reports.toasts.generated'));
     }, 900);
   }
 
@@ -392,19 +412,19 @@ export class Reports {
     this.sortField.set('date');
     this.sortDir.set('desc');
     this.currentPage.set(1);
-    this.showToast('Filters reset');
+    this.showToast(this.lang.translate('reports.toasts.filtersReset'));
   }
 
-  exportPdf():   void { this.showToast('Exporting report as PDF…'); }
-  exportExcel(): void { this.showToast('Exporting report as Excel…'); }
-  exportCsv():   void { this.showToast('Exporting report as CSV…'); }
-  printReport(): void { this.showToast('Preparing report for print…'); }
+  exportPdf():   void { this.showToast(this.lang.translate('reports.toasts.exportingPdf')); }
+  exportExcel(): void { this.showToast(this.lang.translate('reports.toasts.exportingExcel')); }
+  exportCsv():   void { this.showToast(this.lang.translate('reports.toasts.exportingCsv')); }
+  printReport(): void { this.showToast(this.lang.translate('reports.toasts.preparingPrint')); }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   statusColor(status: string): string {
