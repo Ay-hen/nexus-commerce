@@ -836,7 +836,7 @@
       "senderName": "Absendername",
       "senderEmail": "Absender-E-Mail",
       "sendTestEmail": "Test-E-Mail senden",
-      "saveButton": "E-Mail-Einstellungen speichern",
+      "saveButton": "Einstellungen speichern",
       "errors": {
         "smtpHostRequired": "SMTP-Host ist erforderlich.",
         "invalidPort": "Geben Sie eine gültige Portnummer ein."
