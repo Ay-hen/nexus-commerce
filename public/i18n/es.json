@@ -48,7 +48,9 @@
     "previous": "Anterior",
     "close": "Cerrar",
     "optional": "opcional",
-    "required": "obligatorio"
+    "required": "obligatorio",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente"
   },
 
   "buttons": {
@@ -165,6 +167,17 @@
     "es": "Español"
   },
 
+  "layout": {
+    "adminNavigation": "Navegación de administración",
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Contraer barra lateral",
+    "openNavigation": "Abrir navegación",
+    "globalSearch": "Búsqueda global",
+    "switchToLightMode": "Cambiar a modo claro",
+    "switchToDarkMode": "Cambiar a modo oscuro",
+    "adminMenu": "Menú de administrador"
+  },
+
   "dashboard": {
     "title": "Panel",
     "subtitle": "Bienvenido de nuevo — esto es lo que ocurre hoy.",
@@ -193,8 +206,10 @@
     "recentOrders": "Pedidos recientes",
     "viewAll": "Ver todo →",
     "topProducts": "Productos más vendidos",
+    "soldCount": "{{count}} vendidos",
     "lowStock": "Poco stock",
     "fix": "Solucionar →",
+    "stockLeft": "{{count}} restantes",
     "quickActions": "Acciones rápidas",
     "qa": {
       "addProduct": "Añadir producto",
@@ -211,6 +226,68 @@
       "total": "Total",
       "status": "Estado",
       "date": "Fecha"
+    }
+  },
+
+  "reports": {
+    "subtitle": "Genera informes empresariales detallados y exporta datos",
+    "types": {
+      "sales": "Ventas",
+      "paymentMethods": "Métodos de pago"
+    },
+    "status": {
+      "all": "Todas",
+      "completed": "Completada",
+      "pending": "Pendiente",
+      "cancelled": "Cancelada"
+    },
+    "columns": {
+      "orderId": "N.º de pedido",
+      "paymentMethod": "Método de pago"
+    },
+    "stats": {
+      "productsSold": "Productos vendidos",
+      "vsPreviousPeriod": "vs. periodo anterior"
+    },
+    "filters": {
+      "title": "Filtros del informe",
+      "dateRange": "Rango de fechas",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "reportType": "Tipo de informe",
+      "orderStatus": "Estado del pedido",
+      "searchPlaceholder": "Buscar n.º de pedido, cliente, producto, categoría…"
+    },
+    "empty": {
+      "title": "No se encontraron informes",
+      "subtitle": "Cambia los filtros o selecciona otro rango de fechas."
+    },
+    "charts": {
+      "title": "Visualizaciones del informe",
+      "revenueTrendTitle": "Tendencia de ingresos",
+      "revenueTrendSub": "Ingresos durante el periodo seleccionado",
+      "noDataPeriod": "No hay datos para este periodo.",
+      "ordersTrendTitle": "Tendencia de pedidos",
+      "ordersTrendSub": "Volumen de pedidos",
+      "topProductsSub": "Por ingresos",
+      "noProductData": "No hay datos de productos.",
+      "topCategoriesSub": "Participación en ingresos",
+      "noCategoryData": "No hay datos de categorías.",
+      "paymentDistributionTitle": "Distribución de pagos",
+      "paymentDistributionSub": "Por método de pago",
+      "noPaymentData": "No hay datos de pago."
+    },
+    "export": {
+      "title": "Exportar este informe",
+      "subtitle": "Descarga los resultados filtrados actuales en el formato que prefieras."
+    },
+    "toasts": {
+      "generated": "Informe generado correctamente",
+      "filtersReset": "Filtros restablecidos",
+      "exportingPdf": "Exportando informe como PDF…",
+      "exportingExcel": "Exportando informe como Excel…",
+      "exportingCsv": "Exportando informe como CSV…",
+      "preparingPrint": "Preparando el informe para imprimir…"
     }
   },
 
@@ -324,7 +401,50 @@
       "subtitleEmpty": "Crea tu primera categoría para organizar tus productos."
     },
     "deleteConfirmTitle": "Eliminar categoría",
-    "deleteConfirmBody": "¿Seguro que deseas eliminar «{{name}}»? Esta acción no se puede deshacer y puede afectar a {{count}} productos."
+    "deleteConfirmBody": "¿Seguro que deseas eliminar «{{name}}»? Esta acción no se puede deshacer y puede afectar a {{count}} productos.",
+    "searchPlaceholder": "Buscar categorías…",
+    "clearSearchAria": "Borrar búsqueda",
+    "productsSuffix": "productos",
+    "basicInfo": "Información básica",
+    "slug": "Slug",
+    "validation": {
+      "nameLength": "El nombre debe tener entre 2 y 60 caracteres.",
+      "slugPattern": "Usa solo letras minúsculas, números y guiones.",
+      "descriptionRequired": "La descripción es obligatoria.",
+      "coverRequired": "La imagen de portada es obligatoria."
+    },
+    "discardBody": "Has realizado cambios en esta categoría que aún no se han guardado.",
+    "seoSectionTitle": "SEO",
+    "metaTitle": "Título meta",
+    "metaDescription": "Descripción meta",
+    "keywordsPlaceholder": "Añade una palabra clave y pulsa Intro…",
+    "dragDropImage": "Arrastra y suelta una imagen, o",
+    "browse": "explora",
+    "imageSizeHint": "PNG o JPG, hasta 5 MB",
+    "replace": "Reemplazar",
+    "crop": "Recortar",
+    "cropComingSoon": "Herramienta de recorte próximamente",
+    "remove": "Eliminar",
+    "addGalleryImages": "Añadir imágenes a la galería",
+    "toasts": {
+      "saved": "Categoría guardada correctamente",
+      "fixFields": "Corrige los campos resaltados antes de guardar."
+    },
+    "errors": {
+      "slugReserved": "El slug «/{{slug}}» está reservado. Elige otro."
+    },
+    "saving": "Guardando…",
+    "saved": "Guardado",
+    "avgRating": "Valoración media",
+    "totalSales": "Ventas totales",
+    "views": "Visitas",
+    "productsInCategory": "Productos en esta categoría",
+    "shownCount": "{{count}} mostrados",
+    "noProductsLinked": "Aún no hay productos vinculados a esta categoría.",
+    "viewProduct": "Ver producto",
+    "clickToZoom": "Haz clic para ampliar",
+    "closePreview": "Cerrar vista previa",
+    "updated": "Actualizado"
   },
 
   "orders": {
@@ -711,32 +831,235 @@
       "currency": "Moneda",
       "timezone": "Zona horaria",
       "language": "Idioma",
-      "dateFormat": "Formato de fecha"
+      "dateFormat": "Formato de fecha",
+      "saveButton": "Guardar",
+      "errors": {
+        "storeNameRequired": "El nombre de la tienda es obligatorio."
+      }
+    },
+    "profile": {
+      "title": "Perfil del administrador",
+      "subtitle": "Tu información personal tal como aparece en todo el panel de administración.",
+      "uploadPhoto": "Subir nueva foto",
+      "uploadHint": "JPG, PNG o GIF. Máx. 2 MB.",
+      "name": "Nombre",
+      "username": "Nombre de usuario",
+      "jobTitle": "Puesto",
+      "bio": "Biografía",
+      "saveButton": "Guardar perfil",
+      "errors": {
+        "nameRequired": "El nombre es obligatorio.",
+        "usernameRequired": "El nombre de usuario es obligatorio."
+      }
+    },
+    "security": {
+      "changePassword": "Cambiar contraseña",
+      "changePasswordSub": "Usa una contraseña segura que no utilices en ningún otro lugar.",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Introduce la nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelve a introducir la nueva contraseña",
+      "updatePasswordButton": "Actualizar contraseña",
+      "twoFactor": "Autenticación de dos factores",
+      "twoFactorSub": "Requerir un código de verificación además de tu contraseña.",
+      "rememberLogin": "Recordar inicio de sesión",
+      "rememberLoginSub": "Permanecer conectado en este dispositivo entre visitas.",
+      "loginAlerts": "Alertas de inicio de sesión",
+      "loginAlertsSub": "Recibir un correo cada vez que un nuevo dispositivo inicie sesión.",
+      "sessionTimeout": "Tiempo de espera de sesión (minutos)",
+      "preferencesTitle": "Preferencias de seguridad",
+      "preferencesSub": "Controla cómo tu cuenta gestiona la autenticación y la actividad de las sesiones.",
+      "activeSessions": "Sesiones activas",
+      "activeSessionsSub": "Dispositivos actualmente conectados a tu cuenta de administrador.",
+      "terminateSession": "Finalizar",
+      "terminateAll": "Finalizar todas las sesiones",
+      "thisDevice": "Este dispositivo",
+      "terminateSessionModalTitle": "Finalizar sesión",
+      "terminateSessionModalBody": "¿Seguro que deseas cerrar la sesión de {{device}} ({{browser}} · {{location}})?",
+      "terminateAllModalTitle": "Finalizar todas las demás sesiones",
+      "terminateAllModalBody": "Esto cerrará tu sesión en todos los dispositivos excepto este. Deberás iniciar sesión de nuevo en esos dispositivos.",
+      "terminateAllConfirm": "Finalizar todas",
+      "table": {
+        "device": "Dispositivo",
+        "browser": "Navegador",
+        "ipAddress": "Dirección IP",
+        "location": "Ubicación",
+        "lastActivity": "Última actividad"
+      },
+      "strength": {
+        "veryWeak": "Muy débil",
+        "weak": "Débil",
+        "fair": "Aceptable",
+        "good": "Buena",
+        "strong": "Fuerte"
+      }
+    },
+    "store": {
+      "brandingTitle": "Identidad de la tienda",
+      "brandingSub": "Elementos visuales mostrados en toda tu tienda.",
+      "logo": "Logo de la tienda",
+      "favicon": "Favicon",
+      "banner": "Banner de la tienda",
+      "uploadButton": "Subir",
+      "statusTitle": "Estado de la tienda",
+      "statusSub": "Controla si los clientes pueden navegar y comprar en este momento.",
+      "maintenanceMode": "Modo mantenimiento",
+      "maintenanceModeSub": "Deshabilitar temporalmente la tienda para los clientes mientras realizas cambios.",
+      "status": {
+        "open": "Abierta",
+        "closed": "Cerrada",
+        "comingSoon": "Próximamente"
+      },
+      "pricingShippingTitle": "Precios y envío",
+      "pricingShippingSub": "Valores predeterminados aplicados al finalizar la compra.",
+      "taxPercentage": "Porcentaje de impuesto",
+      "shippingFee": "Costo de envío",
+      "freeShippingThreshold": "Umbral de envío gratuito",
+      "defaultWarehouse": "Almacén predeterminado",
+      "saveButton": "Guardar configuración de la tienda"
+    },
+    "payments": {
+      "title": "Métodos de pago",
+      "subtitle": "Activa y configura las pasarelas de pago disponibles al finalizar la compra.",
+      "testMode": "Modo de prueba",
+      "liveMode": "Modo real",
+      "apiKey": "Clave API",
+      "secretKey": "Clave secreta",
+      "webhookUrl": "URL del webhook",
+      "testModeSub": "Usar credenciales de prueba — no se realizarán cargos reales.",
+      "saveButton": "Guardar configuración de pagos"
+    },
+    "email": {
+      "title": "Configuración SMTP",
+      "subtitle": "Se usa para enviar correos transaccionales y de marketing desde tu tienda.",
+      "smtpHost": "Host SMTP",
+      "smtpPort": "Puerto SMTP",
+      "encryption": "Cifrado",
+      "encryptionOptions": {
+        "none": "Ninguno",
+        "ssl": "SSL",
+        "tls": "TLS"
+      },
+      "senderName": "Nombre del remitente",
+      "senderEmail": "Correo del remitente",
+      "sendTestEmail": "Enviar correo de prueba",
+      "saveButton": "Guardar configuración",
+      "errors": {
+        "smtpHostRequired": "El host SMTP es obligatorio.",
+        "invalidPort": "Introduce un número de puerto válido."
+      }
+    },
+    "notifications": {
+      "channelsTitle": "Canales de notificación",
+      "channelsSub": "Elige cómo recibís las alertas tú y tu equipo.",
+      "email": "Notificaciones por correo",
+      "emailSub": "Recibir alertas por correo electrónico.",
+      "push": "Notificaciones push",
+      "pushSub": "Recibir alertas como notificaciones push en la app de administración.",
+      "sms": "Notificaciones SMS",
+      "smsSub": "Recibir alertas críticas por mensaje de texto.",
+      "activityAlertsTitle": "Alertas de actividad",
+      "activityAlertsSub": "Ajusta qué eventos activan una notificación.",
+      "order": "Notificaciones de pedidos",
+      "orderSub": "Nuevos pedidos, cambios de estado y cancelaciones.",
+      "customer": "Notificaciones de clientes",
+      "customerSub": "Nuevos registros de cuenta y actualizaciones de perfil.",
+      "inventory": "Alertas de inventario",
+      "inventorySub": "Ajustes de stock y cambios de almacén.",
+      "lowStock": "Alertas de poco stock",
+      "lowStockSub": "Cuando un producto cae por debajo de su umbral de reposición.",
+      "review": "Alertas de reseñas",
+      "reviewSub": "Nuevas reseñas de productos pendientes de moderación.",
+      "adminLogin": "Alertas de inicio de sesión de admin",
+      "adminLoginSub": "Cada vez que un administrador inicia sesión.",
+      "activityLog": "Alertas del registro de actividad",
+      "activityLogSub": "Resúmenes de acciones sensibles realizadas en todo el sistema.",
+      "saveButton": "Guardar configuración de notificaciones"
     },
     "appearance": {
       "theme": "Tema",
+      "themeSub": "Elige cómo se ve el panel de administración para ti.",
       "light": "Claro",
       "dark": "Oscuro",
       "system": "Sistema",
       "primaryColor": "Color principal",
+      "primaryColorSub": "Define el color de acento usado en botones, enlaces y resaltados.",
       "sidebarStyle": "Estilo de la barra lateral",
       "compact": "Compacto",
       "normal": "Normal",
       "fontSize": "Tamaño de fuente",
+      "small": "Pequeño",
+      "medium": "Mediano",
+      "large": "Grande",
+      "layoutDensityTitle": "Diseño y densidad",
+      "layoutDensitySub": "Ajusta cuán compacta se siente la interfaz.",
       "roundedCards": "Tarjetas redondeadas",
+      "roundedCardsSub": "Usar esquinas más suaves y redondeadas en toda la interfaz.",
       "animations": "Animaciones",
-      "reducedMotion": "Movimiento reducido"
+      "animationsSub": "Activar animaciones de desplazamiento, desvanecimiento y deslizamiento en todo el panel.",
+      "reducedMotion": "Movimiento reducido",
+      "reducedMotionSub": "Minimizar el movimiento por accesibilidad.",
+      "livePreviewTitle": "Vista previa en directo",
+      "livePreviewSub": "Una vista previa de tu configuración de apariencia actual.",
+      "previewButtonLabel": "Botón principal",
+      "previewSampleText": "El veloz murciélago hindú comía feliz cardillo y kiwi.",
+      "saveButton": "Guardar configuración de apariencia"
     },
-    "security": {
-      "changePassword": "Cambiar contraseña",
-      "newPassword": "Nueva contraseña",
-      "confirmPassword": "Confirmar contraseña",
-      "twoFactor": "Autenticación de dos factores",
-      "sessionTimeout": "Tiempo de espera de sesión (minutos)",
-      "activeSessions": "Sesiones activas",
-      "terminateSession": "Finalizar",
-      "terminateAll": "Finalizar todas las sesiones",
-      "thisDevice": "Este dispositivo"
+    "system": {
+      "infoTitle": "Información del sistema",
+      "infoSub": "Estado actual del entorno y la infraestructura.",
+      "applicationVersion": "Versión de la aplicación",
+      "angularVersion": "Versión de Angular",
+      "backendVersion": "Versión del backend",
+      "databaseStatus": "Estado de la base de datos",
+      "serverStatus": "Estado del servidor",
+      "environment": "Entorno",
+      "status": {
+        "operational": "Operativo",
+        "degraded": "Degradado",
+        "down": "Inactivo"
+      },
+      "env": {
+        "production": "Producción",
+        "development": "Desarrollo"
+      },
+      "storageUsed": "Almacenamiento usado",
+      "maintenanceToolsTitle": "Herramientas de mantenimiento",
+      "maintenanceToolsSub": "Acciones de utilidad para mantener la plataforma funcionando sin problemas.",
+      "clearCache": "Borrar caché",
+      "rebuildIndex": "Reconstruir índice",
+      "optimizeImages": "Optimizar imágenes",
+      "backupDatabase": "Respaldar base de datos",
+      "exportSettings": "Exportar configuración",
+      "importSettings": "Importar configuración",
+      "dangerZoneTitle": "Zona de peligro",
+      "dangerZoneSub": "Estas acciones son destructivas y no se pueden deshacer.",
+      "deleteLogsTitle": "Eliminar todos los registros",
+      "deleteLogsSub": "Eliminar permanentemente cada entrada del registro de actividad.",
+      "deleteLogsButton": "Eliminar registros",
+      "deleteCacheTitle": "Eliminar caché",
+      "deleteCacheSub": "Borrar todos los datos almacenados en caché en la plataforma.",
+      "factoryResetRowTitle": "Restablecer toda la configuración",
+      "factoryResetSub": "Restaurar cada ajuste de esta página a su valor predeterminado de fábrica.",
+      "factoryResetTitle": "Restablecimiento de fábrica"
+    },
+    "toasts": {
+      "fixFieldsBeforeSaving": "Corrige los campos resaltados antes de guardar",
+      "cantTerminateCurrent": "No puedes finalizar tu sesión actual",
+      "sessionTerminated": "Sesión en {{device}} finalizada",
+      "allSessionsTerminated": "Se finalizaron todas las demás sesiones",
+      "passwordUpdated": "Contraseña actualizada correctamente",
+      "cacheCleared": "Caché borrada correctamente",
+      "indexRebuildStarted": "Reconstrucción del índice de búsqueda iniciada",
+      "imageOptimizationStarted": "Optimización de imágenes iniciada",
+      "backupStarted": "Copia de seguridad de la base de datos iniciada — se te notificará cuando esté lista",
+      "settingsExported": "Configuración exportada a JSON",
+      "selectImportFile": "Selecciona un archivo de configuración para importar",
+      "testEmailSent": "Correo de prueba enviado a {{email}}",
+      "fixSmtpBeforeTest": "Corrige la configuración SMTP antes de enviar un correo de prueba",
+      "logsDeleted": "Todos los registros de actividad han sido eliminados",
+      "cacheDeleted": "La caché ha sido borrada",
+      "factoryResetDone": "Toda la configuración se ha restablecido a los valores de fábrica"
     },
     "unsavedPill": "Cambios sin guardar"
   },
