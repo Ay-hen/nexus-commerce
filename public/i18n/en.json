@@ -48,7 +48,9 @@
     "previous": "Previous",
     "close": "Close",
     "optional": "optional",
-    "required": "required"
+    "required": "required",
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
   },
 
   "buttons": {
@@ -227,6 +229,68 @@
     }
   },
 
+  "reports": {
+    "subtitle": "Generate detailed business reports and export data",
+    "types": {
+      "sales": "Sales",
+      "paymentMethods": "Payment Methods"
+    },
+    "status": {
+      "all": "All",
+      "completed": "Completed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "columns": {
+      "orderId": "Order ID",
+      "paymentMethod": "Payment Method"
+    },
+    "stats": {
+      "productsSold": "Products Sold",
+      "vsPreviousPeriod": "vs previous period"
+    },
+    "filters": {
+      "title": "Report Filters",
+      "dateRange": "Date Range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "reportType": "Report Type",
+      "orderStatus": "Order Status",
+      "searchPlaceholder": "Search order ID, customer, product, category…"
+    },
+    "empty": {
+      "title": "No reports found",
+      "subtitle": "Try changing filters or selecting another date range."
+    },
+    "charts": {
+      "title": "Report Visualizations",
+      "revenueTrendTitle": "Revenue Trend",
+      "revenueTrendSub": "Revenue across the selected period",
+      "noDataPeriod": "No data for this period.",
+      "ordersTrendTitle": "Orders Trend",
+      "ordersTrendSub": "Order volume",
+      "topProductsSub": "By revenue",
+      "noProductData": "No product data.",
+      "topCategoriesSub": "Revenue share",
+      "noCategoryData": "No category data.",
+      "paymentDistributionTitle": "Payment Distribution",
+      "paymentDistributionSub": "By payment method",
+      "noPaymentData": "No payment data."
+    },
+    "export": {
+      "title": "Export this report",
+      "subtitle": "Download the current filtered results in your preferred format."
+    },
+    "toasts": {
+      "generated": "Report generated successfully",
+      "filtersReset": "Filters reset",
+      "exportingPdf": "Exporting report as PDF…",
+      "exportingExcel": "Exporting report as Excel…",
+      "exportingCsv": "Exporting report as CSV…",
+      "preparingPrint": "Preparing report for print…"
+    }
+  },
+
   "products": {
     "title": "Products",
     "subtitle": "{{count}} products total",
@@ -337,7 +401,50 @@
       "subtitleEmpty": "Create your first category to organize your products."
     },
     "deleteConfirmTitle": "Delete Category",
-    "deleteConfirmBody": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone and may affect {{count}} products."
+    "deleteConfirmBody": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone and may affect {{count}} products.",
+    "searchPlaceholder": "Search categories…",
+    "clearSearchAria": "Clear search",
+    "productsSuffix": "products",
+    "basicInfo": "Basic Information",
+    "slug": "Slug",
+    "validation": {
+      "nameLength": "Name must be between 2 and 60 characters.",
+      "slugPattern": "Use lowercase letters, numbers, and hyphens only.",
+      "descriptionRequired": "Description is required.",
+      "coverRequired": "Cover image is required."
+    },
+    "discardBody": "You've made changes to this category that haven't been saved yet.",
+    "seoSectionTitle": "SEO",
+    "metaTitle": "Meta Title",
+    "metaDescription": "Meta Description",
+    "keywordsPlaceholder": "Add keyword and press Enter…",
+    "dragDropImage": "Drag & drop an image, or",
+    "browse": "browse",
+    "imageSizeHint": "PNG or JPG, up to 5MB",
+    "replace": "Replace",
+    "crop": "Crop",
+    "cropComingSoon": "Crop tool coming soon",
+    "remove": "Remove",
+    "addGalleryImages": "Add gallery images",
+    "toasts": {
+      "saved": "Category saved successfully",
+      "fixFields": "Please fix the highlighted fields before saving."
+    },
+    "errors": {
+      "slugReserved": "The slug \"/{{slug}}\" is reserved. Please choose another."
+    },
+    "saving": "Saving…",
+    "saved": "Saved",
+    "avgRating": "Avg. Rating",
+    "totalSales": "Total Sales",
+    "views": "Views",
+    "productsInCategory": "Products in this Category",
+    "shownCount": "{{count}} shown",
+    "noProductsLinked": "No products linked to this category yet.",
+    "viewProduct": "View Product",
+    "clickToZoom": "Click to zoom",
+    "closePreview": "Close preview",
+    "updated": "Updated"
   },
 
   "orders": {
