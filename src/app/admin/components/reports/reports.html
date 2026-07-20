@@ -20,8 +20,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Reports</h1>
-        <p class="page-sub">Generate detailed business reports and export data</p>
+        <h1 class="page-title">{{ 'navigation.reports' | translate }}</h1>
+        <p class="page-sub">{{ 'reports.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="page-header__actions">
@@ -31,21 +31,21 @@
           <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
           <rect x="6" y="14" width="12" height="8"/>
         </svg>
-        Print
+        <span class="btn-label">{{ 'buttons.print' | translate }}</span>
       </button>
-      <button class="btn-ghost" (click)="exportExcel()">
+      <button class="btn-ghost btn-ghost--wide" (click)="exportExcel()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
           <path d="M9 15l3-4 3 4M9 11l3 4 3-4" transform="translate(0 -1)"/>
         </svg>
-        Export Excel
+        <span class="btn-label">{{ 'buttons.exportExcel' | translate }}</span>
       </button>
       <button class="btn-primary" (click)="exportPdf()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Export PDF
+        <span class="btn-label">{{ 'buttons.exportPdf' | translate }}</span>
       </button>
     </div>
   </div>
@@ -82,15 +82,15 @@
             </svg>
           </div>
           <div class="stat-body">
-            <p class="stat-label">{{ card.label }}</p>
+            <p class="stat-label">{{ card.label | translate }}</p>
             <p class="stat-value">{{ card.prefix }}{{ card.value | number }}</p>
           </div>
           <div class="stat-change" [class.stat-change--up]="card.change > 0" [class.stat-change--down]="card.change < 0">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               @if (card.change >= 0) { <polyline points="18 15 12 9 6 15"/> } @else { <polyline points="6 9 12 15 18 9"/> }
             </svg>
-            {{ card.change > 0 ? '+' : '' }}{{ card.change }}%
-            <span class="change-label">vs previous period</span>
+            {{ card.change > 0 ? '+' : '' }}{{ lang.formatNumber(card.change) }}%
+            <span class="change-label">{{ 'reports.stats.vsPreviousPeriod' | translate }}</span>
           </div>
         </div>
       }
@@ -105,29 +105,29 @@
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
         </svg>
       </div>
-      <h2 class="filter-card__title">Report Filters</h2>
+      <h2 class="filter-card__title">{{ 'reports.filters.title' | translate }}</h2>
     </div>
 
     <div class="filter-grid">
 
       <!-- Date range -->
       <div class="filter-field filter-field--wide">
-        <label class="filter-label">Date Range</label>
+        <label class="filter-label">{{ 'reports.filters.dateRange' | translate }}</label>
         <div class="pill-group">
           @for (opt of dateRangeOptions; track opt.key) {
             <button class="pill-btn" [class.pill-btn--active]="dateRange() === opt.key" (click)="dateRange.set(opt.key)">
-              {{ opt.label }}
+              {{ opt.label | translate }}
             </button>
           }
         </div>
         @if (dateRange() === 'custom') {
           <div class="custom-range-row">
             <div class="date-input-wrap">
-              <span class="date-input-label">Start Date</span>
+              <span class="date-input-label">{{ 'reports.filters.startDate' | translate }}</span>
               <input type="date" class="date-input" [value]="customStart()" (change)="customStart.set($any($event.target).value)" />
             </div>
             <div class="date-input-wrap">
-              <span class="date-input-label">End Date</span>
+              <span class="date-input-label">{{ 'reports.filters.endDate' | translate }}</span>
               <input type="date" class="date-input" [value]="customEnd()" (change)="customEnd.set($any($event.target).value)" />
             </div>
           </div>
@@ -136,11 +136,11 @@
 
       <!-- Report type -->
       <div class="filter-field">
-        <label class="filter-label" for="report-type">Report Type</label>
+        <label class="filter-label" for="report-type">{{ 'reports.filters.reportType' | translate }}</label>
         <div class="select-wrap">
           <select id="report-type" class="filter-select" [value]="reportType()" (change)="reportType.set($any($event.target).value); currentPage.set(1)">
             @for (opt of reportTypeOptions; track opt.key) {
-              <option [value]="opt.key">{{ opt.label }}</option>
+              <option [value]="opt.key">{{ opt.label | translate }}</option>
             }
           </select>
           <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -149,11 +149,11 @@
 
       <!-- Order status -->
       <div class="filter-field">
-        <label class="filter-label" for="order-status">Order Status</label>
+        <label class="filter-label" for="order-status">{{ 'reports.filters.orderStatus' | translate }}</label>
         <div class="select-wrap">
           <select id="order-status" class="filter-select" [value]="statusFilter()" (change)="statusFilter.set($any($event.target).value); currentPage.set(1)">
             @for (opt of statusOptions; track opt.key) {
-              <option [value]="opt.key">{{ opt.label }}</option>
+              <option [value]="opt.key">{{ opt.label | translate }}</option>
             }
           </select>
           <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -162,7 +162,7 @@
 
       <!-- Search -->
       <div class="filter-field filter-field--wide">
-        <label class="filter-label" for="report-search">Search</label>
+        <label class="filter-label" for="report-search">{{ 'common.search' | translate }}</label>
         <div class="search-wrap">
           <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
@@ -171,7 +171,7 @@
             id="report-search"
             class="search-input"
             type="search"
-            placeholder="Search order ID, customer, product, category…"
+            [placeholder]="'reports.filters.searchPlaceholder' | translate"
             [value]="searchQuery()"
             (input)="searchQuery.set($any($event.target).value); currentPage.set(1)"
           />
@@ -184,7 +184,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
         </svg>
-        Reset Filters
+        <span class="btn-label">{{ 'buttons.resetFilters' | translate }}</span>
       </button>
       <button class="btn-generate" (click)="generateReport()" [disabled]="isGenerating()">
         @if (isGenerating()) {
@@ -194,7 +194,7 @@
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
           </svg>
         }
-        Generate Report
+        <span class="btn-label">{{ 'buttons.generateReport' | translate }}</span>
       </button>
     </div>
   </div>
@@ -215,25 +215,25 @@
               <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
             </svg>
           </div>
-          <h3 class="empty-state__title">No reports found</h3>
-          <p class="empty-state__sub">Try changing filters or selecting another date range.</p>
-          <button class="btn-reset" (click)="resetFilters()">Clear Filters</button>
+          <h3 class="empty-state__title">{{ 'reports.empty.title' | translate }}</h3>
+          <p class="empty-state__sub">{{ 'reports.empty.subtitle' | translate }}</p>
+          <button class="btn-reset" (click)="resetFilters()"><span class="btn-label">{{ 'common.clearFilters' | translate }}</span></button>
         </div>
       } @else {
 
         <div class="table-scroll">
-          <table class="data-table" aria-label="Report results">
+          <table class="data-table" [attr.aria-label]="'navigation.reports' | translate">
             <thead>
               <tr>
                 @for (col of visibleColumns(); track col) {
                   <th class="th-sortable" (click)="setSort(col)">
-                    {{ columnLabels[col] }}
+                    {{ columnLabels[col] | translate }}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" [class.sort-active]="sortField() === col">
                       <polyline [attr.points]="sortDir() === 'asc' && sortField() === col ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
                     </svg>
                   </th>
                 }
-                <th class="th-actions">Actions</th>
+                <th class="th-actions">{{ 'common.actions' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -255,13 +255,13 @@
                         @case ('paymentMethod') { <span class="td-mid">{{ row.paymentMethod }}</span> }
                         @case ('revenue') { <span class="td-revenue">{{ formatCurrency(row.revenue) }}</span> }
                         @case ('status') {
-                          <span class="status-pill status-pill--{{ statusColor(row.status) }}">{{ row.status }}</span>
+                          <span class="status-pill status-pill--{{ statusColor(row.status) }}">{{ ('reports.status.' + row.status) | translate }}</span>
                         }
                       }
                     </td>
                   }
                   <td class="td-actions">
-                    <button class="action-btn" title="View details" aria-label="View details">
+                    <button class="action-btn" [title]="'buttons.viewDetails' | translate" [attr.aria-label]="'buttons.viewDetails' | translate">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                       </svg>
@@ -278,7 +278,7 @@
           <div class="pagination">
             <span class="pag-info">{{ pageRangeLabel() }}</span>
             <div class="pag-controls">
-              <button class="pag-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" aria-label="Previous page">
+              <button class="pag-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" [attr.aria-label]="'common.previousPage' | translate">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
               </button>
               @if (currentPage() > 2) {
@@ -292,7 +292,7 @@
                 @if (currentPage() < totalPages() - 2) { <span class="pag-ellipsis">…</span> }
                 <button class="pag-num" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
               }
-              <button class="pag-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" aria-label="Next page">
+              <button class="pag-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" [attr.aria-label]="'common.nextPage' | translate">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
             </div>
@@ -306,7 +306,7 @@
   <!-- ── CHARTS SECTION ────────────────────────────────────────────────────── -->
   @if (!isLoading()) {
     <div class="charts-section">
-      <h2 class="section-title">Report Visualizations</h2>
+      <h2 class="section-title">{{ 'reports.charts.title' | translate }}</h2>
 
       <div class="charts-grid">
 
@@ -314,18 +314,18 @@
         <div class="chart-card chart-card--wide">
           <div class="chart-head">
             <div>
-              <h3 class="chart-title">Revenue Trend</h3>
-              <p class="chart-sub">Revenue across the selected period</p>
+              <h3 class="chart-title">{{ 'reports.charts.revenueTrendTitle' | translate }}</h3>
+              <p class="chart-sub">{{ 'reports.charts.revenueTrendSub' | translate }}</p>
             </div>
           </div>
           @if (revenueTrend().length === 0) {
-            <p class="chart-empty">No data for this period.</p>
+            <p class="chart-empty">{{ 'reports.charts.noDataPeriod' | translate }}</p>
           } @else {
             <div class="bar-chart">
               @for (pt of revenueTrend(); track pt.label) {
                 <div class="bar-col">
                   <div class="bar-pair bar-pair--single">
-                    <div class="bar bar--blue" [style.height.%]="barHeight(pt.value, maxRevenueTrend())" [attr.title]="'Revenue: ' + formatCurrency(pt.value)"></div>
+                    <div class="bar bar--blue" [style.height.%]="barHeight(pt.value, maxRevenueTrend())" [attr.title]="revenueBarTooltip(pt.value)"></div>
                   </div>
                   <span class="bar-label">{{ pt.label }}</span>
                 </div>
@@ -338,18 +338,18 @@
         <div class="chart-card">
           <div class="chart-head">
             <div>
-              <h3 class="chart-title">Orders Trend</h3>
-              <p class="chart-sub">Order volume</p>
+              <h3 class="chart-title">{{ 'reports.charts.ordersTrendTitle' | translate }}</h3>
+              <p class="chart-sub">{{ 'reports.charts.ordersTrendSub' | translate }}</p>
             </div>
           </div>
           @if (ordersTrend().length === 0) {
-            <p class="chart-empty">No data for this period.</p>
+            <p class="chart-empty">{{ 'reports.charts.noDataPeriod' | translate }}</p>
           } @else {
             <div class="bar-chart bar-chart--sm">
               @for (pt of ordersTrend(); track pt.label) {
                 <div class="bar-col">
                   <div class="bar-pair bar-pair--single">
-                    <div class="bar bar--green" [style.height.%]="barHeight(pt.value, maxOrdersTrend())" [attr.title]="pt.value + ' orders'"></div>
+                    <div class="bar bar--green" [style.height.%]="barHeight(pt.value, maxOrdersTrend())" [attr.title]="ordersBarTooltip(pt.value)"></div>
                   </div>
                 </div>
               }
@@ -361,12 +361,12 @@
         <div class="chart-card">
           <div class="chart-head">
             <div>
-              <h3 class="chart-title">Top Products</h3>
-              <p class="chart-sub">By revenue</p>
+              <h3 class="chart-title">{{ 'dashboard.topProducts' | translate }}</h3>
+              <p class="chart-sub">{{ 'reports.charts.topProductsSub' | translate }}</p>
             </div>
           </div>
           @if (topProducts().length === 0) {
-            <p class="chart-empty">No product data.</p>
+            <p class="chart-empty">{{ 'reports.charts.noProductData' | translate }}</p>
           } @else {
             <div class="rank-list">
               @for (p of topProducts(); track p.name; let i = $index) {
@@ -389,12 +389,12 @@
         <div class="chart-card">
           <div class="chart-head">
             <div>
-              <h3 class="chart-title">Top Categories</h3>
-              <p class="chart-sub">Revenue share</p>
+              <h3 class="chart-title">{{ 'dashboard.topCategories' | translate }}</h3>
+              <p class="chart-sub">{{ 'reports.charts.topCategoriesSub' | translate }}</p>
             </div>
           </div>
           @if (categoryDonut().length === 0) {
-            <p class="chart-empty">No category data.</p>
+            <p class="chart-empty">{{ 'reports.charts.noCategoryData' | translate }}</p>
           } @else {
             <div class="donut-wrap">
               <svg class="donut-svg" viewBox="0 0 100 100" aria-hidden="true">
@@ -422,12 +422,12 @@
         <div class="chart-card">
           <div class="chart-head">
             <div>
-              <h3 class="chart-title">Payment Distribution</h3>
-              <p class="chart-sub">By payment method</p>
+              <h3 class="chart-title">{{ 'reports.charts.paymentDistributionTitle' | translate }}</h3>
+              <p class="chart-sub">{{ 'reports.charts.paymentDistributionSub' | translate }}</p>
             </div>
           </div>
           @if (paymentDonut().length === 0) {
-            <p class="chart-empty">No payment data.</p>
+            <p class="chart-empty">{{ 'reports.charts.noPaymentData' | translate }}</p>
           } @else {
             <div class="donut-wrap">
               <svg class="donut-svg" viewBox="0 0 100 100" aria-hidden="true">
@@ -459,33 +459,33 @@
   @if (!isLoading()) {
     <div class="export-card">
       <div class="export-card__text">
-        <h3 class="export-card__title">Export this report</h3>
-        <p class="export-card__sub">Download the current filtered results in your preferred format.</p>
+        <h3 class="export-card__title">{{ 'reports.export.title' | translate }}</h3>
+        <p class="export-card__sub">{{ 'reports.export.subtitle' | translate }}</p>
       </div>
       <div class="export-card__actions">
         <button class="export-btn" (click)="exportPdf()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
           </svg>
-          PDF
+          <span class="btn-label">PDF</span>
         </button>
         <button class="export-btn" (click)="exportExcel()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/>
           </svg>
-          Excel
+          <span class="btn-label">Excel</span>
         </button>
         <button class="export-btn" (click)="exportCsv()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          CSV
+          <span class="btn-label">CSV</span>
         </button>
         <button class="export-btn export-btn--primary" (click)="printReport()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
           </svg>
-          Print
+          <span class="btn-label">{{ 'buttons.print' | translate }}</span>
         </button>
       </div>
     </div>
