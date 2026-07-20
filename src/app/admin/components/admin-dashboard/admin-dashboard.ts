@@ -1,18 +1,22 @@
 // admin-dashboard.component.ts
-import { Component, signal, computed, OnInit } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
   StatCard, Order, AdminProduct, Customer, ChartPoint, RevenuePoint
 } from '../../model/admin-models.model';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss',
 })
 export class AdminDashboard implements OnInit {
+
+  lang = inject(LanguageService);
 
   isLoading = signal(true);
   skeletons = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -22,15 +26,16 @@ export class AdminDashboard implements OnInit {
   }
 
   // ── Stat cards ────────────────────────────────────────────────────────────
+  // label / changeLabel now hold translation keys instead of literal English text.
   statCards: StatCard[] = [
-    { id: 'revenue',   label: 'Total Revenue',    value: 84320,  change: 12.4,  changeLabel: 'vs last month', icon: 'revenue',   color: 'blue',   prefix: '$' },
-    { id: 'orders',    label: 'Total Orders',      value: 1284,   change: 8.1,   changeLabel: 'vs last month', icon: 'orders',    color: 'green'  },
-    { id: 'products',  label: 'Products',          value: 1407,   change: 2.3,   changeLabel: 'new this month', icon: 'products',  color: 'purple' },
-    { id: 'customers', label: 'Customers',         value: 3281,   change: 15.6,  changeLabel: 'vs last month', icon: 'customers', color: 'amber'  },
-    { id: 'pending',   label: 'Pending Orders',    value: 47,     change: -3.2,  changeLabel: 'vs yesterday',  icon: 'pending',   color: 'red'    },
-    { id: 'today',     label: 'Sales Today',       value: 2840,   change: 6.8,   changeLabel: 'vs yesterday',  icon: 'today',     color: 'green',  prefix: '$' },
-    { id: 'stock',     label: 'Low Stock Items',   value: 12,     change: -1,    changeLabel: 'vs last week',  icon: 'stock',     color: 'red'    },
-    { id: 'rating',    label: 'Avg Rating',        value: '4.8',  change: 0.2,   changeLabel: 'vs last month', icon: 'rating',    color: 'amber',  suffix: '★' },
+    { id: 'revenue',   label: 'dashboard.stats.totalRevenue',  value: 84320,  change: 12.4,  changeLabel: 'dashboard.stats.vsLastMonth', icon: 'revenue',   color: 'blue',   prefix: '$' },
+    { id: 'orders',    label: 'dashboard.stats.totalOrders',   value: 1284,   change: 8.1,   changeLabel: 'dashboard.stats.vsLastMonth', icon: 'orders',    color: 'green'  },
+    { id: 'products',  label: 'dashboard.stats.products',      value: 1407,   change: 2.3,   changeLabel: 'dashboard.stats.newThisMonth', icon: 'products',  color: 'purple' },
+    { id: 'customers', label: 'dashboard.stats.customers',     value: 3281,   change: 15.6,  changeLabel: 'dashboard.stats.vsLastMonth', icon: 'customers', color: 'amber'  },
+    { id: 'pending',   label: 'dashboard.stats.pendingOrders', value: 47,     change: -3.2,  changeLabel: 'dashboard.stats.vsYesterday',  icon: 'pending',   color: 'red'    },
+    { id: 'today',     label: 'dashboard.stats.salesToday',    value: 2840,   change: 6.8,   changeLabel: 'dashboard.stats.vsYesterday',  icon: 'today',     color: 'green',  prefix: '$' },
+    { id: 'stock',     label: 'dashboard.stats.lowStockItems', value: 12,     change: -1,    changeLabel: 'dashboard.stats.vsLastWeek',   icon: 'stock',     color: 'red'    },
+    { id: 'rating',    label: 'dashboard.stats.avgRating',     value: '4.8',  change: 0.2,   changeLabel: 'dashboard.stats.vsLastMonth', icon: 'rating',    color: 'amber',  suffix: '★' },
   ];
 
   // ── Revenue chart data (12 months) ────────────────────────────────────────
@@ -53,6 +58,15 @@ export class AdminDashboard implements OnInit {
 
   barHeight(val: number): number {
     return (val / this.maxRevenue()) * 100;
+  }
+
+  // Tooltips for the revenue/profit bars — built from translation keys + locale-aware currency formatting.
+  revenueTooltip(pt: RevenuePoint): string {
+    return `${this.lang.translate('dashboard.legendRevenue')}: ${this.lang.formatCurrency(pt.revenue)}`;
+  }
+
+  profitTooltip(pt: RevenuePoint): string {
+    return `${this.lang.translate('dashboard.legendProfit')}: ${this.lang.formatCurrency(pt.profit)}`;
   }
 
   // ── Top categories chart ──────────────────────────────────────────────────
@@ -113,11 +127,6 @@ export class AdminDashboard implements OnInit {
   ];
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  formatCurrency(val: number): string {
-    if (val >= 1000) return '$' + (val / 1000).toFixed(1) + 'k';
-    return '$' + val.toLocaleString();
-  }
-
   statusColor(status: string): string {
     const map: Record<string, string> = {
       delivered: 'green', processing: 'blue', shipped: 'amber',
@@ -129,13 +138,14 @@ export class AdminDashboard implements OnInit {
   trackById(_: number, item: { id: string | number }): string | number { return item.id; }
 
   // ── Quick actions ─────────────────────────────────────────────────────────
+  // label now holds a translation key.
   quickActions = [
-    { label: 'Add Product',      route: '/admin/products/new',  bg: 'rgba(0,102,255,.12)',    color: '#3B82F6', icon: 'M12 5v14M5 12h14' },
-    { label: 'New Order',        route: '/admin/orders',        bg: 'rgba(16,185,129,.12)',   color: '#10B981', icon: 'M9 17H5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v0a2 2 0 0 0-2-2h-4M12 3v14' },
-    { label: 'Send Notification', route: '/admin/notifications', bg: 'rgba(245,158,11,.12)',   color: '#F59E0B', icon: 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0' },
-    { label: 'Create Coupon',    route: '/admin/coupons',       bg: 'rgba(124,92,252,.12)',   color: '#7C5CFC', icon: 'M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z' },
-    { label: 'View Reports',     route: '/admin/reports',       bg: 'rgba(239,68,68,.12)',    color: '#EF4444', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6' },
-    { label: 'Manage Inventory', route: '/admin/inventory',     bg: 'rgba(100,116,139,.12)',  color: '#94A3B8', icon: 'M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 12v.01' },
+    { label: 'dashboard.qa.addProduct',      route: '/admin/products/new',  bg: 'rgba(0,102,255,.12)',    color: '#3B82F6', icon: 'M12 5v14M5 12h14' },
+    { label: 'dashboard.qa.newOrder',        route: '/admin/orders',        bg: 'rgba(16,185,129,.12)',   color: '#10B981', icon: 'M9 17H5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v0a2 2 0 0 0-2-2h-4M12 3v14' },
+    { label: 'dashboard.qa.sendNotification', route: '/admin/notifications', bg: 'rgba(245,158,11,.12)',   color: '#F59E0B', icon: 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0' },
+    { label: 'dashboard.qa.createCoupon',    route: '/admin/coupons',       bg: 'rgba(124,92,252,.12)',   color: '#7C5CFC', icon: 'M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z' },
+    { label: 'dashboard.qa.viewReports',     route: '/admin/reports',       bg: 'rgba(239,68,68,.12)',    color: '#EF4444', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6' },
+    { label: 'dashboard.qa.manageInventory', route: '/admin/inventory',     bg: 'rgba(100,116,139,.12)',  color: '#94A3B8', icon: 'M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 12v.01' },
   ];
 
   ngOnInit(): void {
@@ -146,5 +156,3 @@ export class AdminDashboard implements OnInit {
     this.router.navigate(['/admin/products/new'])
   }
 }
-
-
