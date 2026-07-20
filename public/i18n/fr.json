@@ -48,7 +48,9 @@
     "previous": "Précédent",
     "close": "Fermer",
     "optional": "facultatif",
-    "required": "requis"
+    "required": "requis",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante"
   },
 
   "buttons": {
@@ -227,6 +229,68 @@
     }
   },
 
+  "reports": {
+    "subtitle": "Générez des rapports d'activité détaillés et exportez vos données",
+    "types": {
+      "sales": "Ventes",
+      "paymentMethods": "Moyens de paiement"
+    },
+    "status": {
+      "all": "Toutes",
+      "completed": "Terminée",
+      "pending": "En attente",
+      "cancelled": "Annulée"
+    },
+    "columns": {
+      "orderId": "N° de commande",
+      "paymentMethod": "Moyen de paiement"
+    },
+    "stats": {
+      "productsSold": "Produits vendus",
+      "vsPreviousPeriod": "vs période précédente"
+    },
+    "filters": {
+      "title": "Filtres du rapport",
+      "dateRange": "Plage de dates",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "reportType": "Type de rapport",
+      "orderStatus": "Statut de la commande",
+      "searchPlaceholder": "Rechercher un n° de commande, client, produit, catégorie…"
+    },
+    "empty": {
+      "title": "Aucun rapport trouvé",
+      "subtitle": "Modifiez les filtres ou sélectionnez une autre plage de dates."
+    },
+    "charts": {
+      "title": "Visualisations du rapport",
+      "revenueTrendTitle": "Tendance des revenus",
+      "revenueTrendSub": "Revenus sur la période sélectionnée",
+      "noDataPeriod": "Aucune donnée pour cette période.",
+      "ordersTrendTitle": "Tendance des commandes",
+      "ordersTrendSub": "Volume de commandes",
+      "topProductsSub": "Par revenu",
+      "noProductData": "Aucune donnée produit.",
+      "topCategoriesSub": "Part des revenus",
+      "noCategoryData": "Aucune donnée de catégorie.",
+      "paymentDistributionTitle": "Répartition des paiements",
+      "paymentDistributionSub": "Par moyen de paiement",
+      "noPaymentData": "Aucune donnée de paiement."
+    },
+    "export": {
+      "title": "Exporter ce rapport",
+      "subtitle": "Téléchargez les résultats filtrés actuels dans le format de votre choix."
+    },
+    "toasts": {
+      "generated": "Rapport généré avec succès",
+      "filtersReset": "Filtres réinitialisés",
+      "exportingPdf": "Exportation du rapport en PDF…",
+      "exportingExcel": "Exportation du rapport en Excel…",
+      "exportingCsv": "Exportation du rapport en CSV…",
+      "preparingPrint": "Préparation du rapport pour l'impression…"
+    }
+  },
+
   "products": {
     "title": "Produits",
     "subtitle": "{{count}} produits au total",
@@ -337,7 +401,50 @@
       "subtitleEmpty": "Créez votre première catégorie pour organiser vos produits."
     },
     "deleteConfirmTitle": "Supprimer la catégorie",
-    "deleteConfirmBody": "Voulez-vous vraiment supprimer « {{name}} » ? Cette action est irréversible et peut affecter {{count}} produits."
+    "deleteConfirmBody": "Voulez-vous vraiment supprimer « {{name}} » ? Cette action est irréversible et peut affecter {{count}} produits.",
+    "searchPlaceholder": "Rechercher des catégories…",
+    "clearSearchAria": "Effacer la recherche",
+    "productsSuffix": "produits",
+    "basicInfo": "Informations de base",
+    "slug": "Slug",
+    "validation": {
+      "nameLength": "Le nom doit contenir entre 2 et 60 caractères.",
+      "slugPattern": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
+      "descriptionRequired": "La description est requise.",
+      "coverRequired": "L'image de couverture est requise."
+    },
+    "discardBody": "Vous avez apporté des modifications à cette catégorie qui n'ont pas encore été enregistrées.",
+    "seoSectionTitle": "SEO",
+    "metaTitle": "Titre Meta",
+    "metaDescription": "Description Meta",
+    "keywordsPlaceholder": "Ajoutez un mot-clé et appuyez sur Entrée…",
+    "dragDropImage": "Glissez-déposez une image, ou",
+    "browse": "parcourez",
+    "imageSizeHint": "PNG ou JPG, jusqu'à 5 Mo",
+    "replace": "Remplacer",
+    "crop": "Recadrer",
+    "cropComingSoon": "Outil de recadrage bientôt disponible",
+    "remove": "Supprimer",
+    "addGalleryImages": "Ajouter des images à la galerie",
+    "toasts": {
+      "saved": "Catégorie enregistrée avec succès",
+      "fixFields": "Veuillez corriger les champs en surbrillance avant d'enregistrer."
+    },
+    "errors": {
+      "slugReserved": "Le slug « /{{slug}} » est réservé. Veuillez en choisir un autre."
+    },
+    "saving": "Enregistrement…",
+    "saved": "Enregistré",
+    "avgRating": "Note moyenne",
+    "totalSales": "Ventes totales",
+    "views": "Vues",
+    "productsInCategory": "Produits de cette catégorie",
+    "shownCount": "{{count}} affiché(s)",
+    "noProductsLinked": "Aucun produit associé à cette catégorie pour le moment.",
+    "viewProduct": "Voir le produit",
+    "clickToZoom": "Cliquez pour zoomer",
+    "closePreview": "Fermer l'aperçu",
+    "updated": "Mise à jour"
   },
 
   "orders": {
