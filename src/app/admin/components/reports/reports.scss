@@ -132,12 +132,23 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
 .page-header__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
+// ─── Shared buttons ───────────────────────────────────────────────────────────
+.btn-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
 .btn-ghost {
   height: 38px;
   padding: 0 16px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  width: 130px;
+  flex-shrink: 0;
   background: $surface;
   border: 1px solid $border2;
   border-radius: $radius-sm;
@@ -149,6 +160,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   transition: background .15s $ease, color .15s, border-color .15s;
 
   &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &--wide { width: 180px; } // for longer labels like "Export to Excel"
 }
 
 .btn-primary {
@@ -156,7 +168,10 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   padding: 0 16px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  width: 160px;
+  flex-shrink: 0;
   background: $accent;
   border: none;
   border-radius: $radius-sm;
@@ -337,6 +352,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .pill-btn {
   height: 34px;
   padding: 0 14px;
+  min-width: 84px;
+  max-width: 150px;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   background: $surface2;
   border: 1.5px solid $border;
   border-radius: $radius-pill;
@@ -457,9 +478,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .btn-reset {
   height: 40px;
   padding: 0 18px;
+  width: 160px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
+  flex-shrink: 0;
   background: $surface;
   border: 1px solid $border2;
   border-radius: $radius-sm;
@@ -476,9 +500,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .btn-generate {
   height: 40px;
   padding: 0 20px;
+  width: 190px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  flex-shrink: 0;
   background: $accent;
   border: none;
   border-radius: $radius-sm;
@@ -517,6 +544,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .data-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: .82rem;
 
   thead tr { border-bottom: 1px solid $border; background: $surface2; }
@@ -530,6 +558,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     letter-spacing: .08em;
     color: $text-light;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &.th-actions { width: 60px; }
   }
@@ -540,6 +570,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     vertical-align: middle;
     color: $text-mid;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   tbody tr:last-child td { border-bottom: none; }
@@ -566,7 +598,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .td-mid        { color: $text-mid; }
 .td-muted      { color: $text-light; font-size: .74rem; }
 .td-revenue    { font-weight: 700; color: $text-primary; }
-.td-actions    { text-align: right; }
+.td-actions    { text-align: right; overflow: visible; }
 
 .customer-cell {
   display: flex;
@@ -588,7 +620,13 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   justify-content: center;
 }
 
-.cust-name { font-weight: 600; color: $text-primary; font-size: .82rem; }
+.cust-name {
+  font-weight: 600;
+  color: $text-primary;
+  font-size: .82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .status-pill {
   display: inline-flex;
@@ -599,6 +637,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   font-size: .67rem;
   font-weight: 700;
   text-transform: capitalize;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &--green { background: $green-bg; color: $green; }
   &--amber { background: $amber-bg; color: $amber; }
@@ -889,7 +929,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 .donut-lbl { flex: 1; color: $text-mid; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.donut-val { font-weight: 700; color: $text-primary; }
+.donut-val { font-weight: 700; color: $text-primary; flex-shrink: 0; }
 
 // ─── Export section ───────────────────────────────────────────────────────────
 .export-card {
@@ -919,9 +959,12 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .export-btn {
   height: 38px;
   padding: 0 16px;
+  width: 110px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
+  flex-shrink: 0;
   background: $surface;
   border: 1px solid $border2;
   border-radius: $radius-sm;
@@ -935,6 +978,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   &:hover { background: $surface2; color: $text-primary; border-color: $text-light; transform: translateY(-1px); }
 
   &--primary {
+    width: 130px;
     background: $accent;
     border-color: $accent;
     color: #fff;
