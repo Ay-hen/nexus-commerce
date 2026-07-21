@@ -1,4 +1,4 @@
-// add-category.component.ts
+// add-category.ts
 import {
   Component, signal, computed, inject, HostListener,
 } from '@angular/core';
