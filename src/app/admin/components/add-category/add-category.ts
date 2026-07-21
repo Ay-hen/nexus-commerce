@@ -5,6 +5,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 // ─── Local types ────────────────────────────────────────────────────────────
 export interface CategoryImage {
@@ -59,12 +61,13 @@ function slugify(value: string): string {
 
 @Component({
   selector: 'app-add-category',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './add-category.html',
   styleUrl: './add-category.scss',
 })
 export class AddCategory {
   private router = inject(Router);
+  lang = inject(LanguageService);
 
   // ── Form state ────────────────────────────────────────────────────────────
   form = signal<CategoryForm>({
@@ -111,11 +114,12 @@ export class AddCategory {
     return Math.min(score, 100);
   });
 
+  // Now returns a translated label instead of a hardcoded literal.
   seoScoreLabel = computed(() => {
     const s = this.seoScore();
-    if (s >= 80) return 'Excellent';
-    if (s >= 50) return 'Good';
-    return 'Needs work';
+    if (s >= 80) return this.lang.translate('categories.add.seoExcellent');
+    if (s >= 50) return this.lang.translate('categories.add.seoGood');
+    return this.lang.translate('categories.add.seoNeedsWork');
   });
 
   // ── Form field helpers ────────────────────────────────────────────────────
@@ -157,6 +161,11 @@ export class AddCategory {
     this.form.update(f => ({ ...f, keywords: f.keywords.filter(k => k !== keyword) }));
   }
 
+  // Translation helper for the chip's dynamic aria-label ("Remove {{keyword}}").
+  removeKeywordAria(keyword: string): string {
+    return this.lang.translate('categories.add.removeKeyword', { keyword });
+  }
+
   // ── Image helpers — Base64 conversion ─────────────────────────────────────
   private fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -169,10 +178,10 @@ export class AddCategory {
 
   private validateImageFile(file: File): string | null {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      return `"${file.name}" is not a supported format (JPEG, PNG, WebP only).`;
+      return this.lang.translate('categories.add.errors.unsupportedFormat', { name: file.name });
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      return `"${file.name}" exceeds 5 MB limit.`;
+      return this.lang.translate('categories.add.errors.fileTooLarge', { name: file.name });
     }
     return null;
   }
@@ -291,10 +300,10 @@ export class AddCategory {
     const f = this.form();
     const errs: Record<string, string> = {};
 
-    if (!f.name.trim()) errs['name'] = 'Category name is required.';
-    if (!f.description.trim()) errs['description'] = 'Description is required.';
-    if (!this.effectiveSlug().trim()) errs['slug'] = 'URL slug is required.';
-    if (!this.thumbnail()) errs['thumbnail'] = 'A thumbnail image is required.';
+    if (!f.name.trim()) errs['name'] = this.lang.translate('categories.add.errors.nameRequired');
+    if (!f.description.trim()) errs['description'] = this.lang.translate('categories.validation.descriptionRequired');
+    if (!this.effectiveSlug().trim()) errs['slug'] = this.lang.translate('categories.add.errors.slugRequired');
+    if (!this.thumbnail()) errs['thumbnail'] = this.lang.translate('categories.add.errors.thumbnailRequired');
 
     this.errors.set(errs);
     return Object.keys(errs).length === 0;
@@ -367,7 +376,7 @@ export class AddCategory {
   }
 
   formatDate(d: Date): string {
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(d, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   @HostListener('document:keydown.escape')
