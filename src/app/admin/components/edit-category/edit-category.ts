@@ -1,7 +1,9 @@
-import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminCategoryDetail } from '../../model/category-detail.model';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 type SaveState = 'idle' | 'saving' | 'success' | 'error';
 
@@ -10,12 +12,14 @@ const RESERVED_SLUGS = ['admin', 'new', 'checkout', 'cart', 'edit'];
 
 @Component({
   selector: 'app-edit-category-modal',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, TranslatePipe],
   templateUrl: './edit-category.html',
   styleUrl: './edit-category.scss',
 })
 export class EditCategoryModal implements OnInit, OnDestroy {
   @Input({ required: true }) category!: AdminCategoryDetail;
+
+  lang = inject(LanguageService);
 
   /** Emitted once the closing animation has finished — parent should remove the component. */
   @Output() closed = new EventEmitter<void>();
@@ -275,7 +279,7 @@ export class EditCategoryModal implements OnInit, OnDestroy {
 
     if (this.form.invalid || !this.coverImage()) {
       this.saveState.set('error');
-      this.errorMessage.set('Please fix the highlighted fields before saving.');
+      this.errorMessage.set(this.lang.translate('categories.toasts.fixFields'));
       setTimeout(() => { if (this.saveState() === 'error') this.saveState.set('idle'); }, 1800);
       return;
     }
@@ -283,7 +287,7 @@ export class EditCategoryModal implements OnInit, OnDestroy {
     const slug = this.form.controls.slug.value;
     if (RESERVED_SLUGS.includes(slug)) {
       this.saveState.set('error');
-      this.errorMessage.set(`The slug "/${slug}" is reserved. Please choose another.`);
+      this.errorMessage.set(this.lang.translate('categories.errors.slugReserved', { slug }));
       setTimeout(() => { if (this.saveState() === 'error') this.saveState.set('idle'); }, 1800);
       return;
     }
