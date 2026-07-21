@@ -1,10 +1,12 @@
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ViewCategoryModalComponent } from '../view-category-modal/view-category-modal';
 import { EditCategoryModal} from '../edit-category/edit-category';
 import { AdminCategoryDetail, toCategoryDetail } from '../../model/category-detail.model';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 // ─── Local types (kept inline — promote to model file once approved) ─────────
 export interface AdminCategory {
@@ -22,11 +24,13 @@ type SortKey = 'name' | 'productCount' | 'createdAt';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, FormsModule, RouterLink, ViewCategoryModalComponent, EditCategoryModal],
+  imports: [CommonModule, FormsModule, RouterLink, ViewCategoryModalComponent, EditCategoryModal, TranslatePipe],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
 export class Categories {
+
+  lang = inject(LanguageService);
 
   // ── Loading ────────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -118,12 +122,14 @@ export class Categories {
   featuredCount    = computed(() => this.allCategories().filter(c => c.featured).length);
   totalProducts    = computed(() => this.allCategories().reduce((sum, c) => sum + c.productCount, 0));
 
+  // Now built from lang.formatNumber() + translation strings instead of a
+  // hand-rolled template literal.
   pageRangeLabel = computed(() => {
     const total = this.filteredCategories().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return `0 ${this.lang.translate('common.results')}`;
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return `${this.lang.formatNumber(start)}–${this.lang.formatNumber(end)} ${this.lang.translate('common.of')} ${this.lang.formatNumber(total)}`;
   });
 
   ngOnInit(): void {
@@ -229,8 +235,7 @@ export class Categories {
   trackById(_: number, item: AdminCategory): string { return item.id; }
 
   formatDate(iso: string): string {
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   constructor(private router: Router) {}
