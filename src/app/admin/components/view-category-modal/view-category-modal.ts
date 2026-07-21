@@ -1,16 +1,20 @@
-import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminCategoryDetail, CategoryProduct } from '../../model/category-detail.model';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-view-category-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './view-category-modal.html',
   styleUrl: './view-category-modal.scss',
 })
 export class ViewCategoryModalComponent implements OnInit, OnDestroy {
   @Input({ required: true }) category!: AdminCategoryDetail;
+
+  lang = inject(LanguageService);
 
   /** Emitted once the closing animation has finished — parent should remove the component. */
   @Output() closed = new EventEmitter<void>();
@@ -70,13 +74,23 @@ export class ViewCategoryModalComponent implements OnInit, OnDestroy {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
+  formatPrice(value: number): string {
+    return this.lang.formatCurrency(value, 'MAD');
+  }
+
+  // Maps stock status to existing inventory.status.* translation keys
+  // (exact same English text already lived there: "In Stock" / "Low Stock" /
+  // "Out of Stock"), instead of hardcoding literal strings.
   stockLabel(p: CategoryProduct): string {
-    if (p.status === 'in-stock') return 'In Stock';
-    if (p.status === 'low-stock') return 'Low Stock';
-    return 'Out of Stock';
+    const map: Record<CategoryProduct['status'], string> = {
+      'in-stock': 'inventory.status.inStock',
+      'low-stock': 'inventory.status.lowStock',
+      'out-of-stock': 'inventory.status.outOfStock',
+    };
+    return this.lang.translate(map[p.status]);
   }
 
   trackByProduct(_: number, p: CategoryProduct): string {
