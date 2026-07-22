@@ -317,7 +317,35 @@
     "addColorVariant": "Farbvariante hinzufügen",
     "seoTitle": "SEO-Titel",
     "seoDescription": "SEO-Beschreibung",
-    "urlSlug": "URL-Slug",
+    "urlSlug": "URL-Slug",    
+    "searchPlaceholder": "Nach Name, Marke, SKU suchen…",
+    "searchAriaLabel": "Produkte durchsuchen",
+    "categoryAllPill": "Alle",
+    "viewModeLabel": "Ansichtsmodus",
+    "bulkSetActive": "Aktivieren",
+    "selectAllAria": "Alle auswählen",
+    "selectProductAria": "{{name}} auswählen",
+    "featuredBadge": "Hervorgehoben",
+    "deleteConfirmTitleSingle": "Produkt löschen?",
+    "deleteConfirmTitleBulk": "{{count}} Produkte löschen?",
+    "deleteConfirmBodySingle": "Diese Aktion kann nicht rückgängig gemacht werden. Das Produkt wird endgültig entfernt.",
+    "deleteConfirmBodyBulk": "Diese Aktion kann nicht rückgängig gemacht werden. Die ausgewählten Produkte werden endgültig entfernt.",
+    "deleteButtonSingle": "Produkt löschen",
+    "deleteButtonBulk": "Produkte löschen",
+    "pageRange": "{{start}}–{{end}} von {{total}}",
+    "pageRangeEmpty": "0 Ergebnisse",
+    "sort": {
+      "nameAsc": "Name (A–Z)",
+      "nameDesc": "Name (Z–A)",
+      "priceHigh": "Preis: absteigend",
+      "priceLow": "Preis: aufsteigend",
+      "stockHigh": "Bestand: absteigend",
+      "stockLow": "Bestand: aufsteigend",
+      "salesHigh": "Bestseller",
+      "salesLow": "Wenigste Verkäufe",
+      "statusAsc": "Status"
+    },
+
     "status": {
       "active": "Aktiv",
       "draft": "Entwurf",
@@ -337,7 +365,8 @@
       "outOfStock": "nicht vorrätig",
       "activeSuffix": "aktiv",
       "newThisMonth": "neu diesen Monat",
-      "shownOnStorefront": "im Shop angezeigt"
+      "shownOnStorefront": "im Shop angezeigt",
+      "acrossAllUnits": "über alle vorrätigen Einheiten"
     },
     "table": {
       "product": "Produkt",
