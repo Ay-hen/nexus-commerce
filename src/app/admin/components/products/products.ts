@@ -7,8 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminProduct } from '../../model/admin-models.model';
 import { EditProductModal } from '../../model/edit-product-modal/edit-product-modal';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 type ProductStatus = 'active' | 'draft' | 'archived';
 type SortKey =
