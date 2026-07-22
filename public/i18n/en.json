@@ -364,7 +364,8 @@
       "outOfStock": "out of stock",
       "activeSuffix": "active",
       "newThisMonth": "new this month",
-      "shownOnStorefront": "shown on storefront"
+      "shownOnStorefront": "shown on storefront",
+      "acrossAllUnits": "across all in-stock units"
     },
     "table": {
       "product": "Product",
