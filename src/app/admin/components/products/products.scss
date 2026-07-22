@@ -1,12 +1,4 @@
-// products.scss  (aka admin-products.component.scss)
-// Changes from your original:
-//   - `.action-menu` is now `position: fixed` (was `absolute`, which got
-//     clipped by `.table-wrap`'s `overflow-x/y`). Top/left now come from
-//     inline styles set in the TS file (toggleMenu()), not CSS `top: calc(...)`.
-//   - Removed the `.table-row:nth-last-child(-n+2) .action-menu` flip hack;
-//     replaced with a proper `.action-menu--up` class toggled from TS based
-//     on real available viewport space.
-
+// products.scss
 $surface:       #FFFFFF;
 $surface2:      #F5F7FA;
 $surface3:      #F1F4F8;
@@ -44,7 +36,6 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 $ease-spring:   cubic-bezier(.34,1.56,.64,1);
 $ease-menu:     cubic-bezier(.16,1,.3,1);
 
-// ─── Keyframes ─────────────────────────────────────────────────────────────
 @keyframes pop-in     { from { opacity:0; transform: translateY(8px) scale(.98);} to { opacity:1; transform: translateY(0) scale(1);} }
 @keyframes shimmer    { 0% { background-position: -600px 0;} 100% { background-position: 600px 0;} }
 @keyframes toast-in   { from { opacity:0; transform: translateX(-50%) translateY(-10px);} to { opacity:1; transform: translateX(-50%) translateY(0);} }
@@ -76,7 +67,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   overflow-x: hidden;
 }
 
-// ─── Toast ───────────────────────────────────────────────────────────────
 .admin-toast {
   position: fixed;
   top: 76px; left: 50%;
@@ -93,7 +83,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   svg { color: $green; }
 }
 
-// ─── Confirm dialog ────────────────────────────────────────────────────────
 .dialog-backdrop {
   position: fixed; inset: 0;
   background: rgba(17,24,39,.4);
@@ -154,7 +143,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover { background: darken($red, 8%); }
 }
 
-// ─── Page header ─────────────────────────────────────────────────────────
 .page-header {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; flex-wrap: wrap;
@@ -203,7 +191,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
 }
 
-// ─── Stat cards ─────────────────────────────────────────────────────────
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -252,7 +239,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &__sub   { font-size: .72rem; color: $text-light; margin: 0; }
 }
 
-// ─── Status tabs ──────────────────────────────────────────────────────────
 .status-tabs {
   display: flex;
   gap: 2px;
@@ -287,7 +273,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   .status-tab--active & { background: $accent-bg; color: $accent; }
 }
 
-// ─── Toolbar ──────────────────────────────────────────────────────────────
 .toolbar {
     display: flex;
     align-items: center;
@@ -320,7 +305,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     }
 }
 
-// Search
 .search-wrap {
     flex: 1 1 220px;
     min-width: 180px;
@@ -404,7 +388,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover:not(.view-btn--active) { color: $text-primary; }
 }
 
-// ─── Bulk action bar ────────────────────────────────────────────────────
 .bulk-bar {
   display: flex; align-items: center; gap: 14px;
   background: $accent-bg;
@@ -444,7 +427,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover { text-decoration: underline; }
 }
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────
 .shimmer {
   background: linear-gradient(90deg, $surface2 0%, $surface3 40%, $surface2 80%);
   background-size: 600px 100%;
@@ -456,7 +438,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .sk-row   { height: 56px; border-radius: $radius-sm; margin-bottom: 4px; }
 .sk-table { padding: 20px; display: flex; flex-direction: column; }
 
-// ─── Table card ───────────────────────────────────────────────────────────
 .table-card {
   width: 100%;
   max-width: 100%;
@@ -474,7 +455,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   overflow-x: auto;
   overflow-y: hidden;
 
-  // Table max visible rows = 9 before scrolling kicks in inside the card.
   &--scroll {
     max-height: calc(48px + 9 * 58px);
     overflow-y: auto;
@@ -535,7 +515,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .td-sales { font-weight: 600; color: $text-primary; }
 .td-sku   { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
 
-// ─── Checkbox ─────────────────────────────────────────────────────────────
 .checkbox-sm {
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; user-select: none;
@@ -561,7 +540,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   }
 }
 
-// ─── Product cell (table) ─────────────────────────────────────────────────
 .product-cell { display: flex; align-items: center; gap: 12px; }
 
 .product-img-wrap {
@@ -598,7 +576,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 }
 .product-meta { font-size: .72rem; color: $text-light; margin: 0; }
 
-// ─── Status pill ──────────────────────────────────────────────────────────
 .status-pill {
   display: inline-flex; align-items: center;
   height: 22px; padding: 0 9px;
@@ -612,7 +589,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--archived { background: $slate-bg;  color: $text-mid; }
 }
 
-// ─── Stock badge ──────────────────────────────────────────────────────────
 .stock-badge {
   display: inline-flex; align-items: center;
   height: 22px; padding: 0 9px;
@@ -625,7 +601,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--red   { background: $red-bg;   color: $red;   }
 }
 
-// ─── Action menu trigger ────────────────────────────────────────────────
 .action-menu-wrap { position: relative; display: inline-flex; justify-content: flex-end; }
 
 .action-trigger {
@@ -640,12 +615,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover, &[aria-expanded="true"] { background: $surface2; border-color: $border; color: $text-primary; }
 }
 
-// ─── Action menu (dropdown) ─────────────────────────────────────────────
-// Rendered once, outside the scrollable table markup, and positioned with
-// `position: fixed` using top/left computed in TS from the trigger button's
-// real bounding rect. This is what fixes the clipping/cut-off bug — fixed
-// positioning escapes `.table-wrap`'s overflow clipping entirely, and the
-// TS math keeps it inside the viewport on all four sides.
 .action-menu {
   position: fixed;
   z-index: 2000;
@@ -675,7 +644,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .action-divider { height: 1px; background: $border; margin: 3px 0; }
 
-// ─── Empty state ──────────────────────────────────────────────────────────
 .empty-state {
   background: $surface; border: 1px solid $border;
   border-radius: $radius-lg;
@@ -696,7 +664,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .empty-state__title { font-size: 1.05rem; font-weight: 700; color: $text-primary; margin: 0; }
 .empty-state__sub { font-size: .84rem; color: $text-light; margin: 0 0 6px; max-width: 320px; }
 
-// ─── Product grid (grid view) ──────────────────────────────────────────────
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -830,7 +797,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover { background: $surface3; color: $text-primary; }
 }
 
-// ─── Pagination ───────────────────────────────────────────────────────────
 .pagination {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; flex-wrap: wrap; padding: 4px 0;
@@ -858,7 +824,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .page-ellipsis { width: 28px; text-align: center; font-size: .82rem; color: $text-light; }
 
-// ─── Responsive ───────────────────────────────────────────────────────────
 @media (max-width: 900px) {
   .toolbar { flex-direction: column; align-items: stretch; }
   .toolbar__right { justify-content: space-between; }
