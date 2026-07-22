@@ -1,13 +1,4 @@
 // products.component.ts  (aka admin-products.component.ts)
-// Changes from your original:
-//   1. `editProduct()` now opens <app-edit-product-modal> instead of router.navigate.
-//   2. `toggleMenu()` computes a viewport-aware FIXED position from the button's
-//      real coordinates instead of relying on CSS `position: absolute` + the
-//      `:nth-last-child(-n+2)` flip hack — that's what was causing the "more"
-//      popup to get clipped by the scrollable table container / cut off at
-//      the edge of the screen.
-//   3. Menu closes on scroll/resize so it never goes stale.
-
 import {
   Component, signal, computed, OnInit, inject, HostListener
 } from '@angular/core';
@@ -16,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminProduct } from '../../model/admin-models.model';
 import { EditProductModal } from '../../model/edit-product-modal/edit-product-modal';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 type ProductStatus = 'active' | 'draft' | 'archived';
 type SortKey =
@@ -31,7 +24,7 @@ interface MenuPosition { top: number; left: number; openUp: boolean; }
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, EditProductModal],
+  imports: [CommonModule, FormsModule, EditProductModal, TranslatePipe],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
@@ -39,6 +32,7 @@ export class Products implements OnInit {
 
   protected Math = Math;
   private router = inject(Router);
+  protected lang = inject(LanguageService);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -73,23 +67,24 @@ export class Products implements OnInit {
 
   categories = ['All', 'Electronics', 'Smartphones', 'Laptops', 'Audio', 'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion'];
 
+  // Labels are now translation keys — resolved in the template via `| translate`.
   statusTabs: { key: ProductStatus | 'all'; label: string }[] = [
-    { key: 'all',      label: 'All Products' },
-    { key: 'active',   label: 'Active'       },
-    { key: 'draft',    label: 'Draft'        },
-    { key: 'archived', label: 'Archived'     },
+    { key: 'all',      label: 'products.tabs.all'      },
+    { key: 'active',   label: 'products.tabs.active'   },
+    { key: 'draft',    label: 'products.tabs.draft'    },
+    { key: 'archived', label: 'products.tabs.archived' },
   ];
 
   sortOptions: { key: SortKey; label: string }[] = [
-    { key: 'nameAsc',    label: 'Name (A–Z)' },
-    { key: 'nameDesc',   label: 'Name (Z–A)' },
-    { key: 'priceHigh',  label: 'Price: High to Low' },
-    { key: 'priceLow',   label: 'Price: Low to High' },
-    { key: 'stockHigh',  label: 'Stock: High to Low' },
-    { key: 'stockLow',   label: 'Stock: Low to High' },
-    { key: 'salesHigh',  label: 'Best Selling' },
-    { key: 'salesLow',   label: 'Least Selling' },
-    { key: 'statusAsc',  label: 'Status' },
+    { key: 'nameAsc',    label: 'products.sort.nameAsc'   },
+    { key: 'nameDesc',   label: 'products.sort.nameDesc'  },
+    { key: 'priceHigh',  label: 'products.sort.priceHigh' },
+    { key: 'priceLow',   label: 'products.sort.priceLow'  },
+    { key: 'stockHigh',  label: 'products.sort.stockHigh' },
+    { key: 'stockLow',   label: 'products.sort.stockLow'  },
+    { key: 'salesHigh',  label: 'products.sort.salesHigh' },
+    { key: 'salesLow',   label: 'products.sort.salesLow'  },
+    { key: 'statusAsc',  label: 'products.sort.statusAsc' },
   ];
 
   // ── Mock data ──────────────────────────────────────────────────────────────
@@ -165,10 +160,10 @@ export class Products implements OnInit {
 
   pageRangeLabel = computed(() => {
     const total = this.sorted().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   pageNumbers = computed(() => {
@@ -249,9 +244,6 @@ export class Products implements OnInit {
   onSearch(value: string): void { this.searchQuery.set(value); this.currentPage.set(1); }
 
   // ── Row menu ─────────────────────────────────────────────────────────────
-  // Computes a fixed, viewport-clamped position from the trigger button so the
-  // menu is never clipped by the table's scroll container and never runs off
-  // the bottom/right edge of the screen.
   toggleMenu(product: AdminProduct, event: Event): void {
     event.stopPropagation();
 
@@ -289,7 +281,6 @@ export class Products implements OnInit {
   // ── CRUD ──────────────────────────────────────────────────────────────────
   addProduct(): void { this.router.navigate(['/admin/products/new']); }
 
-  /** Opens the Edit Product modal for this product instead of navigating away. */
   editProduct(id: number): void {
     this.closeMenu();
     const product = this._products().find(p => p.id === id) ?? null;
@@ -303,7 +294,7 @@ export class Products implements OnInit {
   onProductSaved(updated: AdminProduct): void {
     this._products.update(list => list.map(p => p.id === updated.id ? { ...p, ...updated } : p));
     this.editingProduct.set(null);
-    this.showToast(`"${updated.name}" updated`);
+    this.showToast(this.lang.translate('products.toasts.updated', { name: updated.name }));
     // Spring Boot: PUT /api/admin/products/{id}
   }
 
@@ -319,7 +310,7 @@ export class Products implements OnInit {
       sku: product.sku + '-COPY',
     };
     this._products.update(list => [copy, ...list]);
-    this.showToast(`"${product.name}" duplicated as draft`);
+    this.showToast(this.lang.translate('products.toasts.duplicated', { name: product.name }));
   }
 
   toggleStatus(product: AdminProduct, event?: Event): void {
@@ -329,7 +320,8 @@ export class Products implements OnInit {
     this._products.update(list =>
       list.map(p => p.id === product.id ? { ...p, status: next } : p)
     );
-    this.showToast(`"${product.name}" set to ${next}`);
+    const statusLabel = this.lang.translate('products.status.' + next);
+    this.showToast(this.lang.translate('products.toasts.statusChanged', { name: product.name, status: statusLabel }));
     // Spring Boot: PUT /api/admin/products/{id}/status { status: next }
   }
 
@@ -346,7 +338,7 @@ export class Products implements OnInit {
       const product = this._products().find(p => p.id === id);
       this._products.update(list => list.filter(p => p.id !== id));
       this.selectedIds.update(set => { const next = new Set(set); next.delete(id); return next; });
-      this.showToast(`"${product?.name}" deleted`);
+      this.showToast(this.lang.translate('products.toasts.deleted', { name: product?.name ?? '' }));
       this.showDeleteConfirm.set(false);
       this.deleteTargetId.set(null);
       // Spring Boot: DELETE /api/admin/products/{id}
@@ -356,7 +348,7 @@ export class Products implements OnInit {
     if (this.bulkDeleteCount() !== null) {
       const ids = this.selectedIds();
       this._products.update(list => list.filter(p => !ids.has(p.id)));
-      this.showToast(`${ids.size} product${ids.size === 1 ? '' : 's'} deleted`);
+      this.showToast(this.lang.translate('products.toasts.bulkDeleted', { count: ids.size }));
       this.clearSelection();
       this.bulkDeleteCount.set(null);
       this.showDeleteConfirm.set(false);
@@ -383,7 +375,8 @@ export class Products implements OnInit {
     this._products.update(list =>
       list.map(p => ids.has(p.id) ? { ...p, status } : p)
     );
-    this.showToast(`${ids.size} product${ids.size > 1 ? 's' : ''} set to ${status}`);
+    const statusLabel = this.lang.translate('products.status.' + status);
+    this.showToast(this.lang.translate('products.toasts.bulkStatusChanged', { count: ids.size, status: statusLabel }));
     this.clearSelection();
   }
 
@@ -395,11 +388,22 @@ export class Products implements OnInit {
 
   // ── Export ────────────────────────────────────────────────────────────────
   private toCsv(rows: AdminProduct[]): string {
-    const header = ['Name', 'Brand', 'Category', 'Price', 'Stock', 'Status', 'Sales', 'SKU', 'Featured'];
+    const header = [
+      this.lang.translate('admins.table.name'),
+      this.lang.translate('products.brand'),
+      this.lang.translate('products.category'),
+      this.lang.translate('products.table.price'),
+      this.lang.translate('products.table.stock'),
+      this.lang.translate('common.status'),
+      this.lang.translate('products.table.sales'),
+      this.lang.translate('products.table.sku'),
+      this.lang.translate('products.featuredBadge'),
+    ];
     const escape = (val: string | number) => `"${String(val).replace(/"/g, '""')}"`;
 
     const lines = rows.map(p => [
-      p.name, p.brand, p.category, p.price, p.stock, p.status, p.sales, p.sku, p.featured ? 'Yes' : 'No',
+      p.name, p.brand, p.category, p.price, p.stock, p.status, p.sales, p.sku,
+      p.featured ? this.lang.translate('common.yes') : this.lang.translate('common.no'),
     ].map(escape).join(','));
 
     return [header.map(escape).join(','), ...lines].join('\n');
@@ -418,7 +422,7 @@ export class Products implements OnInit {
   exportCsv(): void {
     const csv = this.toCsv(this.sorted());
     this.downloadFile(csv, `products-export-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
-    this.showToast('Products exported');
+    this.showToast(this.lang.translate('products.toasts.exported'));
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
@@ -443,8 +447,6 @@ export class Products implements OnInit {
   onEscape(): void {
     this.closeMenu();
     this.cancelDelete();
-    // Note: the edit modal has its own Escape handler and will close itself
-    // first (it stops at the lightbox, then the dialog) — no extra call needed here.
   }
 
   ngOnInit(): void {
