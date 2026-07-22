@@ -1,4 +1,4 @@
-// add-product.component.ts
+// add-product.ts
 import {
   Component, signal, computed, inject, HostListener, OnDestroy,
 } from '@angular/core';

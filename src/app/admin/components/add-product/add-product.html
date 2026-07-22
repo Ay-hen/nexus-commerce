@@ -1,4 +1,4 @@
-<!-- add-product.component.html -->
+<!-- add-product.html -->
 <div class="add-product-page">
 
   <!-- ── SUCCESS OVERLAY ──────────────────────────────────────────────────── -->
@@ -9,22 +9,22 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <p class="success-title">Product saved!</p>
-      <p class="success-sub">Redirecting to products…</p>
+      <p class="success-title">{{ 'addProduct.successTitle' | translate }}</p>
+      <p class="success-sub">{{ 'addProduct.successSub' | translate }}</p>
     </div>
   }
 
   <!-- ── STICKY TOP BAR ────────────────────────────────────────────────────── -->
   <div class="sticky-bar">
     <div class="sticky-bar__left">
-      <a routerLink="/admin/products" class="back-link" aria-label="Back to products">
+      <a routerLink="/admin/products" class="back-link" [attr.aria-label]="'addProduct.backAriaLabel' | translate">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="15 18 9 12 15 6"/>
         </svg>
       </a>
       <div>
-        <h1 class="page-title">Add Product</h1>
-        <p class="page-sub">Fill in the details below to create a new product</p>
+        <h1 class="page-title">{{ 'products.addProduct' | translate }}</h1>
+        <p class="page-sub">{{ 'addProduct.pageSub' | translate }}</p>
       </div>
     </div>
     <div class="sticky-bar__actions">
@@ -32,7 +32,7 @@
         @if (isSubmitting()) {
           <span class="spinner-sm" aria-hidden="true"></span>
         }
-        Save Draft
+        {{ 'buttons.saveDraft' | translate }}
       </button>
       <button class="btn-publish" (click)="publish()" [disabled]="isSubmitting()">
         @if (isSubmitting()) {
@@ -42,7 +42,7 @@
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         }
-        Publish Product
+        {{ 'products.publish' | translate }}
       </button>
     </div>
   </div>
@@ -61,20 +61,20 @@
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
             </svg>
           </div>
-          <h2 class="card-title" id="sec-basic">Basic Information</h2>
+          <h2 class="card-title" id="sec-basic">{{ 'categories.basicInfo' | translate }}</h2>
         </div>
 
         <div class="field-grid">
           <!-- Name -->
           <div class="field field--full" [class.field--error]="hasError('name')">
             <label class="field__label" for="name">
-              Product Name <span class="required">*</span>
+              {{ 'products.productName' | translate }} <span class="required">*</span>
             </label>
             <input
               id="name"
               class="field__input"
               type="text"
-              placeholder="e.g. Sony WH-1000XM6 Wireless Headphones"
+              [placeholder]="'addProduct.namePlaceholder' | translate"
               [value]="form().name"
               (input)="patchForm({ name: $any($event.target).value })"
               maxlength="120"
@@ -85,12 +85,12 @@
 
           <!-- Brand -->
           <div class="field" [class.field--error]="hasError('brand')">
-            <label class="field__label" for="brand">Brand <span class="required">*</span></label>
+            <label class="field__label" for="brand">{{ 'products.brand' | translate }} <span class="required">*</span></label>
             <input
               id="brand"
               class="field__input"
               type="text"
-              placeholder="e.g. Sony, Apple, Nike"
+              [placeholder]="'addProduct.brandPlaceholder' | translate"
               [value]="form().brand"
               (input)="patchForm({ brand: $any($event.target).value })"
             />
@@ -99,7 +99,7 @@
 
           <!-- Category -->
           <div class="field" [class.field--error]="hasError('category')">
-            <label class="field__label" for="category">Category <span class="required">*</span></label>
+            <label class="field__label" for="category">{{ 'products.category' | translate }} <span class="required">*</span></label>
             <div class="select-wrap">
               <select
                 id="category"
@@ -107,7 +107,7 @@
                 [value]="form().category"
                 (change)="patchForm({ category: $any($event.target).value })"
               >
-                <option value="" disabled selected>Select category…</option>
+                <option value="" disabled selected>{{ 'addProduct.selectCategoryPlaceholder' | translate }}</option>
                 @for (cat of categories; track cat) {
                   <option [value]="cat">{{ cat }}</option>
                 }
@@ -120,13 +120,13 @@
           <!-- Description -->
           <div class="field field--full" [class.field--error]="hasError('description')">
             <label class="field__label" for="description">
-              Description <span class="required">*</span>
+              {{ 'products.description' | translate }} <span class="required">*</span>
             </label>
             <textarea
               id="description"
               class="field__textarea"
               rows="5"
-              placeholder="Describe the product features, benefits, and what makes it special…"
+              [placeholder]="'addProduct.descriptionPlaceholder' | translate"
               [value]="form().description"
               (input)="patchForm({ description: $any($event.target).value })"
             ></textarea>
@@ -135,12 +135,12 @@
 
           <!-- Specifications -->
           <div class="field field--full">
-            <label class="field__label" for="specs">Specifications</label>
+            <label class="field__label" for="specs">{{ 'products.specifications' | translate }}</label>
             <textarea
               id="specs"
               class="field__textarea field__textarea--sm"
               rows="3"
-              placeholder="Driver: 40mm · Frequency: 4Hz–40kHz · Battery: 30hrs…"
+              [placeholder]="'addProduct.specificationsPlaceholder' | translate"
               [value]="form().specifications"
               (input)="patchForm({ specifications: $any($event.target).value })"
             ></textarea>
@@ -148,16 +148,16 @@
 
           <!-- Tags -->
           <div class="field field--full">
-            <label class="field__label" for="tags">Tags</label>
+            <label class="field__label" for="tags">{{ 'products.tags' | translate }}</label>
             <input
               id="tags"
               class="field__input"
               type="text"
-              placeholder="wireless, noise-cancelling, premium (comma separated)"
+              [placeholder]="'addProduct.tagsPlaceholder' | translate"
               [value]="form().tagsRaw"
               (input)="patchForm({ tagsRaw: $any($event.target).value })"
             />
-            <span class="field__hint">Comma-separated list of keywords</span>
+            <span class="field__hint">{{ 'addProduct.tagsHint' | translate }}</span>
           </div>
         </div>
       </section>
@@ -171,13 +171,13 @@
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
             </svg>
           </div>
-          <h2 class="card-title" id="sec-price">Pricing &amp; Inventory</h2>
+          <h2 class="card-title" id="sec-price">{{ 'addProduct.pricingInventoryTitle' | translate }}</h2>
         </div>
 
         <div class="field-grid">
           <!-- Price -->
           <div class="field" [class.field--error]="hasError('price')">
-            <label class="field__label" for="price">Sale Price ($) <span class="required">*</span></label>
+            <label class="field__label" for="price">{{ 'products.salePrice' | translate }} <span class="required">*</span></label>
             <div class="input-prefix-wrap">
               <span class="input-prefix">$</span>
               <input
@@ -196,7 +196,7 @@
 
           <!-- Original price -->
           <div class="field">
-            <label class="field__label" for="orig-price">Original Price ($)</label>
+            <label class="field__label" for="orig-price">{{ 'products.originalPrice' | translate }}</label>
             <div class="input-prefix-wrap">
               <span class="input-prefix">$</span>
               <input
@@ -210,12 +210,12 @@
                 (input)="patchForm({ originalPrice: +$any($event.target).value || null })"
               />
             </div>
-            <span class="field__hint">Leave empty if no discount</span>
+            <span class="field__hint">{{ 'addProduct.originalPriceHint' | translate }}</span>
           </div>
 
           <!-- Discount (auto-computed or manual) -->
           <div class="field" [class.field--error]="hasError('discount')">
-            <label class="field__label" for="discount">Discount (%)</label>
+            <label class="field__label" for="discount">{{ 'products.discount' | translate }}</label>
             <div class="input-suffix-wrap">
               <input
                 id="discount"
@@ -230,14 +230,14 @@
               <span class="input-suffix">%</span>
             </div>
             @if (computedDiscount() > 0 && !form().discount) {
-              <span class="field__hint field__hint--success">Auto-computed: {{ computedDiscount() }}%</span>
+              <span class="field__hint field__hint--success">{{ 'addProduct.discountAutoHint' | translate: { percent: computedDiscount() } }}</span>
             }
             @if (hasError('discount')) { <p class="field__error">{{ errorMsg('discount') }}</p> }
           </div>
 
           <!-- Stock -->
           <div class="field" [class.field--error]="hasError('stock')">
-            <label class="field__label" for="stock">Stock Quantity <span class="required">*</span></label>
+            <label class="field__label" for="stock">{{ 'products.stockQuantity' | translate }} <span class="required">*</span></label>
             <input
               id="stock"
               class="field__input"
@@ -252,12 +252,12 @@
 
           <!-- SKU -->
           <div class="field" [class.field--error]="hasError('sku')">
-            <label class="field__label" for="sku">SKU <span class="required">*</span></label>
+            <label class="field__label" for="sku">{{ 'products.sku' | translate }} <span class="required">*</span></label>
             <input
               id="sku"
               class="field__input field__input--mono"
               type="text"
-              placeholder="BRAND-MODEL-COLOR"
+              [placeholder]="'addProduct.skuPlaceholder' | translate"
               [value]="form().sku"
               (input)="patchForm({ sku: $any($event.target).value })"
             />
@@ -266,7 +266,7 @@
 
           <!-- Barcode -->
           <div class="field">
-            <label class="field__label" for="barcode">Barcode / ISBN</label>
+            <label class="field__label" for="barcode">{{ 'products.barcode' | translate }}</label>
             <input
               id="barcode"
               class="field__input field__input--mono"
@@ -288,13 +288,13 @@
               <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
             </svg>
           </div>
-          <h2 class="card-title" id="sec-ship">Shipping</h2>
+          <h2 class="card-title" id="sec-ship">{{ 'addProduct.shippingTitle' | translate }}</h2>
         </div>
 
         <div class="field-grid">
           <!-- Weight -->
           <div class="field">
-            <label class="field__label" for="weight">Weight</label>
+            <label class="field__label" for="weight">{{ 'products.weight' | translate }}</label>
             <div class="input-suffix-wrap">
               <input
                 id="weight"
@@ -311,7 +311,7 @@
 
           <!-- Warranty -->
           <div class="field">
-            <label class="field__label" for="warranty">Warranty</label>
+            <label class="field__label" for="warranty">{{ 'products.warranty' | translate }}</label>
             <div class="select-wrap">
               <select
                 id="warranty"
@@ -329,12 +329,12 @@
 
           <!-- Dimensions -->
           <div class="field field--full">
-            <label class="field__label">Dimensions (cm)</label>
+            <label class="field__label">{{ 'products.dimensions' | translate }}</label>
             <div class="dim-row">
               <div class="input-suffix-wrap">
                 <input
                   class="field__input field__input--suffixed"
-                  type="number" min="0" placeholder="Length"
+                  type="number" min="0" [placeholder]="'addProduct.dimLengthPlaceholder' | translate"
                   [value]="form().dimLength ?? ''"
                   (input)="patchForm({ dimLength: +$any($event.target).value || null })"
                 />
@@ -343,7 +343,7 @@
               <div class="input-suffix-wrap">
                 <input
                   class="field__input field__input--suffixed"
-                  type="number" min="0" placeholder="Width"
+                  type="number" min="0" [placeholder]="'addProduct.dimWidthPlaceholder' | translate"
                   [value]="form().dimWidth ?? ''"
                   (input)="patchForm({ dimWidth: +$any($event.target).value || null })"
                 />
@@ -352,7 +352,7 @@
               <div class="input-suffix-wrap">
                 <input
                   class="field__input field__input--suffixed"
-                  type="number" min="0" placeholder="Height"
+                  type="number" min="0" [placeholder]="'addProduct.dimHeightPlaceholder' | translate"
                   [value]="form().dimHeight ?? ''"
                   (input)="patchForm({ dimHeight: +$any($event.target).value || null })"
                 />
@@ -372,7 +372,7 @@
               <polyline points="21 15 16 10 5 21"/>
             </svg>
           </div>
-          <h2 class="card-title" id="sec-images">Product Images</h2>
+          <h2 class="card-title" id="sec-images">{{ 'products.productImages' | translate }}</h2>
         </div>
 
         <!-- Color variants toggle -->
@@ -381,8 +381,8 @@
             <span class="toggle-knob"></span>
           </div>
           <div>
-            <p class="toggle-label">Product has multiple color variants</p>
-            <p class="toggle-sub">Upload separate images for each color option</p>
+            <p class="toggle-label">{{ 'products.colorVariants' | translate }}</p>
+            <p class="toggle-sub">{{ 'products.colorVariantsSub' | translate }}</p>
           </div>
         </label>
 
@@ -390,8 +390,8 @@
         @if (!hasColorVariants()) {
           <div class="image-section">
             <div class="image-section__header">
-              <p class="image-section__title">Product Images <span class="image-section__count">{{ defaultImages().length }}/{{ 3 }}</span></p>
-              <p class="image-section__hint">Upload up to 3 images. First image is the main product photo.</p>
+              <p class="image-section__title">{{ 'products.productImages' | translate }} <span class="image-section__count">{{ defaultImages().length }}/{{ 3 }}</span></p>
+              <p class="image-section__hint">{{ 'addProduct.imagesUploadHint' | translate }}</p>
             </div>
 
             @if (hasError('images')) {
@@ -404,21 +404,21 @@
                 <div class="image-tile">
                   <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
                   <div class="image-tile__overlay">
-                    <label class="tile-action" [for]="'replace-' + img.id" title="Replace image">
+                    <label class="tile-action" [for]="'replace-' + img.id" [title]="'forms.replaceImage' | translate">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
                       </svg>
                       <input [id]="'replace-' + img.id" type="file" accept="image/*" class="sr-only"
                         (change)="removeDefaultImage(img.id); onDefaultImageSelect($event)" />
                     </label>
-                    <button class="tile-action tile-action--danger" (click)="removeDefaultImage(img.id)" title="Remove image" type="button">
+                    <button class="tile-action tile-action--danger" (click)="removeDefaultImage(img.id)" [title]="'forms.removeImage' | translate" type="button">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                       </svg>
                     </button>
                   </div>
                   @if ($index === 0) {
-                    <span class="main-badge">Main</span>
+                    <span class="main-badge">{{ 'addProduct.mainBadge' | translate }}</span>
                   }
                   <span class="image-tile__size">{{ formatBytes(img.size) }}</span>
                 </div>
@@ -438,8 +438,8 @@
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
                     <polyline points="21 15 16 10 5 21"/>
                   </svg>
-                  <p class="upload-slot__label">Click or drag &amp; drop</p>
-                  <p class="upload-slot__hint">JPEG, PNG, WebP · Max 5 MB</p>
+                  <p class="upload-slot__label">{{ 'forms.dragAndDrop' | translate }}</p>
+                  <p class="upload-slot__hint">{{ 'addProduct.imageFormatsHint' | translate }}</p>
                   <input
                     id="default-image-input"
                     type="file"
@@ -478,7 +478,7 @@
                   <input
                     class="variant-name-input"
                     type="text"
-                    placeholder="Color name (e.g. Midnight Black)"
+                    [placeholder]="'addProduct.colorNamePlaceholder' | translate"
                     [value]="variant.colorName"
                     (input)="patchVariant(variant.id, { colorName: $any($event.target).value })"
                   />
@@ -487,7 +487,7 @@
                     type="button"
                     (click)="removeColorVariant(variant.id)"
                     [disabled]="colorVariants().length === 1"
-                    aria-label="Remove color variant"
+                    [attr.aria-label]="'addProduct.removeColorVariantAria' | translate"
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                       <path d="M18 6L6 18M6 6l12 12"/>
@@ -508,7 +508,7 @@
                           </svg>
                         </button>
                       </div>
-                      @if ($index === 0) { <span class="main-badge">Main</span> }
+                      @if ($index === 0) { <span class="main-badge">{{ 'addProduct.mainBadge' | translate }}</span> }
                     </div>
                   }
 
@@ -524,7 +524,7 @@
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                       </svg>
-                      <p class="upload-slot__hint">Add image</p>
+                      <p class="upload-slot__hint">{{ 'forms.addImage' | translate }}</p>
                       <input
                         [id]="'variant-img-' + variant.id"
                         type="file"
@@ -550,7 +550,7 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                Add Color Variant
+                {{ 'products.addColorVariant' | translate }}
               </button>
             }
           </div>
@@ -565,31 +565,31 @@
               <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
             </svg>
           </div>
-          <h2 class="card-title" id="sec-seo">SEO &amp; Metadata</h2>
+          <h2 class="card-title" id="sec-seo">{{ 'addProduct.seoMetadataTitle' | translate }}</h2>
         </div>
 
         <div class="field-grid">
           <div class="field field--full">
-            <label class="field__label" for="seo-title">SEO Title</label>
+            <label class="field__label" for="seo-title">{{ 'products.seoTitle' | translate }}</label>
             <input
               id="seo-title"
               class="field__input"
               type="text"
-              placeholder="Leave blank to use product name"
+              [placeholder]="'addProduct.seoTitlePlaceholder' | translate"
               [value]="form().seoTitle"
               (input)="patchForm({ seoTitle: $any($event.target).value })"
               maxlength="70"
             />
-            <span class="field__hint">{{ form().seoTitle.length || form().name.length }}/70 characters</span>
+            <span class="field__hint">{{ 'addProduct.charCountWithLabel' | translate: { count: (form().seoTitle.length || form().name.length), max: 70 } }}</span>
           </div>
 
           <div class="field field--full">
-            <label class="field__label" for="seo-desc">SEO Description</label>
+            <label class="field__label" for="seo-desc">{{ 'products.seoDescription' | translate }}</label>
             <textarea
               id="seo-desc"
               class="field__textarea field__textarea--sm"
               rows="2"
-              placeholder="Brief description for search engines (150–160 characters recommended)"
+              [placeholder]="'addProduct.seoDescPlaceholder' | translate"
               [value]="form().seoDescription"
               (input)="patchForm({ seoDescription: $any($event.target).value })"
               maxlength="160"
@@ -598,14 +598,14 @@
           </div>
 
           <div class="field field--full">
-            <label class="field__label" for="slug">URL Slug</label>
+            <label class="field__label" for="slug">{{ 'products.urlSlug' | translate }}</label>
             <div class="slug-wrap">
               <span class="slug-prefix">/products/</span>
               <input
                 id="slug"
                 class="field__input field__input--slug"
                 type="text"
-                [placeholder]="computedSlug() || 'auto-generated-from-name'"
+                [placeholder]="computedSlug() || ('addProduct.slugPlaceholder' | translate)"
                 [value]="form().slug"
                 (input)="patchForm({ slug: $any($event.target).value })"
               />
@@ -621,7 +621,7 @@
 
       <!-- ── STATUS ──────────────────────────────────────────────────────────── -->
       <div class="side-card">
-        <h3 class="side-card__title">Status</h3>
+        <h3 class="side-card__title">{{ 'common.status' | translate }}</h3>
         <div class="status-options">
           <label class="status-option">
             <input type="radio" name="status" value="active" class="sr-only"
@@ -629,16 +629,16 @@
               (change)="patchForm({ featured: false })" />
             <span class="status-option__radio" [class.checked]="!form().featured"></span>
             <div>
-              <p class="status-option__label">Active</p>
-              <p class="status-option__sub">Visible to customers</p>
+              <p class="status-option__label">{{ 'common.active' | translate }}</p>
+              <p class="status-option__sub">{{ 'addProduct.activeSub' | translate }}</p>
             </div>
           </label>
           <label class="status-option">
             <input type="radio" name="status" value="draft" class="sr-only" />
             <span class="status-option__radio"></span>
             <div>
-              <p class="status-option__label">Draft</p>
-              <p class="status-option__sub">Hidden from store</p>
+              <p class="status-option__label">{{ 'common.draft' | translate }}</p>
+              <p class="status-option__sub">{{ 'addProduct.draftSub' | translate }}</p>
             </div>
           </label>
         </div>
@@ -649,8 +649,8 @@
           <!-- Featured -->
           <div class="toggle-item">
             <div>
-              <p class="toggle-item__label">Featured Product</p>
-              <p class="toggle-item__sub">Show on homepage</p>
+              <p class="toggle-item__label">{{ 'addProduct.featuredProductLabel' | translate }}</p>
+              <p class="toggle-item__sub">{{ 'addProduct.featuredProductSub' | translate }}</p>
             </div>
             <div class="mini-toggle" [class.on]="form().featured"
               (click)="patchForm({ featured: !form().featured })"
@@ -662,8 +662,8 @@
           <!-- New badge -->
           <div class="toggle-item">
             <div>
-              <p class="toggle-item__label">New Badge</p>
-              <p class="toggle-item__sub">Show "New" label</p>
+              <p class="toggle-item__label">{{ 'addProduct.newBadgeLabel' | translate }}</p>
+              <p class="toggle-item__sub">{{ 'addProduct.newBadgeSub' | translate }}</p>
             </div>
             <div class="mini-toggle" [class.on]="form().isNew"
               (click)="patchForm({ isNew: !form().isNew })"
@@ -676,7 +676,7 @@
 
       <!-- ── QUICK PREVIEW ────────────────────────────────────────────────────── -->
       <div class="side-card">
-        <h3 class="side-card__title">Preview</h3>
+        <h3 class="side-card__title">{{ 'addProduct.previewTitle' | translate }}</h3>
         <div class="preview-card">
           <!-- Preview image -->
           <div class="preview-img-zone">
@@ -692,15 +692,15 @@
                 </svg>
               </div>
             }
-            @if (form().isNew) { <span class="preview-badge preview-badge--new">New</span> }
+            @if (form().isNew) { <span class="preview-badge preview-badge--new">{{ 'addProduct.newBadgeShort' | translate }}</span> }
           </div>
           <div class="preview-body">
-            <p class="preview-brand">{{ form().brand || 'Brand' }}</p>
-            <p class="preview-name">{{ form().name || 'Product name' }}</p>
+            <p class="preview-brand">{{ form().brand || ('products.brand' | translate) }}</p>
+            <p class="preview-name">{{ form().name || ('products.productName' | translate) }}</p>
             <div class="preview-price-row">
-              <span class="preview-price">${{ form().price || '0.00' }}</span>
+              <span class="preview-price">{{ lang.formatCurrency(form().price || 0) }}</span>
               @if (form().originalPrice && form().originalPrice! > (form().price ?? 0)) {
-                <span class="preview-orig">${{ form().originalPrice }}</span>
+                <span class="preview-orig">{{ lang.formatCurrency(form().originalPrice!) }}</span>
                 <span class="preview-discount">-{{ computedDiscount() }}%</span>
               }
             </div>
@@ -710,31 +710,31 @@
 
       <!-- ── SUMMARY ─────────────────────────────────────────────────────────── -->
       <div class="side-card">
-        <h3 class="side-card__title">Summary</h3>
+        <h3 class="side-card__title">{{ 'addProduct.summaryTitle' | translate }}</h3>
         <div class="summary-list">
           <div class="summary-row">
-            <span class="summary-label">Images</span>
+            <span class="summary-label">{{ 'addProduct.summaryImagesLabel' | translate }}</span>
             <span class="summary-val" [class.summary-val--warn]="totalImages() === 0">
-              {{ totalImages() }} uploaded
+              {{ 'addProduct.summaryImagesUploaded' | translate: { count: totalImages() } }}
             </span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Color variants</span>
+            <span class="summary-label">{{ 'addProduct.summaryColorVariantsLabel' | translate }}</span>
             <span class="summary-val">
-              {{ hasColorVariants() ? colorVariants().length + ' variants' : 'Single color' }}
+              {{ hasColorVariants() ? ('addProduct.summaryVariantsCount' | translate: { count: colorVariants().length }) : ('addProduct.summarySingleColor' | translate) }}
             </span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Category</span>
+            <span class="summary-label">{{ 'products.category' | translate }}</span>
             <span class="summary-val">{{ form().category || '—' }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Price</span>
-            <span class="summary-val">${{ form().price || 0 }}</span>
+            <span class="summary-label">{{ 'products.table.price' | translate }}</span>
+            <span class="summary-val">{{ lang.formatCurrency(form().price || 0) }}</span>
           </div>
           <div class="summary-row">
-            <span class="summary-label">Stock</span>
-            <span class="summary-val">{{ form().stock ?? 0 }} units</span>
+            <span class="summary-label">{{ 'products.table.stock' | translate }}</span>
+            <span class="summary-val">{{ lang.formatNumber(form().stock ?? 0) }} {{ 'products.unitsSuffix' | translate }}</span>
           </div>
         </div>
       </div>
