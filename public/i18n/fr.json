@@ -318,6 +318,34 @@
     "seoTitle": "Titre SEO",
     "seoDescription": "Description SEO",
     "urlSlug": "Slug URL",
+    "searchPlaceholder": "Rechercher par nom, marque, SKU…",
+    "searchAriaLabel": "Rechercher des produits",
+    "categoryAllPill": "Toutes",
+    "viewModeLabel": "Mode d'affichage",
+    "bulkSetActive": "Activer",
+    "selectAllAria": "Tout sélectionner",
+    "selectProductAria": "Sélectionner {{name}}",
+    "featuredBadge": "En vedette",
+    "deleteConfirmTitleSingle": "Supprimer le produit ?",
+    "deleteConfirmTitleBulk": "Supprimer {{count}} produits ?",
+    "deleteConfirmBodySingle": "Cette action est irréversible. Le produit sera définitivement supprimé.",
+    "deleteConfirmBodyBulk": "Cette action est irréversible. Les produits sélectionnés seront définitivement supprimés.",
+    "deleteButtonSingle": "Supprimer le produit",
+    "deleteButtonBulk": "Supprimer les produits",
+    "pageRange": "{{start}}–{{end}} sur {{total}}",
+    "pageRangeEmpty": "0 résultat",
+    "sort": {
+      "nameAsc": "Nom (A–Z)",
+      "nameDesc": "Nom (Z–A)",
+      "priceHigh": "Prix : décroissant",
+      "priceLow": "Prix : croissant",
+      "stockHigh": "Stock : décroissant",
+      "stockLow": "Stock : croissant",
+      "salesHigh": "Meilleures ventes",
+      "salesLow": "Moins vendus",
+      "statusAsc": "Statut"
+    },
+
     "status": {
       "active": "Actif",
       "draft": "Brouillon",
@@ -337,7 +365,8 @@
       "outOfStock": "en rupture de stock",
       "activeSuffix": "actifs",
       "newThisMonth": "nouveaux ce mois-ci",
-      "shownOnStorefront": "affichés en boutique"
+      "shownOnStorefront": "affichés en boutique",
+      "acrossAllUnits": "sur toutes les unités en stock"
     },
     "table": {
       "product": "Produit",
