@@ -9,15 +9,16 @@ import {
   ProductImage, ColorVariant, ProductFormPayload,
   ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE_BYTES, MAX_IMAGES_PER_SLOT,
 } from '../../model/product-image.model';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
-// ─── Form state interface ─────────────────────────────────────────────────────
 interface ProductForm {
   name: string;
   brand: string;
   category: string;
   description: string;
   specifications: string;
-  tagsRaw: string;          // comma-separated input
+  tagsRaw: string;
   price: number | null;
   originalPrice: number | null;
   discount: number | null;
@@ -39,14 +40,14 @@ interface ProductForm {
 
 @Component({
   selector: 'app-add-product',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './add-product.html',
   styleUrl: './add-product.scss',
 })
 export class AddProduct implements OnDestroy {
   private router = inject(Router);
+  protected lang = inject(LanguageService);
 
-  // ── Form state ────────────────────────────────────────────────────────────
   form = signal<ProductForm>({
     name: '', brand: '', category: '', description: '', specifications: '',
     tagsRaw: '', price: null, originalPrice: null, discount: null,
@@ -56,19 +57,16 @@ export class AddProduct implements OnDestroy {
     seoTitle: '', seoDescription: '', slug: '',
   });
 
-  // ── Image state ────────────────────────────────────────────────────────────
   hasColorVariants = signal(false);
   defaultImages    = signal<ProductImage[]>([]);
   colorVariants    = signal<ColorVariant[]>([]);
 
-  // ── UI state ──────────────────────────────────────────────────────────────
   isSubmitting  = signal(false);
   submitStatus  = signal<'idle' | 'success' | 'error'>('idle');
   errors        = signal<Record<string, string>>({});
-  activeSection = signal('basic');    // for mobile section navigation
-  dragOverSlot  = signal<string | null>(null); // 'default' | colorVariant.id
+  activeSection = signal('basic');
+  dragOverSlot  = signal<string | null>(null);
 
-  // ── Category options ──────────────────────────────────────────────────────
   categories = [
     'Electronics', 'Smartphones', 'Laptops', 'Audio',
     'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion',
@@ -76,7 +74,6 @@ export class AddProduct implements OnDestroy {
 
   warrantyOptions = ['No warranty', '6 months', '1 year', '2 years', '3 years', '5 years'];
 
-  // ── Computed ──────────────────────────────────────────────────────────────
   computedDiscount = computed(() => {
     const f = this.form();
     if (f.price && f.originalPrice && f.originalPrice > f.price) {
@@ -101,14 +98,11 @@ export class AddProduct implements OnDestroy {
     return this.defaultImages().length;
   });
 
-  // ── Form field helpers ────────────────────────────────────────────────────
   patchForm(patch: Partial<ProductForm>): void {
     this.form.update(f => ({ ...f, ...patch }));
-    // Auto-generate slug from name
     if (patch.name !== undefined && !this.form().slug) {
       this.form.update(f => ({ ...f, slug: this.computedSlug() }));
     }
-    // Clear error when field is touched
     if (patch) {
       const keys = Object.keys(patch) as (keyof ProductForm)[];
       this.errors.update(e => {
@@ -119,7 +113,6 @@ export class AddProduct implements OnDestroy {
     }
   }
 
-  // ── Image helpers — Base64 conversion ─────────────────────────────────────
   private fileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -131,10 +124,10 @@ export class AddProduct implements OnDestroy {
 
   private validateImageFile(file: File): string | null {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      return `"${file.name}" is not a supported format (JPEG, PNG, WebP only).`;
+      return this.lang.translate('addProduct.errors.imageFormatInvalid', { name: file.name });
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      return `"${file.name}" exceeds 5 MB limit.`;
+      return this.lang.translate('addProduct.errors.imageSizeExceeded', { name: file.name });
     }
     return null;
   }
@@ -151,7 +144,6 @@ export class AddProduct implements OnDestroy {
     };
   }
 
-  // ── Default images (no color variants) ───────────────────────────────────
   async onDefaultImageDrop(event: DragEvent): Promise<void> {
     event.preventDefault();
     this.dragOverSlot.set(null);
@@ -189,7 +181,6 @@ export class AddProduct implements OnDestroy {
     this.defaultImages.update(list => list.filter(img => img.id !== id));
   }
 
-  // ── Color variants ────────────────────────────────────────────────────────
   addColorVariant(): void {
     const newVariant: ColorVariant = {
       id: crypto.randomUUID(),
@@ -258,7 +249,6 @@ export class AddProduct implements OnDestroy {
     );
   }
 
-  // ── Drag events ───────────────────────────────────────────────────────────
   onDragOver(event: DragEvent, slotId: string): void {
     event.preventDefault();
     this.dragOverSlot.set(slotId);
@@ -266,7 +256,6 @@ export class AddProduct implements OnDestroy {
 
   onDragLeave(): void { this.dragOverSlot.set(null); }
 
-  // ── Color variant toggle ──────────────────────────────────────────────────
   toggleColorVariants(): void {
     this.hasColorVariants.update(v => !v);
     if (this.hasColorVariants() && this.colorVariants().length === 0) {
@@ -274,43 +263,41 @@ export class AddProduct implements OnDestroy {
     }
   }
 
-  // ── Validation ────────────────────────────────────────────────────────────
   private validate(): boolean {
     const f    = this.form();
     const errs: Record<string, string> = {};
 
-    if (!f.name.trim())        errs['name']     = 'Product name is required.';
-    if (!f.brand.trim())       errs['brand']    = 'Brand is required.';
-    if (!f.category)           errs['category'] = 'Category is required.';
+    if (!f.name.trim())        errs['name']     = this.lang.translate('addProduct.errors.nameRequired');
+    if (!f.brand.trim())       errs['brand']    = this.lang.translate('addProduct.errors.brandRequired');
+    if (!f.category)           errs['category'] = this.lang.translate('addProduct.errors.categoryRequired');
     if (!f.price || f.price <= 0)
-                               errs['price']    = 'Price must be greater than 0.';
+                               errs['price']    = this.lang.translate('addProduct.errors.priceInvalid');
     if (f.stock === null || f.stock < 0)
-                               errs['stock']    = 'Stock quantity is required.';
-    if (!f.sku.trim())         errs['sku']      = 'SKU is required.';
-    if (!f.description.trim()) errs['description'] = 'Description is required.';
+                               errs['stock']    = this.lang.translate('addProduct.errors.stockRequired');
+    if (!f.sku.trim())         errs['sku']      = this.lang.translate('addProduct.errors.skuRequired');
+    if (!f.description.trim()) errs['description'] = this.lang.translate('categories.validation.descriptionRequired');
 
     if (f.discount !== null && (f.discount < 0 || f.discount > 100)) {
-      errs['discount'] = 'Discount must be between 0 and 100.';
+      errs['discount'] = this.lang.translate('addProduct.errors.discountRange');
     }
 
-    // Image validation
     if (!this.hasColorVariants()) {
       if (this.defaultImages().length === 0) {
-        errs['images'] = 'At least one product image is required.';
+        errs['images'] = this.lang.translate('addProduct.errors.imagesRequired');
       }
     } else {
       if (this.colorVariants().length === 0) {
-        errs['colorVariants'] = 'Add at least one color variant.';
+        errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsRequired');
       }
       const emptyNames = this.colorVariants().filter(v => !v.colorName.trim());
-      if (emptyNames.length) errs['colorVariants'] = 'All color variants must have a name.';
+      if (emptyNames.length) errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsNameRequired');
 
       const emptyImages = this.colorVariants().filter(v => v.images.length === 0);
-      if (emptyImages.length) errs['colorVariants'] = 'All color variants must have at least one image.';
+      if (emptyImages.length) errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsImagesRequired');
 
       const names = this.colorVariants().map(v => v.colorName.trim().toLowerCase());
       if (new Set(names).size !== names.length) {
-        errs['colorVariants'] = 'Color variant names must be unique.';
+        errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsNameUnique');
       }
     }
 
@@ -318,7 +305,6 @@ export class AddProduct implements OnDestroy {
     return Object.keys(errs).length === 0;
   }
 
-  // ── Build payload ─────────────────────────────────────────────────────────
   private buildPayload(status: 'active' | 'draft'): ProductFormPayload {
     const f = this.form();
     return {
@@ -354,7 +340,6 @@ export class AddProduct implements OnDestroy {
     };
   }
 
-  // ── Submit ────────────────────────────────────────────────────────────────
   async saveDraft(): Promise<void> {
     this.isSubmitting.set(true);
     const payload = this.buildPayload('draft');
@@ -402,5 +387,3 @@ export class AddProduct implements OnDestroy {
 
   ngOnDestroy(): void { /* cleanup if needed */ }
 }
-
-
