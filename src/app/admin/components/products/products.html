@@ -57,7 +57,7 @@
           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
         </svg>
       </div>
-      <div>
+      <div class="page-title-text">
         <h1 class="page-title">{{ 'products.title' | translate }}</h1>
         <p class="page-sub">{{ 'products.subtitle' | translate: { count: filtered().length } }}</p>
       </div>
@@ -282,12 +282,12 @@
                     </span>
                   </label>
                 </th>
-                <th>{{ 'products.table.product' | translate }}</th>
-                <th>{{ 'products.table.status' | translate }}</th>
-                <th>{{ 'products.table.price' | translate }}</th>
-                <th>{{ 'products.table.stock' | translate }}</th>
-                <th>{{ 'products.table.sales' | translate }}</th>
-                <th>{{ 'products.table.sku' | translate }}</th>
+                <th class="th--product">{{ 'products.table.product' | translate }}</th>
+                <th class="th--status">{{ 'products.table.status' | translate }}</th>
+                <th class="th--price">{{ 'products.table.price' | translate }}</th>
+                <th class="th--stock">{{ 'products.table.stock' | translate }}</th>
+                <th class="th--sales col-sales">{{ 'products.table.sales' | translate }}</th>
+                <th class="th--sku col-sku">{{ 'products.table.sku' | translate }}</th>
                 <th class="th--actions"></th>
               </tr>
             </thead>
@@ -305,7 +305,7 @@
                   </td>
 
                   <!-- Product info -->
-                  <td>
+                  <td class="td--product">
                     <div class="product-cell">
                       <div class="product-img-wrap">
                         <img [src]="product.image" [alt]="product.name" class="product-img" loading="lazy" />
@@ -321,7 +321,7 @@
                   </td>
 
                   <!-- Status -->
-                  <td>
+                  <td class="td--status">
                     <span class="status-pill status-pill--{{ product.status }}">{{ 'products.status.' + product.status | translate }}</span>
                   </td>
 
@@ -336,10 +336,10 @@
                   </td>
 
                   <!-- Sales -->
-                  <td class="td-sales">{{ lang.formatNumber(product.sales) }}</td>
+                  <td class="td-sales col-sales">{{ lang.formatNumber(product.sales) }}</td>
 
                   <!-- SKU -->
-                  <td class="td-sku">{{ product.sku }}</td>
+                  <td class="td-sku col-sku">{{ product.sku }}</td>
 
                   <!-- Actions -->
                   <td class="td--actions">
