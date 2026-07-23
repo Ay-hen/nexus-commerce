@@ -1105,5 +1105,19 @@
     "addImage": "Add image",
     "replaceImage": "Replace image",
     "removeImage": "Remove image"
+  },
+
+  "editProductModal": {
+    "dialogAriaLabel": "Edit {{name}}",
+    "untitledProduct": "Untitled product",
+    "subtitle": "{{name}} · ID #{{id}}",
+    "published": "Published",
+    "newBadgeInline": "New badge",
+    "tagsPlaceholder": "wireless, premium, audio",
+    "colorNamePlaceholder": "Color name",
+    "existingImageLabel": "Existing",
+    "imagePreviewAria": "Image preview",
+    "imageRequiredHint": "Add at least one image before saving",
+    "successTitle": "Changes saved!"
   }
 }
