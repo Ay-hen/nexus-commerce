@@ -1106,5 +1106,19 @@
     "addImage": "Bild hinzufügen",
     "replaceImage": "Bild ersetzen",
     "removeImage": "Bild entfernen"
+  },
+
+  "editProductModal": {
+    "dialogAriaLabel": "{{name}} bearbeiten",
+    "untitledProduct": "Unbenanntes Produkt",
+    "subtitle": "{{name}} · ID Nr. {{id}}",
+    "published": "Veröffentlicht",
+    "newBadgeInline": "Neu-Badge",
+    "tagsPlaceholder": "kabellos, premium, audio",
+    "colorNamePlaceholder": "Farbname",
+    "existingImageLabel": "Vorhanden",
+    "imagePreviewAria": "Bildvorschau",
+    "imageRequiredHint": "Fügen Sie vor dem Speichern mindestens ein Bild hinzu",
+    "successTitle": "Änderungen gespeichert!"
   }
 }
