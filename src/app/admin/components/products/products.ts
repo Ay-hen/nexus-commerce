@@ -1,4 +1,4 @@
-// products.ts  
+// products.ts
 import {
   Component, signal, computed, OnInit, inject, HostListener
 } from '@angular/core';
