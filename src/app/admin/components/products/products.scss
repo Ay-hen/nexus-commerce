@@ -39,14 +39,24 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 @keyframes pop-in     { from { opacity:0; transform: translateY(8px) scale(.98);} to { opacity:1; transform: translateY(0) scale(1);} }
 @keyframes shimmer    { 0% { background-position: -600px 0;} 100% { background-position: 600px 0;} }
 @keyframes toast-in   { from { opacity:0; transform: translateX(-50%) translateY(-10px);} to { opacity:1; transform: translateX(-50%) translateY(0);} }
-@keyframes dialog-in  { from { opacity:0; transform: translate(-50%,-50%) scale(.94);} to { opacity:1; transform: translate(-50%,-50%) scale(1);} }
+@keyframes dialog-in  {
+  from { opacity:0; transform: translate(-50%,-50%) scale(.94); }
+  to   { opacity:1; transform: translate(-50%,-50%) scale(1); }
+}
 @keyframes row-in     { from { opacity:0; transform: translateX(-6px);} to { opacity:1; transform: none;} }
 @keyframes menu-in    { from { opacity:0; transform: translateY(-8px);} to { opacity:1; transform: translateY(0);} }
 @keyframes menu-in-up { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
 @keyframes bar-in     { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform: translateY(0);} }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
 
 .products-page {
   display: flex;
@@ -61,27 +71,23 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   overflow-x: hidden;
 }
 
-:host {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
 .admin-toast {
   position: fixed;
   top: 76px; left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
   display: inline-flex; align-items: center; gap: 8px;
+  max-width: calc(100vw - 32px);
   background: $text-primary; border: 1px solid $text-primary; color: #fff;
   font-size: .8rem; font-weight: 600;
   padding: 10px 18px; border-radius: $radius-pill;
   box-shadow: 0 12px 28px rgba(16,24,40,.22);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   animation: toast-in .2s $ease;
 
-  svg { color: $green; }
+  svg { flex-shrink: 0; color: $green; }
 }
 
 .dialog-backdrop {
@@ -94,9 +100,12 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .confirm-dialog {
   position: fixed;
   top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 900;
   width: 360px;
   max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-lg;
@@ -111,6 +120,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .confirm-icon {
   width: 48px; height: 48px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: $red-bg;
   color: $red;
@@ -118,13 +128,13 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   margin-bottom: 14px;
 }
 
-.confirm-title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 8px; }
-.confirm-sub   { font-size: .82rem; color: $text-mid; line-height: 1.6; margin: 0 0 22px; }
+.confirm-title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 8px; word-break: break-word; }
+.confirm-sub   { font-size: .82rem; color: $text-mid; line-height: 1.6; margin: 0 0 22px; word-break: break-word; }
 
 .confirm-actions { display: flex; gap: 10px; width: 100%; }
 
 .btn-cancel {
-  flex: 1; height: 40px;
+  flex: 1; height: 40px; min-width: 0;
   background: $surface2;
   border: 1px solid $border;
   border-radius: $radius-sm;
@@ -135,7 +145,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 }
 
 .btn-danger {
-  flex: 1; height: 40px;
+  flex: 1; height: 40px; min-width: 0;
   background: $red; border: none;
   border-radius: $radius-sm;
   font: inherit; font-size: .83rem; font-weight: 700;
@@ -150,9 +160,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   background: $surface; border: 1px solid $border;
   padding: 12px 16px;
   border-radius: $radius-md;
+  width: 100%;
+  min-width: 0;
 }
 
-.page-title-group { display: flex; align-items: center; gap: 12px; }
+.page-title-group { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 260px; }
 
 .page-icon {
   width: 40px; height: 40px;
@@ -164,9 +176,17 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   flex-shrink: 0;
 }
 
-.page-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -.025em; margin: 0 0 2px; }
-.page-sub   { font-size: .82rem; color: $text-light; }
-.page-header__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.page-title-text { min-width: 0; flex: 1; }
+
+.page-title {
+  font-size: 1.4rem; font-weight: 700; letter-spacing: -.025em; margin: 0 0 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.page-sub {
+  font-size: .82rem; color: $text-light;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.page-header__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
 
 .btn-ghost {
   height: 36px; padding: 0 14px;
@@ -175,6 +195,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .82rem; font-weight: 500;
   color: $text-mid; cursor: pointer;
+  white-space: nowrap;
   transition: background .15s $ease, color .15s, border-color .15s;
 
   &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
@@ -187,6 +208,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .82rem; font-weight: 600;
   color: #fff; cursor: pointer;
+  white-space: nowrap;
   transition: background .15s $ease, box-shadow .15s;
 
   &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
@@ -194,11 +216,13 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  width: 100%;
+  min-width: 0;
 
-  @media (max-width: 1100px) { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 600px)  { grid-template-columns: 1fr; }
+  @media (min-width: 1400px) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 600px)  { grid-template-columns: minmax(0, 1fr); }
 }
 
 .stat-card {
@@ -209,6 +233,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   display: flex; align-items: center; gap: 16px;
   box-shadow: $shadow-card;
   position: relative; overflow: hidden;
+  min-width: 0;
   transition: box-shadow .2s $ease, transform .2s $ease;
   animation: pop-in .3s $ease both;
 
@@ -235,9 +260,19 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--red    .stat-card__icon { background: $red-bg;     color: $red;     }
   &--purple .stat-card__icon { background: $purple-bg;  color: $purple;  }
 
-  &__label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: $text-light; margin: 0 0 4px; }
-  &__value { font-size: 1.7rem; font-weight: 800; letter-spacing: -.04em; color: $text-primary; line-height: 1; margin: 0 0 2px; }
-  &__sub   { font-size: .72rem; color: $text-light; margin: 0; }
+  &__body { min-width: 0; flex: 1; }
+  &__label {
+    font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: $text-light; margin: 0 0 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  &__value {
+    font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; color: $text-primary; line-height: 1.2; margin: 0 0 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  &__sub {
+    font-size: .72rem; color: $text-light; margin: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
 }
 
 .status-tabs {
@@ -245,6 +280,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   gap: 2px;
   border-bottom: 1px solid $border;
   overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 }
@@ -256,6 +293,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-bottom: 2px solid transparent;
   font: inherit; font-size: .82rem; font-weight: 500;
   color: $text-light; cursor: pointer; white-space: nowrap;
+  flex-shrink: 0;
   transition: color .15s, border-color .15s;
   margin-bottom: -1px;
 
@@ -275,42 +313,43 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 }
 
 .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+  min-width: 0;
 
-    background: $surface; border: 1px solid $border;
-    padding: 12px 16px;
-    border-radius: $radius-md;
+  background: $surface; border: 1px solid $border;
+  padding: 12px 16px;
+  border-radius: $radius-md;
 }
 
 .toolbar__left {
-    flex: 1;
-    min-width: 0;
+  flex: 1 1 260px;
+  min-width: 0;
 
-    display: flex;
-    gap: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    flex-wrap: nowrap;
-    white-space: nowrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+  &::-webkit-scrollbar-track { background: transparent; }
 }
 
 .search-wrap {
-    flex: 1 1 220px;
-    min-width: 180px;
-    max-width: 280px;
-    position: relative;
+  flex: 1 1 220px;
+  min-width: 160px;
+  max-width: 280px;
+  position: relative;
 }
 
 .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: $text-light; pointer-events: none; }
@@ -330,7 +369,6 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .cat-pills {
   display: flex; gap: 5px; flex-shrink: 0;
-  overflow: visible;
 }
 
 .cat-pill {
@@ -339,6 +377,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-pill;
   font: inherit; font-size: .76rem; font-weight: 500;
   color: $text-mid; cursor: pointer; white-space: nowrap;
+  flex-shrink: 0;
   transition: all .15s $ease;
 
   &:hover { border-color: $border2; color: $text-primary; background: $surface2; }
@@ -361,6 +400,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .toolbar-select {
   height: 38px; padding: 0 30px 0 12px;
+  max-width: 100%;
   appearance: none; cursor: pointer;
   background: $surface; border: 1.5px solid $border;
   border-radius: $radius-sm;
@@ -391,6 +431,9 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .bulk-bar {
   display: flex; align-items: center; gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  min-width: 0;
   background: $accent-bg;
   border: 1.5px solid rgba($accent, .25);
   border-radius: $radius-md;
@@ -409,6 +452,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .76rem; font-weight: 600;
   color: $text-mid; cursor: pointer;
+  white-space: nowrap;
   transition: background .15s, color .15s, border-color .15s;
 
   &:hover { background: $surface2; color: $text-primary; border-color: $accent; }
@@ -425,6 +469,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   font: inherit; font-size: .78rem; font-weight: 600;
   color: $accent; cursor: pointer;
   padding: 4px 6px;
+  white-space: nowrap;
   &:hover { text-decoration: underline; }
 }
 
@@ -455,6 +500,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 
   &--scroll {
     max-height: calc(48px + 9 * 58px);
@@ -468,6 +514,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .data-table {
   width: 100%;
+  min-width: 640px;
   table-layout: fixed;
   border-collapse: collapse;
   font-size: .82rem;
@@ -484,9 +531,17 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     letter-spacing: .07em;
     color: $text-light;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &.th--check   { width: 40px; }
     &.th--actions { width: 48px; }
+    &.th--product { width: 26%; }
+    &.th--status  { width: 12%; }
+    &.th--price   { width: 12%; }
+    &.th--stock   { width: 14%; }
+    &.th--sales   { width: 12%; }
+    &.th--sku     { width: 14%; }
   }
 
   td {
@@ -496,6 +551,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     color: $text-mid;
     white-space: normal;
     word-break: break-word;
+    overflow: hidden;
 
     &.td--check   { width: 40px; }
     &.td--actions { text-align: right; }
@@ -503,6 +559,13 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover td { background: $surface2; }
+
+  @media (max-width: 900px) {
+    .col-sales { display: none; }
+  }
+  @media (max-width: 700px) {
+    .col-sku { display: none; }
+  }
 }
 
 .table-row {
@@ -512,9 +575,9 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--muted td { opacity: .55; }
 }
 
-.td-price { font-weight: 700; color: $text-primary; }
+.td-price { font-weight: 700; color: $text-primary; white-space: nowrap; }
 .td-sales { font-weight: 600; color: $text-primary; }
-.td-sku   { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; }
+.td-sku   { font-size: .72rem; color: $text-light; font-family: 'Courier New', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .checkbox-sm {
   display: inline-flex; align-items: center; justify-content: center;
@@ -524,6 +587,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
   &__box {
     width: 18px; height: 18px;
+    flex-shrink: 0;
     border-radius: 5px;
     border: 1.5px solid $border2;
     background: $surface;
@@ -541,7 +605,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   }
 }
 
-.product-cell { display: flex; align-items: center; gap: 12px; }
+.product-cell { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
 .product-img-wrap {
   position: relative;
@@ -555,6 +619,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .product-img {
   width: 30px; height: 30px;
+  max-width: 100%;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(16,24,40,.10));
 }
@@ -567,15 +632,18 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border: 1.5px solid $surface;
 }
 
-.product-info { min-width: 0; }
+.product-info { min-width: 0; flex: 1; }
 .product-name {
   font-weight: 600; color: $text-primary;
   font-size: .84rem;
   margin: 0 0 2px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  max-width: 220px;
+  max-width: 100%;
 }
-.product-meta { font-size: .72rem; color: $text-light; margin: 0; }
+.product-meta {
+  font-size: .72rem; color: $text-light; margin: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 .status-pill {
   display: inline-flex; align-items: center;
@@ -606,6 +674,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .action-trigger {
   width: 30px; height: 30px;
+  flex-shrink: 0;
   background: transparent; border: 1px solid transparent;
   border-radius: $radius-sm;
   color: $text-light;
@@ -621,7 +690,9 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   z-index: 2000;
   background: $surface; border: 1px solid $border;
   border-radius: $radius-md; box-shadow: $shadow-menu;
-  width: 180px; overflow: hidden;
+  width: 180px;
+  max-width: calc(100vw - 16px);
+  overflow: hidden;
   transform-origin: top right;
   animation: menu-in .16s $ease-menu both;
 
@@ -639,6 +710,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   width: 100%; text-align: left; cursor: pointer; text-decoration: none;
   transition: background .12s, color .12s;
 
+  svg { flex-shrink: 0; }
+
   &:hover { background: $surface2; color: $text-primary; }
   &--danger { color: $red; &:hover { background: $red-bg; color: $red; } }
 }
@@ -651,11 +724,14 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   padding: 72px 24px;
   display: flex; flex-direction: column; align-items: center; gap: 12px;
   text-align: center;
+  width: 100%;
+  min-width: 0;
   animation: pop-in .3s $ease both;
 }
 
 .empty-state__orb {
   width: 72px; height: 72px; border-radius: 50%;
+  flex-shrink: 0;
   background: $surface2; border: 1px solid $border;
   color: $text-light;
   display: flex; align-items: center; justify-content: center;
@@ -669,11 +745,20 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
+  width: 100%;
+  min-width: 0;
 
   &--scroll {
     max-height: calc(360px * 2 + 16px);
     overflow-y: auto;
     padding-right: 4px;
+  }
+
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  }
+  @media (max-width: 420px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -682,6 +767,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border: 1px solid $border;
   border-radius: $radius-lg;
   overflow: hidden;
+  min-width: 0;
   display: flex; flex-direction: column;
   box-shadow: $shadow-card;
   transition: box-shadow .25s $ease, transform .25s $ease, border-color .2s;
@@ -713,21 +799,26 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .product-card__status {
   position: absolute; top: 10px; right: 10px; z-index: 3;
+  max-width: calc(100% - 60px);
+  overflow: hidden; text-overflow: ellipsis;
 }
 
 .featured-badge {
   position: absolute; bottom: 10px; left: 10px; z-index: 3;
   display: inline-flex; align-items: center; gap: 4px;
   height: 20px; padding: 0 8px;
+  max-width: calc(100% - 20px);
   background: rgba(17,24,39,.75);
   color: #fff; backdrop-filter: blur(4px);
   border-radius: $radius-pill;
   font-size: .62rem; font-weight: 700;
-  svg { color: $amber; }
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  svg { flex-shrink: 0; color: $amber; }
 }
 
 .product-card__img {
   width: 84px; height: 84px;
+  max-width: 70%;
   object-fit: contain;
   filter: drop-shadow(0 6px 10px rgba(16,24,40,.14));
   transition: transform .35s $ease;
@@ -743,6 +834,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .overlay-btn {
   width: 34px; height: 34px;
+  flex-shrink: 0;
   background: $surface; border: none;
   border-radius: 50%;
   color: $text-mid;
@@ -758,11 +850,13 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .product-card__body {
   padding: 14px 16px 16px;
   display: flex; flex-direction: column; gap: 4px;
+  min-width: 0;
 }
 
 .product-card__cat {
   font-size: .64rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .06em; color: $text-light;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 .product-card__name {
@@ -770,29 +864,42 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-.product-card__brand { font-size: .74rem; color: $text-light; margin-bottom: 6px; }
+.product-card__brand {
+  font-size: .74rem; color: $text-light; margin-bottom: 6px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 .product-card__footer {
   display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
   padding-top: 8px; border-top: 1px solid $border;
   margin-top: 4px;
 }
 
-.product-card__price { font-size: 1.05rem; font-weight: 800; color: $text-primary; letter-spacing: -.02em; }
+.product-card__price {
+  font-size: 1.05rem; font-weight: 800; color: $text-primary; letter-spacing: -.02em;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 .product-card__actions {
   display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
   margin-top: 8px;
 }
 
-.product-card__sales { font-size: .72rem; color: $text-light; font-weight: 600; }
+.product-card__sales {
+  font-size: .72rem; color: $text-light; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 .btn-mini {
   height: 28px; padding: 0 10px;
+  flex-shrink: 0;
   background: $surface2; border: 1px solid $border;
   border-radius: $radius-sm;
   font: inherit; font-size: .72rem; font-weight: 600;
   color: $text-mid; cursor: pointer;
+  white-space: nowrap;
   transition: background .15s, color .15s;
 
   &:hover { background: $surface3; color: $text-primary; }
@@ -801,16 +908,23 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .pagination {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; flex-wrap: wrap; padding: 4px 0;
+  width: 100%;
+  min-width: 0;
   animation: pop-in .3s .1s $ease both;
 
   @media (max-width: 600px) { justify-content: center; }
 }
 
-.pagination__label { font-size: .78rem; color: $text-light; @media (max-width: 600px) { display: none; } }
-.pagination__controls { display: flex; align-items: center; gap: 4px; }
+.pagination__label {
+  font-size: .78rem; color: $text-light;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  @media (max-width: 600px) { display: none; }
+}
+.pagination__controls { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; }
 
 .page-btn {
   min-width: 34px; height: 34px; padding: 0 8px;
+  flex-shrink: 0;
   background: $surface; border: 1px solid $border;
   border-radius: $radius-sm;
   font: inherit; font-size: .8rem; font-weight: 500;
@@ -823,7 +937,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:disabled { opacity: .35; cursor: not-allowed; }
 }
 
-.page-ellipsis { width: 28px; text-align: center; font-size: .82rem; color: $text-light; }
+.page-ellipsis { width: 28px; text-align: center; font-size: .82rem; color: $text-light; flex-shrink: 0; }
 
 @media (max-width: 900px) {
   .toolbar { flex-direction: column; align-items: stretch; }
@@ -832,8 +946,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 @media (max-width: 600px) {
   .page-header { align-items: flex-start; }
+  .page-header__actions { width: 100%; }
+  .page-header__actions .btn-primary { flex: 1; justify-content: center; }
   .bulk-bar { flex-wrap: wrap; }
   .bulk-bar__clear { margin-left: 0; }
+  .search-wrap { min-width: 140px; max-width: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -841,12 +958,4 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   .pagination, .action-menu, .admin-toast, .bulk-bar, .confirm-dialog { animation: none !important; transition: none !important; }
 }
 
-.toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
-.toolbar__left-scroll::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
-.toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
-
-.toolbar__right { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; }
-
-.stat-card__value{
-  font-size: 1.25rem;
-}
+.toolbar__right { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; flex-wrap: wrap; }
