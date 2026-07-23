@@ -1077,5 +1077,19 @@
     "addImage": "Añadir imagen",
     "replaceImage": "Reemplazar imagen",
     "removeImage": "Eliminar imagen"
+  },
+
+  "editProductModal": {
+    "dialogAriaLabel": "Editar {{name}}",
+    "untitledProduct": "Producto sin título",
+    "subtitle": "{{name}} · ID n.º {{id}}",
+    "published": "Publicado",
+    "newBadgeInline": "Insignia de novedad",
+    "tagsPlaceholder": "inalámbrico, premium, audio",
+    "colorNamePlaceholder": "Nombre del color",
+    "existingImageLabel": "Existente",
+    "imagePreviewAria": "Vista previa de la imagen",
+    "imageRequiredHint": "Añade al menos una imagen antes de guardar",
+    "successTitle": "¡Cambios guardados!"
   }
 }
