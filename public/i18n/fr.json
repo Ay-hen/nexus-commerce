@@ -1106,5 +1106,19 @@
     "addImage": "Ajouter une image",
     "replaceImage": "Remplacer l'image",
     "removeImage": "Supprimer l'image"
+  },
+
+  "editProductModal": {
+    "dialogAriaLabel": "Modifier {{name}}",
+    "untitledProduct": "Produit sans titre",
+    "subtitle": "{{name}} · ID n° {{id}}",
+    "published": "Publié",
+    "newBadgeInline": "Badge Nouveauté",
+    "tagsPlaceholder": "sans fil, premium, audio",
+    "colorNamePlaceholder": "Nom de la couleur",
+    "existingImageLabel": "Existante",
+    "imagePreviewAria": "Aperçu de l'image",
+    "imageRequiredHint": "Ajoutez au moins une image avant d'enregistrer",
+    "successTitle": "Modifications enregistrées !"
   }
 }
