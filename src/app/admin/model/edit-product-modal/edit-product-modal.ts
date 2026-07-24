@@ -1,6 +1,3 @@
-// edit-product-modal.component.ts
-// Place at: src/app/admin/edit-product-modal/edit-product-modal.component.ts
-
 import {
   Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy,
   Output, SimpleChanges, computed, inject, signal,
