@@ -12,8 +12,8 @@ import {
   ProductImage, ColorVariant, MAX_IMAGES_PER_SLOT,
 } from '../../model/product-image.model';
 import { AdminProduct } from '../../model/admin-models.model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 interface ProductForm {
   name: string;
