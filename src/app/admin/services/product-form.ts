@@ -1,6 +1,6 @@
 // product-form.service.ts
 import { Service } from '@angular/core';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import {
   ProductImage,
   ColorVariant,
@@ -8,9 +8,11 @@ import {
   ALLOWED_IMAGE_TYPES,
   MAX_IMAGE_SIZE_BYTES,
 } from '../model/product-image.model';
+import { LanguageService } from '../../localization/language.service';
 
 @Service()
 export class ProductFormService {
+  private lang = inject(LanguageService);
 
   // ─── Base64 conversion ───────────────────────────────────────────────────
   fileToBase64(file: File): Promise<string> {
@@ -25,10 +27,10 @@ export class ProductFormService {
   // ─── Image validation ────────────────────────────────────────────────────
   validateImageFile(file: File): string | null {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      return `"${file.name}" must be JPEG, PNG, or WebP.`;
+      return this.lang.translate('addProduct.errors.imageFormatInvalid', { name: file.name });
     }
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      return `"${file.name}" exceeds the 5 MB limit.`;
+      return this.lang.translate('addProduct.errors.imageSizeExceeded', { name: file.name });
     }
     return null;
   }
@@ -96,40 +98,40 @@ export class ProductFormService {
   ): Record<string, string> {
     const errs: Record<string, string> = {};
 
-    if (!form.name.trim())        errs['name']        = 'Product name is required.';
-    if (!form.brand.trim())       errs['brand']       = 'Brand is required.';
-    if (!form.category)           errs['category']    = 'Category is required.';
-    if (!form.description.trim()) errs['description'] = 'Description is required.';
+    if (!form.name.trim())        errs['name']        = this.lang.translate('addProduct.errors.nameRequired');
+    if (!form.brand.trim())       errs['brand']       = this.lang.translate('addProduct.errors.brandRequired');
+    if (!form.category)           errs['category']    = this.lang.translate('addProduct.errors.categoryRequired');
+    if (!form.description.trim()) errs['description'] = this.lang.translate('categories.validation.descriptionRequired');
     if (!form.price || form.price <= 0)
-                                  errs['price']       = 'Price must be greater than 0.';
+                                  errs['price']       = this.lang.translate('addProduct.errors.priceInvalid');
     if (form.stock === null || form.stock < 0)
-                                  errs['stock']       = 'Stock quantity is required.';
-    if (!form.sku.trim())         errs['sku']         = 'SKU is required.';
+                                  errs['stock']       = this.lang.translate('addProduct.errors.stockRequired');
+    if (!form.sku.trim())         errs['sku']         = this.lang.translate('addProduct.errors.skuRequired');
 
     if (form.discount !== null && (form.discount < 0 || form.discount > 100)) {
-      errs['discount'] = 'Discount must be between 0 and 100.';
+      errs['discount'] = this.lang.translate('addProduct.errors.discountRange');
     }
 
     if (!hasColorVariants) {
       if (defaultImages.length === 0) {
-        errs['images'] = 'At least one product image is required.';
+        errs['images'] = this.lang.translate('addProduct.errors.imagesRequired');
       }
     } else {
       if (colorVariants.length === 0) {
-        errs['colorVariants'] = 'Add at least one color variant.';
+        errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsRequired');
       } else {
         const emptyNames = colorVariants.filter(v => !v.colorName.trim());
         if (emptyNames.length) {
-          errs['colorVariants'] = 'All color variants must have a name.';
+          errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsNameRequired');
         } else {
           const names = colorVariants.map(v => v.colorName.trim().toLowerCase());
           if (new Set(names).size !== names.length) {
-            errs['colorVariants'] = 'Color variant names must be unique.';
+            errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsNameUnique');
           }
         }
         const emptyImages = colorVariants.filter(v => v.images.length === 0);
         if (emptyImages.length && !errs['colorVariants']) {
-          errs['colorVariants'] = 'All color variants must have at least one image.';
+          errs['colorVariants'] = this.lang.translate('addProduct.errors.colorVariantsImagesRequired');
         }
       }
     }
