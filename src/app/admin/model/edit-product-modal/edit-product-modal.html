@@ -3,17 +3,17 @@
 
 <div class="epm-backdrop" (click)="onBackdropClick()" aria-hidden="true"></div>
 
-<div class="epm-dialog" role="dialog" aria-modal="true" [attr.aria-label]="'Edit ' + (product?.name || 'product')">
+<div class="epm-dialog" role="dialog" aria-modal="true" [attr.aria-label]="'editProductModal.dialogAriaLabel' | translate: { name: (product?.name || ('editProductModal.untitledProduct' | translate)) }">
 
   <!-- Lightbox -->
   @if (lightboxSrc()) {
-    <div class="epm-lightbox" (click)="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image preview">
-      <button class="epm-lightbox__close" (click)="closeLightbox()" aria-label="Close preview">
+    <div class="epm-lightbox" (click)="closeLightbox()" role="dialog" aria-modal="true" [attr.aria-label]="'editProductModal.imagePreviewAria' | translate">
+      <button class="epm-lightbox__close" (click)="closeLightbox()" [attr.aria-label]="'categories.closePreview' | translate">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
       </button>
-      <img [src]="lightboxSrc()!" class="epm-lightbox__img" alt="Image preview" (click)="$event.stopPropagation()" />
+      <img [src]="lightboxSrc()!" class="epm-lightbox__img" [alt]="'editProductModal.imagePreviewAria' | translate" (click)="$event.stopPropagation()" />
     </div>
   }
 
@@ -25,17 +25,17 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <p class="epm-success__title">Changes saved!</p>
+      <p class="epm-success__title">{{ 'editProductModal.successTitle' | translate }}</p>
     </div>
   }
 
   <!-- Header -->
   <div class="epm-header">
     <div class="epm-header__text">
-      <h2 class="epm-title">Edit Product</h2>
-      <p class="epm-sub">{{ form().name || 'Untitled product' }} · ID #{{ product?.id }}</p>
+      <h2 class="epm-title">{{ 'products.editProduct' | translate }}</h2>
+      <p class="epm-sub">{{ 'editProductModal.subtitle' | translate: { name: (form().name || ('editProductModal.untitledProduct' | translate)), id: product?.id } }}</p>
     </div>
-    <button class="epm-close" (click)="requestClose()" [disabled]="isSubmitting()" aria-label="Close">
+    <button class="epm-close" (click)="requestClose()" [disabled]="isSubmitting()" [attr.aria-label]="'buttons.close' | translate">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
         <path d="M18 6L6 18M6 6l12 12"/>
       </svg>
@@ -54,14 +54,14 @@
               [checked]="form().status === 'active'"
               (change)="patchForm({ status: 'active' })" />
             <span class="epm-radio" [class.checked]="form().status === 'active'"></span>
-            Published
+            {{ 'editProductModal.published' | translate }}
           </label>
           <label class="epm-status-option">
             <input type="radio" name="epm-status" class="sr-only"
               [checked]="form().status === 'draft'"
               (change)="patchForm({ status: 'draft' })" />
             <span class="epm-radio" [class.checked]="form().status === 'draft'"></span>
-            Draft
+            {{ 'common.draft' | translate }}
           </label>
         </div>
 
@@ -70,7 +70,7 @@
             (click)="patchForm({ featured: !form().featured })" role="switch" [attr.aria-checked]="form().featured">
             <span class="epm-mini-knob"></span>
           </div>
-          <span>Featured</span>
+          <span>{{ 'products.featuredBadge' | translate }}</span>
         </div>
 
         <div class="epm-toggle-inline">
@@ -78,35 +78,35 @@
             (click)="patchForm({ isNew: !form().isNew })" role="switch" [attr.aria-checked]="form().isNew">
             <span class="epm-mini-knob"></span>
           </div>
-          <span>New badge</span>
+          <span>{{ 'editProductModal.newBadgeInline' | translate }}</span>
         </div>
       </div>
     </section>
 
     <!-- Basic information -->
     <section class="epm-card">
-      <h3 class="epm-card__title">Basic Information</h3>
+      <h3 class="epm-card__title">{{ 'categories.basicInfo' | translate }}</h3>
       <div class="epm-grid">
         <div class="field field--full" [class.field--error]="hasError('name')">
-          <label class="field__label" for="epm-name">Product Name <span class="required">*</span></label>
+          <label class="field__label" for="epm-name">{{ 'products.productName' | translate }} <span class="required">*</span></label>
           <input id="epm-name" class="field__input" type="text" maxlength="120"
             [value]="form().name" (input)="patchForm({ name: $any($event.target).value })" />
           @if (hasError('name')) { <p class="field__error">{{ errorMsg('name') }}</p> }
         </div>
 
         <div class="field" [class.field--error]="hasError('brand')">
-          <label class="field__label" for="epm-brand">Brand <span class="required">*</span></label>
+          <label class="field__label" for="epm-brand">{{ 'products.brand' | translate }} <span class="required">*</span></label>
           <input id="epm-brand" class="field__input" type="text"
             [value]="form().brand" (input)="patchForm({ brand: $any($event.target).value })" />
           @if (hasError('brand')) { <p class="field__error">{{ errorMsg('brand') }}</p> }
         </div>
 
         <div class="field" [class.field--error]="hasError('category')">
-          <label class="field__label" for="epm-category">Category <span class="required">*</span></label>
+          <label class="field__label" for="epm-category">{{ 'products.category' | translate }} <span class="required">*</span></label>
           <div class="select-wrap">
             <select id="epm-category" class="field__select"
               [value]="form().category" (change)="patchForm({ category: $any($event.target).value })">
-              <option value="" disabled>Select category…</option>
+              <option value="" disabled>{{ 'addProduct.selectCategoryPlaceholder' | translate }}</option>
               @for (cat of categories; track cat) {
                 <option [value]="cat" [selected]="form().category === cat">{{ cat }}</option>
               }
@@ -117,15 +117,15 @@
         </div>
 
         <div class="field field--full" [class.field--error]="hasError('description')">
-          <label class="field__label" for="epm-desc">Description <span class="required">*</span></label>
+          <label class="field__label" for="epm-desc">{{ 'products.description' | translate }} <span class="required">*</span></label>
           <textarea id="epm-desc" class="field__textarea" rows="4"
             [value]="form().description" (input)="patchForm({ description: $any($event.target).value })"></textarea>
           @if (hasError('description')) { <p class="field__error">{{ errorMsg('description') }}</p> }
         </div>
 
         <div class="field field--full">
-          <label class="field__label" for="epm-tags">Tags</label>
-          <input id="epm-tags" class="field__input" type="text" placeholder="wireless, premium, audio"
+          <label class="field__label" for="epm-tags">{{ 'products.tags' | translate }}</label>
+          <input id="epm-tags" class="field__input" type="text" [placeholder]="'editProductModal.tagsPlaceholder' | translate"
             [value]="form().tagsRaw" (input)="patchForm({ tagsRaw: $any($event.target).value })" />
         </div>
       </div>
@@ -133,10 +133,10 @@
 
     <!-- Pricing & inventory -->
     <section class="epm-card">
-      <h3 class="epm-card__title">Pricing &amp; Inventory</h3>
+      <h3 class="epm-card__title">{{ 'addProduct.pricingInventoryTitle' | translate }}</h3>
       <div class="epm-grid">
         <div class="field" [class.field--error]="hasError('price')">
-          <label class="field__label" for="epm-price">Sale Price ($) <span class="required">*</span></label>
+          <label class="field__label" for="epm-price">{{ 'products.salePrice' | translate }} <span class="required">*</span></label>
           <div class="input-prefix-wrap">
             <span class="input-prefix">$</span>
             <input id="epm-price" class="field__input field__input--prefixed" type="number" min="0" step="0.01"
@@ -146,7 +146,7 @@
         </div>
 
         <div class="field">
-          <label class="field__label" for="epm-orig-price">Original Price ($)</label>
+          <label class="field__label" for="epm-orig-price">{{ 'products.originalPrice' | translate }}</label>
           <div class="input-prefix-wrap">
             <span class="input-prefix">$</span>
             <input id="epm-orig-price" class="field__input field__input--prefixed" type="number" min="0" step="0.01"
@@ -155,34 +155,34 @@
         </div>
 
         <div class="field" [class.field--error]="hasError('discount')">
-          <label class="field__label" for="epm-discount">Discount (%)</label>
+          <label class="field__label" for="epm-discount">{{ 'products.discount' | translate }}</label>
           <div class="input-suffix-wrap">
             <input id="epm-discount" class="field__input field__input--suffixed" type="number" min="0" max="100"
               [value]="form().discount ?? computedDiscount() || ''" (input)="patchForm({ discount: +$any($event.target).value || null })" />
             <span class="input-suffix">%</span>
           </div>
           @if (computedDiscount() > 0 && !form().discount) {
-            <span class="field__hint field__hint--success">Auto-computed: {{ computedDiscount() }}%</span>
+            <span class="field__hint field__hint--success">{{ 'addProduct.discountAutoHint' | translate: { percent: computedDiscount() } }}</span>
           }
           @if (hasError('discount')) { <p class="field__error">{{ errorMsg('discount') }}</p> }
         </div>
 
         <div class="field" [class.field--error]="hasError('stock')">
-          <label class="field__label" for="epm-stock">Stock Quantity <span class="required">*</span></label>
+          <label class="field__label" for="epm-stock">{{ 'products.stockQuantity' | translate }} <span class="required">*</span></label>
           <input id="epm-stock" class="field__input" type="number" min="0"
             [value]="form().stock ?? ''" (input)="patchForm({ stock: +$any($event.target).value })" />
           @if (hasError('stock')) { <p class="field__error">{{ errorMsg('stock') }}</p> }
         </div>
 
         <div class="field" [class.field--error]="hasError('sku')">
-          <label class="field__label" for="epm-sku">SKU <span class="required">*</span></label>
+          <label class="field__label" for="epm-sku">{{ 'products.sku' | translate }} <span class="required">*</span></label>
           <input id="epm-sku" class="field__input field__input--mono" type="text"
             [value]="form().sku" (input)="patchForm({ sku: $any($event.target).value })" />
           @if (hasError('sku')) { <p class="field__error">{{ errorMsg('sku') }}</p> }
         </div>
 
         <div class="field">
-          <label class="field__label" for="epm-barcode">Barcode</label>
+          <label class="field__label" for="epm-barcode">{{ 'products.barcode' | translate }}</label>
           <input id="epm-barcode" class="field__input field__input--mono" type="text"
             [value]="form().barcode" (input)="patchForm({ barcode: $any($event.target).value })" />
         </div>
@@ -191,7 +191,7 @@
 
     <!-- Images -->
     <section class="epm-card">
-      <h3 class="epm-card__title">Product Images</h3>
+      <h3 class="epm-card__title">{{ 'products.productImages' | translate }}</h3>
 
       <label class="toggle-row">
         <div class="toggle-switch" [class.on]="hasColorVariants()"
@@ -199,8 +199,8 @@
           <span class="toggle-knob"></span>
         </div>
         <div>
-          <p class="toggle-label">Product has multiple color variants</p>
-          <p class="toggle-sub">Upload separate images for each color option</p>
+          <p class="toggle-label">{{ 'products.colorVariants' | translate }}</p>
+          <p class="toggle-sub">{{ 'products.colorVariantsSub' | translate }}</p>
         </div>
       </label>
 
@@ -213,20 +213,20 @@
               <div class="image-tile" (click)="openLightbox(img.preview)">
                 <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
                 <div class="image-tile__overlay" (click)="$event.stopPropagation()">
-                  <label class="tile-action" [for]="'epm-replace-' + img.id" title="Replace" (click)="replaceDefaultImage(img.id)">
+                  <label class="tile-action" [for]="'epm-replace-' + img.id" [title]="'categories.replace' | translate" (click)="replaceDefaultImage(img.id)">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
                     </svg>
                     <input [id]="'epm-replace-' + img.id" type="file" accept="image/*" class="sr-only" (change)="onDefaultImageSelect($event)" />
                   </label>
-                  <button class="tile-action tile-action--danger" type="button" (click)="removeDefaultImage(img.id)" title="Delete">
+                  <button class="tile-action tile-action--danger" type="button" (click)="removeDefaultImage(img.id)" [title]="'buttons.delete' | translate">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
                   </button>
                 </div>
-                @if ($index === 0) { <span class="main-badge">Main</span> }
-                <span class="image-tile__size">{{ img.size > 0 ? formatBytes(img.size) : 'Existing' }}</span>
+                @if ($index === 0) { <span class="main-badge">{{ 'addProduct.mainBadge' | translate }}</span> }
+                <span class="image-tile__size">{{ img.size > 0 ? formatBytes(img.size) : ('editProductModal.existingImageLabel' | translate) }}</span>
               </div>
             }
 
@@ -237,8 +237,8 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                   <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
                 </svg>
-                <p class="upload-slot__label">Click or drag &amp; drop</p>
-                <p class="upload-slot__hint">JPEG, PNG, WebP · Max 5 MB</p>
+                <p class="upload-slot__label">{{ 'forms.dragAndDrop' | translate }}</p>
+                <p class="upload-slot__hint">{{ 'addProduct.imageFormatsHint' | translate }}</p>
                 <input id="epm-default-image-input" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" (change)="onDefaultImageSelect($event)" />
               </label>
             }
@@ -258,10 +258,10 @@
                     (input)="patchVariant(variant.id, { colorHex: $any($event.target).value })" />
                   <span class="color-swatch" [style.background]="variant.colorHex"></span>
                 </div>
-                <input class="variant-name-input" type="text" placeholder="Color name"
+                <input class="variant-name-input" type="text" [placeholder]="'editProductModal.colorNamePlaceholder' | translate"
                   [value]="variant.colorName" (input)="patchVariant(variant.id, { colorName: $any($event.target).value })" />
                 <button class="variant-remove-btn" type="button" (click)="removeColorVariant(variant.id)"
-                  [disabled]="colorVariants().length === 1" aria-label="Remove variant">
+                  [disabled]="colorVariants().length === 1" [attr.aria-label]="'addProduct.removeColorVariantAria' | translate">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
@@ -271,11 +271,11 @@
                   <div class="image-tile image-tile--sm" (click)="openLightbox(img.preview)">
                     <img [src]="img.preview" [alt]="img.name" class="image-tile__img" />
                     <div class="image-tile__overlay" (click)="$event.stopPropagation()">
-                      <button class="tile-action tile-action--danger" type="button" (click)="removeVariantImage(variant.id, img.id)" title="Delete">
+                      <button class="tile-action tile-action--danger" type="button" (click)="removeVariantImage(variant.id, img.id)" [title]="'buttons.delete' | translate">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
                       </button>
                     </div>
-                    @if ($index === 0) { <span class="main-badge">Main</span> }
+                    @if ($index === 0) { <span class="main-badge">{{ 'addProduct.mainBadge' | translate }}</span> }
                   </div>
                 }
                 @if (variant.images.length < 3) {
@@ -283,7 +283,7 @@
                     [for]="'epm-variant-img-' + variant.id"
                     (dragover)="onDragOver($event, variant.id)" (dragleave)="onDragLeave()" (drop)="onVariantImageDrop(variant.id, $event)">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    <p class="upload-slot__hint">Add image</p>
+                    <p class="upload-slot__hint">{{ 'forms.addImage' | translate }}</p>
                     <input [id]="'epm-variant-img-' + variant.id" type="file" accept="image/jpeg,image/png,image/webp" multiple class="sr-only" (change)="onVariantImageSelect(variant.id, $event)" />
                   </label>
                 }
@@ -297,7 +297,7 @@
           @if (colorVariants().length < 8) {
             <button class="add-variant-btn" type="button" (click)="addColorVariant()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Color Variant
+              {{ 'products.addColorVariant' | translate }}
             </button>
           }
         </div>
@@ -306,15 +306,15 @@
 
     <!-- SEO -->
     <section class="epm-card">
-      <h3 class="epm-card__title">SEO &amp; Metadata</h3>
+      <h3 class="epm-card__title">{{ 'addProduct.seoMetadataTitle' | translate }}</h3>
       <div class="epm-grid">
         <div class="field field--full">
-          <label class="field__label" for="epm-seo-title">SEO Title</label>
+          <label class="field__label" for="epm-seo-title">{{ 'products.seoTitle' | translate }}</label>
           <input id="epm-seo-title" class="field__input" type="text" maxlength="70"
             [placeholder]="form().name" [value]="form().seoTitle" (input)="patchForm({ seoTitle: $any($event.target).value })" />
         </div>
         <div class="field field--full">
-          <label class="field__label" for="epm-slug">URL Slug</label>
+          <label class="field__label" for="epm-slug">{{ 'products.urlSlug' | translate }}</label>
           <div class="slug-wrap">
             <span class="slug-prefix">/products/</span>
             <input id="epm-slug" class="field__input field__input--slug" type="text"
@@ -329,17 +329,17 @@
   <!-- Footer -->
   <div class="epm-footer">
     <span class="epm-footer__hint">
-      @if (totalImages() === 0) { <span class="epm-warn">Add at least one image before saving</span> }
+      @if (totalImages() === 0) { <span class="epm-warn">{{ 'editProductModal.imageRequiredHint' | translate }}</span> }
     </span>
     <div class="epm-footer__actions">
-      <button class="epm-btn-cancel" type="button" (click)="requestClose()" [disabled]="isSubmitting()">Cancel</button>
+      <button class="epm-btn-cancel" type="button" (click)="requestClose()" [disabled]="isSubmitting()">{{ 'buttons.cancel' | translate }}</button>
       <button class="epm-btn-draft" type="button" (click)="saveDraft()" [disabled]="isSubmitting()">
         @if (isSubmitting()) { <span class="epm-spinner"></span> }
-        Save as Draft
+        {{ 'buttons.saveDraft' | translate }}
       </button>
       <button class="epm-btn-save" type="button" (click)="saveChanges()" [disabled]="isSubmitting()">
         @if (isSubmitting()) { <span class="epm-spinner epm-spinner--white"></span> }
-        Save Changes
+        {{ 'buttons.saveChanges' | translate }}
       </button>
     </div>
   </div>
