@@ -1,6 +1,5 @@
 // edit-product-modal.component.ts
 // Place at: src/app/admin/edit-product-modal/edit-product-modal.component.ts
-// (same folder depth as edit-product/ and products/ — adjust relative imports if different)
 
 import {
   Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy,
@@ -13,6 +12,8 @@ import {
   ProductImage, ColorVariant, MAX_IMAGES_PER_SLOT,
 } from '../../model/product-image.model';
 import { AdminProduct } from '../../model/admin-models.model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 interface ProductForm {
   name: string;
@@ -42,12 +43,13 @@ interface ProductForm {
 
 @Component({
   selector: 'app-edit-product-modal',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './edit-product-modal.html',
   styleUrl: './edit-product-modal.scss',
 })
 export class EditProductModal implements OnChanges, OnDestroy {
   private pfs = inject(ProductFormService);
+  protected lang = inject(LanguageService);
 
   // The full product record from the list — passed in directly so the modal
   // is always editing the exact row that was clicked (no re-fetch/mismatch).
