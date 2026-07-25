@@ -678,6 +678,68 @@
     "removeConfirmBody": "Are you sure you want to remove \"{{name}}\" from inventory tracking? This action cannot be undone."
   },
 
+  "adjustStock": {
+    "title": "Adjust Inventory",
+    "subtitle": "Update product stock levels and inventory information",
+    "inStockBadge": "{{count}} in stock",
+    "decreaseAria": "Decrease",
+    "increaseAria": "Increase",
+    "errors": {
+      "exceedsAvailable": "This quantity exceeds the {{available}} units currently available.",
+      "exceedsAvailableSave": "Quantity exceeds available stock. Reduce the amount or choose a different adjustment type.",
+      "willBeZero": "This adjustment will bring stock to zero.",
+      "belowMinimum": "Resulting stock will fall below the minimum threshold of {{min}}.",
+      "destinationRequired": "Select a destination warehouse to continue."
+    },
+    "summaryTitle": "Current Inventory Summary",
+    "summary": {
+      "reserved": "Reserved",
+      "available": "Available",
+      "incoming": "Incoming",
+      "minimum": "Minimum",
+      "maximum": "Maximum"
+    },
+    "quickActionsTitle": "Quick Actions",
+    "quickActions": {
+      "setMinimum": "Set to Minimum",
+      "setMaximum": "Set to Maximum",
+      "clearStock": "Clear Stock",
+      "autoFill": "Auto Fill"
+    },
+    "autoFillNote": "Auto-filled restock based on minimum stock threshold.",
+    "adjustmentTitle": "Stock Adjustment",
+    "types": {
+      "increase": "Increase", "decrease": "Decrease", "correction": "Correction", "transfer": "Transfer",
+      "return": "Return", "damaged": "Damaged", "lost": "Lost", "initial": "Initial Stock"
+    },
+    "reasons": {
+      "customerReturn": "Customer Return", "supplierDelivery": "Supplier Delivery",
+      "stockCorrection": "Stock Correction", "damaged": "Damaged", "lost": "Lost",
+      "warehouseTransfer": "Warehouse Transfer", "inventoryCount": "Inventory Count", "other": "Other"
+    },
+    "adjustmentTypeLabel": "Adjustment Type",
+    "newStockCountLabel": "New Stock Count",
+    "quantityLabel": "Quantity",
+    "reasonLabel": "Reason",
+    "destinationWarehouseLabel": "Destination Warehouse",
+    "selectWarehousePlaceholder": "Select warehouse…",
+    "referenceNumberLabel": "Reference Number",
+    "referencePlaceholder": "e.g. PO-4821",
+    "adjustmentDateLabel": "Adjustment Date",
+    "performedByLabel": "Performed By",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Additional details about this adjustment…",
+    "previewTitle": "Live Preview",
+    "previewAdjustment": "Adjustment",
+    "previewNewStock": "New Stock",
+    "previewNoChange": "(no change)",
+    "previewGained": "gained",
+    "previewLost": "lost",
+    "saveButton": "Save Adjustment",
+    "successTitle": "Stock Updated Successfully",
+    "successBody": "{{name}} is now at {{stock}} units"
+  },
+
   "reviews": {
     "title": "Reviews",
     "subtitle": "Manage customer reviews and moderation.",
