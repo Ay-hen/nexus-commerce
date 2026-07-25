@@ -628,6 +628,18 @@
       "reorderQty": "Reorder Quantity",
       "unitCost": "Unit Cost"
     },
+    "recentMovementsTitle": "Recent Stock Movements",
+    "movements": {
+      "date": "Date", "type": "Type", "quantity": "Quantity", "before": "Before",
+      "after": "After", "user": "User", "notes": "Notes",
+      "empty": "No stock movements recorded yet."
+    },
+    "toasts": {
+      "stockUpdated": "Stock updated for \"{{name}}\" ({{sign}}{{diff}})",
+      "removed": "\"{{name}}\" removed from inventory",
+      "selectProduct": "Select a product below to adjust its stock",
+      "added": "\"{{name}}\" added to inventory"
+    },
     "stats": {
       "totalProducts": "Total Products",
       "totalStockUnits": "Total Stock Units",
