@@ -629,6 +629,20 @@
       "reorderQty": "Quantité de réapprovisionnement",
       "unitCost": "Coût unitaire"
     },
+    
+    "recentMovementsTitle": "Mouvements de stock récents",
+    "movements": {
+      "date": "Date", "type": "Type", "quantity": "Quantité", "before": "Avant",
+      "after": "Après", "user": "Utilisateur", "notes": "Notes",
+      "empty": "Aucun mouvement de stock enregistré pour le moment."
+    },
+    "toasts": {
+      "stockUpdated": "Stock mis à jour pour « {{name}} » ({{sign}}{{diff}})",
+      "removed": "« {{name}} » retiré de l'inventaire",
+      "selectProduct": "Sélectionnez un produit ci-dessous pour ajuster son stock",
+      "added": "« {{name}} » ajouté à l'inventaire"
+    },
+    
     "stats": {
       "totalProducts": "Total des produits",
       "totalStockUnits": "Unités en stock",
