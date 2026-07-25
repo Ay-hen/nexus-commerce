@@ -740,6 +740,33 @@
     "successBody": "{{name}} is now at {{stock}} units"
   },
 
+  "addInventoryItem": {
+    "subtitle": "Create a new product record to start tracking its stock",
+    "successTitle": "Item Added to Inventory",
+    "successBody": "{{name}} is now being tracked with {{count}} units.",
+    "productImageTitle": "Product Image",
+    "productIdentityTitle": "Product Identity",
+    "stockLevelsTitle": "Stock Levels",
+    "generateButton": "Generate",
+    "barcodeLabel": "Barcode",
+    "noSupplierOption": "No supplier",
+    "initialStockLabel": "Initial Stock",
+    "unitCostLabel": "Unit Cost ($)",
+    "reorderPlaceholder": "Defaults to 2× minimum stock",
+    "stockLevelLabel": "Stock Level",
+    "addButton": "Add to Inventory",
+    "errors": {
+      "warehouseRequired": "Select a warehouse.",
+      "skuExists": "This SKU already exists.",
+      "stockNegative": "Stock cannot be negative.",
+      "minExceedsMax": "Minimum stock cannot exceed maximum stock.",
+      "maxRequired": "Maximum stock is required.",
+      "unitCostNegative": "Unit cost cannot be negative.",
+      "imageFormatInvalid": "Only JPEG, PNG, or WebP images are supported.",
+      "imageSizeExceeded": "Image exceeds the 5 MB limit."
+    }
+  },
+
   "reviews": {
     "title": "Reviews",
     "subtitle": "Manage customer reviews and moderation.",
