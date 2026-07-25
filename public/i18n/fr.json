@@ -743,6 +743,33 @@
     "successBody": "{{name}} est maintenant à {{stock}} unités"
   },
 
+  "addInventoryItem": {
+    "subtitle": "Créez une nouvelle fiche produit pour commencer à suivre son stock",
+    "successTitle": "Article ajouté à l'inventaire",
+    "successBody": "{{name}} est désormais suivi avec {{count}} unités.",
+    "productImageTitle": "Image du produit",
+    "productIdentityTitle": "Identité du produit",
+    "stockLevelsTitle": "Niveaux de stock",
+    "generateButton": "Générer",
+    "barcodeLabel": "Code-barres",
+    "noSupplierOption": "Aucun fournisseur",
+    "initialStockLabel": "Stock initial",
+    "unitCostLabel": "Coût unitaire ($)",
+    "reorderPlaceholder": "Par défaut, 2× le stock minimum",
+    "stockLevelLabel": "Niveau de stock",
+    "addButton": "Ajouter à l'inventaire",
+    "errors": {
+      "warehouseRequired": "Sélectionnez un entrepôt.",
+      "skuExists": "Ce SKU existe déjà.",
+      "stockNegative": "Le stock ne peut pas être négatif.",
+      "minExceedsMax": "Le stock minimum ne peut pas dépasser le stock maximum.",
+      "maxRequired": "Le stock maximum est requis.",
+      "unitCostNegative": "Le coût unitaire ne peut pas être négatif.",
+      "imageFormatInvalid": "Seules les images JPEG, PNG ou WebP sont prises en charge.",
+      "imageSizeExceeded": "L'image dépasse la limite de 5 Mo."
+    }
+  },
+
   "reviews": {
     "title": "Avis",
     "subtitle": "Gérez les avis clients et leur modération.",
