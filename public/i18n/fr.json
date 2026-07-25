@@ -681,6 +681,68 @@
     "removeConfirmBody": "Voulez-vous vraiment retirer « {{name}} » du suivi d'inventaire ? Cette action est irréversible."
   },
 
+  "adjustStock": {
+    "title": "Ajuster l'inventaire",
+    "subtitle": "Mettez à jour les niveaux de stock et les informations d'inventaire",
+    "inStockBadge": "{{count}} en stock",
+    "decreaseAria": "Diminuer",
+    "increaseAria": "Augmenter",
+    "errors": {
+      "exceedsAvailable": "Cette quantité dépasse les {{available}} unités actuellement disponibles.",
+      "exceedsAvailableSave": "La quantité dépasse le stock disponible. Réduisez le montant ou choisissez un autre type d'ajustement.",
+      "willBeZero": "Cet ajustement ramènera le stock à zéro.",
+      "belowMinimum": "Le stock résultant descendra sous le seuil minimum de {{min}}.",
+      "destinationRequired": "Sélectionnez un entrepôt de destination pour continuer."
+    },
+    "summaryTitle": "Résumé de l'inventaire actuel",
+    "summary": {
+      "reserved": "Réservé",
+      "available": "Disponible",
+      "incoming": "Entrant",
+      "minimum": "Minimum",
+      "maximum": "Maximum"
+    },
+    "quickActionsTitle": "Actions rapides",
+    "quickActions": {
+      "setMinimum": "Définir au minimum",
+      "setMaximum": "Définir au maximum",
+      "clearStock": "Vider le stock",
+      "autoFill": "Remplissage auto"
+    },
+    "autoFillNote": "Réapprovisionnement rempli automatiquement selon le seuil de stock minimum.",
+    "adjustmentTitle": "Ajustement de stock",
+    "types": {
+      "increase": "Augmentation", "decrease": "Diminution", "correction": "Correction", "transfer": "Transfert",
+      "return": "Retour", "damaged": "Endommagé", "lost": "Perdu", "initial": "Stock initial"
+    },
+    "reasons": {
+      "customerReturn": "Retour client", "supplierDelivery": "Livraison fournisseur",
+      "stockCorrection": "Correction de stock", "damaged": "Endommagé", "lost": "Perdu",
+      "warehouseTransfer": "Transfert d'entrepôt", "inventoryCount": "Comptage d'inventaire", "other": "Autre"
+    },
+    "adjustmentTypeLabel": "Type d'ajustement",
+    "newStockCountLabel": "Nouveau nombre en stock",
+    "quantityLabel": "Quantité",
+    "reasonLabel": "Motif",
+    "destinationWarehouseLabel": "Entrepôt de destination",
+    "selectWarehousePlaceholder": "Sélectionner un entrepôt…",
+    "referenceNumberLabel": "Numéro de référence",
+    "referencePlaceholder": "ex. PO-4821",
+    "adjustmentDateLabel": "Date d'ajustement",
+    "performedByLabel": "Effectué par",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Détails supplémentaires sur cet ajustement…",
+    "previewTitle": "Aperçu en direct",
+    "previewAdjustment": "Ajustement",
+    "previewNewStock": "Nouveau stock",
+    "previewNoChange": "(aucun changement)",
+    "previewGained": "gagné(s)",
+    "previewLost": "perdu(s)",
+    "saveButton": "Enregistrer l'ajustement",
+    "successTitle": "Stock mis à jour avec succès",
+    "successBody": "{{name}} est maintenant à {{stock}} unités"
+  },
+
   "reviews": {
     "title": "Avis",
     "subtitle": "Gérez les avis clients et leur modération.",
