@@ -680,66 +680,66 @@
   },
 
   "adjustStock": {
-  "title": "Inventar anpassen",
-  "subtitle": "Aktualisieren Sie Bestandsniveaus und Inventarinformationen",
-  "inStockBadge": "{{count}} auf Lager",
-  "decreaseAria": "Verringern",
-  "increaseAria": "Erhöhen",
-  "errors": {
-    "exceedsAvailable": "Diese Menge übersteigt die derzeit verfügbaren {{available}} Einheiten.",
-    "exceedsAvailableSave": "Die Menge übersteigt den verfügbaren Bestand. Verringern Sie die Menge oder wählen Sie einen anderen Anpassungstyp.",
-    "willBeZero": "Diese Anpassung bringt den Bestand auf null.",
-    "belowMinimum": "Der resultierende Bestand fällt unter den Mindestschwellenwert von {{min}}.",
-    "destinationRequired": "Wählen Sie ein Ziellager, um fortzufahren."
+    "title": "Inventar anpassen",
+    "subtitle": "Aktualisieren Sie Bestandsniveaus und Inventarinformationen",
+    "inStockBadge": "{{count}} auf Lager",
+    "decreaseAria": "Verringern",
+    "increaseAria": "Erhöhen",
+    "errors": {
+      "exceedsAvailable": "Diese Menge übersteigt die derzeit verfügbaren {{available}} Einheiten.",
+      "exceedsAvailableSave": "Die Menge übersteigt den verfügbaren Bestand. Verringern Sie die Menge oder wählen Sie einen anderen Anpassungstyp.",
+      "willBeZero": "Diese Anpassung bringt den Bestand auf null.",
+      "belowMinimum": "Der resultierende Bestand fällt unter den Mindestschwellenwert von {{min}}.",
+      "destinationRequired": "Wählen Sie ein Ziellager, um fortzufahren."
+    },
+    "summaryTitle": "Aktuelle Bestandsübersicht",
+    "summary": {
+      "reserved": "Reserviert",
+      "available": "Verfügbar",
+      "incoming": "Eingehend",
+      "minimum": "Minimum",
+      "maximum": "Maximum"
+    },
+    "quickActionsTitle": "Schnellaktionen",
+    "quickActions": {
+      "setMinimum": "Auf Minimum setzen",
+      "setMaximum": "Auf Maximum setzen",
+      "clearStock": "Bestand leeren",
+      "autoFill": "Automatisch ausfüllen"
+    },
+    "autoFillNote": "Automatisch ausgefüllte Auffüllung basierend auf dem Mindestbestandsschwellenwert.",
+    "adjustmentTitle": "Bestandsanpassung",
+    "types": {
+      "increase": "Erhöhung", "decrease": "Verringerung", "correction": "Korrektur", "transfer": "Transfer",
+      "return": "Rücksendung", "damaged": "Beschädigt", "lost": "Verloren", "initial": "Anfangsbestand"
+    },
+    "reasons": {
+      "customerReturn": "Kundenrücksendung", "supplierDelivery": "Lieferantenlieferung",
+      "stockCorrection": "Bestandskorrektur", "damaged": "Beschädigt", "lost": "Verloren",
+      "warehouseTransfer": "Lagertransfer", "inventoryCount": "Inventurzählung", "other": "Sonstiges"
+    },
+    "adjustmentTypeLabel": "Anpassungstyp",
+    "newStockCountLabel": "Neuer Bestand",
+    "quantityLabel": "Menge",
+    "reasonLabel": "Grund",
+    "destinationWarehouseLabel": "Ziellager",
+    "selectWarehousePlaceholder": "Lager auswählen…",
+    "referenceNumberLabel": "Referenznummer",
+    "referencePlaceholder": "z. B. PO-4821",
+    "adjustmentDateLabel": "Anpassungsdatum",
+    "performedByLabel": "Durchgeführt von",
+    "notesLabel": "Notizen",
+    "notesPlaceholder": "Weitere Details zu dieser Anpassung…",
+    "previewTitle": "Live-Vorschau",
+    "previewAdjustment": "Anpassung",
+    "previewNewStock": "Neuer Bestand",
+    "previewNoChange": "(keine Änderung)",
+    "previewGained": "hinzugewonnen",
+    "previewLost": "verloren",
+    "saveButton": "Anpassung speichern",
+    "successTitle": "Bestand erfolgreich aktualisiert",
+    "successBody": "{{name}} liegt jetzt bei {{stock}} Einheiten"
   },
-  "summaryTitle": "Aktuelle Bestandsübersicht",
-  "summary": {
-    "reserved": "Reserviert",
-    "available": "Verfügbar",
-    "incoming": "Eingehend",
-    "minimum": "Minimum",
-    "maximum": "Maximum"
-  },
-  "quickActionsTitle": "Schnellaktionen",
-  "quickActions": {
-    "setMinimum": "Auf Minimum setzen",
-    "setMaximum": "Auf Maximum setzen",
-    "clearStock": "Bestand leeren",
-    "autoFill": "Automatisch ausfüllen"
-  },
-  "autoFillNote": "Automatisch ausgefüllte Auffüllung basierend auf dem Mindestbestandsschwellenwert.",
-  "adjustmentTitle": "Bestandsanpassung",
-  "types": {
-    "increase": "Erhöhung", "decrease": "Verringerung", "correction": "Korrektur", "transfer": "Transfer",
-    "return": "Rücksendung", "damaged": "Beschädigt", "lost": "Verloren", "initial": "Anfangsbestand"
-  },
-  "reasons": {
-    "customerReturn": "Kundenrücksendung", "supplierDelivery": "Lieferantenlieferung",
-    "stockCorrection": "Bestandskorrektur", "damaged": "Beschädigt", "lost": "Verloren",
-    "warehouseTransfer": "Lagertransfer", "inventoryCount": "Inventurzählung", "other": "Sonstiges"
-  },
-  "adjustmentTypeLabel": "Anpassungstyp",
-  "newStockCountLabel": "Neuer Bestand",
-  "quantityLabel": "Menge",
-  "reasonLabel": "Grund",
-  "destinationWarehouseLabel": "Ziellager",
-  "selectWarehousePlaceholder": "Lager auswählen…",
-  "referenceNumberLabel": "Referenznummer",
-  "referencePlaceholder": "z. B. PO-4821",
-  "adjustmentDateLabel": "Anpassungsdatum",
-  "performedByLabel": "Durchgeführt von",
-  "notesLabel": "Notizen",
-  "notesPlaceholder": "Weitere Details zu dieser Anpassung…",
-  "previewTitle": "Live-Vorschau",
-  "previewAdjustment": "Anpassung",
-  "previewNewStock": "Neuer Bestand",
-  "previewNoChange": "(keine Änderung)",
-  "previewGained": "hinzugewonnen",
-  "previewLost": "verloren",
-  "saveButton": "Anpassung speichern",
-  "successTitle": "Bestand erfolgreich aktualisiert",
-  "successBody": "{{name}} liegt jetzt bei {{stock}} Einheiten"
-},
 
   "reviews": {
     "title": "Bewertungen",
