@@ -741,6 +741,24 @@
     "successBody": "{{name}} liegt jetzt bei {{stock}} Einheiten"
   },
 
+  "addInventoryItem": {
+  "subtitle": "Erstellen Sie einen neuen Produktdatensatz, um dessen Bestand zu verfolgen",
+  "successTitle": "Artikel zum Inventar hinzugefügt",
+  "successBody": "{{name}} wird jetzt mit {{count}} Einheiten verfolgt.",
+  "productImageTitle": "Produktbild",
+  "productIdentityTitle": "Produktidentität",
+  "stockLevelsTitle": "Bestandsniveaus",
+  "generateButton": "Generieren",
+  "barcodeLabel": "Barcode",
+  "noSupplierOption": "Kein Lieferant",
+  "initialStockLabel": "Anfangsbestand",
+  "unitCostLabel": "Stückkosten ($)",
+  "reorderPlaceholder": "Standardmäßig das 2-Fache des Mindestbestands",
+  "stockLevelLabel": "Bestandsniveau",
+  "addButton": "Zum Inventar hinzufügen",
+  
+},
+
   "reviews": {
     "title": "Bewertungen",
     "subtitle": "Verwalten Sie Kundenbewertungen und deren Moderation.",
