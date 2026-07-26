@@ -679,6 +679,47 @@
     "removeConfirmBody": "Möchten Sie „{{name}}“ wirklich aus der Bestandsverfolgung entfernen? Dies kann nicht rückgängig gemacht werden."
   },
 
+  "adjustStock": {
+  "title": "Inventar anpassen",
+  "subtitle": "Aktualisieren Sie Bestandsniveaus und Inventarinformationen",
+  "inStockBadge": "{{count}} auf Lager",
+  "decreaseAria": "Verringern",
+  "increaseAria": "Erhöhen",
+  "errors": {
+    "exceedsAvailable": "Diese Menge übersteigt die derzeit verfügbaren {{available}} Einheiten.",
+    "exceedsAvailableSave": "Die Menge übersteigt den verfügbaren Bestand. Verringern Sie die Menge oder wählen Sie einen anderen Anpassungstyp.",
+    "willBeZero": "Diese Anpassung bringt den Bestand auf null.",
+    "belowMinimum": "Der resultierende Bestand fällt unter den Mindestschwellenwert von {{min}}.",
+    "destinationRequired": "Wählen Sie ein Ziellager, um fortzufahren."
+  },
+  "summaryTitle": "Aktuelle Bestandsübersicht",
+  "summary": {
+    "reserved": "Reserviert",
+    "available": "Verfügbar",
+    "incoming": "Eingehend",
+    "minimum": "Minimum",
+    "maximum": "Maximum"
+  },
+  "quickActionsTitle": "Schnellaktionen",
+  "quickActions": {
+    "setMinimum": "Auf Minimum setzen",
+    "setMaximum": "Auf Maximum setzen",
+    "clearStock": "Bestand leeren",
+    "autoFill": "Automatisch ausfüllen"
+  },
+  "autoFillNote": "Automatisch ausgefüllte Auffüllung basierend auf dem Mindestbestandsschwellenwert.",
+  "adjustmentTitle": "Bestandsanpassung",
+  "types": {
+    "increase": "Erhöhung", "decrease": "Verringerung", "correction": "Korrektur", "transfer": "Transfer",
+    "return": "Rücksendung", "damaged": "Beschädigt", "lost": "Verloren", "initial": "Anfangsbestand"
+  },
+  "reasons": {
+    "customerReturn": "Kundenrücksendung", "supplierDelivery": "Lieferantenlieferung",
+    "stockCorrection": "Bestandskorrektur", "damaged": "Beschädigt", "lost": "Verloren",
+    "warehouseTransfer": "Lagertransfer", "inventoryCount": "Inventurzählung", "other": "Sonstiges"
+  }
+},
+
   "reviews": {
     "title": "Bewertungen",
     "subtitle": "Verwalten Sie Kundenbewertungen und deren Moderation.",
