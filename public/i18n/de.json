@@ -717,7 +717,28 @@
     "customerReturn": "Kundenrücksendung", "supplierDelivery": "Lieferantenlieferung",
     "stockCorrection": "Bestandskorrektur", "damaged": "Beschädigt", "lost": "Verloren",
     "warehouseTransfer": "Lagertransfer", "inventoryCount": "Inventurzählung", "other": "Sonstiges"
-  }
+  },
+  "adjustmentTypeLabel": "Anpassungstyp",
+  "newStockCountLabel": "Neuer Bestand",
+  "quantityLabel": "Menge",
+  "reasonLabel": "Grund",
+  "destinationWarehouseLabel": "Ziellager",
+  "selectWarehousePlaceholder": "Lager auswählen…",
+  "referenceNumberLabel": "Referenznummer",
+  "referencePlaceholder": "z. B. PO-4821",
+  "adjustmentDateLabel": "Anpassungsdatum",
+  "performedByLabel": "Durchgeführt von",
+  "notesLabel": "Notizen",
+  "notesPlaceholder": "Weitere Details zu dieser Anpassung…",
+  "previewTitle": "Live-Vorschau",
+  "previewAdjustment": "Anpassung",
+  "previewNewStock": "Neuer Bestand",
+  "previewNoChange": "(keine Änderung)",
+  "previewGained": "hinzugewonnen",
+  "previewLost": "verloren",
+  "saveButton": "Anpassung speichern",
+  "successTitle": "Bestand erfolgreich aktualisiert",
+  "successBody": "{{name}} liegt jetzt bei {{stock}} Einheiten"
 },
 
   "reviews": {
