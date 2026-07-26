@@ -650,6 +650,42 @@
     "removeConfirmBody": "¿Seguro que deseas eliminar «{{name}}» del seguimiento de inventario? Esta acción no se puede deshacer."
   },
 
+  "adjustStock": {
+    "title": "Ajustar inventario",
+    "subtitle": "Actualiza los niveles de stock y la información de inventario",
+    "inStockBadge": "{{count}} en stock",
+    "decreaseAria": "Disminuir",
+    "increaseAria": "Aumentar",
+    "errors": {
+      "exceedsAvailable": "Esta cantidad supera las {{available}} unidades actualmente disponibles.",
+      "exceedsAvailableSave": "La cantidad supera el stock disponible. Reduce la cantidad o elige otro tipo de ajuste.",
+      "willBeZero": "Este ajuste dejará el stock en cero.",
+      "belowMinimum": "El stock resultante caerá por debajo del umbral mínimo de {{min}}.",
+      "destinationRequired": "Selecciona un almacén de destino para continuar."
+    },
+    "summaryTitle": "Resumen de inventario actual",
+    "summary": {
+      "reserved": "Reservado",
+      "available": "Disponible",
+      "incoming": "Entrante",
+      "minimum": "Mínimo",
+      "maximum": "Máximo"
+    },
+    "quickActionsTitle": "Acciones rápidas",
+    "quickActions": {
+      "setMinimum": "Establecer al mínimo",
+      "setMaximum": "Establecer al máximo",
+      "clearStock": "Vaciar stock",
+      "autoFill": "Autocompletar"
+    },
+    "autoFillNote": "Reabastecimiento autocompletado según el umbral de stock mínimo.",
+    "adjustmentTitle": "Ajuste de stock",
+    "types": {
+      "increase": "Aumento", "decrease": "Disminución", "correction": "Corrección", "transfer": "Transferencia",
+      "return": "Devolución", "damaged": "Dañado", "lost": "Perdido", "initial": "Stock inicial"
+    }
+  },
+
   "reviews": {
     "title": "Reseñas",
     "subtitle": "Gestiona las reseñas de los clientes y su moderación.",
