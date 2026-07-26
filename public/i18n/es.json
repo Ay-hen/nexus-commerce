@@ -683,7 +683,33 @@
     "types": {
       "increase": "Aumento", "decrease": "Disminución", "correction": "Corrección", "transfer": "Transferencia",
       "return": "Devolución", "damaged": "Dañado", "lost": "Perdido", "initial": "Stock inicial"
-    }
+    },
+    "reasons": {
+      "customerReturn": "Devolución de cliente", "supplierDelivery": "Entrega de proveedor",
+      "stockCorrection": "Corrección de stock", "damaged": "Dañado", "lost": "Perdido",
+      "warehouseTransfer": "Transferencia de almacén", "inventoryCount": "Conteo de inventario", "other": "Otro"
+    },
+    "adjustmentTypeLabel": "Tipo de ajuste",
+    "newStockCountLabel": "Nuevo conteo de stock",
+    "quantityLabel": "Cantidad",
+    "reasonLabel": "Motivo",
+    "destinationWarehouseLabel": "Almacén de destino",
+    "selectWarehousePlaceholder": "Seleccionar almacén…",
+    "referenceNumberLabel": "Número de referencia",
+    "referencePlaceholder": "ej. PO-4821",
+    "adjustmentDateLabel": "Fecha de ajuste",
+    "performedByLabel": "Realizado por",
+    "notesLabel": "Notas",
+    "notesPlaceholder": "Detalles adicionales sobre este ajuste…",
+    "previewTitle": "Vista previa en directo",
+    "previewAdjustment": "Ajuste",
+    "previewNewStock": "Nuevo stock",
+    "previewNoChange": "(sin cambios)",
+    "previewGained": "ganadas",
+    "previewLost": "perdidas",
+    "saveButton": "Guardar ajuste",
+    "successTitle": "Stock actualizado correctamente",
+    "successBody": "{{name}} ahora tiene {{stock}} unidades"
   },
 
   "reviews": {
