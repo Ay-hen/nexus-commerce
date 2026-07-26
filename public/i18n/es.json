@@ -712,6 +712,24 @@
     "successBody": "{{name}} ahora tiene {{stock}} unidades"
   },
 
+  "addInventoryItem": {
+    "subtitle": "Crea un nuevo registro de producto para comenzar a seguir su stock",
+    "successTitle": "Artículo añadido al inventario",
+    "successBody": "{{name}} ahora se está siguiendo con {{count}} unidades.",
+    "productImageTitle": "Imagen del producto",
+    "productIdentityTitle": "Identidad del producto",
+    "stockLevelsTitle": "Niveles de stock",
+    "generateButton": "Generar",
+    "barcodeLabel": "Código de barras",
+    "noSupplierOption": "Sin proveedor",
+    "initialStockLabel": "Stock inicial",
+    "unitCostLabel": "Costo unitario ($)",
+    "reorderPlaceholder": "Por defecto, 2× el stock mínimo",
+    "stockLevelLabel": "Nivel de stock",
+    "addButton": "Añadir al inventario"
+    
+  },
+
   "reviews": {
     "title": "Reseñas",
     "subtitle": "Gestiona las reseñas de los clientes y su moderación.",
