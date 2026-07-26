@@ -587,6 +587,31 @@
     "filterAll": "Todas",
     "itemsCount": "{{count}} artículos",
     "lastUpdated": "Última actualización",
+    "detail": {
+      "supplier": "Proveedor",
+      "currentStock": "Stock actual",
+      "reservedStock": "Stock reservado",
+      "availableStock": "Stock disponible",
+      "incomingStock": "Stock entrante",
+      "outgoingStock": "Stock saliente",
+      "minStock": "Stock mínimo",
+      "maxStock": "Stock máximo",
+      "stockLevel": "Nivel de stock ({{percent}}%)",
+      "reorderQty": "Cantidad de reabastecimiento",
+      "unitCost": "Costo unitario"
+    },
+    "recentMovementsTitle": "Movimientos de stock recientes",
+    "movements": {
+      "date": "Fecha", "type": "Tipo", "quantity": "Cantidad", "before": "Antes",
+      "after": "Después", "user": "Usuario", "notes": "Notas",
+      "empty": "Aún no se han registrado movimientos de stock."
+    },
+    "toasts": {
+      "stockUpdated": "Stock actualizado para «{{name}}» ({{sign}}{{diff}})",
+      "removed": "«{{name}}» eliminado del inventario",
+      "selectProduct": "Selecciona un producto abajo para ajustar su stock",
+      "added": "«{{name}}» añadido al inventario"
+    },
     "stats": {
       "totalProducts": "Productos totales",
       "totalStockUnits": "Unidades en stock",
