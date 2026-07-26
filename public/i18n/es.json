@@ -726,8 +726,17 @@
     "unitCostLabel": "Costo unitario ($)",
     "reorderPlaceholder": "Por defecto, 2× el stock mínimo",
     "stockLevelLabel": "Nivel de stock",
-    "addButton": "Añadir al inventario"
-    
+    "addButton": "Añadir al inventario",
+    "errors": {
+      "warehouseRequired": "Selecciona un almacén.",
+      "skuExists": "Este SKU ya existe.",
+      "stockNegative": "El stock no puede ser negativo.",
+      "minExceedsMax": "El stock mínimo no puede superar al stock máximo.",
+      "maxRequired": "El stock máximo es obligatorio.",
+      "unitCostNegative": "El costo unitario no puede ser negativo.",
+      "imageFormatInvalid": "Solo se admiten imágenes JPEG, PNG o WebP.",
+      "imageSizeExceeded": "La imagen supera el límite de 5 MB."
+    }
   },
 
   "reviews": {
