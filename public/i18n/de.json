@@ -742,31 +742,31 @@
   },
 
   "addInventoryItem": {
-  "subtitle": "Erstellen Sie einen neuen Produktdatensatz, um dessen Bestand zu verfolgen",
-  "successTitle": "Artikel zum Inventar hinzugefügt",
-  "successBody": "{{name}} wird jetzt mit {{count}} Einheiten verfolgt.",
-  "productImageTitle": "Produktbild",
-  "productIdentityTitle": "Produktidentität",
-  "stockLevelsTitle": "Bestandsniveaus",
-  "generateButton": "Generieren",
-  "barcodeLabel": "Barcode",
-  "noSupplierOption": "Kein Lieferant",
-  "initialStockLabel": "Anfangsbestand",
-  "unitCostLabel": "Stückkosten ($)",
-  "reorderPlaceholder": "Standardmäßig das 2-Fache des Mindestbestands",
-  "stockLevelLabel": "Bestandsniveau",
-  "addButton": "Zum Inventar hinzufügen",
-  "errors": {
-    "warehouseRequired": "Wählen Sie ein Lager aus.",
-    "skuExists": "Diese SKU existiert bereits.",
-    "stockNegative": "Der Bestand darf nicht negativ sein.",
-    "minExceedsMax": "Der Mindestbestand darf den Höchstbestand nicht überschreiten.",
-    "maxRequired": "Der Höchstbestand ist erforderlich.",
-    "unitCostNegative": "Die Stückkosten dürfen nicht negativ sein.",
-    "imageFormatInvalid": "Nur JPEG-, PNG- oder WebP-Bilder werden unterstützt.",
-    "imageSizeExceeded": "Das Bild überschreitet das 5-MB-Limit."
-  }
-},
+    "subtitle": "Erstellen Sie einen neuen Produktdatensatz, um dessen Bestand zu verfolgen",
+    "successTitle": "Artikel zum Inventar hinzugefügt",
+    "successBody": "{{name}} wird jetzt mit {{count}} Einheiten verfolgt.",
+    "productImageTitle": "Produktbild",
+    "productIdentityTitle": "Produktidentität",
+    "stockLevelsTitle": "Bestandsniveaus",
+    "generateButton": "Generieren",
+    "barcodeLabel": "Barcode",
+    "noSupplierOption": "Kein Lieferant",
+    "initialStockLabel": "Anfangsbestand",
+    "unitCostLabel": "Stückkosten ($)",
+    "reorderPlaceholder": "Standardmäßig das 2-Fache des Mindestbestands",
+    "stockLevelLabel": "Bestandsniveau",
+    "addButton": "Zum Inventar hinzufügen",
+    "errors": {
+      "warehouseRequired": "Wählen Sie ein Lager aus.",
+      "skuExists": "Diese SKU existiert bereits.",
+      "stockNegative": "Der Bestand darf nicht negativ sein.",
+      "minExceedsMax": "Der Mindestbestand darf den Höchstbestand nicht überschreiten.",
+      "maxRequired": "Der Höchstbestand ist erforderlich.",
+      "unitCostNegative": "Die Stückkosten dürfen nicht negativ sein.",
+      "imageFormatInvalid": "Nur JPEG-, PNG- oder WebP-Bilder werden unterstützt.",
+      "imageSizeExceeded": "Das Bild überschreitet das 5-MB-Limit."
+    }
+  },
 
   "reviews": {
     "title": "Bewertungen",

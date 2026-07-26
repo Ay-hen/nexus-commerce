@@ -581,6 +581,12 @@
     "title": "Inventario",
     "subtitle": "Supervisa el stock, los almacenes, los movimientos y el estado del inventario",
     "addItem": "Añadir artículo",
+    "removeButton": "Eliminar",
+    "searchPlaceholder": "Buscar producto, SKU, código de barras…",
+    "allWarehouses": "Todos los almacenes",
+    "filterAll": "Todas",
+    "itemsCount": "{{count}} artículos",
+    "lastUpdated": "Última actualización",
     "stats": {
       "totalProducts": "Productos totales",
       "totalStockUnits": "Unidades en stock",
