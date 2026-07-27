@@ -19,18 +19,15 @@
             <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
           </svg>
         </div>
-        <h2 class="modal__title" id="del-title">Remove from Inventory</h2>
-        <p class="modal__body">
-          Are you sure you want to remove <strong>{{ pendingDelete()!.name }}</strong> from inventory tracking?
-          This action cannot be undone.
-        </p>
+        <h2 class="modal__title" id="del-title">{{ 'inventory.removeConfirmTitle' | translate }}</h2>
+        <p class="modal__body" [innerHTML]="'inventory.removeConfirmBody' | translate: { name: pendingDelete()!.name }"></p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-ghost" (click)="cancelDelete()">{{ 'buttons.cancel' | translate }}</button>
           <button class="btn-danger" (click)="confirmDelete()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
             </svg>
-            Remove
+            {{ 'inventory.removeButton' | translate }}
           </button>
         </div>
       </div>
@@ -42,7 +39,7 @@
     <div class="modal-backdrop" (click)="closeView()" role="dialog" aria-modal="true" aria-labelledby="view-title">
       <div class="modal modal--lg" (click)="$event.stopPropagation()">
 
-        <button class="modal-close" (click)="closeView()" aria-label="Close">
+        <button class="modal-close" (click)="closeView()" [attr.aria-label]="'buttons.close' | translate">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
 
@@ -60,40 +57,46 @@
         </div>
 
         <div class="detail-grid">
-          <div class="detail-field"><span class="detail-label">Category</span><span class="detail-value">{{ item.category }}</span></div>
-          <div class="detail-field"><span class="detail-label">Warehouse</span><span class="detail-value">{{ item.warehouse }}</span></div>
-          <div class="detail-field"><span class="detail-label">Supplier</span><span class="detail-value">{{ item.supplier }}</span></div>
-          <div class="detail-field"><span class="detail-label">Last Updated</span><span class="detail-value">{{ formatDateTime(item.lastUpdated) }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'products.category' | translate }}</span><span class="detail-value">{{ item.category }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.table.warehouse' | translate }}</span><span class="detail-value">{{ item.warehouse }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.supplier' | translate }}</span><span class="detail-value">{{ item.supplier }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.lastUpdated' | translate }}</span><span class="detail-value">{{ formatDateTime(item.lastUpdated) }}</span></div>
 
-          <div class="detail-field"><span class="detail-label">Current Stock</span><span class="detail-value detail-value--strong">{{ item.currentStock }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Reserved Stock</span><span class="detail-value">{{ item.reserved }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Available Stock</span><span class="detail-value detail-value--strong">{{ availableStock(item) }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Inventory Value</span><span class="detail-value detail-value--strong">{{ formatCurrency(inventoryValueFor(item)) }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.currentStock' | translate }}</span><span class="detail-value detail-value--strong">{{ lang.formatNumber(item.currentStock) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.reservedStock' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.reserved) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.availableStock' | translate }}</span><span class="detail-value detail-value--strong">{{ lang.formatNumber(availableStock(item)) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.stats.inventoryValue' | translate }}</span><span class="detail-value detail-value--strong">{{ formatCurrency(inventoryValueFor(item)) }}</span></div>
 
-          <div class="detail-field"><span class="detail-label">Incoming Stock</span><span class="detail-value">{{ item.incoming }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Outgoing Stock</span><span class="detail-value">{{ item.outgoing }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Minimum Stock</span><span class="detail-value">{{ item.minStock }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Maximum Stock</span><span class="detail-value">{{ item.maxStock }} units</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.incomingStock' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.incoming) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.outgoingStock' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.outgoing) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.minStock' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.minStock) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.maxStock' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.maxStock) }} {{ 'products.unitsSuffix' | translate }}</span></div>
 
           <div class="detail-field detail-field--full">
-            <span class="detail-label">Stock Level ({{ stockPercent(item) }}%)</span>
+            <span class="detail-label">{{ 'inventory.detail.stockLevel' | translate: { percent: stockPercent(item) } }}</span>
             <div class="progress-track progress-track--lg">
               <div class="progress-fill progress-fill--{{ statusFor(item) }}" [style.width.%]="stockPercent(item)"></div>
             </div>
           </div>
 
-          <div class="detail-field"><span class="detail-label">Reorder Quantity</span><span class="detail-value">{{ item.reorderQty }} units</span></div>
-          <div class="detail-field"><span class="detail-label">Unit Cost</span><span class="detail-value">{{ formatCurrency(item.unitCost) }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.reorderQty' | translate }}</span><span class="detail-value">{{ lang.formatNumber(item.reorderQty) }} {{ 'products.unitsSuffix' | translate }}</span></div>
+          <div class="detail-field"><span class="detail-label">{{ 'inventory.detail.unitCost' | translate }}</span><span class="detail-value">{{ formatCurrency(item.unitCost) }}</span></div>
         </div>
 
         <div class="detail-divider"></div>
 
-        <h3 class="detail-section-title">Recent Stock Movements</h3>
+        <h3 class="detail-section-title">{{ 'inventory.recentMovementsTitle' | translate }}</h3>
         <div class="movement-table-wrap">
           <table class="movement-table">
             <thead>
               <tr>
-                <th>Date</th><th>Type</th><th>Quantity</th><th>Before</th><th>After</th><th>User</th><th>Notes</th>
+                <th>{{ 'inventory.movements.date' | translate }}</th>
+                <th>{{ 'inventory.movements.type' | translate }}</th>
+                <th>{{ 'inventory.movements.quantity' | translate }}</th>
+                <th>{{ 'inventory.movements.before' | translate }}</th>
+                <th>{{ 'inventory.movements.after' | translate }}</th>
+                <th>{{ 'inventory.movements.user' | translate }}</th>
+                <th>{{ 'inventory.movements.notes' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -109,20 +112,20 @@
                 </tr>
               }
               @if (item.movements.length === 0) {
-                <tr><td colspan="7" class="mv-empty">No stock movements recorded yet.</td></tr>
+                <tr><td colspan="7" class="mv-empty">{{ 'inventory.movements.empty' | translate }}</td></tr>
               }
             </tbody>
           </table>
         </div>
 
         <div class="modal__actions modal__actions--right">
-          <button class="btn-ghost" (click)="closeView()">Close</button>
+          <button class="btn-ghost" (click)="closeView()">{{ 'buttons.close' | translate }}</button>
           <button class="btn-primary" (click)="editFromView(item)">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
-            Edit Product
+            {{ 'products.editProduct' | translate }}
           </button>
         </div>
       </div>
@@ -164,8 +167,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Inventory</h1>
-        <p class="page-sub">Monitor product stock, warehouses, movements and inventory health</p>
+        <h1 class="page-title">{{ 'inventory.title' | translate }}</h1>
+        <p class="page-sub">{{ 'inventory.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="page-header__actions">
@@ -173,7 +176,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        Add Inventory Item
+        {{ 'inventory.addItem' | translate }}
       </button>
     </div>
   </div>
@@ -189,37 +192,37 @@
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Total Products</p><p class="stat-value">{{ summary().totalProducts | number }}</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.totalProducts' | translate }}</p><p class="stat-value">{{ lang.formatNumber(summary().totalProducts) }}</p></div>
       </div>
       <div class="stat-card stat-card--purple">
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Total Stock Units</p><p class="stat-value">{{ summary().totalStockUnits | number }}</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.totalStockUnits' | translate }}</p><p class="stat-value">{{ lang.formatNumber(summary().totalStockUnits) }}</p></div>
       </div>
       <div class="stat-card stat-card--amber">
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Low Stock Items</p><p class="stat-value">{{ summary().lowStockItems | number }}</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.lowStockItems' | translate }}</p><p class="stat-value">{{ lang.formatNumber(summary().lowStockItems) }}</p></div>
       </div>
       <div class="stat-card stat-card--red">
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Out of Stock</p><p class="stat-value">{{ summary().outOfStock | number }}</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.outOfStock' | translate }}</p><p class="stat-value">{{ lang.formatNumber(summary().outOfStock) }}</p></div>
       </div>
       <div class="stat-card stat-card--green">
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Inventory Value</p><p class="stat-value">{{ formatCurrency(summary().inventoryValue) }}</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.inventoryValue' | translate }}</p><p class="stat-value">{{ formatCurrency(summary().inventoryValue) }}</p></div>
       </div>
       <div class="stat-card stat-card--slate">
         <div class="stat-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <div class="stat-body"><p class="stat-label">Avg Stock Level</p><p class="stat-value">{{ summary().avgStockLevel }}%</p></div>
+        <div class="stat-body"><p class="stat-label">{{ 'inventory.stats.avgStockLevel' | translate }}</p><p class="stat-value">{{ summary().avgStockLevel }}%</p></div>
       </div>
     </div>
   }
@@ -232,9 +235,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
-          <h2 class="alerts-card__title">Items Requiring Attention</h2>
+          <h2 class="alerts-card__title">{{ 'inventory.attention' | translate }}</h2>
         </div>
-        <span class="alerts-count">{{ alertItems().length }} items</span>
+        <span class="alerts-count">{{ 'inventory.itemsCount' | translate: { count: alertItems().length } }}</span>
       </div>
 
       <div class="alerts-grid">
@@ -248,7 +251,7 @@
                 <span class="alert-item__stock">{{ item.currentStock }} / {{ item.minStock }} min</span>
               </div>
             </div>
-            <button class="restock-btn" (click)="quickRestock(item, $event)">Restock</button>
+            <button class="restock-btn" (click)="quickRestock(item, $event)">{{ 'inventory.restock' | translate }}</button>
           </div>
         }
       </div>
@@ -268,7 +271,7 @@
         <input
           class="search-input"
           type="search"
-          placeholder="Search product, SKU, barcode…"
+          [placeholder]="'inventory.searchPlaceholder' | translate"
           [value]="searchQuery()"
           (input)="searchQuery.set($any($event.target).value); onFilterChange()"
         />
@@ -277,7 +280,7 @@
       <!-- Warehouse -->
       <div class="select-wrap">
         <select class="toolbar-select" [value]="warehouseFilter()" (change)="warehouseFilter.set($any($event.target).value); onFilterChange()">
-          <option value="all">All Warehouses</option>
+          <option value="all">{{ 'inventory.allWarehouses' | translate }}</option>
           @for (w of warehouses; track w) { <option [value]="w">{{ w }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -286,7 +289,7 @@
       <!-- Category -->
       <div class="select-wrap">
         <select class="toolbar-select" [value]="categoryFilter()" (change)="categoryFilter.set($any($event.target).value); onFilterChange()">
-          <option value="all">All Categories</option>
+          <option value="all">{{ 'common.allCategories' | translate }}</option>
           @for (c of categories; track c) { <option [value]="c">{{ c }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -296,7 +299,7 @@
       <div class="filter-pills">
         @for (opt of stockStatusOptions; track opt.key) {
           <button class="filter-pill" [class.filter-pill--active]="stockStatusFilter() === opt.key" (click)="stockStatusFilter.set(opt.key); onFilterChange()">
-            {{ opt.label }}
+            {{ opt.label | translate }}
           </button>
         }
       </div>
@@ -306,19 +309,19 @@
       <!-- Sort -->
       <div class="select-wrap">
         <select class="toolbar-select" [value]="sortField()" (change)="setSort($any($event.target).value)">
-          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">{{ 'common.sortBy' | translate }}: {{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- View toggle -->
-      <div class="view-toggle" role="group" aria-label="View mode">
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+      <div class="view-toggle" role="group" [attr.aria-label]="'products.viewModeLabel' | translate">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" [attr.aria-label]="'common.viewTable' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/>
           </svg>
         </button>
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" [attr.aria-label]="'common.viewGrid' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
           </svg>
@@ -344,9 +347,9 @@
             <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
           </svg>
         </div>
-        <h3 class="empty-state__title">No inventory records found</h3>
-        <p class="empty-state__sub">Try changing your filters.</p>
-        <button class="btn-ghost" (click)="resetFilters()">Clear Filters</button>
+        <h3 class="empty-state__title">{{ 'inventory.empty.title' | translate }}</h3>
+        <p class="empty-state__sub">{{ 'inventory.empty.subtitle' | translate }}</p>
+        <button class="btn-ghost" (click)="resetFilters()">{{ 'common.clearFilters' | translate }}</button>
       </div>
     }
 
@@ -359,20 +362,20 @@
               <tr>
                 <th class="th--img"></th>
                 <th class="th-sortable" (click)="setSort('product')">
-                  Product
+                  {{ 'inventory.table.product' | translate }}
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'product'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='product' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
                 </th>
-                <th>SKU</th>
-                <th>Warehouse</th>
+                <th>{{ 'inventory.table.sku' | translate }}</th>
+                <th>{{ 'inventory.table.warehouse' | translate }}</th>
                 <th class="th-sortable" (click)="setSort('stock')">
-                  Stock
+                  {{ 'inventory.table.stock' | translate }}
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'stock'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='stock' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
                 </th>
                 <th class="th-sortable" (click)="setSort('value')">
-                  Value
+                  {{ 'inventory.table.value' | translate }}
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" [class.sort-active]="sortField() === 'value'"><polyline [attr.points]="sortDir()==='asc' && sortField()==='value' ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/></svg>
                 </th>
-                <th>Status</th>
+                <th>{{ 'inventory.table.status' | translate }}</th>
                 <th class="th--actions"></th>
               </tr>
             </thead>
@@ -404,7 +407,7 @@
                   </td>
                   <td class="td--actions">
                     <div class="action-menu-wrap">
-                      <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" aria-label="Row actions">
+                      <button class="action-trigger" (click)="toggleMenu(item, $event)" [attr.aria-expanded]="openMenuId() === item.id" [attr.aria-label]="'common.actions' | translate">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                           <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                         </svg>
@@ -413,28 +416,28 @@
                         <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
                           <a class="action-item" (click)="openView(item)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            View
+                            {{ 'buttons.view' | translate }}
                           </a>
                           <a class="action-item" (click)="editFromView(item)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            Edit
+                            {{ 'buttons.edit' | translate }}
                           </a>
                           <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            Adjust Stock
+                            {{ 'inventory.actions.adjustStock' | translate }}
                           </a>
                           <a class="action-item" (click)="openAdjust(item, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                            Transfer
+                            {{ 'inventory.actions.transfer' | translate }}
                           </a>
                           <a class="action-item" (click)="openView(item)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-                            Stock History
+                            {{ 'inventory.actions.stockHistory' | translate }}
                           </a>
                           <div class="action-divider"></div>
                           <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(item, $event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                            Delete
+                            {{ 'buttons.delete' | translate }}
                           </button>
                         </div>
                       }
@@ -459,9 +462,9 @@
                 <span class="status-dot"></span>{{ statusLabel(statusFor(item)) }}
               </span>
               <div class="inv-card__overlay">
-                <button class="card-action-btn" (click)="openView(item, $event)" title="View"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                <button class="card-action-btn" (click)="openAdjust(item, $event)" title="Adjust Stock"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <button class="card-action-btn card-action-btn--danger" (click)="requestDelete(item, $event)" title="Delete"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+                <button class="card-action-btn" (click)="openView(item, $event)" [title]="'buttons.view' | translate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                <button class="card-action-btn" (click)="openAdjust(item, $event)" [title]="'inventory.actions.adjustStock' | translate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                <button class="card-action-btn card-action-btn--danger" (click)="requestDelete(item, $event)" [title]="'buttons.delete' | translate"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
               </div>
             </div>
             <div class="inv-card__body">
@@ -469,7 +472,7 @@
               <p class="inv-card__sku">{{ item.sku }}</p>
 
               <div class="inv-card__stock-row">
-                <span class="inv-card__stock-num">{{ item.currentStock }} units</span>
+                <span class="inv-card__stock-num">{{ lang.formatNumber(item.currentStock) }} {{ 'products.unitsSuffix' | translate }}</span>
                 <span class="inv-card__stock-pct">{{ stockPercent(item) }}%</span>
               </div>
               <div class="progress-track">
@@ -494,7 +497,7 @@
       <div class="pagination">
         <span class="pagination__label">{{ pageRangeLabel() }}</span>
         <div class="pagination__controls">
-          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" [attr.aria-label]="'common.previousPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
           @if (currentPage() > 2) {
@@ -508,7 +511,7 @@
             @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
             <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
           }
-          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" [attr.aria-label]="'common.nextPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
