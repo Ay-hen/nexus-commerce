@@ -1,9 +1,11 @@
 // add-inventory-item.ts
 import {
-  Component, Input, Output, EventEmitter, signal, computed, HostListener,
+  Component, Input, Output, EventEmitter, signal, computed, HostListener, inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export interface NewInventoryItemPayload {
@@ -47,14 +49,21 @@ function slugCode(value: string): string {
   return value.replace(/[^A-Za-z0-9]/g, '').slice(0, 6).toUpperCase();
 }
 
+// Maps preview status -> the camelCase key under inventory.status.*
+const STATUS_KEY_MAP: Record<string, string> = {
+  'in-stock': 'inStock', 'low-stock': 'lowStock', 'out-of-stock': 'outOfStock',
+  'overstock': 'overstock', 'critical': 'critical',
+};
+
 @Component({
   selector: 'app-add-inventory-item',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './add-inventory-item.html',
   styleUrl: './add-inventory-item.scss',
 })
 export class AddInventoryItem {
+  protected lang = inject(LanguageService);
 
   // ── Inputs / Outputs ────────────────────────────────────────────────────
   @Input() categories: string[] = ['Electronics', 'Smartphones', 'Laptops', 'Audio', 'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion'];
@@ -103,13 +112,7 @@ export class AddInventoryItem {
     return 'in-stock';
   });
 
-  statusLabel = computed(() => {
-    const map: Record<string, string> = {
-      'in-stock': 'In Stock', 'low-stock': 'Low Stock', 'out-of-stock': 'Out of Stock',
-      'overstock': 'Overstock', 'critical': 'Critical',
-    };
-    return map[this.previewStatus()];
-  });
+  statusLabel = computed(() => this.lang.translate('inventory.status.' + STATUS_KEY_MAP[this.previewStatus()]));
 
   canSave = computed(() => {
     const f = this.form();
@@ -152,8 +155,8 @@ export class AddInventoryItem {
   }
 
   private validateImageFile(file: File): string | null {
-    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) return 'Only JPEG, PNG, or WebP images are supported.';
-    if (file.size > MAX_IMAGE_SIZE_BYTES) return 'Image exceeds the 5 MB limit.';
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) return this.lang.translate('addInventoryItem.errors.imageFormatInvalid');
+    if (file.size > MAX_IMAGE_SIZE_BYTES) return this.lang.translate('addInventoryItem.errors.imageSizeExceeded');
     return null;
   }
 
@@ -189,19 +192,19 @@ export class AddInventoryItem {
     const f = this.form();
     const errs: Record<string, string> = {};
 
-    if (!f.name.trim()) errs['name'] = 'Product name is required.';
-    if (!f.category) errs['category'] = 'Select a category.';
-    if (!f.warehouse) errs['warehouse'] = 'Select a warehouse.';
+    if (!f.name.trim()) errs['name'] = this.lang.translate('addProduct.errors.nameRequired');
+    if (!f.category) errs['category'] = this.lang.translate('addProduct.errors.categoryRequired');
+    if (!f.warehouse) errs['warehouse'] = this.lang.translate('addInventoryItem.errors.warehouseRequired');
 
     const sku = f.sku.trim() || this.computedSku();
-    if (sku && this.existingSkus.includes(sku)) errs['sku'] = 'This SKU already exists.';
+    if (sku && this.existingSkus.includes(sku)) errs['sku'] = this.lang.translate('addInventoryItem.errors.skuExists');
 
-    if (f.initialStock !== null && f.initialStock < 0) errs['initialStock'] = 'Stock cannot be negative.';
+    if (f.initialStock !== null && f.initialStock < 0) errs['initialStock'] = this.lang.translate('addInventoryItem.errors.stockNegative');
     if (f.minStock !== null && f.maxStock !== null && f.minStock > f.maxStock) {
-      errs['minStock'] = 'Minimum stock cannot exceed maximum stock.';
+      errs['minStock'] = this.lang.translate('addInventoryItem.errors.minExceedsMax');
     }
-    if (!f.maxStock || f.maxStock <= 0) errs['maxStock'] = 'Maximum stock is required.';
-    if (f.unitCost !== null && f.unitCost < 0) errs['unitCost'] = 'Unit cost cannot be negative.';
+    if (!f.maxStock || f.maxStock <= 0) errs['maxStock'] = this.lang.translate('addInventoryItem.errors.maxRequired');
+    if (f.unitCost !== null && f.unitCost < 0) errs['unitCost'] = this.lang.translate('addInventoryItem.errors.unitCostNegative');
 
     this.errors.set(errs);
     return Object.keys(errs).length === 0;
@@ -262,7 +265,7 @@ export class AddInventoryItem {
   hasError(field: string): boolean { return !!this.errors()[field]; }
   errorMsg(field: string): string { return this.errors()[field] ?? ''; }
 
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   @HostListener('document:keydown.escape')
   onEscape(): void { this.attemptClose(); }
