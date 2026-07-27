@@ -22,9 +22,9 @@
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
-        <h2 class="success-title">Stock Updated Successfully</h2>
+        <h2 class="success-title">{{ 'adjustStock.successTitle' | translate }}</h2>
         <p class="success-sub">
-          {{ product?.name }} is now at <strong>{{ resultingStock() }} units</strong>
+          {{ 'adjustStock.successBody' | translate: { name: product?.name, stock: resultingStock() } }}
           @if (difference() !== 0) {
             <span class="success-diff" [class.success-diff--pos]="difference() > 0" [class.success-diff--neg]="difference() < 0">
               ({{ difference() > 0 ? '+' : '' }}{{ difference() }})
@@ -39,12 +39,12 @@
 
       <!-- ── STICKY HEADER ─────────────────────────────────────────────── -->
       <div class="modal-header">
-        <button class="modal-close" (click)="attemptClose()" [disabled]="isSaving()" aria-label="Close">
+        <button class="modal-close" (click)="attemptClose()" [disabled]="isSaving()" [attr.aria-label]="'buttons.close' | translate">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
 
-        <h2 class="modal-header__title" id="adjust-modal-title">Adjust Inventory</h2>
-        <p class="modal-header__sub">Update product stock levels and inventory information</p>
+        <h2 class="modal-header__title" id="adjust-modal-title">{{ 'adjustStock.title' | translate }}</h2>
+        <p class="modal-header__sub">{{ 'adjustStock.subtitle' | translate }}</p>
 
         <div class="product-identity">
           <div class="product-identity__img">
@@ -59,7 +59,7 @@
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
                 {{ product.warehouse }}
               </span>
-              <span class="id-badge id-badge--stock">{{ product.currentStock }} in stock</span>
+              <span class="id-badge id-badge--stock">{{ 'adjustStock.inStockBadge' | translate: { count: product.currentStock } }}</span>
             </div>
           </div>
         </div>
@@ -79,74 +79,74 @@
         }
 
         <!-- Inventory summary -->
-        <h3 class="section-title">Current Inventory Summary</h3>
+        <h3 class="section-title">{{ 'adjustStock.summaryTitle' | translate }}</h3>
         <div class="summary-grid">
           <div class="summary-stat summary-stat--blue">
-            <p class="summary-stat__label">Current Stock</p>
-            <p class="summary-stat__value">{{ product.currentStock }}</p>
+            <p class="summary-stat__label">{{ 'inventory.detail.currentStock' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(product.currentStock) }}</p>
           </div>
           <div class="summary-stat summary-stat--amber">
-            <p class="summary-stat__label">Reserved</p>
-            <p class="summary-stat__value">{{ product.reserved }}</p>
+            <p class="summary-stat__label">{{ 'adjustStock.summary.reserved' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(product.reserved) }}</p>
           </div>
           <div class="summary-stat summary-stat--green">
-            <p class="summary-stat__label">Available</p>
-            <p class="summary-stat__value">{{ availableStock() }}</p>
+            <p class="summary-stat__label">{{ 'adjustStock.summary.available' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(availableStock()) }}</p>
           </div>
           <div class="summary-stat summary-stat--purple">
-            <p class="summary-stat__label">Incoming</p>
-            <p class="summary-stat__value">{{ product.incoming }}</p>
+            <p class="summary-stat__label">{{ 'adjustStock.summary.incoming' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(product.incoming) }}</p>
           </div>
           <div class="summary-stat summary-stat--slate">
-            <p class="summary-stat__label">Minimum</p>
-            <p class="summary-stat__value">{{ product.minStock }}</p>
+            <p class="summary-stat__label">{{ 'adjustStock.summary.minimum' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(product.minStock) }}</p>
           </div>
           <div class="summary-stat summary-stat--slate">
-            <p class="summary-stat__label">Maximum</p>
-            <p class="summary-stat__value">{{ product.maxStock }}</p>
+            <p class="summary-stat__label">{{ 'adjustStock.summary.maximum' | translate }}</p>
+            <p class="summary-stat__value">{{ lang.formatNumber(product.maxStock) }}</p>
           </div>
           <div class="summary-stat summary-stat--green">
-            <p class="summary-stat__label">Inventory Value</p>
+            <p class="summary-stat__label">{{ 'inventory.stats.inventoryValue' | translate }}</p>
             <p class="summary-stat__value">{{ formatCurrency(inventoryValue()) }}</p>
           </div>
           <div class="summary-stat summary-stat--slate">
-            <p class="summary-stat__label">Last Updated</p>
+            <p class="summary-stat__label">{{ 'inventory.lastUpdated' | translate }}</p>
             <p class="summary-stat__value summary-stat__value--sm">{{ formatDateTime(product.lastUpdated) }}</p>
           </div>
         </div>
 
         <!-- Quick actions -->
-        <h3 class="section-title">Quick Actions</h3>
+        <h3 class="section-title">{{ 'adjustStock.quickActionsTitle' | translate }}</h3>
         <div class="quick-actions">
           <button class="quick-btn" (click)="setToMinimum()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="19 12 12 19 5 12"/><line x1="12" y1="5" x2="12" y2="19"/></svg>
-            Set to Minimum
+            {{ 'adjustStock.quickActions.setMinimum' | translate }}
           </button>
           <button class="quick-btn" (click)="setToMaximum()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="5 12 12 5 19 12"/><line x1="12" y1="5" x2="12" y2="19"/></svg>
-            Set to Maximum
+            {{ 'adjustStock.quickActions.setMaximum' | translate }}
           </button>
           <button class="quick-btn" (click)="quickRestock()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Restock
+            {{ 'inventory.restock' | translate }}
           </button>
           <button class="quick-btn quick-btn--danger" (click)="clearStock()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M18 6L6 18M6 6l12 12"/></svg>
-            Clear Stock
+            {{ 'adjustStock.quickActions.clearStock' | translate }}
           </button>
           <button class="quick-btn quick-btn--accent" (click)="autoFill()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            Auto Fill
+            {{ 'adjustStock.quickActions.autoFill' | translate }}
           </button>
         </div>
 
         <!-- Adjustment form -->
-        <h3 class="section-title">Stock Adjustment</h3>
+        <h3 class="section-title">{{ 'adjustStock.adjustmentTitle' | translate }}</h3>
         <div class="adjust-form">
 
           <!-- Type -->
           <div class="field field--full">
-            <label class="field__label">Adjustment Type</label>
+            <label class="field__label">{{ 'adjustStock.adjustmentTypeLabel' | translate }}</label>
             <div class="type-grid">
               @for (opt of adjustmentTypes; track opt.key) {
                 <button type="button" class="type-btn" [class.type-btn--active]="form().type === opt.key" (click)="selectType(opt.key)">
@@ -162,7 +162,7 @@
                       @case ('flag')     { <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/> }
                     }
                   </svg>
-                  {{ opt.label }}
+                  {{ opt.label | translate }}
                 </button>
               }
             </div>
@@ -170,9 +170,9 @@
 
           <!-- Quantity -->
           <div class="field">
-            <label class="field__label" for="adj-qty">{{ isSetType() ? 'New Stock Count' : 'Quantity' }}</label>
+            <label class="field__label" for="adj-qty">{{ (isSetType() ? 'adjustStock.newStockCountLabel' : 'adjustStock.quantityLabel') | translate }}</label>
             <div class="qty-stepper">
-              <button type="button" class="qty-btn" (click)="decrementQty()" [disabled]="quantityNum() === 0" aria-label="Decrease">
+              <button type="button" class="qty-btn" (click)="decrementQty()" [disabled]="quantityNum() === 0" [attr.aria-label]="'adjustStock.decreaseAria' | translate">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
               </button>
               <input
@@ -184,7 +184,7 @@
                 [value]="form().quantity ?? ''"
                 (input)="patchForm({ quantity: +$any($event.target).value || null })"
               />
-              <button type="button" class="qty-btn" (click)="incrementQty()" aria-label="Increase">
+              <button type="button" class="qty-btn" (click)="incrementQty()" [attr.aria-label]="'adjustStock.increaseAria' | translate">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               </button>
             </div>
@@ -192,10 +192,10 @@
 
           <!-- Reason -->
           <div class="field">
-            <label class="field__label" for="adj-reason">Reason</label>
+            <label class="field__label" for="adj-reason">{{ 'adjustStock.reasonLabel' | translate }}</label>
             <div class="select-wrap">
               <select id="adj-reason" class="field__select" [value]="form().reason" (change)="patchForm({ reason: $any($event.target).value })">
-                @for (r of reasonOptions; track r.key) { <option [value]="r.key">{{ r.label }}</option> }
+                @for (r of reasonOptions; track r.key) { <option [value]="r.key">{{ r.label | translate }}</option> }
               </select>
               <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
@@ -204,26 +204,26 @@
           <!-- Destination warehouse (transfer only) -->
           @if (isTransfer()) {
             <div class="field" [class.field--error]="needsWarehouse()">
-              <label class="field__label" for="adj-warehouse">Destination Warehouse</label>
+              <label class="field__label" for="adj-warehouse">{{ 'adjustStock.destinationWarehouseLabel' | translate }}</label>
               <div class="select-wrap">
                 <select id="adj-warehouse" class="field__select" [value]="form().destinationWarehouse" (change)="patchForm({ destinationWarehouse: $any($event.target).value })">
-                  <option value="" disabled>Select warehouse…</option>
+                  <option value="" disabled>{{ 'adjustStock.selectWarehousePlaceholder' | translate }}</option>
                   @for (w of destinationWarehouses(); track w) { <option [value]="w">{{ w }}</option> }
                 </select>
                 <svg class="select-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
-              @if (needsWarehouse()) { <p class="field__error">Select a destination warehouse to continue.</p> }
+              @if (needsWarehouse()) { <p class="field__error">{{ 'adjustStock.errors.destinationRequired' | translate }}</p> }
             </div>
           }
 
           <!-- Reference number -->
           <div class="field">
-            <label class="field__label" for="adj-ref">Reference Number <span class="field__optional">(optional)</span></label>
+            <label class="field__label" for="adj-ref">{{ 'adjustStock.referenceNumberLabel' | translate }} <span class="field__optional">({{ 'common.optional' | translate }})</span></label>
             <input
               id="adj-ref"
               class="field__input"
               type="text"
-              placeholder="e.g. PO-4821"
+              [placeholder]="'adjustStock.referencePlaceholder' | translate"
               [value]="form().referenceNumber"
               (input)="patchForm({ referenceNumber: $any($event.target).value })"
             />
@@ -231,7 +231,7 @@
 
           <!-- Adjustment date -->
           <div class="field">
-            <label class="field__label" for="adj-date">Adjustment Date</label>
+            <label class="field__label" for="adj-date">{{ 'adjustStock.adjustmentDateLabel' | translate }}</label>
             <input
               id="adj-date"
               class="field__input"
@@ -243,18 +243,18 @@
 
           <!-- Performed by -->
           <div class="field">
-            <label class="field__label">Performed By</label>
+            <label class="field__label">{{ 'adjustStock.performedByLabel' | translate }}</label>
             <input class="field__input field__input--readonly" type="text" [value]="currentUser" readonly />
           </div>
 
           <!-- Notes -->
           <div class="field field--full">
-            <label class="field__label" for="adj-notes">Notes</label>
+            <label class="field__label" for="adj-notes">{{ 'adjustStock.notesLabel' | translate }}</label>
             <textarea
               id="adj-notes"
               class="field__textarea"
               rows="3"
-              placeholder="Additional details about this adjustment…"
+              [placeholder]="'adjustStock.notesPlaceholder' | translate"
               [value]="form().notes"
               (input)="patchForm({ notes: $any($event.target).value })"
             ></textarea>
@@ -262,28 +262,29 @@
         </div>
 
         <!-- Live preview -->
-        <h3 class="section-title">Live Preview</h3>
+        <h3 class="section-title">{{ 'adjustStock.previewTitle' | translate }}</h3>
         <div class="preview-card" [class.preview-card--positive]="previewState() === 'positive'" [class.preview-card--negative]="previewState() === 'negative'">
           <div class="preview-formula">
             <div class="preview-step">
-              <span class="preview-step__label">Current Stock</span>
+              <span class="preview-step__label">{{ 'inventory.detail.currentStock' | translate }}</span>
               <span class="preview-step__value">{{ currentStock() }}</span>
             </div>
             <span class="preview-op">+</span>
             <div class="preview-step">
-              <span class="preview-step__label">Adjustment</span>
+              <span class="preview-step__label">{{ 'adjustStock.previewAdjustment' | translate }}</span>
               <span class="preview-step__value" [class.preview-step__value--pos]="signedDelta() > 0" [class.preview-step__value--neg]="signedDelta() < 0">
                 {{ signedDelta() > 0 ? '+' : '' }}{{ signedDelta() }}
               </span>
             </div>
             <span class="preview-op">=</span>
             <div class="preview-step preview-step--result">
-              <span class="preview-step__label">New Stock</span>
+              <span class="preview-step__label">{{ 'adjustStock.previewNewStock' | translate }}</span>
               <span class="preview-step__value preview-step__value--result">{{ resultingStock() }}</span>
             </div>
           </div>
           <div class="preview-diff" [class.preview-diff--pos]="difference() > 0" [class.preview-diff--neg]="difference() < 0">
-            {{ difference() > 0 ? '+' : '' }}{{ difference() }} units {{ difference() === 0 ? '(no change)' : difference() > 0 ? 'gained' : 'lost' }}
+            {{ difference() > 0 ? '+' : '' }}{{ difference() }} {{ 'products.unitsSuffix' | translate }}
+            {{ difference() === 0 ? ('adjustStock.previewNoChange' | translate) : (difference() > 0 ? ('adjustStock.previewGained' | translate) : ('adjustStock.previewLost' | translate)) }}
           </div>
         </div>
 
@@ -291,24 +292,24 @@
         @if (exceedsAvailable()) {
           <div class="validation-banner validation-banner--danger">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            This quantity exceeds the {{ availableStock() }} units currently available.
+            {{ 'adjustStock.errors.exceedsAvailable' | translate: { available: availableStock() } }}
           </div>
         }
         @if (willBeZero()) {
           <div class="validation-banner validation-banner--danger">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            This adjustment will bring stock to zero.
+            {{ 'adjustStock.errors.willBeZero' | translate }}
           </div>
         } @else if (belowMinimum()) {
           <div class="validation-banner validation-banner--warning">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Resulting stock will fall below the minimum threshold of {{ product.minStock }}.
+            {{ 'adjustStock.errors.belowMinimum' | translate: { min: product.minStock } }}
           </div>
         }
 
         <!-- Timeline -->
         @if (product.movements.length > 0) {
-          <h3 class="section-title">Recent Stock Movements</h3>
+          <h3 class="section-title">{{ 'inventory.recentMovementsTitle' | translate }}</h3>
           <div class="timeline">
             @for (mv of product.movements; track mv.id) {
               <div class="timeline-item">
@@ -322,9 +323,9 @@
                 </span>
                 <div class="timeline-body">
                   <div class="timeline-top">
-                    <span class="timeline-type">{{ mv.type }}</span>
+                    <span class="timeline-type">{{ typeLabel(mv.type) }}</span>
                     <span class="timeline-qty" [class.timeline-qty--neg]="mv.type === 'decrease'">
-                      {{ mv.type === 'decrease' ? '-' : '+' }}{{ mv.quantity }} units
+                      {{ mv.type === 'decrease' ? '-' : '+' }}{{ mv.quantity }} {{ 'products.unitsSuffix' | translate }}
                     </span>
                   </div>
                   <p class="timeline-reason">{{ mv.reason }}</p>
@@ -339,15 +340,15 @@
 
       <!-- ── STICKY FOOTER ─────────────────────────────────────────────── -->
       <div class="modal-footer">
-        <button class="btn-ghost" (click)="cancel()" [disabled]="isSaving()">Cancel</button>
+        <button class="btn-ghost" (click)="cancel()" [disabled]="isSaving()">{{ 'buttons.cancel' | translate }}</button>
         <div class="modal-footer__right">
           <button class="btn-reset" (click)="reset()" [disabled]="isSaving()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-            Reset
+            {{ 'buttons.reset' | translate }}
           </button>
           <button class="btn-primary" (click)="save()" [disabled]="!canSave()">
             @if (isSaving()) { <span class="spinner-sm spinner-sm--white" aria-hidden="true"></span> }
-            Save Adjustment
+            {{ 'adjustStock.saveButton' | translate }}
           </button>
         </div>
       </div>
