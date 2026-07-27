@@ -1,10 +1,12 @@
 // inventory.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdjustStock, AdjustStockProduct, StockAdjustmentPayload } from '../adjust-stock/adjust-stock';
 import { AddInventoryItem, NewInventoryItemPayload } from '../add-inventory-item/add-inventory-item';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock' | 'overstock' | 'critical';
@@ -44,13 +46,24 @@ export interface InventoryItem {
   movements: StockMovement[];
 }
 
+// Maps StockStatus -> the camelCase key segment used in inventory.status.*
+const STATUS_KEY_MAP: Record<StockStatus, string> = {
+  'in-stock': 'inStock',
+  'low-stock': 'lowStock',
+  'out-of-stock': 'outOfStock',
+  'overstock': 'overstock',
+  'critical': 'critical',
+};
+
 @Component({
   selector: 'app-inventory',
-  imports: [CommonModule, FormsModule, AdjustStock, AddInventoryItem],
+  imports: [CommonModule, FormsModule, AdjustStock, AddInventoryItem, TranslatePipe],
   templateUrl: './inventory.html',
   styleUrl: './inventory.scss',
 })
 export class Inventory {
+
+  protected lang = inject(LanguageService);
 
   constructor(private router: Router) {}
 
@@ -99,18 +112,19 @@ export class Inventory {
   categories = ['Electronics', 'Smartphones', 'Laptops', 'Audio', 'Watches', 'Shoes', 'Accessories', 'Gaming', 'Fashion'];
   suppliers  = ['TechSource Inc', 'Global Distributors', 'Prime Supply Co', 'Apex Trading'];
 
+  // Labels are translation keys — resolved via `| translate` in the template.
   stockStatusOptions: { key: StockStatusFilter; label: string }[] = [
-    { key: 'all',           label: 'All' },
-    { key: 'in-stock',      label: 'In Stock' },
-    { key: 'low-stock',     label: 'Low Stock' },
-    { key: 'out-of-stock',  label: 'Out of Stock' },
+    { key: 'all',           label: 'inventory.filterAll' },
+    { key: 'in-stock',      label: 'inventory.status.inStock' },
+    { key: 'low-stock',     label: 'inventory.status.lowStock' },
+    { key: 'out-of-stock',  label: 'inventory.status.outOfStock' },
   ];
 
   sortOptions: { key: SortField; label: string }[] = [
-    { key: 'product', label: 'Product' },
-    { key: 'stock',   label: 'Stock' },
-    { key: 'value',   label: 'Value' },
-    { key: 'updated', label: 'Last Updated' },
+    { key: 'product', label: 'inventory.table.product' },
+    { key: 'stock',   label: 'inventory.table.stock' },
+    { key: 'value',   label: 'inventory.table.value' },
+    { key: 'updated', label: 'inventory.lastUpdated' },
   ];
 
   // ── Mock data (generated once, mutable via signal) ───────────────────────
@@ -143,14 +157,13 @@ export class Inventory {
       const minStock = 10 + (i % 3) * 5;
       const maxStock = 100 + (i % 4) * 40;
 
-      // Distribute stock levels across the full status spectrum
       let currentStock: number;
       const cycle = i % 7;
-      if (cycle === 0) currentStock = 0;                                   // out of stock
-      else if (cycle === 1) currentStock = Math.round(minStock * 0.3);     // critical
-      else if (cycle === 2) currentStock = Math.round(minStock * 0.8);     // low stock
-      else if (cycle === 3) currentStock = Math.round(maxStock * 1.1);     // overstock
-      else currentStock = minStock + Math.round((maxStock - minStock) * 0.45); // in stock
+      if (cycle === 0) currentStock = 0;
+      else if (cycle === 1) currentStock = Math.round(minStock * 0.3);
+      else if (cycle === 2) currentStock = Math.round(minStock * 0.8);
+      else if (cycle === 3) currentStock = Math.round(maxStock * 1.1);
+      else currentStock = minStock + Math.round((maxStock - minStock) * 0.45);
 
       const reserved  = Math.min(currentStock, Math.round(currentStock * 0.12));
       const incoming  = (i % 5 === 0) ? 20 + (i % 3) * 10 : 0;
@@ -219,14 +232,16 @@ export class Inventory {
       });
     }
 
-    // Ensure the final movement lands on the item's actual current stock
     if (movements.length) {
       movements[movements.length - 1].after = finalStock;
     }
 
-    return movements.reverse(); // most recent first
+    return movements.reverse();
   }
 
+  // NOTE: These notes simulate backend-supplied movement reasons — in a real
+  // integration this text would arrive from the API, so per the localization
+  // rules it is treated as data, not UI copy, and is left untranslated.
   private notesFor(type: MovementType): string {
     const map: Record<MovementType, string> = {
       increase: 'Restocked from supplier delivery',
@@ -260,11 +275,7 @@ export class Inventory {
   }
 
   statusLabel(status: StockStatus): string {
-    const map: Record<StockStatus, string> = {
-      'in-stock': 'In Stock', 'low-stock': 'Low Stock', 'out-of-stock': 'Out of Stock',
-      'overstock': 'Overstock', 'critical': 'Critical',
-    };
-    return map[status];
+    return this.lang.translate('inventory.status.' + STATUS_KEY_MAP[status]);
   }
 
   private statusMatchesFilter(item: InventoryItem, filter: StockStatusFilter): boolean {
@@ -340,10 +351,10 @@ export class Inventory {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedItems().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize + 1;
     const end = Math.min(start + this.pageSize - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   goToPage(page: number): void {
@@ -406,8 +417,6 @@ export class Inventory {
     this.closeMenu();
     this.closeView();
     this.pendingDelete.set(null);
-    // Note: the adjust-stock modal handles its own ESC/backdrop-close internally
-    // and emits (closed) back to us; we don't force-close it from here.
   }
 
   // ── Details modal ─────────────────────────────────────────────────────────
@@ -435,12 +444,9 @@ export class Inventory {
   }
 
   quickRestock(item: InventoryItem, event?: Event): void {
-    // Opens the modal; the "Restock" quick action inside <app-adjust-stock>
-    // pre-fills type/quantity from the product's own min/max thresholds.
     this.openAdjust(item, event);
   }
 
-  /** Maps a raw InventoryItem onto the shape <app-adjust-stock> expects. */
   private toAdjustProduct(item: InventoryItem): AdjustStockProduct {
     return {
       id: item.id,
@@ -467,7 +473,6 @@ export class Inventory {
     };
   }
 
-  /** Handles the (saved) event emitted by <app-adjust-stock>. */
   onStockAdjusted(payload: StockAdjustmentPayload): void {
     const target = this.items().find(i => i.id === payload.productId);
     if (!target) return;
@@ -501,7 +506,8 @@ export class Inventory {
         : i
     ));
 
-    this.showToast(`Stock updated for "${target.name}" (${payload.difference > 0 ? '+' : ''}${payload.difference})`);
+    const sign = payload.difference > 0 ? '+' : '';
+    this.showToast(this.lang.translate('inventory.toasts.stockUpdated', { name: target.name, sign, diff: payload.difference }));
   }
 
   // ── Delete ────────────────────────────────────────────────────────────────
@@ -517,16 +523,15 @@ export class Inventory {
     if (!target) return;
     this.items.update(list => list.filter(i => i.id !== target.id));
     this.pendingDelete.set(null);
-    this.showToast(`"${target.name}" removed from inventory`);
+    this.showToast(this.lang.translate('inventory.toasts.removed', { name: target.name }));
   }
 
-  adjustStockPrompt(): void { this.showToast('Select a product below to adjust its stock'); }
+  adjustStockPrompt(): void { this.showToast(this.lang.translate('inventory.toasts.selectProduct')); }
 
   // ── Add inventory item modal ─────────────────────────────────────────────
   openAddItem(): void { this.isAddingItem.set(true); }
   closeAddItem(): void { this.isAddingItem.set(false); }
 
-  /** Handles the (created) event emitted by <app-add-inventory-item>. */
   onItemCreated(payload: NewInventoryItemPayload): void {
     const now = new Date().toISOString();
 
@@ -564,18 +569,18 @@ export class Inventory {
 
     this.items.update(list => [newItem, ...list]);
     this.currentPage.set(1);
-    this.showToast(`"${newItem.name}" added to inventory`);
+    this.showToast(this.lang.translate('inventory.toasts.added', { name: newItem.name }));
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatDateTime(iso: string): string {
-    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDateTime(iso);
   }
 
   trackById(_: number, item: { id: string }): string { return item.id; }
@@ -590,4 +595,3 @@ export class Inventory {
     setTimeout(() => this.isLoading.set(false), 700);
   }
 }
-
