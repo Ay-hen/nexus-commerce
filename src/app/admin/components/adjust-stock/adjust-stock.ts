@@ -1,9 +1,11 @@
 // adjust-stock-modal.ts
 import {
-  Component, Input, Output, EventEmitter, signal, computed, HostListener, OnChanges, SimpleChanges,
+  Component, Input, Output, EventEmitter, signal, computed, HostListener, OnChanges, SimpleChanges, inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type AdjustmentType =
@@ -76,14 +78,33 @@ const DEFAULT_FORM: AdjustFormState = {
   adjustmentDate: TODAY,
 };
 
+// Maps AdjustmentType -> the camelCase key under adjustStock.types.*
+const TYPE_KEY_MAP: Record<AdjustmentType, string> = {
+  increase: 'increase', decrease: 'decrease', correction: 'correction', transfer: 'transfer',
+  return: 'return', damaged: 'damaged', lost: 'lost', initial: 'initial',
+};
+
+// Maps AdjustmentReason -> the camelCase key under adjustStock.reasons.*
+const REASON_KEY_MAP: Record<AdjustmentReason, string> = {
+  'customer-return': 'customerReturn',
+  'supplier-delivery': 'supplierDelivery',
+  'stock-correction': 'stockCorrection',
+  'damaged': 'damaged',
+  'lost': 'lost',
+  'warehouse-transfer': 'warehouseTransfer',
+  'inventory-count': 'inventoryCount',
+  'other': 'other',
+};
+
 @Component({
   selector: 'app-adjust-stock',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './adjust-stock.html',
   styleUrl: './adjust-stock.scss',
 })
 export class AdjustStock implements OnChanges {
+  protected lang = inject(LanguageService);
 
   // ── Inputs / Outputs ────────────────────────────────────────────────────
   @Input() product: AdjustStockProduct | null = null;
@@ -101,27 +122,27 @@ export class AdjustStock implements OnChanges {
   showSuccess = signal(false);
   errorMsg = signal<string | null>(null);
 
-  // ── Static option lists ──────────────────────────────────────────────────
+  // ── Static option lists — label is now a translation key ─────────────────
   adjustmentTypes: { key: AdjustmentType; label: string; icon: string; sign: 'pos' | 'neg' | 'set' }[] = [
-    { key: 'increase',   label: 'Increase',       icon: 'plus',     sign: 'pos' },
-    { key: 'decrease',   label: 'Decrease',       icon: 'minus',    sign: 'neg' },
-    { key: 'correction', label: 'Correction',     icon: 'check',    sign: 'set' },
-    { key: 'transfer',   label: 'Transfer',       icon: 'transfer', sign: 'neg' },
-    { key: 'return',     label: 'Return',         icon: 'undo',     sign: 'pos' },
-    { key: 'damaged',    label: 'Damaged',        icon: 'alert',    sign: 'neg' },
-    { key: 'lost',       label: 'Lost',           icon: 'x',        sign: 'neg' },
-    { key: 'initial',    label: 'Initial Stock',  icon: 'flag',     sign: 'set' },
+    { key: 'increase',   label: 'adjustStock.types.increase',   icon: 'plus',     sign: 'pos' },
+    { key: 'decrease',   label: 'adjustStock.types.decrease',   icon: 'minus',    sign: 'neg' },
+    { key: 'correction', label: 'adjustStock.types.correction', icon: 'check',    sign: 'set' },
+    { key: 'transfer',   label: 'adjustStock.types.transfer',   icon: 'transfer', sign: 'neg' },
+    { key: 'return',     label: 'adjustStock.types.return',     icon: 'undo',     sign: 'pos' },
+    { key: 'damaged',    label: 'adjustStock.types.damaged',    icon: 'alert',    sign: 'neg' },
+    { key: 'lost',       label: 'adjustStock.types.lost',       icon: 'x',        sign: 'neg' },
+    { key: 'initial',    label: 'adjustStock.types.initial',    icon: 'flag',     sign: 'set' },
   ];
 
   reasonOptions: { key: AdjustmentReason; label: string }[] = [
-    { key: 'customer-return',    label: 'Customer Return' },
-    { key: 'supplier-delivery',  label: 'Supplier Delivery' },
-    { key: 'stock-correction',   label: 'Stock Correction' },
-    { key: 'damaged',            label: 'Damaged' },
-    { key: 'lost',               label: 'Lost' },
-    { key: 'warehouse-transfer', label: 'Warehouse Transfer' },
-    { key: 'inventory-count',    label: 'Inventory Count' },
-    { key: 'other',              label: 'Other' },
+    { key: 'customer-return',    label: 'adjustStock.reasons.customerReturn' },
+    { key: 'supplier-delivery',  label: 'adjustStock.reasons.supplierDelivery' },
+    { key: 'stock-correction',   label: 'adjustStock.reasons.stockCorrection' },
+    { key: 'damaged',            label: 'adjustStock.reasons.damaged' },
+    { key: 'lost',               label: 'adjustStock.reasons.lost' },
+    { key: 'warehouse-transfer', label: 'adjustStock.reasons.warehouseTransfer' },
+    { key: 'inventory-count',    label: 'adjustStock.reasons.inventoryCount' },
+    { key: 'other',              label: 'adjustStock.reasons.other' },
   ];
 
   // ── Derived: current type metadata ───────────────────────────────────────
@@ -142,7 +163,6 @@ export class AdjustStock implements OnChanges {
     const sign = this.activeTypeMeta().sign;
     if (sign === 'pos') return qty;
     if (sign === 'neg') return -qty;
-    // 'set' types (correction / initial) treat quantity as the target count
     return qty - this.currentStock();
   });
 
@@ -234,7 +254,7 @@ export class AdjustStock implements OnChanges {
       quantity: Math.max(10, this.product.minStock),
       reason: 'supplier-delivery',
       referenceNumber: 'PO-' + Math.floor(1000 + Math.random() * 9000),
-      notes: 'Auto-filled restock based on minimum stock threshold.',
+      notes: this.lang.translate('adjustStock.autoFillNote'),
     });
   }
 
@@ -261,7 +281,7 @@ export class AdjustStock implements OnChanges {
     if (!this.canSave() || !this.product) return;
 
     if (this.exceedsAvailable()) {
-      this.errorMsg.set('Quantity exceeds available stock. Reduce the amount or choose a different adjustment type.');
+      this.errorMsg.set(this.lang.translate('adjustStock.errors.exceedsAvailableSave'));
       return;
     }
 
@@ -293,14 +313,19 @@ export class AdjustStock implements OnChanges {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   formatDateTime(iso: string): string {
-    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDateTime(iso);
+  }
+
+  typeLabel(type: string): string {
+    return this.lang.translate('adjustStock.types.' + TYPE_KEY_MAP[type as AdjustmentType]);
   }
 
   reasonLabel(key: string): string {
-    return this.reasonOptions.find(r => r.key === key)?.label ?? key;
+    const mapped = REASON_KEY_MAP[key as AdjustmentReason];
+    return mapped ? this.lang.translate('adjustStock.reasons.' + mapped) : key;
   }
 
   trackById(_: number, item: { id: string }): string { return item.id; }
