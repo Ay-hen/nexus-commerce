@@ -24,7 +24,7 @@
         </div>
         <h2 class="success-title">{{ 'adjustStock.successTitle' | translate }}</h2>
         <p class="success-sub">
-          {{ 'adjustStock.successBody' | translate: { name: product?.name, stock: resultingStock() } }}
+          {{ 'adjustStock.successBody' | translate: { name: product!.name, stock: resultingStock() } }}
           @if (difference() !== 0) {
             <span class="success-diff" [class.success-diff--pos]="difference() > 0" [class.success-diff--neg]="difference() < 0">
               ({{ difference() > 0 ? '+' : '' }}{{ difference() }})
