@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdjustStock, AdjustStockProduct, StockAdjustmentPayload } from '../adjust-stock/adjust-stock';
 import { AddInventoryItem, NewInventoryItemPayload } from '../add-inventory-item/add-inventory-item';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock' | 'overstock' | 'critical';
