@@ -151,7 +151,7 @@
                   <p class="customer-panel__meta">{{ 'orders.detail.customerSince' | translate: { date: formatDate(o.customer.customerSince) } }}</p>
                 </div>
                 <div class="customer-panel__stats">
-                  <div><span class="cp-stat-val">{{ o.customer.totalOrders }}</span><span class="cp-stat-lbl">{{ 'products.table.stock' === '' ? '' : ('orders.table.customer' | translate) === '' ? '' : ('inventory.actions.stockHistory' | translate) === '' ? '' : ('orders.detail.ordersLabel' | translate) }}</span></div>
+                  <div><span class="cp-stat-val">{{ o.customer.totalOrders }}</span><span class="cp-stat-lbl">{{ 'orders.detail.ordersLabel' | translate }}</span></div>
                   <div><span class="cp-stat-val">{{ formatCurrency(o.customer.lifetimeSpend) }}</span><span class="cp-stat-lbl">{{ 'orders.detail.lifetimeLabel' | translate }}</span></div>
                 </div>
               </div>
@@ -243,7 +243,7 @@
                   <div class="detail-field"><span class="detail-label">{{ 'orders.detail.shippingCompany' | translate }}</span><span class="detail-value">{{ o.shipping.company }}</span></div>
                   <div class="detail-field"><span class="detail-label">{{ 'orders.trackingNumberLabel' | translate }}</span><span class="detail-value detail-value--mono">{{ o.shipping.trackingNumber }}</span></div>
                   <div class="detail-field"><span class="detail-label">{{ 'orders.estimatedDeliveryLabel' | translate }}</span><span class="detail-value">{{ formatDate(o.shipping.estimatedDelivery) }}</span></div>
-                  <div class="detail-field"><span class="detail-label">{{ 'orders.subtotal' === '' ? '' : ('orders.detail.shippingCostLabel' | translate) }}</span><span class="detail-value">{{ formatCurrency(o.shipping.cost) }}</span></div>
+                  <div class="detail-field"><span class="detail-label">{{ 'orders.detail.shippingCostLabel' | translate }}</span><span class="detail-value">{{ formatCurrency(o.shipping.cost) }}</span></div>
                   <div class="detail-field"><span class="detail-label">{{ 'orders.table.shippingStatus' | translate }}</span>
                     <span class="ship-pill ship-pill--{{ o.shipping.status }}">{{ shippingStatusLabel(o.shipping.status) }}</span>
                   </div>
