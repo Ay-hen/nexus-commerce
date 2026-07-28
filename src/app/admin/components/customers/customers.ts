@@ -1,8 +1,10 @@
 // customers.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type CustomerStatus = 'active' | 'inactive' | 'blocked' | 'pending-verification';
@@ -122,13 +124,22 @@ export interface Customer {
   insights: CustomerInsights;
 }
 
+const ACTIVITY_KEY_MAP: Record<ActivityKind, string> = {
+  'account-created': 'accountCreated', 'email-verified': 'emailVerified',
+  'order-placed': 'orderPlaced', 'order-delivered': 'orderDelivered',
+  'review-submitted': 'reviewSubmitted', 'password-changed': 'passwordChanged',
+  'profile-updated': 'profileUpdated', 'reward-earned': 'rewardEarned',
+};
+
 @Component({
   selector: 'app-customers',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './customers.html',
   styleUrl: './customers.scss',
 })
 export class Customers {
+  protected lang = inject(LanguageService);
+
   constructor(private router: Router) {}
 
   // ── Loading ────────────────────────────────────────────────────────────
@@ -160,14 +171,11 @@ export class Customers {
   pendingDelete = signal<Customer | null>(null);
   pendingBlockToggle = signal<Customer | null>(null);
 
-  // Profile modal active tab
   profileTab = signal<'overview' | 'orders' | 'addresses' | 'payments' | 'wishlist' | 'activity' | 'notes' | 'insights'>('overview');
 
-  // Notes composer
   newNoteText = signal('');
   newNoteKind = signal<'admin' | 'internal'>('admin');
 
-  // Edit customer form fields
   editName = signal('');
   editEmail = signal('');
   editPhone = signal('');
@@ -179,7 +187,6 @@ export class Customers {
   editMarketing = signal(true);
   editSaving = signal(false);
 
-  // Send email form fields
   emailSubject = signal('');
   emailMessage = signal('');
   emailTemplate = signal<'order-update' | 'promotion' | 'newsletter' | 'custom'>('custom');
@@ -189,56 +196,56 @@ export class Customers {
   toastMsg = signal<string | null>(null);
   private toastTimer: any;
 
-  // ── Option lists ───────────────────────────────────────────────────────
+  // ── Option lists — labels are translation keys ───────────────────────────
   searchByOptions: { key: SearchByField; label: string }[] = [
-    { key: 'name', label: 'Customer Name' },
-    { key: 'email', label: 'Email' },
-    { key: 'phone', label: 'Phone Number' },
-    { key: 'customerId', label: 'Customer ID' },
+    { key: 'name', label: 'customers.searchBy.name' },
+    { key: 'email', label: 'customers.searchBy.email' },
+    { key: 'phone', label: 'customers.searchBy.phone' },
+    { key: 'customerId', label: 'customers.searchBy.customerId' },
   ];
 
   statusOptions: { key: 'all' | CustomerStatus; label: string }[] = [
-    { key: 'all', label: 'All Statuses' },
-    { key: 'active', label: 'Active' },
-    { key: 'inactive', label: 'Inactive' },
-    { key: 'blocked', label: 'Blocked' },
-    { key: 'pending-verification', label: 'Pending Verification' },
+    { key: 'all', label: 'common.allStatuses' },
+    { key: 'active', label: 'customers.status.active' },
+    { key: 'inactive', label: 'customers.status.inactive' },
+    { key: 'blocked', label: 'customers.status.blocked' },
+    { key: 'pending-verification', label: 'customers.status.pendingVerification' },
   ];
 
   statusDropdownOptions: CustomerStatus[] = ['active', 'inactive', 'blocked', 'pending-verification'];
 
   typeOptions: { key: CustomerTypeFilter; label: string }[] = [
-    { key: 'all', label: 'All Types' },
-    { key: 'regular', label: 'Regular' },
-    { key: 'premium', label: 'Premium' },
-    { key: 'vip', label: 'VIP' },
-    { key: 'business', label: 'Business' },
+    { key: 'all', label: 'common.allTypes' },
+    { key: 'regular', label: 'customers.type.regular' },
+    { key: 'premium', label: 'customers.type.premium' },
+    { key: 'vip', label: 'customers.type.vip' },
+    { key: 'business', label: 'customers.type.business' },
   ];
 
   typeDropdownOptions: CustomerType[] = ['regular', 'premium', 'vip', 'business'];
 
   registrationOptions: { key: RegistrationFilter; label: string }[] = [
-    { key: 'all', label: 'All Time' },
-    { key: 'today', label: 'Today' },
-    { key: '7d', label: 'Last 7 Days' },
-    { key: '30d', label: 'Last 30 Days' },
-    { key: '1y', label: 'Last Year' },
-    { key: 'custom', label: 'Custom Range' },
+    { key: 'all', label: 'common.allTime' },
+    { key: 'today', label: 'common.today' },
+    { key: '7d', label: 'common.last7Days' },
+    { key: '30d', label: 'common.last30Days' },
+    { key: '1y', label: 'common.lastYear' },
+    { key: 'custom', label: 'common.customRange' },
   ];
 
   sortOptions: { key: SortByField; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'highest-spending', label: 'Highest Spending' },
-    { key: 'most-orders', label: 'Most Orders' },
-    { key: 'name', label: 'Customer Name' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'highest-spending', label: 'customers.sort.highestSpending' },
+    { key: 'most-orders', label: 'customers.sort.mostOrders' },
+    { key: 'name', label: 'customers.sort.name' },
   ];
 
   emailTemplateOptions: { key: 'order-update' | 'promotion' | 'newsletter' | 'custom'; label: string }[] = [
-    { key: 'order-update', label: 'Order Update' },
-    { key: 'promotion', label: 'Promotion' },
-    { key: 'newsletter', label: 'Newsletter' },
-    { key: 'custom', label: 'Custom' },
+    { key: 'order-update', label: 'customers.emailTemplates.orderUpdate' },
+    { key: 'promotion', label: 'customers.emailTemplates.promotion' },
+    { key: 'newsletter', label: 'customers.emailTemplates.newsletter' },
+    { key: 'custom', label: 'customers.emailTemplates.custom' },
   ];
 
   // ── Mock data pools ────────────────────────────────────────────────────
@@ -485,10 +492,10 @@ export class Customers {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedCustomers().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize + 1;
     const end = Math.min(start + this.pageSize - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   // ── Stats ──────────────────────────────────────────────────────────────
@@ -641,7 +648,7 @@ export class Customers {
         status: this.editStatus(), type: this.editType(), marketingSubscribed: this.editMarketing(),
       };
       this.customers.update(list => list.map(c => c.id === target.id ? { ...c, ...updated } : c));
-      this.showToast(`${this.editName()} updated successfully`);
+      this.showToast(this.lang.translate('customers.toasts.updated', { name: this.editName() }));
       this.closeEdit();
     }, 700);
   }
@@ -659,15 +666,15 @@ export class Customers {
 
   applyEmailTemplate(kind: 'order-update' | 'promotion' | 'newsletter' | 'custom'): void {
     this.emailTemplate.set(kind);
-    const map: Record<string, { subject: string; message: string }> = {
-      'order-update': { subject: 'An update on your recent order', message: 'Hi there,\n\nWe wanted to give you a quick update on your recent order status.\n\nThanks for shopping with us!' },
-      promotion: { subject: 'A special offer just for you', message: 'Hi there,\n\nAs a valued customer, enjoy an exclusive discount on your next purchase.\n\nHappy shopping!' },
-      newsletter: { subject: 'What\'s new this month', message: 'Hi there,\n\nHere\'s a roundup of what\'s new in our store this month.' },
-      custom: { subject: '', message: '' },
+    const map: Record<string, { subjectKey: string; messageKey: string }> = {
+      'order-update': { subjectKey: 'customers.emailTemplateContent.orderUpdateSubject', messageKey: 'customers.emailTemplateContent.orderUpdateMessage' },
+      promotion: { subjectKey: 'customers.emailTemplateContent.promotionSubject', messageKey: 'customers.emailTemplateContent.promotionMessage' },
+      newsletter: { subjectKey: 'customers.emailTemplateContent.newsletterSubject', messageKey: 'customers.emailTemplateContent.newsletterMessage' },
+      custom: { subjectKey: '', messageKey: '' },
     };
     const t = map[kind];
-    this.emailSubject.set(t.subject);
-    this.emailMessage.set(t.message);
+    this.emailSubject.set(t.subjectKey ? this.lang.translate(t.subjectKey) : '');
+    this.emailMessage.set(t.messageKey ? this.lang.translate(t.messageKey) : '');
   }
 
   sendEmail(): void {
@@ -675,7 +682,7 @@ export class Customers {
     if (!target || !this.emailSubject().trim()) return;
     this.emailSending.set(true);
     setTimeout(() => {
-      this.showToast(`Email sent to ${target.email}`);
+      this.showToast(this.lang.translate('customers.toasts.emailSent', { email: target.email }));
       this.closeEmail();
     }, 700);
   }
@@ -692,7 +699,7 @@ export class Customers {
     if (!target) return;
     const newStatus: CustomerStatus = target.status === 'blocked' ? 'active' : 'blocked';
     this.customers.update(list => list.map(c => c.id === target.id ? { ...c, status: newStatus } : c));
-    this.showToast(`${target.name} ${newStatus === 'blocked' ? 'blocked' : 'unblocked'}`);
+    this.showToast(this.lang.translate(newStatus === 'blocked' ? 'customers.toasts.blocked' : 'customers.toasts.unblocked', { name: target.name }));
     this.pendingBlockToggle.set(null);
   }
 
@@ -706,45 +713,56 @@ export class Customers {
     const target = this.pendingDelete();
     if (!target) return;
     this.customers.update(list => list.filter(c => c.id !== target.id));
-    this.showToast(`${target.name} deleted`);
+    this.showToast(this.lang.translate('customers.toasts.deleted', { name: target.name }));
     this.pendingDelete.set(null);
   }
 
-  exportCustomers(): void { this.showToast('Exporting customers to CSV…'); }
-  importCustomers(): void { this.showToast('Opening import dialog…'); }
-  addCustomer(): void { this.showToast('Opening new customer form…'); }
+  exportCustomers(): void { this.showToast(this.lang.translate('customers.toasts.exporting')); }
+  importCustomers(): void { this.showToast(this.lang.translate('customers.toasts.importing')); }
+  addCustomer(): void { this.showToast(this.lang.translate('customers.toasts.openingNewCustomer')); }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   statusLabel(status: CustomerStatus): string {
-    const map: Record<CustomerStatus, string> = {
-      active: 'Active', inactive: 'Inactive', blocked: 'Blocked', 'pending-verification': 'Pending Verification',
-    };
-    return map[status];
+    const key = status === 'pending-verification' ? 'pendingVerification' : status;
+    return this.lang.translate('customers.status.' + key);
   }
 
   typeLabel(type: CustomerType): string {
-    const map: Record<CustomerType, string> = {
-      regular: 'Regular', premium: 'Premium', vip: 'VIP', business: 'Business',
+    return this.lang.translate('customers.type.' + type);
+  }
+
+  activityLabel(kind: ActivityKind): string {
+    return this.lang.translate('customers.activity.' + ACTIVITY_KEY_MAP[kind]);
+  }
+
+  addressTypeLabel(type: 'shipping' | 'billing'): string {
+    return type === 'shipping' ? this.lang.translate('orders.detail.shippingAddress') : this.lang.translate('orders.detail.billingAddress');
+  }
+
+  paymentKindLabel(kind: CustomerPaymentMethod['kind']): string {
+    const map: Record<CustomerPaymentMethod['kind'], string> = {
+      card: 'customers.paymentKind.card', paypal: 'customers.paymentKind.paypal',
+      bank: 'customers.paymentKind.bank', wallet: 'customers.paymentKind.wallet',
     };
-    return map[type];
+    return this.lang.translate(map[kind]);
   }
 
   ratingStars(rating: number): number[] {
     return [1, 2, 3, 4, 5];
   }
 
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatTime(iso: string): string {
-    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDate(iso, { hour: 'numeric', minute: '2-digit' });
   }
 
   formatDateTime(iso: string): string {
-    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDateTime(iso);
   }
 
   trackById(_: number, item: { id: string }): string { return item.id; }
