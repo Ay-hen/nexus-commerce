@@ -87,7 +87,7 @@
           </div>
 
           <div class="uf-field">
-            <label class="uf-label">{{ 'orders.detail.notesTitle' === '' ? '' : ('customers.messageLabel' | translate) }}</label>
+            <label class="uf-label">{{ 'customers.messageLabel' | translate }}</label>
             <textarea class="uf-textarea" rows="6" [ngModel]="emailMessage()" (ngModelChange)="emailMessage.set($event)" [placeholder]="'customers.messagePlaceholder' | translate"></textarea>
           </div>
         </div>
