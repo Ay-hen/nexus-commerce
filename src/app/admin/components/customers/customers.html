@@ -285,7 +285,7 @@
               } @else {
                 <div class="table-wrap">
                   <table class="data-table data-table--modal">
-                    
+
                     <thead>
                       <tr>
                         <th>{{ 'reports.columns.orderId' | translate }}</th>
@@ -326,7 +326,11 @@
                   <div class="address-card">
                     <div class="address-card__top">
                       <span class="address-card__label">{{ addressTypeLabel(a.type) }}</span>
-                      @if (a.isDefault) { <span class="default-badge">{{ 'settings.system.env.default' === '' ? '' : ('customers.defaultBadge' | translate) }}</span> }
+                      @if (a.isDefault) {
+                        <span class="default-badge">
+                          {{ 'customers.defaultBadge' | translate }}
+                        </span>
+                      }
                     </div>
                     <p class="address-card__name">{{ a.recipient }}</p>
                     <p class="address-card__line">{{ a.street }}</p>
