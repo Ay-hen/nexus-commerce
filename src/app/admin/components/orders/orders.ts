@@ -1,8 +1,10 @@
 // orders.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type OrderStatus =
@@ -113,13 +115,30 @@ export interface Order {
   notes: string;
 }
 
+// Maps PaymentMethod (data value) -> translation key segment, for display only.
+const PAYMENT_METHOD_KEY_MAP: Record<PaymentMethod, string> = {
+  'Credit Card': 'creditCard',
+  'PayPal': 'paypal',
+  'Cash on Delivery': 'cashOnDelivery',
+  'Bank Transfer': 'bankTransfer',
+  'Wallet': 'wallet',
+};
+
+const TIMELINE_KEY_MAP: Record<TimelineKind, string> = {
+  placed: 'placed', payment: 'payment', confirmed: 'confirmed', packed: 'packed',
+  shipped: 'shipped', 'out-for-delivery': 'outForDelivery', delivered: 'delivered',
+  cancelled: 'cancelled', refunded: 'refunded',
+};
+
 @Component({
   selector: 'app-orders',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './orders.html',
   styleUrl: './orders.scss',
 })
 export class Orders {
+  protected lang = inject(LanguageService);
+
   constructor(private router: Router) {}
 
   // ── Loading ────────────────────────────────────────────────────────────
@@ -163,26 +182,26 @@ export class Orders {
   toastMsg = signal<string | null>(null);
   private toastTimer: any;
 
-  // ── Option lists (for template dropdowns) ─────────────────────────────
+  // ── Option lists — labels are translation keys resolved via `| translate` ──
   searchByOptions: { key: SearchByField; label: string }[] = [
-    { key: 'orderNumber', label: 'Order Number' },
-    { key: 'customerName', label: 'Customer Name' },
-    { key: 'email', label: 'Email' },
-    { key: 'phone', label: 'Phone' },
-    { key: 'productName', label: 'Product Name' },
-    { key: 'sku', label: 'SKU' },
+    { key: 'orderNumber', label: 'orders.searchBy.orderNumber' },
+    { key: 'customerName', label: 'orders.searchBy.customerName' },
+    { key: 'email', label: 'orders.searchBy.email' },
+    { key: 'phone', label: 'orders.searchBy.phone' },
+    { key: 'productName', label: 'orders.searchBy.productName' },
+    { key: 'sku', label: 'orders.searchBy.sku' },
   ];
 
   statusOptions: { key: 'all' | OrderStatus; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'pending', label: 'Pending' },
-    { key: 'confirmed', label: 'Confirmed' },
-    { key: 'processing', label: 'Processing' },
-    { key: 'packed', label: 'Packed' },
-    { key: 'shipped', label: 'Shipped' },
-    { key: 'delivered', label: 'Delivered' },
-    { key: 'cancelled', label: 'Cancelled' },
-    { key: 'refunded', label: 'Refunded' },
+    { key: 'all', label: 'common.allStatuses' },
+    { key: 'pending', label: 'orders.status.pending' },
+    { key: 'confirmed', label: 'orders.status.confirmed' },
+    { key: 'processing', label: 'orders.status.processing' },
+    { key: 'packed', label: 'orders.status.packed' },
+    { key: 'shipped', label: 'orders.status.shipped' },
+    { key: 'delivered', label: 'orders.status.delivered' },
+    { key: 'cancelled', label: 'orders.status.cancelled' },
+    { key: 'refunded', label: 'orders.status.refunded' },
   ];
 
   statusDropdownOptions: OrderStatus[] = [
@@ -190,44 +209,39 @@ export class Orders {
   ];
 
   paymentStatusOptions: { key: 'all' | PaymentStatus; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'paid', label: 'Paid' },
-    { key: 'pending', label: 'Pending' },
-    { key: 'failed', label: 'Failed' },
-    { key: 'refunded', label: 'Refunded' },
+    { key: 'all', label: 'orders.allPayments' },
+    { key: 'paid', label: 'orders.payment.paid' },
+    { key: 'pending', label: 'orders.payment.pending' },
+    { key: 'failed', label: 'orders.payment.failed' },
+    { key: 'refunded', label: 'orders.payment.refunded' },
   ];
 
   paymentMethodOptions: { key: 'all' | PaymentMethod; label: string }[] = [
-    { key: 'all', label: 'All Methods' },
-    { key: 'Credit Card', label: 'Credit Card' },
-    { key: 'PayPal', label: 'PayPal' },
-    { key: 'Cash on Delivery', label: 'Cash on Delivery' },
-    { key: 'Bank Transfer', label: 'Bank Transfer' },
-    { key: 'Wallet', label: 'Wallet' },
+    { key: 'all', label: 'orders.allMethods' },
+    { key: 'Credit Card', label: 'orders.paymentMethods.creditCard' },
+    { key: 'PayPal', label: 'orders.paymentMethods.paypal' },
+    { key: 'Cash on Delivery', label: 'orders.paymentMethods.cashOnDelivery' },
+    { key: 'Bank Transfer', label: 'orders.paymentMethods.bankTransfer' },
+    { key: 'Wallet', label: 'orders.paymentMethods.wallet' },
   ];
 
   dateRangeOptions: { key: DateRangeFilter; label: string }[] = [
-    { key: 'all', label: 'All Time' },
-    { key: 'today', label: 'Today' },
-    { key: '7d', label: 'Last 7 Days' },
-    { key: '30d', label: 'Last 30 Days' },
-    { key: 'custom', label: 'Custom Range' },
+    { key: 'all', label: 'common.allTime' },
+    { key: 'today', label: 'common.today' },
+    { key: '7d', label: 'common.last7Days' },
+    { key: '30d', label: 'common.last30Days' },
+    { key: 'custom', label: 'common.customRange' },
   ];
 
   sortOptions: { key: SortByField; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'highest', label: 'Highest Total' },
-    { key: 'lowest', label: 'Lowest Total' },
-    { key: 'customer', label: 'Customer' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'highest', label: 'orders.sort.highest' },
+    { key: 'lowest', label: 'orders.sort.lowest' },
+    { key: 'customer', label: 'orders.sort.customer' },
   ];
 
   // ── Mock data source pools ────────────────────────────────────────────
-  // NOTE: these MUST be declared before `orders` below — class field
-  // initializers run top-to-bottom at construction time, and
-  // generateMockOrders() (called by `orders`'s initializer) reads all of
-  // these. If `orders` were declared first, every pool referenced inside
-  // generateMockOrders() would still be `undefined` at that point.
   private customerPool = [
     { name: 'Ayoub Hennani', email: 'ayoub@nexus.com', phone: '+212 6 12 34 56 78' },
     { name: 'Sara Idrissi', email: 'sara@mail.com', phone: '+212 6 22 11 44 09' },
@@ -314,6 +328,9 @@ export class Orders {
     return events.reverse();
   }
 
+  // NOTE: these notes simulate backend-supplied audit descriptions — treated
+  // as data, not UI copy, and left untranslated (same policy as inventory's
+  // movement notes).
   private timelineNoteFor(kind: TimelineKind): string {
     const map: Record<TimelineKind, string> = {
       placed: 'Customer placed the order online',
@@ -526,10 +543,10 @@ export class Orders {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedOrders().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize + 1;
     const end = Math.min(start + this.pageSize - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   // ── Stats ──────────────────────────────────────────────────────────────
@@ -609,13 +626,13 @@ export class Orders {
 
   editFromView(order: Order): void {
     this.closeView();
-    this.showToast(`Editing ${order.orderNumber} — open the order editor`);
+    this.showToast(this.lang.translate('orders.toasts.editingOrderOpen', { order: order.orderNumber }));
   }
 
   editOrder(order: Order, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
-    this.showToast(`Editing ${order.orderNumber}`);
+    this.showToast(this.lang.translate('orders.toasts.editingOrder', { order: order.orderNumber }));
   }
 
   // ── Update status modal ────────────────────────────────────────────────
@@ -643,15 +660,16 @@ export class Orders {
     setTimeout(() => {
       const newStatus = this.updateStatusValue();
       const now = new Date().toISOString();
+      const statusLabelText = this.statusLabel(newStatus);
       const newEvent: TimelineEvent = {
         id: 'tl-' + Date.now(),
         kind: newStatus === 'cancelled' ? 'cancelled' : newStatus === 'refunded' ? 'refunded'
           : newStatus === 'shipped' ? 'shipped' : newStatus === 'delivered' ? 'delivered'
           : newStatus === 'packed' ? 'packed' : newStatus === 'confirmed' ? 'confirmed' : 'placed',
-        label: `Status updated to ${this.statusLabel(newStatus)}`,
+        label: this.lang.translate('orders.timeline.statusUpdatedTo', { status: statusLabelText }),
         date: now,
         employee: 'You',
-        notes: this.updateNotes() || `Status manually updated to ${this.statusLabel(newStatus)}`,
+        notes: this.updateNotes() || this.lang.translate('orders.timeline.statusManuallyUpdated', { status: statusLabelText }),
       };
 
       this.orders.update(list => list.map(o => o.id === target.id ? {
@@ -667,7 +685,7 @@ export class Orders {
         timeline: [newEvent, ...o.timeline],
       } : o));
 
-      this.showToast(`${target.orderNumber} updated to "${this.statusLabel(newStatus)}"`);
+      this.showToast(this.lang.translate('orders.toasts.statusUpdated', { order: target.orderNumber, status: statusLabelText }));
       this.closeUpdateStatus();
     }, 700);
   }
@@ -679,19 +697,19 @@ export class Orders {
     const idx = this.employeePool.indexOf(order.assignedEmployee);
     const next = this.employeePool[(idx + 1) % this.employeePool.length];
     this.orders.update(list => list.map(o => o.id === order.id ? { ...o, assignedEmployee: next } : o));
-    this.showToast(`${order.orderNumber} assigned to ${next}`);
+    this.showToast(this.lang.translate('orders.toasts.assigned', { order: order.orderNumber, employee: next }));
   }
 
   printInvoice(order: Order, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
-    this.showToast(`Printing invoice ${order.payment.invoiceNumber}`);
+    this.showToast(this.lang.translate('orders.toasts.printingInvoice', { invoice: order.payment.invoiceNumber }));
   }
 
   downloadInvoice(order: Order, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
-    this.showToast(`Downloading invoice ${order.payment.invoiceNumber}.pdf`);
+    this.showToast(this.lang.translate('orders.toasts.downloadingInvoice', { invoice: order.payment.invoiceNumber }));
   }
 
   requestRefund(order: Order, event?: Event): void {
@@ -708,7 +726,7 @@ export class Orders {
         date: new Date().toISOString(), employee: 'You', notes: 'Refund issued to customer',
       }, ...o.timeline],
     } : o));
-    this.showToast(`${order.orderNumber} refunded`);
+    this.showToast(this.lang.translate('orders.toasts.refunded', { order: order.orderNumber }));
   }
 
   requestCancel(order: Order, event: Event): void {
@@ -729,7 +747,7 @@ export class Orders {
         date: new Date().toISOString(), employee: 'You', notes: 'Cancelled by admin',
       }, ...o.timeline],
     } : o));
-    this.showToast(`${target.orderNumber} cancelled`);
+    this.showToast(this.lang.translate('orders.toasts.cancelled', { order: target.orderNumber }));
     this.pendingCancel.set(null);
   }
 
@@ -744,35 +762,38 @@ export class Orders {
     if (!target) return;
     this.orders.update(list => list.filter(o => o.id !== target.id));
     this.pendingDelete.set(null);
-    this.showToast(`${target.orderNumber} deleted`);
+    this.showToast(this.lang.translate('orders.toasts.deleted', { order: target.orderNumber }));
   }
 
-  exportOrders(): void { this.showToast('Exporting orders to CSV…'); }
-  printAll(): void { this.showToast('Preparing print view…'); }
-  createOrder(): void { this.showToast('Opening new order form…'); }
+  exportOrders(): void { this.showToast(this.lang.translate('orders.toasts.exporting')); }
+  printAll(): void { this.showToast(this.lang.translate('orders.toasts.preparingPrint')); }
+  createOrder(): void { this.showToast(this.lang.translate('orders.toasts.openingNewOrder')); }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   statusLabel(status: OrderStatus): string {
-    const map: Record<OrderStatus, string> = {
-      pending: 'Pending', confirmed: 'Confirmed', processing: 'Processing', packed: 'Packed',
-      shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled', refunded: 'Refunded',
-    };
-    return map[status];
+    return this.lang.translate('orders.status.' + status);
   }
 
   paymentStatusLabel(status: PaymentStatus): string {
-    const map: Record<PaymentStatus, string> = {
-      paid: 'Paid', pending: 'Pending', failed: 'Failed', refunded: 'Refunded',
-    };
-    return map[status];
+    return this.lang.translate('orders.payment.' + status);
   }
 
   shippingStatusLabel(status: ShippingStatus): string {
-    const map: Record<ShippingStatus, string> = {
-      preparing: 'Preparing', ready: 'Ready', 'in-transit': 'In Transit',
-      delivered: 'Delivered', returned: 'Returned',
-    };
-    return map[status];
+    const key = status === 'in-transit' ? 'inTransit' : status;
+    return this.lang.translate('orders.shipping.' + key);
+  }
+
+  paymentMethodLabel(method: PaymentMethod): string {
+    return this.lang.translate('orders.paymentMethods.' + PAYMENT_METHOD_KEY_MAP[method]);
+  }
+
+  timelineLabel(kind: TimelineKind): string {
+    return this.lang.translate('orders.timeline.' + TIMELINE_KEY_MAP[kind]);
+  }
+
+  inventoryStatusLabel(status: 'in-stock' | 'low-stock' | 'out-of-stock'): string {
+    const key = status === 'in-stock' ? 'inStock' : status === 'low-stock' ? 'lowStock' : 'outOfStock';
+    return this.lang.translate('inventory.status.' + key);
   }
 
   itemSubtotal(item: OrderLineItem): number {
@@ -783,18 +804,18 @@ export class Orders {
     return order.items.reduce((s, i) => s + i.quantity, 0);
   }
 
-  formatCurrency(v: number): string { return '$' + v.toLocaleString(); }
+  formatCurrency(v: number): string { return this.lang.formatCurrency(v); }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatTime(iso: string): string {
-    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDate(iso, { hour: 'numeric', minute: '2-digit' });
   }
 
   formatDateTime(iso: string): string {
-    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDateTime(iso);
   }
 
   trackById(_: number, item: { id: string }): string { return item.id; }
