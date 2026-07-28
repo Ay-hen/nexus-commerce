@@ -285,9 +285,19 @@
               } @else {
                 <div class="table-wrap">
                   <table class="data-table data-table--modal">
+                    
                     <thead>
-                      <tr><th>{{ 'reports.columns.orderId' | translate }}</th><th>{{ 'categories.table.created' === '' ? '' : ('common.today' === '' ? '' : ('orders.table.orderDate' | translate)) }}</th><th>{{ 'orders.detail.itemsLabel' | translate }}</th><th>{{ 'orders.table.total' | translate }}</th><th>{{ 'common.status' | translate }}</th><th>{{ 'orders.table.paymentStatus' | translate }}</th><th></th></tr>
+                      <tr>
+                        <th>{{ 'reports.columns.orderId' | translate }}</th>
+                        <th>{{ 'orders.table.orderDate' | translate }}</th>
+                        <th>{{ 'orders.detail.itemsLabel' | translate }}</th>
+                        <th>{{ 'orders.table.total' | translate }}</th>
+                        <th>{{ 'common.status' | translate }}</th>
+                        <th>{{ 'orders.table.paymentStatus' | translate }}</th>
+                        <th></th>
+                      </tr>
                     </thead>
+
                     <tbody>
                       @for (o of c.orders; track o.orderNumber) {
                         <tr>
