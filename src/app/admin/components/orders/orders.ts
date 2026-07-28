@@ -3,8 +3,8 @@ import { Component, signal, computed, HostListener, inject } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export type OrderStatus =
