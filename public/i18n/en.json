@@ -533,7 +533,20 @@
       "couponLabel": "Coupon ({{code}})",
       "appliedLabel": "Applied"
     },
-    
+    "toasts": {
+      "editingOrderOpen": "Editing {{order}} — open the order editor",
+      "editingOrder": "Editing {{order}}",
+      "statusUpdated": "{{order}} updated to \"{{status}}\"",
+      "assigned": "{{order}} assigned to {{employee}}",
+      "printingInvoice": "Printing invoice {{invoice}}",
+      "downloadingInvoice": "Downloading invoice {{invoice}}.pdf",
+      "refunded": "{{order}} refunded",
+      "cancelled": "{{order}} cancelled",
+      "deleted": "{{order}} deleted",
+      "exporting": "Exporting orders to CSV…",
+      "preparingPrint": "Preparing print view…",
+      "openingNewOrder": "Opening new order form…"
+    },
     "stats": {
       "totalOrders": "Total Orders",
       "pending": "Pending",
