@@ -499,6 +499,14 @@
     "trackingNumberPlaceholder": "ex. TRK5029134",
     "estimatedDeliveryLabel": "Livraison estimée",
     "updateNotesPlaceholder": "Ajoutez une note à propos de cette mise à jour…",
+    "timeline": {
+      "placed": "Commande passée", "payment": "Paiement reçu", "confirmed": "Commande confirmée",
+      "packed": "Commande emballée", "shipped": "Commande expédiée", "outForDelivery": "En cours de livraison",
+      "delivered": "Commande livrée", "cancelled": "Commande annulée", "refunded": "Commande remboursée",
+      "statusUpdatedTo": "Statut mis à jour vers {{status}}",
+      "statusManuallyUpdated": "Statut mis à jour manuellement vers {{status}}"
+    },
+
     "stats": {
       "totalOrders": "Commandes totales",
       "pending": "En attente",
