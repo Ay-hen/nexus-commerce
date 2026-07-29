@@ -534,6 +534,20 @@
       "couponLabel": "Coupon ({{code}})",
       "appliedLabel": "Appliqué"
     },
+    "toasts": {
+      "editingOrderOpen": "Modification de {{order}} — ouverture de l'éditeur de commande",
+      "editingOrder": "Modification de {{order}}",
+      "statusUpdated": "{{order}} mis à jour vers « {{status}} »",
+      "assigned": "{{order}} assignée à {{employee}}",
+      "printingInvoice": "Impression de la facture {{invoice}}",
+      "downloadingInvoice": "Téléchargement de la facture {{invoice}}.pdf",
+      "refunded": "{{order}} remboursée",
+      "cancelled": "{{order}} annulée",
+      "deleted": "{{order}} supprimée",
+      "exporting": "Exportation des commandes en CSV…",
+      "preparingPrint": "Préparation de la vue d'impression…",
+      "openingNewOrder": "Ouverture du formulaire de nouvelle commande…"
+    },
     "stats": {
       "totalOrders": "Commandes totales",
       "pending": "En attente",
