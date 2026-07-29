@@ -498,6 +498,13 @@
     "trackingNumberPlaceholder": "e.g. TRK5029134",
     "estimatedDeliveryLabel": "Estimated Delivery",
     "updateNotesPlaceholder": "Add a note about this update…",
+    "timeline": {
+      "placed": "Order Placed", "payment": "Payment Received", "confirmed": "Order Confirmed",
+      "packed": "Order Packed", "shipped": "Order Shipped", "outForDelivery": "Out for Delivery",
+      "delivered": "Order Delivered", "cancelled": "Order Cancelled", "refunded": "Order Refunded",
+      "statusUpdatedTo": "Status updated to {{status}}",
+      "statusManuallyUpdated": "Status manually updated to {{status}}"
+    },
     "stats": {
       "totalOrders": "Total Orders",
       "pending": "Pending",
