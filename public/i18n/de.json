@@ -534,6 +534,20 @@
       "couponLabel": "Gutschein ({{code}})",
       "appliedLabel": "Angewendet"
     },
+    "toasts": {
+      "editingOrderOpen": "{{order}} wird bearbeitet — Bestelleditor wird geöffnet",
+      "editingOrder": "{{order}} wird bearbeitet",
+      "statusUpdated": "{{order}} auf „{{status}}“ aktualisiert",
+      "assigned": "{{order}} an {{employee}} zugewiesen",
+      "printingInvoice": "Rechnung {{invoice}} wird gedruckt",
+      "downloadingInvoice": "Rechnung {{invoice}}.pdf wird heruntergeladen",
+      "refunded": "{{order}} erstattet",
+      "cancelled": "{{order}} storniert",
+      "deleted": "{{order}} gelöscht",
+      "exporting": "Bestellungen werden als CSV exportiert…",
+      "preparingPrint": "Druckansicht wird vorbereitet…",
+      "openingNewOrder": "Formular für neue Bestellung wird geöffnet…"
+    },
     "stats": {
       "totalOrders": "Bestellungen gesamt",
       "pending": "Ausstehend",
