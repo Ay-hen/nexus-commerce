@@ -15,7 +15,6 @@ type DropdownTab = 'all' | 'unread';
 
 @Component({
   selector: 'app-notification-dropdown',
-  standalone: true,
   imports: [CommonModule, NotificationDetailModal],
   templateUrl: './notification-dropdown.html',
   styleUrl: './notification-dropdown.scss',

@@ -21,7 +21,6 @@ type DateFilter = 'all' | 'today' | 'week' | 'month';
 
 @Component({
   selector: 'app-notifications',
-  standalone: true,
   imports: [CommonModule, FormsModule, NotificationDetailModal],
   templateUrl: './notifications.html',
   styleUrl: './notifications.scss',
