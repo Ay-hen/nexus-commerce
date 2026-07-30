@@ -506,6 +506,23 @@
       "statusUpdatedTo": "Status aktualisiert auf {{status}}",
       "statusManuallyUpdated": "Status manuell aktualisiert auf {{status}}"
     },
+    "detail": {
+      "customerInfo": "Kundeninformationen",
+      "customerSince": "Kunde seit {{date}}",
+      "ordersLabel": "Bestellungen",
+      "lifetimeLabel": "Lebenszeit",
+      "addressesTitle": "Adressen",
+      "shippingAddress": "Lieferadresse",
+      "billingAddress": "Rechnungsadresse",
+      "orderedProducts": "Bestellte Produkte",
+      "qty": "Menge",
+      "subtotalLabel": "Zwischensumme",
+      "paymentDetails": "Zahlungsdetails",
+      "transactionId": "Transaktions-ID",
+      "paymentDate": "Zahlungsdatum",
+      "amountPaid": "Bezahlter Betrag",
+      "refundAmount": "Erstatteter Betrag"
+    },
     "stats": {
       "totalOrders": "Bestellungen gesamt",
       "pending": "Ausstehend",
