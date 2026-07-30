@@ -477,6 +477,18 @@
       "statusUpdatedTo": "Estado actualizado a {{status}}",
       "statusManuallyUpdated": "Estado actualizado manualmente a {{status}}"
     },
+    "detail": {
+      "customerInfo": "Información del cliente",
+      "customerSince": "Cliente desde {{date}}",
+      "ordersLabel": "Pedidos",
+      "lifetimeLabel": "Valor de por vida",
+      "addressesTitle": "Direcciones",
+      "shippingAddress": "Dirección de envío",
+      "billingAddress": "Dirección de facturación",
+      "orderedProducts": "Productos pedidos",
+      "qty": "Cant.",
+      "subtotalLabel": "Subtotal"
+    },
     "stats": {
       "totalOrders": "Pedidos totales",
       "pending": "Pendientes",
