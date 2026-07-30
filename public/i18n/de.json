@@ -499,6 +499,13 @@
     "trackingNumberPlaceholder": "z. B. TRK5029134",
     "estimatedDeliveryLabel": "Voraussichtliche Lieferung",
     "updateNotesPlaceholder": "Fügen Sie eine Notiz zu diesem Update hinzu…",
+    "timeline": {
+      "placed": "Bestellung aufgegeben", "payment": "Zahlung erhalten", "confirmed": "Bestellung bestätigt",
+      "packed": "Bestellung verpackt", "shipped": "Bestellung versandt", "outForDelivery": "Wird zugestellt",
+      "delivered": "Bestellung geliefert", "cancelled": "Bestellung storniert", "refunded": "Bestellung erstattet",
+      "statusUpdatedTo": "Status aktualisiert auf {{status}}",
+      "statusManuallyUpdated": "Status manuell aktualisiert auf {{status}}"
+    },
     "stats": {
       "totalOrders": "Bestellungen gesamt",
       "pending": "Ausstehend",
