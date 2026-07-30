@@ -521,7 +521,18 @@
       "transactionId": "Transaktions-ID",
       "paymentDate": "Zahlungsdatum",
       "amountPaid": "Bezahlter Betrag",
-      "refundAmount": "Erstatteter Betrag"
+      "refundAmount": "Erstatteter Betrag",
+      "invoiceNumber": "Rechnungsnummer",
+      "downloadReceipt": "Beleg herunterladen",
+      "shippingDetails": "Versanddetails",
+      "shippingCompany": "Versandunternehmen",
+      "shippingCostLabel": "Versandkosten",
+      "timelineTitle": "Bestellverlauf",
+      "timelineDateAt": "{{date}} um {{time}} · {{employee}}",
+      "notesTitle": "Notizen",
+      "itemsLabel": "Artikel",
+      "couponLabel": "Gutschein ({{code}})",
+      "appliedLabel": "Angewendet"
     },
     "stats": {
       "totalOrders": "Bestellungen gesamt",
