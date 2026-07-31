@@ -1,10 +1,12 @@
-import { Component, HostListener, computed, signal } from '@angular/core';
+import { Component, HostListener, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminReview, ReviewStatus } from '../../model/review-model';
 import { AdminReviewDetail, toReviewDetail } from '../../model/review-detail-model';
 import { ViewReviewModal } from '../../model/view-review-modal/view-review-modal';
 import { DeleteReviewModal } from '../../model/delete-review-modal/delete-review-modal';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 export type SearchField = 'all' | 'customer' | 'email' | 'product' | 'title' | 'review';
 export type RatingFilter = 'all' | 5 | 4 | 3 | 2 | 1;
@@ -15,11 +17,12 @@ export type ViewMode = 'table' | 'grid';
 @Component({
   selector: 'app-reviews',
   standalone: true,
-  imports: [CommonModule, FormsModule, ViewReviewModal, DeleteReviewModal],
+  imports: [CommonModule, FormsModule, ViewReviewModal, DeleteReviewModal, TranslatePipe],
   templateUrl: './reviews.html',
   styleUrl: './reviews.scss',
 })
 export class Reviews {
+  protected lang = inject(LanguageService);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -47,26 +50,27 @@ export class Reviews {
 
   filtersOpen = signal(false);
 
+  // Labels are translation keys — resolved in the template via `| translate`.
   searchFieldOptions: { key: SearchField; label: string }[] = [
-    { key: 'all', label: 'All Fields' },
-    { key: 'customer', label: 'Customer' },
-    { key: 'email', label: 'Email' },
-    { key: 'product', label: 'Product' },
-    { key: 'title', label: 'Title' },
-    { key: 'review', label: 'Review' },
+    { key: 'all', label: 'reviews.searchFields.all' },
+    { key: 'customer', label: 'reviews.searchFields.customer' },
+    { key: 'email', label: 'reviews.searchFields.email' },
+    { key: 'product', label: 'reviews.searchFields.product' },
+    { key: 'title', label: 'reviews.searchFields.title' },
+    { key: 'review', label: 'reviews.searchFields.review' },
   ];
 
   statusOptions: { key: 'all' | ReviewStatus; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'new', label: 'New' },
-    { key: 'read', label: 'Read' },
-    { key: 'approved', label: 'Approved' },
-    { key: 'featured', label: 'Featured' },
-    { key: 'flagged', label: 'Flagged' },
+    { key: 'all', label: 'reviews.filterAll' },
+    { key: 'new', label: 'reviews.status.new' },
+    { key: 'read', label: 'reviews.status.read' },
+    { key: 'approved', label: 'reviews.status.approved' },
+    { key: 'featured', label: 'reviews.status.featured' },
+    { key: 'flagged', label: 'reviews.status.flagged' },
   ];
 
   ratingOptions: { key: RatingFilter; label: string }[] = [
-    { key: 'all', label: 'All' },
+    { key: 'all', label: 'reviews.filterAll' },
     { key: 5, label: '5★' },
     { key: 4, label: '4★' },
     { key: 3, label: '3★' },
@@ -75,13 +79,13 @@ export class Reviews {
   ];
 
   sortOptions: { key: SortKey; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'ratingHigh', label: 'Highest Rating' },
-    { key: 'ratingLow', label: 'Lowest Rating' },
-    { key: 'customer', label: 'Customer' },
-    { key: 'product', label: 'Product' },
-    { key: 'helpful', label: 'Most Helpful' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'ratingHigh', label: 'reviews.sort.ratingHigh' },
+    { key: 'ratingLow', label: 'reviews.sort.ratingLow' },
+    { key: 'customer', label: 'orders.sort.customer' },
+    { key: 'product', label: 'reviews.sort.product' },
+    { key: 'helpful', label: 'reviews.sort.helpful' },
   ];
 
   // ── Pagination ───────────────────────────────────────────────────────────
@@ -162,10 +166,10 @@ export class Reviews {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedReviews().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   pageNumbers = computed(() => {
@@ -304,28 +308,28 @@ export class Reviews {
     event?.stopPropagation();
     this.closeMenu();
     this.updateStatus(review.id, 'read');
-    this.showToast(`Marked review by ${review.customerName} as read`);
+    this.showToast(this.lang.translate('reviews.toasts.markedRead', { name: review.customerName }));
   }
 
   approveReview(review: AdminReview, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
     this.updateStatus(review.id, 'approved');
-    this.showToast(`Approved review by ${review.customerName}`);
+    this.showToast(this.lang.translate('reviews.toasts.approved', { name: review.customerName }));
   }
 
   featureReview(review: AdminReview, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
     this.updateStatus(review.id, 'featured');
-    this.showToast(`Featured review by ${review.customerName}`);
+    this.showToast(this.lang.translate('reviews.toasts.featured', { name: review.customerName }));
   }
 
   flagReview(review: AdminReview, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
     this.updateStatus(review.id, 'flagged');
-    this.showToast(`Flagged review by ${review.customerName}`);
+    this.showToast(this.lang.translate('reviews.toasts.flagged', { name: review.customerName }));
   }
 
   requestDelete(review: AdminReview, event?: Event): void {
@@ -350,7 +354,7 @@ export class Reviews {
     if (target) {
       this.allReviews.update(list => list.filter(r => r.id !== target.id));
       this.selectedIds.update(set => { const next = new Set(set); next.delete(target.id); return next; });
-      this.showToast(`Review by ${target.customerName} deleted`);
+      this.showToast(this.lang.translate('reviews.toasts.deleted', { name: target.customerName }));
       this.deletingReview.set(null);
       return;
     }
@@ -358,7 +362,7 @@ export class Reviews {
     if (this.bulkDeleteCount() !== null) {
       const ids = this.selectedIds();
       this.allReviews.update(list => list.filter(r => !ids.has(r.id)));
-      this.showToast(`${ids.size} review${ids.size === 1 ? '' : 's'} deleted`);
+      this.showToast(this.lang.translate('reviews.toasts.bulkDeleted', { count: ids.size }));
       this.clearSelection();
       this.bulkDeleteCount.set(null);
     }
@@ -368,15 +372,15 @@ export class Reviews {
   // Bulk actions
   // ══════════════════════════════════════════════════════════════════════
 
-  bulkMarkRead(): void { this.bulkUpdateStatus('read', 'Marked as read'); }
-  bulkApprove(): void { this.bulkUpdateStatus('approved', 'Approved'); }
-  bulkFeature(): void { this.bulkUpdateStatus('featured', 'Featured'); }
+  bulkMarkRead(): void { this.bulkUpdateStatus('read', this.lang.translate('reviews.toasts.bulkMarkedRead')); }
+  bulkApprove(): void { this.bulkUpdateStatus('approved', this.lang.translate('reviews.toasts.bulkApproved')); }
+  bulkFeature(): void { this.bulkUpdateStatus('featured', this.lang.translate('reviews.toasts.bulkFeatured')); }
 
   private bulkUpdateStatus(status: ReviewStatus, label: string): void {
     const ids = this.selectedIds();
     if (!ids.size) return;
     this.allReviews.update(list => list.map(r => ids.has(r.id) ? { ...r, status } : r));
-    this.showToast(`${label}: ${ids.size} review${ids.size === 1 ? '' : 's'}`);
+    this.showToast(this.lang.translate('reviews.toasts.bulkActionCount', { label, count: ids.size }));
     this.clearSelection();
   }
 
@@ -396,12 +400,23 @@ export class Reviews {
   }
 
   private toCsv(rows: AdminReview[]): string {
-    const header = ['Customer', 'Email', 'Product', 'Rating', 'Status', 'Verified', 'Helpful Votes', 'Date', 'Review Title', 'Review Body'];
+    const header = [
+      this.lang.translate('orders.table.customer'),
+      this.lang.translate('customers.table.email'),
+      this.lang.translate('products.category') === '' ? '' : this.lang.translate('reviews.csv.product'),
+      this.lang.translate('reviews.csv.rating'),
+      this.lang.translate('common.status'),
+      this.lang.translate('reviews.csv.verified'),
+      this.lang.translate('reviews.csv.helpfulVotes'),
+      this.lang.translate('categories.table.created') === '' ? '' : this.lang.translate('reviews.csv.date'),
+      this.lang.translate('reviews.csv.reviewTitle'),
+      this.lang.translate('reviews.csv.reviewBody'),
+    ];
     const escape = (val: string | number) => `"${String(val).replace(/"/g, '""')}"`;
 
     const lines = rows.map(r => [
       r.customerName, r.customerEmail, r.productName, r.rating, r.status,
-      r.verifiedPurchase ? 'Verified' : 'Not Verified', r.helpfulVotes,
+      r.verifiedPurchase ? this.lang.translate('reviews.verified') : this.lang.translate('reviews.notVerified'), r.helpfulVotes,
       this.formatDate(r.createdAt), r.title, r.review,
     ].map(escape).join(','));
 
@@ -421,13 +436,13 @@ export class Reviews {
   downloadReport(): void {
     const csv = this.toCsv(this.reportRows());
     this.downloadFile(csv, `reviews-report-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
-    this.showToast('Report downloaded');
+    this.showToast(this.lang.translate('reviews.toasts.reportDownloaded'));
   }
 
   exportCsv(): void {
     const csv = this.toCsv(this.reportRows());
     this.downloadFile(csv, `reviews-export-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
-    this.showToast('CSV exported');
+    this.showToast(this.lang.translate('reviews.toasts.csvExported'));
   }
 
   // ══════════════════════════════════════════════════════════════════════
@@ -439,10 +454,7 @@ export class Reviews {
   }
 
   statusLabel(status: ReviewStatus): string {
-    const map: Record<ReviewStatus, string> = {
-      new: 'New', read: 'Read', approved: 'Approved', featured: 'Featured', flagged: 'Flagged',
-    };
-    return map[status];
+    return this.lang.translate('reviews.status.' + status);
   }
 
   initialsFor(name: string): string {
@@ -450,7 +462,7 @@ export class Reviews {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   trackById(_: number, item: { id: string }): string { return item.id; }
