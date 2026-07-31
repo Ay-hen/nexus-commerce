@@ -1,15 +1,19 @@
-import { Component, EventEmitter, HostListener, Input, Output, computed, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminReview } from '../../model/review-model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 @Component({
   selector: 'app-delete-review-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './delete-review-modal.html',
   styleUrl: './delete-review-modal.scss',
 })
 export class DeleteReviewModal {
+  protected lang = inject(LanguageService);
+
   /** Single-review delete. Null when this is a bulk delete instead. */
   @Input() review: AdminReview | null = null;
   /** Bulk delete count. Null when this is a single-review delete instead. */
