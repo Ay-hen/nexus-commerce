@@ -20,8 +20,8 @@
       <h2 class="drm-title" id="drm-title">{{ 'reviews.deleteConfirmTitle' | translate }}</h2>
       <p class="drm-body" [innerHTML]="'reviews.deleteConfirmBodySingle' | translate: { name: review.customerName, product: review.productName }"></p>
     } @else {
-      <h2 class="drm-title" id="drm-title">{{ 'reviews.deleteConfirmTitleBulk' | translate: { count: bulkCount } }}</h2>
-      <p class="drm-body" [innerHTML]="'reviews.deleteConfirmBodyBulk' | translate: { count: bulkCount }"></p>
+      <h2 class="drm-title" id="drm-title">{{ 'reviews.deleteConfirmTitleBulk' | translate: { count: bulkCount! } }}</h2>
+      <p class="drm-body" [innerHTML]="'reviews.deleteConfirmBodyBulk' | translate: { count: bulkCount! }"></p>
     }
 
     <div class="drm-actions">
