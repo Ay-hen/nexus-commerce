@@ -403,12 +403,12 @@ export class Reviews {
     const header = [
       this.lang.translate('orders.table.customer'),
       this.lang.translate('customers.table.email'),
-      this.lang.translate('products.category') === '' ? '' : this.lang.translate('reviews.csv.product'),
+      this.lang.translate('reviews.csv.product'),
       this.lang.translate('reviews.csv.rating'),
       this.lang.translate('common.status'),
       this.lang.translate('reviews.csv.verified'),
       this.lang.translate('reviews.csv.helpfulVotes'),
-      this.lang.translate('categories.table.created') === '' ? '' : this.lang.translate('reviews.csv.date'),
+      this.lang.translate('reviews.csv.date'),
       this.lang.translate('reviews.csv.reviewTitle'),
       this.lang.translate('reviews.csv.reviewBody'),
     ];
