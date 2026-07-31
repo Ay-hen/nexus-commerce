@@ -134,7 +134,7 @@
       <div class="select-wrap">
         <select class="toolbar-select" [value]="searchField()" (change)="onSearchFieldChange($any($event.target).value)">
           @for (opt of searchFieldOptions; track opt.key) {
-            <option [value]="opt.key">{{ 'common.sortBy' === '' ? '' : ('reviews.searchColon' | translate) }} {{ opt.label | translate }}</option>
+            <option [value]="opt.key">{{'reviews.searchColon' | translate }} {{ opt.label | translate }}</option>
           }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
