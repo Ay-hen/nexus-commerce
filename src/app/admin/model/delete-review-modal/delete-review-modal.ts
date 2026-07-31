@@ -1,8 +1,8 @@
 import { Component, EventEmitter, HostListener, Input, Output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminReview } from '../../model/review-model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 @Component({
   selector: 'app-delete-review-modal',
