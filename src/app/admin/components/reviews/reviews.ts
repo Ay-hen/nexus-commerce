@@ -5,8 +5,8 @@ import { AdminReview, ReviewStatus } from '../../model/review-model';
 import { AdminReviewDetail, toReviewDetail } from '../../model/review-detail-model';
 import { ViewReviewModal } from '../../model/view-review-modal/view-review-modal';
 import { DeleteReviewModal } from '../../model/delete-review-modal/delete-review-modal';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 export type SearchField = 'all' | 'customer' | 'email' | 'product' | 'title' | 'review';
 export type RatingFilter = 'all' | 5 | 4 | 3 | 2 | 1;
