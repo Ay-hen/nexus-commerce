@@ -36,18 +36,17 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Reviews</h1>
-        <p class="page-sub">Manage customer reviews and moderation.</p>
+        <h1 class="page-title">{{ 'reviews.title' | translate }}</h1>
+        <p class="page-sub">{{ 'reviews.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="page-header__actions">
-      
       <button class="btn-primary" (click)="downloadReport()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
         </svg>
-        Download Report
+        {{ 'buttons.downloadReport' | translate }}
       </button>
     </div>
   </div>
@@ -66,9 +65,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Total Reviews</p>
-          <p class="stat-card__value">{{ totalReviews() | number }}</p>
-          <p class="stat-card__sub">across all products</p>
+          <p class="stat-card__label">{{ 'reviews.stats.totalReviews' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(totalReviews()) }}</p>
+          <p class="stat-card__sub">{{ 'reviews.acrossAllProducts' | translate }}</p>
         </div>
       </div>
 
@@ -79,9 +78,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Average Rating</p>
+          <p class="stat-card__label">{{ 'reviews.stats.averageRating' | translate }}</p>
           <p class="stat-card__value">{{ averageRating() }}★</p>
-          <p class="stat-card__sub">average across all reviews</p>
+          <p class="stat-card__sub">{{ 'reviews.averageAcrossAll' | translate }}</p>
         </div>
       </div>
 
@@ -92,9 +91,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Pending Moderation</p>
-          <p class="stat-card__value">{{ pendingModerationCount() | number }}</p>
-          <p class="stat-card__sub">awaiting review</p>
+          <p class="stat-card__label">{{ 'reviews.stats.pendingModeration' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(pendingModerationCount()) }}</p>
+          <p class="stat-card__sub">{{ 'reviews.awaitingReview' | translate }}</p>
         </div>
       </div>
 
@@ -105,9 +104,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Featured Reviews</p>
-          <p class="stat-card__value">{{ featuredCount() | number }}</p>
-          <p class="stat-card__sub">shown on storefront</p>
+          <p class="stat-card__label">{{ 'reviews.stats.featuredReviews' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(featuredCount()) }}</p>
+          <p class="stat-card__sub">{{ 'products.stats.shownOnStorefront' | translate }}</p>
         </div>
       </div>
     </div>
@@ -116,7 +115,6 @@
   <!-- ── TOOLBAR ───────────────────────────────────────────────────────────── -->
   <div class="toolbar" (click)="$event.stopPropagation()">
     <div class="toolbar__left">
-      
 
       <!-- Search -->
       <div class="search-wrap">
@@ -126,7 +124,7 @@
         <input
           class="search-input"
           type="search"
-          placeholder="Search reviews…"
+          [placeholder]="'reviews.searchPlaceholder' | translate"
           [value]="searchQuery()"
           (input)="onSearch($any($event.target).value)"
         />
@@ -136,7 +134,7 @@
       <div class="select-wrap">
         <select class="toolbar-select" [value]="searchField()" (change)="onSearchFieldChange($any($event.target).value)">
           @for (opt of searchFieldOptions; track opt.key) {
-            <option [value]="opt.key">Search: {{ opt.label }}</option>
+            <option [value]="opt.key">{{ 'common.sortBy' === '' ? '' : ('reviews.searchColon' | translate) }} {{ opt.label | translate }}</option>
           }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
@@ -145,26 +143,24 @@
       <!-- Status filter pills -->
       <div class="filter-pills">
         @for (opt of statusOptions; track opt.key) {
-          <button class="filter-pill" [class.filter-pill--active]="statusFilter() === opt.key" (click)="setStatusFilter(opt.key)">{{ opt.label }}</button>
+          <button class="filter-pill" [class.filter-pill--active]="statusFilter() === opt.key" (click)="setStatusFilter(opt.key)">{{ opt.label | translate }}</button>
         }
       </div>
-
 
       <!-- Verified -->
       <div class="select-wrap">
         <select class="toolbar-select" [value]="verifiedFilter()" (change)="setVerifiedFilter($any($event.target).value)">
-          <option value="all">Verified: All</option>
-          <option value="yes">Verified Only</option>
-          <option value="no">Not Verified</option>
+          <option value="all">{{ 'reviews.verifiedAll' | translate }}</option>
+          <option value="yes">{{ 'reviews.verifiedOnly' | translate }}</option>
+          <option value="no">{{ 'reviews.notVerified' | translate }}</option>
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
-
       @if (hasAnyActiveFilter()) {
         <button class="clear-filters-btn" (click)="clearFilters()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          Clear
+          {{ 'common.clear' | translate }}
         </button>
       }
     </div>
@@ -173,19 +169,19 @@
       <!-- Sort -->
       <div class="select-wrap">
         <select class="toolbar-select" [value]="sortKey()" (change)="setSort($any($event.target).value)">
-          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">{{ 'common.sortBy' | translate }}: {{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <!-- View toggle -->
-      <div class="view-toggle" role="group" aria-label="View mode">
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+      <div class="view-toggle" role="group" [attr.aria-label]="'products.viewModeLabel' | translate">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" [attr.aria-label]="'common.viewTable' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/>
           </svg>
         </button>
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" [attr.aria-label]="'common.viewGrid' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
           </svg>
@@ -198,26 +194,26 @@
   <!-- ── BULK ACTION BAR ───────────────────────────────────────────────────── -->
   @if (selectedIds().size > 0) {
     <div class="bulk-bar" (click)="$event.stopPropagation()">
-      <span class="bulk-bar__count">{{ selectedIds().size }} selected</span>
+      <span class="bulk-bar__count">{{ selectedIds().size }} {{ 'common.selected' | translate }}</span>
       <div class="bulk-bar__actions">
         <button class="bulk-btn" (click)="bulkMarkRead()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Mark Read
+          {{ 'reviews.actions.markRead' | translate }}
         </button>
         <button class="bulk-btn" (click)="bulkApprove()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"/></svg>
-          Approve
+          {{ 'reviews.actions.approve' | translate }}
         </button>
         <button class="bulk-btn" (click)="bulkFeature()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          Feature
+          {{ 'reviews.actions.feature' | translate }}
         </button>
         <button class="bulk-btn bulk-btn--danger" (click)="bulkDelete()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          Delete
+          {{ 'buttons.delete' | translate }}
         </button>
       </div>
-      <button class="bulk-bar__clear" (click)="clearSelection()">Clear</button>
+      <button class="bulk-bar__clear" (click)="clearSelection()">{{ 'buttons.clearSelection' | translate }}</button>
     </div>
   }
 
@@ -241,9 +237,9 @@
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </div>
-        <h3 class="empty-state__title">No reviews found</h3>
-        <p class="empty-state__sub">Try adjusting your filters or search.</p>
-        <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+        <h3 class="empty-state__title">{{ 'reviews.empty.title' | translate }}</h3>
+        <p class="empty-state__sub">{{ 'reviews.empty.subtitle' | translate }}</p>
+        <button class="btn-ghost" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
       </div>
     }
 
@@ -262,11 +258,11 @@
                     </span>
                   </label>
                 </th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Rating</th>
-                <th>Status</th>
-                <th>Date</th>
+                <th>{{ 'orders.table.customer' | translate }}</th>
+                <th>{{ 'reviews.csv.product' | translate }}</th>
+                <th>{{ 'reviews.tableRating' | translate }}</th>
+                <th>{{ 'common.status' | translate }}</th>
+                <th>{{ 'reviews.csv.date' | translate }}</th>
                 <th class="th--actions"></th>
               </tr>
             </thead>
@@ -293,7 +289,6 @@
                     </div>
                   </td>
 
-
                   <!-- Product -->
                   <td>
                     <div class="product-cell">
@@ -319,16 +314,13 @@
                     <span class="status-pill status-pill--{{ r.status }}">{{ statusLabel(r.status) }}</span>
                   </td>
 
-                  <!-- Helpful -->
-                  
-
                   <!-- Date -->
                   <td class="td-light">{{ formatDate(r.createdAt) }}</td>
 
                   <!-- Actions -->
                   <td class="td--actions">
                     <div class="action-menu-wrap">
-                      <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" aria-label="Review actions">
+                      <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" [attr.aria-label]="'common.actions' | translate">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                           <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                         </svg>
@@ -338,28 +330,28 @@
                         <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
                           <a class="action-item" (click)="viewReview(r)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            View Review
+                            {{ 'reviews.actions.viewReview' | translate }}
                           </a>
                           <a class="action-item" (click)="markRead(r, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            Mark Read
+                            {{ 'reviews.actions.markRead' | translate }}
                           </a>
                           <a class="action-item" (click)="approveReview(r, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                            Approve
+                            {{ 'reviews.actions.approve' | translate }}
                           </a>
                           <a class="action-item" (click)="featureReview(r, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            Feature
+                            {{ 'reviews.actions.feature' | translate }}
                           </a>
                           <a class="action-item" (click)="flagReview(r, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                            Flag
+                            {{ 'reviews.actions.flag' | translate }}
                           </a>
                           <div class="action-divider"></div>
                           <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(r, $event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                            Delete
+                            {{ 'buttons.delete' | translate }}
                           </button>
                         </div>
                       }
@@ -388,20 +380,20 @@
               <span class="status-pill status-pill--{{ r.status }}">{{ statusLabel(r.status) }}</span>
 
               <div class="action-menu-wrap review-card__menu">
-                <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" aria-label="Review actions">
+                <button class="action-trigger" (click)="toggleMenu(r, $event)" [attr.aria-expanded]="openMenuId() === r.id" [attr.aria-label]="'common.actions' | translate">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
                   </svg>
                 </button>
                 @if (openMenuId() === r.id) {
                   <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
-                    <a class="action-item" (click)="viewReview(r)" role="menuitem">View Review</a>
-                    <a class="action-item" (click)="markRead(r, $event)" role="menuitem">Mark Read</a>
-                    <a class="action-item" (click)="approveReview(r, $event)" role="menuitem">Approve</a>
-                    <a class="action-item" (click)="featureReview(r, $event)" role="menuitem">Feature</a>
-                    <a class="action-item" (click)="flagReview(r, $event)" role="menuitem">Flag</a>
+                    <a class="action-item" (click)="viewReview(r)" role="menuitem">{{ 'reviews.actions.viewReview' | translate }}</a>
+                    <a class="action-item" (click)="markRead(r, $event)" role="menuitem">{{ 'reviews.actions.markRead' | translate }}</a>
+                    <a class="action-item" (click)="approveReview(r, $event)" role="menuitem">{{ 'reviews.actions.approve' | translate }}</a>
+                    <a class="action-item" (click)="featureReview(r, $event)" role="menuitem">{{ 'reviews.actions.feature' | translate }}</a>
+                    <a class="action-item" (click)="flagReview(r, $event)" role="menuitem">{{ 'reviews.actions.flag' | translate }}</a>
                     <div class="action-divider"></div>
-                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(r, $event)">Delete</button>
+                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(r, $event)">{{ 'buttons.delete' | translate }}</button>
                   </div>
                 }
               </div>
@@ -433,9 +425,9 @@
 
             <div class="review-card__footer">
               @if (r.verifiedPurchase) {
-                <span class="verified-pill verified-pill--yes">Verified</span>
+                <span class="verified-pill verified-pill--yes">{{ 'reviews.verified' | translate }}</span>
               } @else {
-                <span class="verified-pill verified-pill--no">Not Verified</span>
+                <span class="verified-pill verified-pill--no">{{ 'reviews.notVerified' | translate }}</span>
               }
               <span class="review-card__helpful">{{ r.helpfulVotes }} 👍</span>
               <span class="review-card__date">{{ formatDate(r.createdAt) }}</span>
@@ -450,7 +442,7 @@
       <div class="pagination">
         <span class="pagination__label">{{ pageRangeLabel() }}</span>
         <div class="pagination__controls">
-          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" [attr.aria-label]="'common.previousPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
           @if (currentPage() > 2) {
@@ -464,7 +456,7 @@
             @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
             <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
           }
-          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" [attr.aria-label]="'common.nextPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
