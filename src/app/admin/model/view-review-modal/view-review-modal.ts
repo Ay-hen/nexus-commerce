@@ -1,15 +1,24 @@
-import { Component, EventEmitter, HostListener, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminReview } from '../../model/review-model';
-import { AdminReviewDetail } from '../../model/review-detail-model';
+import { AdminReviewDetail, ModerationActionKind } from '../../model/review-detail-model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
+
+const MODERATION_KIND_KEY_MAP: Record<ModerationActionKind, string> = {
+  submitted: 'submitted', reported: 'reported', markedRead: 'markedRead',
+  approved: 'approved', featured: 'featured', flagged: 'flagged',
+};
 
 @Component({
   selector: 'app-view-review-modal',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './view-review-modal.html',
   styleUrl: './view-review-modal.scss',
 })
 export class ViewReviewModal {
+  protected lang = inject(LanguageService);
+
   @Input({ required: true }) review!: AdminReviewDetail;
 
   /** Emitted once the closing animation has finished — parent should remove the component. */
@@ -60,10 +69,11 @@ export class ViewReviewModal {
   }
 
   statusLabel(status: string): string {
-    const map: Record<string, string> = {
-      new: 'New', read: 'Read', approved: 'Approved', featured: 'Featured', flagged: 'Flagged',
-    };
-    return map[status] ?? status;
+    return this.lang.translate('reviews.status.' + status);
+  }
+
+  moderationLabel(kind: ModerationActionKind): string {
+    return this.lang.translate('viewReviewModal.moderationActions.' + MODERATION_KIND_KEY_MAP[kind]);
   }
 
   initialsFor(name: string): string {
@@ -71,9 +81,7 @@ export class ViewReviewModal {
   }
 
   formatDateTime(iso: string): string {
-    return new Date(iso).toLocaleString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
-    });
+    return this.lang.formatDateTime(iso);
   }
 
   trackByHistoryId(_: number, item: { id: string }): string {
