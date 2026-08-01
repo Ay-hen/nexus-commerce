@@ -14,8 +14,8 @@ import {
   generateMockNotifications,
   relativeTime,
 } from '../../model/notification-model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 type TypeFilter = 'all' | NotificationType;
 type PriorityFilter = 'all' | NotificationPriority;
