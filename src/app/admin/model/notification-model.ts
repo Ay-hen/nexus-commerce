@@ -1,4 +1,5 @@
 // notification.model.ts
+import { LanguageService } from '../localization/language.service';
 
 export type NotificationType =
   | 'order'
@@ -39,8 +40,13 @@ export type NotificationSort = 'newest' | 'oldest' | 'unread' | 'priority';
 export type NotificationStatusFilter = 'all' | 'read' | 'unread';
 
 // ─── Display helpers (shared across Notifications page, dropdown, and modal) ──
+// NOTE: `label` is kept for backward compatibility but is no longer read by
+// templates — labels are now resolved via the translate pipe using
+// 'notifications.type.<key>' / 'notifications.priority.<key>', which already
+// match these keys 1:1 in the translation files. Only `color`/`bg` (visual
+// tokens, not UI copy) are consumed directly from these maps now.
 
-export const NOTIFICATION_TYPE_META: Record<
+export const NOTIFICATION_TYPE_META: Record
   NotificationType,
   { label: string; color: string; bg: string }
 > = {
@@ -55,7 +61,7 @@ export const NOTIFICATION_TYPE_META: Record<
   info:      { label: 'Info',      color: '#3B82F6', bg: 'rgba(59,130,246,.08)' },
 };
 
-export const NOTIFICATION_PRIORITY_META: Record<
+export const NOTIFICATION_PRIORITY_META: Record
   NotificationPriority,
   { label: string; color: string; bg: string }
 > = {
@@ -64,30 +70,34 @@ export const NOTIFICATION_PRIORITY_META: Record<
   high:   { label: 'High',   color: '#EF4444', bg: 'rgba(239,68,68,.08)' },
 };
 
-/** Relative time formatter shared by every notification surface. */
-export function relativeTime(iso: string): string {
+/**
+ * Relative time formatter shared by every notification surface.
+ * Requires a LanguageService instance so the output is localized — callers
+ * (component methods) pass `this.lang` through.
+ */
+export function relativeTime(iso: string, lang: LanguageService): string {
   const now = Date.now();
   const then = new Date(iso).getTime();
   const diffSec = Math.max(0, Math.floor((now - then) / 1000));
 
-  if (diffSec < 5) return 'just now';
-  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffSec < 5) return lang.translate('common.justNow');
+  if (diffSec < 60) return lang.translate('common.secondsAgo', { count: diffSec });
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 60) return lang.translate('common.minutesAgo', { count: diffMin });
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffHr < 24) return lang.translate('common.hoursAgo', { count: diffHr });
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 7) return `${diffDay}d ago`;
+  if (diffDay < 7) return lang.translate('common.daysAgo', { count: diffDay });
   const diffWeek = Math.floor(diffDay / 7);
-  if (diffWeek < 5) return `${diffWeek}w ago`;
+  if (diffWeek < 5) return lang.translate('common.weeksAgo', { count: diffWeek });
   const diffMonth = Math.floor(diffDay / 30);
-  if (diffMonth < 12) return `${diffMonth}mo ago`;
+  if (diffMonth < 12) return lang.translate('common.monthsAgo', { count: diffMonth });
   const diffYear = Math.floor(diffDay / 365);
-  return `${diffYear}y ago`;
+  return lang.translate('common.yearsAgo', { count: diffYear });
 }
 
-export function formatFullDate(iso: string): string {
-  return new Date(iso).toLocaleString('en-US', {
+export function formatFullDate(iso: string, lang: LanguageService): string {
+  return lang.formatDate(iso, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -97,6 +107,10 @@ export function formatFullDate(iso: string): string {
 }
 
 // ─── Mock data generation ──────────────────────────────────────────────────
+// NOTE: MOCK_SEEDS below simulates backend-supplied notification content —
+// in a real integration this text arrives from the API, so per the
+// localization rules it is treated as data, not UI copy, and stays untranslated
+// (same policy applied to Orders/Inventory mock generators in earlier batches).
 
 interface MockSeed {
   title: string;
