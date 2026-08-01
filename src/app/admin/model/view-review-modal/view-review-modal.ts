@@ -2,8 +2,8 @@ import { Component, EventEmitter, HostListener, Input, Output, inject, signal } 
 import { CommonModule } from '@angular/common';
 import { AdminReview } from '../../model/review-model';
 import { AdminReviewDetail, ModerationActionKind } from '../../model/review-detail-model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 const MODERATION_KIND_KEY_MAP: Record<ModerationActionKind, string> = {
   submitted: 'submitted', reported: 'reported', markedRead: 'markedRead',
