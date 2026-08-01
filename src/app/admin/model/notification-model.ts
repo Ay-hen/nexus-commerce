@@ -1,5 +1,5 @@
 // notification.model.ts
-import { LanguageService } from '../localization/language.service';
+import { LanguageService } from '../../localization/language.service';
 
 export type NotificationType =
   | 'order'
