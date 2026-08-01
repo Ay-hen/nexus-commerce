@@ -46,28 +46,76 @@ export type NotificationStatusFilter = 'all' | 'read' | 'unread';
 // match these keys 1:1 in the translation files. Only `color`/`bg` (visual
 // tokens, not UI copy) are consumed directly from these maps now.
 
-export const NOTIFICATION_TYPE_META: Record
+export const NOTIFICATION_TYPE_META: Record<
   NotificationType,
   { label: string; color: string; bg: string }
 > = {
-  order:     { label: 'Order',     color: '#4F46E5', bg: 'rgba(79,70,229,.08)' },
-  customer:  { label: 'Customer',  color: '#F59E0B', bg: 'rgba(245,158,11,.08)' },
-  inventory: { label: 'Inventory', color: '#7C3AED', bg: 'rgba(124,58,237,.08)' },
-  product:   { label: 'Product',   color: '#3B82F6', bg: 'rgba(59,130,246,.08)' },
-  payment:   { label: 'Payment',   color: '#10B981', bg: 'rgba(16,185,129,.08)' },
-  system:    { label: 'System',    color: '#6B7280', bg: 'rgba(107,114,128,.10)' },
-  warning:   { label: 'Warning',   color: '#F59E0B', bg: 'rgba(245,158,11,.08)' },
-  success:   { label: 'Success',   color: '#10B981', bg: 'rgba(16,185,129,.08)' },
-  info:      { label: 'Info',      color: '#3B82F6', bg: 'rgba(59,130,246,.08)' },
+  order: {
+    label: 'Order',
+    color: '#4F46E5',
+    bg: 'rgba(79,70,229,.08)',
+  },
+  customer: {
+    label: 'Customer',
+    color: '#F59E0B',
+    bg: 'rgba(245,158,11,.08)',
+  },
+  inventory: {
+    label: 'Inventory',
+    color: '#7C3AED',
+    bg: 'rgba(124,58,237,.08)',
+  },
+  product: {
+    label: 'Product',
+    color: '#3B82F6',
+    bg: 'rgba(59,130,246,.08)',
+  },
+  payment: {
+    label: 'Payment',
+    color: '#10B981',
+    bg: 'rgba(16,185,129,.08)',
+  },
+  system: {
+    label: 'System',
+    color: '#6B7280',
+    bg: 'rgba(107,114,128,.10)',
+  },
+  warning: {
+    label: 'Warning',
+    color: '#F59E0B',
+    bg: 'rgba(245,158,11,.08)',
+  },
+  success: {
+    label: 'Success',
+    color: '#10B981',
+    bg: 'rgba(16,185,129,.08)',
+  },
+  info: {
+    label: 'Info',
+    color: '#3B82F6',
+    bg: 'rgba(59,130,246,.08)',
+  },
 };
 
-export const NOTIFICATION_PRIORITY_META: Record
+export const NOTIFICATION_PRIORITY_META: Record<
   NotificationPriority,
   { label: string; color: string; bg: string }
 > = {
-  low:    { label: 'Low',    color: '#6B7280', bg: 'rgba(107,114,128,.10)' },
-  medium: { label: 'Medium', color: '#F59E0B', bg: 'rgba(245,158,11,.08)' },
-  high:   { label: 'High',   color: '#EF4444', bg: 'rgba(239,68,68,.08)' },
+  low: {
+    label: 'Low',
+    color: '#6B7280',
+    bg: 'rgba(107,114,128,.10)',
+  },
+  medium: {
+    label: 'Medium',
+    color: '#F59E0B',
+    bg: 'rgba(245,158,11,.08)',
+  },
+  high: {
+    label: 'High',
+    color: '#EF4444',
+    bg: 'rgba(239,68,68,.08)',
+  },
 };
 
 /**
