@@ -16,11 +16,11 @@
           </svg>
         </div>
         <div>
-          <h2 class="vrm-header__title" id="vrm-title">Review Details</h2>
+          <h2 class="vrm-header__title" id="vrm-title">{{ 'viewReviewModal.title' | translate }}</h2>
           <p class="vrm-header__sub">{{ review.productName }}</p>
         </div>
       </div>
-      <button class="vrm-close" (click)="requestClose()" aria-label="Close" type="button">
+      <button class="vrm-close" (click)="requestClose()" [attr.aria-label]="'buttons.close' | translate" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
@@ -52,9 +52,9 @@
       <div class="vrm-badges">
         <span class="status-pill status-pill--{{ review.status }}">{{ statusLabel(review.status) }}</span>
         @if (review.verifiedPurchase) {
-          <span class="verified-pill verified-pill--yes">Verified Purchase</span>
+          <span class="verified-pill verified-pill--yes">{{ 'viewReviewModal.verifiedPurchase' | translate }}</span>
         } @else {
-          <span class="verified-pill verified-pill--no">Not Verified</span>
+          <span class="verified-pill verified-pill--no">{{ 'reviews.notVerified' | translate }}</span>
         }
         @if (review.reported) {
           <span class="reported-pill">
@@ -62,7 +62,7 @@
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
               <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            Reported
+            {{ 'viewReviewModal.reported' | translate }}
           </span>
         }
       </div>
@@ -85,18 +85,18 @@
 
       <div class="vrm-meta-grid">
         <div class="vrm-meta-field">
-          <span class="vrm-meta-label">Helpful Votes</span>
+          <span class="vrm-meta-label">{{ 'viewReviewModal.helpfulVotes' | translate }}</span>
           <span class="vrm-meta-value">{{ review.helpfulVotes }}</span>
         </div>
         <div class="vrm-meta-field">
-          <span class="vrm-meta-label">Product ID</span>
+          <span class="vrm-meta-label">{{ 'viewReviewModal.productId' | translate }}</span>
           <span class="vrm-meta-value vrm-meta-value--mono">{{ review.productId }}</span>
         </div>
       </div>
 
       <!-- Moderation history -->
       <div class="vrm-divider"></div>
-      <h3 class="vrm-section-title">Moderation History</h3>
+      <h3 class="vrm-section-title">{{ 'viewReviewModal.moderationHistoryTitle' | translate }}</h3>
 
       <div class="vrm-timeline">
         @for (entry of review.moderationHistory; track trackByHistoryId($index, entry)) {
@@ -104,10 +104,10 @@
             <span class="vrm-timeline__dot"></span>
             <div class="vrm-timeline__content">
               <div class="vrm-timeline__top">
-                <p class="vrm-timeline__action">{{ entry.action }}</p>
+                <p class="vrm-timeline__action">{{ moderationLabel(entry.kind) }}</p>
                 <span class="vrm-timeline__date">{{ formatDateTime(entry.date) }}</span>
               </div>
-              <p class="vrm-timeline__actor">by {{ entry.actor }}</p>
+              <p class="vrm-timeline__actor">{{ 'viewReviewModal.byActor' | translate: { actor: entry.actor } }}</p>
               @if (entry.note) {
                 <p class="vrm-timeline__note">{{ entry.note }}</p>
               }
@@ -115,19 +115,19 @@
           </div>
         }
         @if (review.moderationHistory.length === 0) {
-          <p class="vrm-timeline__empty">No moderation activity recorded yet.</p>
+          <p class="vrm-timeline__empty">{{ 'viewReviewModal.noModerationActivity' | translate }}</p>
         }
       </div>
     </div>
 
     <!-- ── Footer ─────────────────────────────────────────────────────── -->
     <footer class="vrm-footer">
-      <button class="btn-ghost" type="button" (click)="requestClose()">Close</button>
+      <button class="btn-ghost" type="button" (click)="requestClose()">{{ 'buttons.close' | translate }}</button>
       <button class="btn-danger" type="button" (click)="requestDelete()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
         </svg>
-        Delete Review
+        {{ 'reviews.deleteReviewButton' | translate }}
       </button>
     </footer>
   </div>
