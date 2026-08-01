@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, signal } from '@angular/core';
+import { Component, HostListener, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotificationDetailModal } from '../../model/notification-detail-model/notification-detail-model';
@@ -14,6 +14,8 @@ import {
   generateMockNotifications,
   relativeTime,
 } from '../../model/notification-model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 type TypeFilter = 'all' | NotificationType;
 type PriorityFilter = 'all' | NotificationPriority;
@@ -21,11 +23,13 @@ type DateFilter = 'all' | 'today' | 'week' | 'month';
 
 @Component({
   selector: 'app-notifications',
-  imports: [CommonModule, FormsModule, NotificationDetailModal],
+  standalone: true,
+  imports: [CommonModule, FormsModule, NotificationDetailModal, TranslatePipe],
   templateUrl: './notifications.html',
   styleUrl: './notifications.scss',
 })
 export class Notifications {
+  protected lang = inject(LanguageService);
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -62,45 +66,45 @@ export class Notifications {
   toastMsg = signal<string | null>(null);
   private toastTimer: any;
 
-  // ── Static option lists ────────────────────────────────────────────────
+  // ── Static option lists — labels are translation keys ──────────────────
   typeOptions: { key: TypeFilter; label: string }[] = [
-    { key: 'all', label: 'All Types' },
-    { key: 'order', label: 'Order' },
-    { key: 'customer', label: 'Customer' },
-    { key: 'inventory', label: 'Inventory' },
-    { key: 'product', label: 'Product' },
-    { key: 'payment', label: 'Payment' },
-    { key: 'system', label: 'System' },
-    { key: 'warning', label: 'Warning' },
-    { key: 'success', label: 'Success' },
-    { key: 'info', label: 'Info' },
+    { key: 'all', label: 'common.allTypes' },
+    { key: 'order', label: 'notifications.type.order' },
+    { key: 'customer', label: 'notifications.type.customer' },
+    { key: 'inventory', label: 'notifications.type.inventory' },
+    { key: 'product', label: 'notifications.type.product' },
+    { key: 'payment', label: 'notifications.type.payment' },
+    { key: 'system', label: 'notifications.type.system' },
+    { key: 'warning', label: 'notifications.type.warning' },
+    { key: 'success', label: 'notifications.type.success' },
+    { key: 'info', label: 'notifications.type.info' },
   ];
 
   priorityOptions: { key: PriorityFilter; label: string }[] = [
-    { key: 'all', label: 'All Priorities' },
-    { key: 'high', label: 'High' },
-    { key: 'medium', label: 'Medium' },
-    { key: 'low', label: 'Low' },
+    { key: 'all', label: 'notifications.allPriorities' },
+    { key: 'high', label: 'notifications.priority.high' },
+    { key: 'medium', label: 'notifications.priority.medium' },
+    { key: 'low', label: 'notifications.priority.low' },
   ];
 
   statusOptions: { key: NotificationStatusFilter; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'unread', label: 'Unread' },
-    { key: 'read', label: 'Read' },
+    { key: 'all', label: 'notifications.filterAll' },
+    { key: 'unread', label: 'notifications.tabs.unread' },
+    { key: 'read', label: 'reviews.status.read' },
   ];
 
   dateOptions: { key: DateFilter; label: string }[] = [
-    { key: 'all', label: 'Any Date' },
-    { key: 'today', label: 'Today' },
-    { key: 'week', label: 'This Week' },
-    { key: 'month', label: 'This Month' },
+    { key: 'all', label: 'notifications.anyDate' },
+    { key: 'today', label: 'common.today' },
+    { key: 'week', label: 'notifications.stats.thisWeek' },
+    { key: 'month', label: 'notifications.thisMonth' },
   ];
 
   sortOptions: { key: NotificationSort; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'unread', label: 'Unread First' },
-    { key: 'priority', label: 'Priority' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'unread', label: 'notifications.sortUnreadFirst' },
+    { key: 'priority', label: 'notifications.sortPriority' },
   ];
 
   // ── Computed: statistics ───────────────────────────────────────────────
@@ -194,10 +198,10 @@ export class Notifications {
 
   pageRangeLabel = computed(() => {
     const total = this.filteredNotifications().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   // ── Computed: bulk selection state ─────────────────────────────────────
@@ -322,7 +326,7 @@ export class Notifications {
     this.allNotifications.update(list =>
       list.map(n => (ids.has(n.id) && !n.read ? { ...n, read: true, readAt: new Date().toISOString() } : n))
     );
-    this.showToast(`Marked ${ids.size} notification${ids.size === 1 ? '' : 's'} as read`);
+    this.showToast(this.lang.translate('notifications.toasts.markedRead', { count: ids.size }));
     this.clearSelection();
   }
 
@@ -346,7 +350,7 @@ export class Notifications {
     this.allNotifications.update(list => list.filter(n => n.id !== target.id));
     this.selectedIds.update(set => { const next = new Set(set); next.delete(target.id); return next; });
     this.pendingDelete.set(null);
-    this.showToast('Notification deleted');
+    this.showToast(this.lang.translate('notifications.toasts.deleted'));
   }
 
   requestBulkDelete(): void {
@@ -359,7 +363,7 @@ export class Notifications {
   confirmBulkDelete(): void {
     const ids = this.selectedIds();
     this.allNotifications.update(list => list.filter(n => !ids.has(n.id)));
-    this.showToast(`Deleted ${ids.size} notification${ids.size === 1 ? '' : 's'}`);
+    this.showToast(this.lang.translate('notifications.toasts.bulkDeleted', { count: ids.size }));
     this.clearSelection();
     this.pendingBulkDelete.set(false);
   }
@@ -381,14 +385,14 @@ export class Notifications {
   onDetailMarkUnread(id: string): void { this.markUnread(id); }
   onDetailDeleted(id: string): void {
     this.allNotifications.update(list => list.filter(n => n.id !== id));
-    this.showToast('Notification deleted');
+    this.showToast(this.lang.translate('notifications.toasts.deleted'));
   }
 
   // ── Display helpers ───────────────────────────────────────────────────
   typeMeta(type: NotificationType) { return NOTIFICATION_TYPE_META[type]; }
   priorityMeta(priority: NotificationPriority) { return NOTIFICATION_PRIORITY_META[priority]; }
-  relativeTime(iso: string): string { return relativeTime(iso); }
-  formatFullDate(iso: string): string { return formatFullDate(iso); }
+  relativeTime(iso: string): string { return relativeTime(iso, this.lang); }
+  formatFullDate(iso: string): string { return formatFullDate(iso, this.lang); }
 
   messagePreview(message: string): string {
     return message.length > 90 ? message.slice(0, 87) + '…' : message;
