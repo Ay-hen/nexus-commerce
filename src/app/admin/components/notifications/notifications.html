@@ -20,18 +20,15 @@
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
           </svg>
         </div>
-        <h2 class="modal__title" id="del-title">Delete Notification</h2>
-        <p class="modal__body">
-          Are you sure you want to delete <strong>{{ pendingDelete()!.title }}</strong>?
-          This action cannot be undone.
-        </p>
+        <h2 class="modal__title" id="del-title">{{ 'notifications.deleteConfirmTitle' | translate }}</h2>
+        <p class="modal__body" [innerHTML]="'notifications.deleteConfirmBody' | translate: { title: pendingDelete()!.title }"></p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelDelete()">Cancel</button>
+          <button class="btn-ghost" (click)="cancelDelete()">{{ 'buttons.cancel' | translate }}</button>
           <button class="btn-danger" (click)="confirmDelete()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
             </svg>
-            Delete
+            {{ 'buttons.delete' | translate }}
           </button>
         </div>
       </div>
@@ -50,18 +47,15 @@
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
           </svg>
         </div>
-        <h2 class="modal__title" id="bulk-del-title">Delete {{ selectedCount() }} Notifications</h2>
-        <p class="modal__body">
-          Are you sure you want to delete the <strong>{{ selectedCount() }}</strong> selected notifications?
-          This action cannot be undone.
-        </p>
+        <h2 class="modal__title" id="bulk-del-title">{{ 'notifications.deleteConfirmTitleBulk' | translate: { count: selectedCount() } }}</h2>
+        <p class="modal__body" [innerHTML]="'notifications.deleteConfirmBodyBulk' | translate: { count: selectedCount() }"></p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelBulkDelete()">Cancel</button>
+          <button class="btn-ghost" (click)="cancelBulkDelete()">{{ 'buttons.cancel' | translate }}</button>
           <button class="btn-danger" (click)="confirmBulkDelete()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
             </svg>
-            Delete All
+            {{ 'notifications.deleteAllButton' | translate }}
           </button>
         </div>
       </div>
@@ -89,8 +83,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Notifications</h1>
-        <p class="page-sub">Monitor every activity across your store.</p>
+        <h1 class="page-title">{{ 'notifications.title' | translate }}</h1>
+        <p class="page-sub">{{ 'notifications.subtitle' | translate }}</p>
       </div>
     </div>
     <div class="page-header__actions">
@@ -99,19 +93,19 @@
           <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
           <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
         </svg>
-        Refresh
+        {{ 'buttons.refresh' | translate }}
       </button>
       <button class="btn-ghost" [disabled]="selectedCount() === 0" (click)="markSelectedRead()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
-        Mark Selected Read
+        {{ 'buttons.markSelectedRead' | translate }}
       </button>
       <button class="btn-danger" [disabled]="selectedCount() === 0" (click)="requestBulkDelete()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
         </svg>
-        Delete Selected
+        {{ 'buttons.deleteSelected' | translate }}
       </button>
     </div>
   </div>
@@ -130,9 +124,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Unread Notifications</p>
-          <p class="stat-card__value">{{ unreadCount() }}</p>
-          <p class="stat-card__sub">need your attention</p>
+          <p class="stat-card__label">{{ 'notifications.stats.unread' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(unreadCount()) }}</p>
+          <p class="stat-card__sub">{{ 'notifications.needsAttention' | translate }}</p>
         </div>
       </div>
 
@@ -143,9 +137,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">Today</p>
-          <p class="stat-card__value">{{ todayCount() }}</p>
-          <p class="stat-card__sub">received today</p>
+          <p class="stat-card__label">{{ 'notifications.stats.today' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(todayCount()) }}</p>
+          <p class="stat-card__sub">{{ 'notifications.receivedToday' | translate }}</p>
         </div>
       </div>
 
@@ -157,9 +151,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">This Week</p>
-          <p class="stat-card__value">{{ thisWeekCount() }}</p>
-          <p class="stat-card__sub">across all types</p>
+          <p class="stat-card__label">{{ 'notifications.stats.thisWeek' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(thisWeekCount()) }}</p>
+          <p class="stat-card__sub">{{ 'notifications.acrossAllTypes' | translate }}</p>
         </div>
       </div>
 
@@ -171,9 +165,9 @@
           </svg>
         </div>
         <div class="stat-card__body">
-          <p class="stat-card__label">High Priority</p>
-          <p class="stat-card__value">{{ highPriorityCount() }}</p>
-          <p class="stat-card__sub">require action</p>
+          <p class="stat-card__label">{{ 'notifications.stats.highPriority' | translate }}</p>
+          <p class="stat-card__value">{{ lang.formatNumber(highPriorityCount()) }}</p>
+          <p class="stat-card__sub">{{ 'notifications.requireAction' | translate }}</p>
         </div>
       </div>
     </div>
@@ -191,13 +185,13 @@
         <input
           class="search-input"
           type="search"
-          placeholder="Search title, message, actor…"
+          [placeholder]="'notifications.searchPlaceholder' | translate"
           [value]="searchQuery()"
           (input)="onSearch($any($event.target).value)"
-          aria-label="Search notifications"
+          [attr.aria-label]="'notifications.searchAriaLabel' | translate"
         />
         @if (searchQuery()) {
-          <button class="search-clear" (click)="onSearch('')" aria-label="Clear search">
+          <button class="search-clear" (click)="onSearch('')" [attr.aria-label]="'notifications.clearSearchAria' | translate">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -208,7 +202,7 @@
       <!-- Type -->
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="typeFilter()" (ngModelChange)="setTypeFilter($event)">
-          @for (opt of typeOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of typeOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -216,7 +210,7 @@
       <!-- Priority -->
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="priorityFilter()" (ngModelChange)="setPriorityFilter($event)">
-          @for (opt of priorityOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of priorityOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -225,7 +219,7 @@
       <div class="filter-pills">
         @for (opt of statusOptions; track opt.key) {
           <button class="filter-pill" [class.filter-pill--active]="statusFilter() === opt.key" (click)="setStatusFilter(opt.key)">
-            {{ opt.label }}
+            {{ opt.label | translate }}
           </button>
         }
       </div>
@@ -233,13 +227,13 @@
       <!-- Date -->
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="dateFilter()" (ngModelChange)="setDateFilter($event)">
-          @for (opt of dateOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of dateOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       @if (hasActiveFilters()) {
-        <button class="clear-filters-btn" (click)="clearFilters()">Clear</button>
+        <button class="clear-filters-btn" (click)="clearFilters()">{{ 'common.clear' | translate }}</button>
       }
     </div>
 
@@ -247,7 +241,7 @@
       <!-- Sort -->
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="sortBy()" (ngModelChange)="setSort($event)">
-          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">{{ 'common.sortBy' | translate }}: {{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -257,17 +251,17 @@
   <!-- ── SELECTION BAR ─────────────────────────────────────────────────────── -->
   @if (selectedCount() > 0) {
     <div class="selection-bar">
-      <span class="selection-bar__count">{{ selectedCount() }} selected</span>
+      <span class="selection-bar__count">{{ selectedCount() }} {{ 'common.selected' | translate }}</span>
       <div class="selection-bar__actions">
         <button class="selection-bar__btn" (click)="markSelectedRead()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
-          Mark Read
+          {{ 'buttons.markRead' | translate }}
         </button>
         <button class="selection-bar__btn selection-bar__btn--danger" (click)="requestBulkDelete()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          Delete
+          {{ 'buttons.delete' | translate }}
         </button>
-        <button class="selection-bar__btn" (click)="clearSelection()">Clear</button>
+        <button class="selection-bar__btn" (click)="clearSelection()">{{ 'common.clear' | translate }}</button>
       </div>
     </div>
   }
@@ -295,16 +289,16 @@
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
         </div>
-        <h3 class="empty-state__title">No notifications found</h3>
+        <h3 class="empty-state__title">{{ 'notifications.empty.title' | translate }}</h3>
         <p class="empty-state__sub">
           @if (hasActiveFilters()) {
-            Try adjusting your search or filters.
+            {{ 'notifications.tryAdjusting' | translate }}
           } @else {
-            You're all caught up — new activity will appear here.
+            {{ 'notifications.empty.genericSub' | translate }}
           }
         </p>
         @if (hasActiveFilters()) {
-          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+          <button class="btn-ghost" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
         }
       </div>
     }
@@ -325,11 +319,11 @@
                   </label>
                 </th>
                 <th class="th--icon"></th>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Created</th>
+                <th>{{ 'notifications.table.title' | translate }}</th>
+                <th>{{ 'notifications.table.type' | translate }}</th>
+                <th>{{ 'notifications.table.priority' | translate }}</th>
+                <th>{{ 'common.status' | translate }}</th>
+                <th>{{ 'categories.table.created' | translate }}</th>
                 <th class="th--actions"></th>
               </tr>
             </thead>
@@ -399,14 +393,14 @@
                   <!-- Type -->
                   <td>
                     <span class="type-pill" [style.background]="typeMeta(n.type).bg" [style.color]="typeMeta(n.type).color">
-                      {{ typeMeta(n.type).label }}
+                      {{ 'notifications.type.' + n.type | translate }}
                     </span>
                   </td>
 
                   <!-- Priority -->
                   <td>
                     <span class="priority-pill" [style.background]="priorityMeta(n.priority).bg" [style.color]="priorityMeta(n.priority).color">
-                      {{ priorityMeta(n.priority).label }}
+                      {{ 'notifications.priority.' + n.priority | translate }}
                     </span>
                   </td>
 
@@ -414,7 +408,7 @@
                   <td>
                     <span class="status-pill" [class.status-pill--unread]="!n.read" [class.status-pill--read]="n.read">
                       <span class="status-dot"></span>
-                      {{ n.read ? 'Read' : 'Unread' }}
+                      {{ (n.read ? 'reviews.status.read' : 'notifications.tabs.unread') | translate }}
                     </span>
                   </td>
 
@@ -428,7 +422,7 @@
                         class="action-trigger"
                         (click)="toggleMenu(n, $event)"
                         [attr.aria-expanded]="openMenuId() === n.id"
-                        aria-label="Notification actions"
+                        [attr.aria-label]="'common.actions' | translate"
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                           <circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/>
@@ -441,17 +435,17 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                             </svg>
-                            View Details
+                            {{ 'orders.actions.viewDetails' | translate }}
                           </a>
                           @if (n.read) {
                             <a class="action-item" (click)="markUnread(n.id); closeMenu()" role="menuitem">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
-                              Mark Unread
+                              {{ 'buttons.markUnread' | translate }}
                             </a>
                           } @else {
                             <a class="action-item" (click)="markRead(n.id); closeMenu()" role="menuitem">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                              Mark Read
+                              {{ 'buttons.markRead' | translate }}
                             </a>
                           }
                           <div class="action-divider"></div>
@@ -461,7 +455,7 @@
                               <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                               <path d="M10 11v6M14 11v6"/>
                             </svg>
-                            Delete
+                            {{ 'buttons.delete' | translate }}
                           </button>
                         </div>
                       }
@@ -481,7 +475,7 @@
         <span class="pagination__label">{{ pageRangeLabel() }}</span>
 
         <div class="pagination__controls">
-          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" [attr.aria-label]="'common.previousPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
 
@@ -499,7 +493,7 @@
             <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
           }
 
-          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" [attr.aria-label]="'common.nextPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
