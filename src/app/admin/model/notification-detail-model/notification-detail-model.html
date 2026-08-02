@@ -52,17 +52,17 @@
           <h2 class="ndm-header__title" id="ndm-title">{{ notification.title }}</h2>
           <div class="ndm-header__badges">
             <span class="ndm-badge" [style.background]="priorityMeta().bg" [style.color]="priorityMeta().color">
-              {{ priorityMeta().label }} priority
+              {{ 'notificationDetailModal.priorityWithSuffix' | translate: { priority: ('notifications.priority.' + notification.priority | translate) } }}
             </span>
             <span class="ndm-badge" [class.ndm-badge--unread]="!notification.read" [class.ndm-badge--read]="notification.read">
               <span class="ndm-badge__dot"></span>
-              {{ notification.read ? 'Read' : 'Unread' }}
+              {{ (notification.read ? 'reviews.status.read' : 'notifications.tabs.unread') | translate }}
             </span>
             <span class="ndm-header__date">{{ fullCreatedDate() }}</span>
           </div>
         </div>
       </div>
-      <button class="ndm-close" (click)="requestClose()" aria-label="Close" type="button">
+      <button class="ndm-close" (click)="requestClose()" [attr.aria-label]="'buttons.close' | translate" type="button">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
@@ -79,16 +79,16 @@
       <section class="ndm-section">
         <div class="ndm-meta-grid">
           <div class="ndm-meta-field">
-            <span class="ndm-meta-label">Activity Type</span>
+            <span class="ndm-meta-label">{{ 'notificationDetailModal.activityType' | translate }}</span>
             <span class="ndm-meta-value">
               <span class="ndm-type-dot" [style.background]="typeMeta().color"></span>
-              {{ typeMeta().label }}
+              {{ 'notifications.type.' + notification.type | translate }}
             </span>
           </div>
 
           @if (notification.actor) {
             <div class="ndm-meta-field">
-              <span class="ndm-meta-label">Actor</span>
+              <span class="ndm-meta-label">{{ 'notificationDetailModal.actor' | translate }}</span>
               <span class="ndm-meta-value ndm-actor">
                 <span class="ndm-actor__avatar">{{ notification.actor.name.charAt(0) }}</span>
                 {{ notification.actor.name }}
@@ -100,24 +100,24 @@
 
       @if (hasMetadataLinks()) {
         <section class="ndm-section">
-          <h3 class="ndm-section__title">Related Records</h3>
+          <h3 class="ndm-section__title">{{ 'notificationDetailModal.relatedRecords' | translate }}</h3>
           <div class="ndm-links">
             @if (notification.metadata?.orderId) {
               <a class="ndm-link">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                Order {{ notification.metadata?.orderId }}
+                {{ 'notificationDetailModal.relatedOrder' | translate: { id: notification.metadata?.orderId } }}
               </a>
             }
             @if (notification.metadata?.customerId) {
               <a class="ndm-link">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                Customer {{ notification.metadata?.customerId }}
+                {{ 'notificationDetailModal.relatedCustomer' | translate: { id: notification.metadata?.customerId } }}
               </a>
             }
             @if (notification.metadata?.productId) {
               <a class="ndm-link">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                Product {{ notification.metadata?.productId }}
+                {{ 'notificationDetailModal.relatedProduct' | translate: { id: notification.metadata?.productId } }}
               </a>
             }
           </div>
@@ -125,12 +125,12 @@
       }
 
       <section class="ndm-section">
-        <h3 class="ndm-section__title">Timeline</h3>
+        <h3 class="ndm-section__title">{{ 'notificationDetailModal.timeline' | translate }}</h3>
         <div class="ndm-timeline">
           <div class="ndm-timeline__item">
             <span class="ndm-timeline__dot ndm-timeline__dot--active"></span>
             <div class="ndm-timeline__body">
-              <p class="ndm-timeline__label">Created</p>
+              <p class="ndm-timeline__label">{{ 'notificationDetailModal.timelineCreated' | translate }}</p>
               <p class="ndm-timeline__time">{{ fullCreatedDate() }} · {{ relativeCreated() }}</p>
             </div>
           </div>
@@ -138,7 +138,7 @@
             <div class="ndm-timeline__item">
               <span class="ndm-timeline__dot ndm-timeline__dot--active"></span>
               <div class="ndm-timeline__body">
-                <p class="ndm-timeline__label">Read</p>
+                <p class="ndm-timeline__label">{{ 'reviews.status.read' | translate }}</p>
                 <p class="ndm-timeline__time">{{ fullReadDate() }} · {{ relativeRead() }}</p>
               </div>
             </div>
@@ -146,7 +146,7 @@
             <div class="ndm-timeline__item ndm-timeline__item--pending">
               <span class="ndm-timeline__dot"></span>
               <div class="ndm-timeline__body">
-                <p class="ndm-timeline__label">Not yet read</p>
+                <p class="ndm-timeline__label">{{ 'notificationDetailModal.timelineNotYetRead' | translate }}</p>
               </div>
             </div>
           }
@@ -161,15 +161,15 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
         </svg>
-        Delete
+        {{ 'buttons.delete' | translate }}
       </button>
       <div class="ndm-footer__right">
         @if (notification.read) {
-          <button class="btn-ghost" type="button" (click)="onMarkUnread()">Mark Unread</button>
+          <button class="btn-ghost" type="button" (click)="onMarkUnread()">{{ 'buttons.markUnread' | translate }}</button>
         } @else {
-          <button class="btn-ghost" type="button" (click)="onMarkRead()">Mark Read</button>
+          <button class="btn-ghost" type="button" (click)="onMarkRead()">{{ 'buttons.markRead' | translate }}</button>
         }
-        <button class="btn-primary" type="button" (click)="requestClose()">Close</button>
+        <button class="btn-primary" type="button" (click)="requestClose()">{{ 'buttons.close' | translate }}</button>
       </div>
     </footer>
   </div>
