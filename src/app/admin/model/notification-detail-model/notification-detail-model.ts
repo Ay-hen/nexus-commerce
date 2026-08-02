@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   AdminNotification,
@@ -7,15 +7,19 @@ import {
   relativeTime,
   formatFullDate,
 } from '../notification-model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 @Component({
   selector: 'app-notification-detail-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './notification-detail-model.html',
   styleUrl: './notification-detail-model.scss',
 })
 export class NotificationDetailModal implements OnInit, OnDestroy {
+  protected lang = inject(LanguageService);
+
   @Input({ required: true }) notification!: AdminNotification;
 
   @Output() closed = new EventEmitter<void>();
@@ -50,19 +54,19 @@ export class NotificationDetailModal implements OnInit, OnDestroy {
   }
 
   relativeCreated(): string {
-    return relativeTime(this.notification.createdAt);
+    return relativeTime(this.notification.createdAt, this.lang);
   }
 
   relativeRead(): string {
-    return this.notification.readAt ? relativeTime(this.notification.readAt) : '';
+    return this.notification.readAt ? relativeTime(this.notification.readAt, this.lang) : '';
   }
 
   fullCreatedDate(): string {
-    return formatFullDate(this.notification.createdAt);
+    return formatFullDate(this.notification.createdAt, this.lang);
   }
 
   fullReadDate(): string {
-    return this.notification.readAt ? formatFullDate(this.notification.readAt) : '';
+    return this.notification.readAt ? formatFullDate(this.notification.readAt, this.lang) : '';
   }
 
   hasMetadataLinks(): boolean {
