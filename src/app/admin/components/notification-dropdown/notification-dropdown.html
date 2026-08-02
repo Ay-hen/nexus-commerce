@@ -1,4 +1,4 @@
-<div class="ndd-panel" role="dialog" aria-label="Notifications">
+<div class="ndd-panel" role="dialog" [attr.aria-label]="'notifications.title' | translate">
 
   @if (viewingNotification()) {
     <app-notification-detail-modal
@@ -13,22 +13,22 @@
   <!-- ── Header ────────────────────────────────────────────────────────── -->
   <div class="ndd-header">
     <div class="ndd-header__title-row">
-      <h3 class="ndd-header__title">Notifications</h3>
+      <h3 class="ndd-header__title">{{ 'notifications.title' | translate }}</h3>
       @if (unreadCount() > 0) {
         <span class="ndd-unread-badge">{{ unreadCount() }}</span>
       }
     </div>
     <button class="ndd-mark-all" [disabled]="unreadCount() === 0" (click)="markAllRead()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
-      Mark All Read
+      {{ 'notifications.markAllRead' | translate }}
     </button>
   </div>
 
   <!-- ── Tabs ──────────────────────────────────────────────────────────── -->
   <div class="ndd-tabs" role="tablist">
-    <button class="ndd-tab" [class.ndd-tab--active]="activeTab() === 'all'" (click)="setTab('all')" role="tab">All</button>
+    <button class="ndd-tab" [class.ndd-tab--active]="activeTab() === 'all'" (click)="setTab('all')" role="tab">{{ 'notifications.tabs.all' | translate }}</button>
     <button class="ndd-tab" [class.ndd-tab--active]="activeTab() === 'unread'" (click)="setTab('unread')" role="tab">
-      Unread
+      {{ 'notifications.tabs.unread' | translate }}
       @if (unreadCount() > 0) { <span class="ndd-tab__count">{{ unreadCount() }}</span> }
     </button>
   </div>
@@ -42,8 +42,8 @@
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
         </div>
-        <p class="ndd-empty__title">You're all caught up</p>
-        <p class="ndd-empty__sub">No {{ activeTab() === 'unread' ? 'unread ' : '' }}notifications right now.</p>
+        <p class="ndd-empty__title">{{ 'notifications.empty.caughtUp' | translate }}</p>
+        <p class="ndd-empty__sub">{{ (activeTab() === 'unread' ? 'notifications.empty.caughtUpSubUnread' : 'notifications.empty.caughtUpSubAll') | translate }}</p>
       </div>
     }
 
@@ -88,7 +88,7 @@
         <span class="ndd-item__body">
           <span class="ndd-item__top">
             <span class="ndd-item__title" [class.ndd-item__title--unread]="!n.read">{{ n.title }}</span>
-            <span class="ndd-priority-dot" [style.background]="priorityColor(n)" [attr.title]="n.priority + ' priority'"></span>
+            <span class="ndd-priority-dot" [style.background]="priorityColor(n)" [attr.title]="('notifications.priority.' + n.priority | translate) + ' priority'"></span>
           </span>
           <span class="ndd-item__message">{{ messagePreview(n.message) }}</span>
           <span class="ndd-item__time">{{ relativeTime(n.createdAt) }}</span>
@@ -104,10 +104,9 @@
   <!-- ── Footer ────────────────────────────────────────────────────────── -->
   <div class="ndd-footer">
     <button class="ndd-view-all" (click)="viewAll()">
-      View All Notifications
+      {{ 'notifications.viewAll' | translate }}
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </button>
   </div>
 
 </div>
-
