@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output, computed, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationDetailModal } from '../../model/notification-detail-model/notification-detail-model';
@@ -10,16 +10,20 @@ import {
   generateMockNotifications,
   relativeTime,
 } from '../../model/notification-model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 type DropdownTab = 'all' | 'unread';
 
 @Component({
   selector: 'app-notification-dropdown',
-  imports: [CommonModule, NotificationDetailModal],
+  imports: [CommonModule, NotificationDetailModal, TranslatePipe],
   templateUrl: './notification-dropdown.html',
   styleUrl: './notification-dropdown.scss',
 })
 export class NotificationDropdownComponent {
+  protected lang = inject(LanguageService);
+
   /** Emitted when the dropdown wants to be closed (e.g. after "View All" or an outside click). */
   @Output() closed = new EventEmitter<void>();
 
@@ -101,7 +105,7 @@ export class NotificationDropdownComponent {
   // ── Display helpers ───────────────────────────────────────────────────
   typeMeta(type: NotificationType) { return NOTIFICATION_TYPE_META[type]; }
   priorityColor(n: AdminNotification): string { return NOTIFICATION_PRIORITY_META[n.priority].color; }
-  relativeTime(iso: string): string { return relativeTime(iso); }
+  relativeTime(iso: string): string { return relativeTime(iso, this.lang); }
 
   messagePreview(message: string): string {
     return message.length > 64 ? message.slice(0, 61) + '…' : message;
@@ -109,4 +113,3 @@ export class NotificationDropdownComponent {
 
   trackById(_: number, item: AdminNotification): string { return item.id; }
 }
-
