@@ -7,8 +7,8 @@ import {
   relativeTime,
   formatFullDate,
 } from '../notification-model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 @Component({
   selector: 'app-notification-detail-modal',
