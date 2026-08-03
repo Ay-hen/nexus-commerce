@@ -912,7 +912,9 @@
       "title": "Aucune notification trouvée",
       "caughtUp": "Vous êtes à jour",
       "caughtUpSub": "Aucune notification {{filter}}pour le moment.",
-      "genericSub": "Vous êtes à jour — les nouvelles activités apparaîtront ici."
+      "genericSub": "Vous êtes à jour — les nouvelles activités apparaîtront ici.",
+      "caughtUpSubAll": "Aucune notification pour le moment.",
+      "caughtUpSubUnread": "Aucune notification non lue pour le moment."
     },
     "viewAll": "Voir toutes les notifications",
     "stats": {
