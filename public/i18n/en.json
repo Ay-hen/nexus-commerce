@@ -895,6 +895,12 @@
     "deleteConfirmTitleBulk": "Delete {{count}} Notifications",
     "deleteConfirmBodyBulk": "Are you sure you want to delete the {{count}} selected notifications? This action cannot be undone.",
     "deleteAllButton": "Delete All",
+    "table": { "title": "Title", "type": "Type", "priority": "Priority" },
+    "toasts": {
+      "markedRead": "Marked {{count}} notification(s) as read",
+      "deleted": "Notification deleted",
+      "bulkDeleted": "Deleted {{count}} notification(s)"
+    },
     "tabs": {
       "all": "All",
       "unread": "Unread"
