@@ -898,6 +898,12 @@
     "deleteConfirmTitleBulk": "Supprimer {{count}} notifications",
     "deleteConfirmBodyBulk": "Voulez-vous vraiment supprimer les {{count}} notifications sélectionnées ? Cette action est irréversible.",
     "deleteAllButton": "Tout supprimer",
+    "table": { "title": "Titre", "type": "Type", "priority": "Priorité" },
+    "toasts": {
+      "markedRead": "{{count}} notification(s) marquée(s) comme lue(s)",
+      "deleted": "Notification supprimée",
+      "bulkDeleted": "{{count}} notification(s) supprimée(s)"
+    },
     "tabs": {
       "all": "Toutes",
       "unread": "Non lues"
