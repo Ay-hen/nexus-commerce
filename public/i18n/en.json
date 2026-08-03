@@ -909,7 +909,9 @@
       "title": "No notifications found",
       "caughtUp": "You're all caught up",
       "caughtUpSub": "No {{filter}}notifications right now.",
-      "genericSub": "You're all caught up — new activity will appear here."
+      "genericSub": "You're all caught up — new activity will appear here.",
+      "caughtUpSubAll": "No notifications right now.",
+      "caughtUpSubUnread": "No unread notifications right now."
     },
     "viewAll": "View All Notifications",
     "stats": {
