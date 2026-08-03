@@ -50,7 +50,11 @@
     "optional": "opcional",
     "required": "obligatorio",
     "previousPage": "Página anterior",
-    "nextPage": "Página siguiente"
+    "nextPage": "Página siguiente",
+    "secondsAgo": "hace {{count}}s",
+    "weeksAgo": "hace {{count}}sem",
+    "monthsAgo": "hace {{count}}me",
+    "yearsAgo": "hace {{count}}a"
   },
 
   "buttons": {
