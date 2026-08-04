@@ -912,8 +912,8 @@
       "caughtUp": "Sie sind auf dem neuesten Stand",
       "caughtUpSub": "Derzeit keine {{filter}}Benachrichtigungen.",
       "genericSub": "Sie sind auf dem neuesten Stand — neue Aktivitäten erscheinen hier.",
-      "caughtUpSubAll": "Aucune notification pour le moment.",
-      "caughtUpSubUnread": "Aucune notification non lue pour le moment."
+      "caughtUpSubAll": "Derzeit keine Benachrichtigungen.",
+      "caughtUpSubUnread": "Derzeit keine ungelesenen Benachrichtigungen."
     },
     "viewAll": "Alle Benachrichtigungen ansehen",
     "stats": {
