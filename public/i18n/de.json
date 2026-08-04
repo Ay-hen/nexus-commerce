@@ -877,6 +877,7 @@
     "title": "Benachrichtigungen",
     "subtitle": "Verfolgen Sie jede Aktivität in Ihrem Shop.",
     "markAllRead": "Alle als gelesen markieren",
+
     "tabs": {
       "all": "Alle",
       "unread": "Ungelesen"
@@ -885,7 +886,9 @@
       "title": "Keine Benachrichtigungen gefunden",
       "caughtUp": "Sie sind auf dem neuesten Stand",
       "caughtUpSub": "Derzeit keine {{filter}}Benachrichtigungen.",
-      "genericSub": "Sie sind auf dem neuesten Stand — neue Aktivitäten erscheinen hier."
+      "genericSub": "Sie sind auf dem neuesten Stand — neue Aktivitäten erscheinen hier.",
+      "caughtUpSubAll": "Aucune notification pour le moment.",
+      "caughtUpSubUnread": "Aucune notification non lue pour le moment."
     },
     "viewAll": "Alle Benachrichtigungen ansehen",
     "stats": {
@@ -1170,47 +1173,31 @@
       }
     },
     "notifications": {
-      "searchPlaceholder": "Titel, Nachricht, Akteur suchen…",
-      "searchAriaLabel": "Benachrichtigungen durchsuchen",
-      "clearSearchAria": "Suche löschen",
-      "allPriorities": "Alle Prioritäten",
-      "filterAll": "Alle",
-      "anyDate": "Beliebiges Datum",
-      "thisMonth": "Diesen Monat",
-      "sortUnreadFirst": "Ungelesene zuerst",
-      "sortPriority": "Priorität",
-      "needsAttention": "benötigen Ihre Aufmerksamkeit",
-      "receivedToday": "heute erhalten",
-      "acrossAllTypes": "über alle Typen hinweg",
-      "requireAction": "erfordern eine Aktion",
-      "tryAdjusting": "Passen Sie Ihre Suche oder Filter an.",
-      "deleteConfirmTitle": "Benachrichtigung löschen",
-      "deleteConfirmBody": "Möchten Sie „{{title}}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-      "deleteConfirmTitleBulk": "{{count}} Benachrichtigungen löschen",
-      "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Benachrichtigungen wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-      "deleteAllButton": "Alle löschen",
-      "table": { "title": "Titel", "type": "Typ", "priority": "Priorität" },
-      "toasts": {
-        "markedRead": "{{count}} Benachrichtigung(en) als gelesen markiert",
-        "deleted": "Benachrichtigung gelöscht",
-        "bulkDeleted": "{{count}} Benachrichtigung(en) gelöscht"
-      },
-      "empty": {
-        "caughtUpSubAll": "Derzeit keine Benachrichtigungen.",
-        "caughtUpSubUnread": "Derzeit keine ungelesenen Benachrichtigungen."
-      }
-    },
-    "notificationDetailModal": {
-      "priorityWithSuffix": "Priorität {{priority}}",
-      "activityType": "Aktivitätstyp",
-      "actor": "Akteur",
-      "relatedRecords": "Zugehörige Datensätze",
-      "timeline": "Zeitverlauf",
-      "timelineCreated": "Erstellt",
-      "timelineNotYetRead": "Noch nicht gelesen",
-      "relatedOrder": "Bestellung {{id}}",
-      "relatedCustomer": "Kunde {{id}}",
-      "relatedProduct": "Produkt {{id}}"
+      "channelsTitle": "Benachrichtigungskanäle",
+      "channelsSub": "Legen Sie fest, wie Sie und Ihr Team Benachrichtigungen erhalten.",
+      "email": "E-Mail-Benachrichtigungen",
+      "emailSub": "Benachrichtigungen per E-Mail erhalten.",
+      "push": "Push-Benachrichtigungen",
+      "pushSub": "Benachrichtigungen als Push-Nachrichten in der Admin-App erhalten.",
+      "sms": "SMS-Benachrichtigungen",
+      "smsSub": "Kritische Benachrichtigungen per SMS erhalten.",
+      "activityAlertsTitle": "Aktivitätsbenachrichtigungen",
+      "activityAlertsSub": "Legen Sie fest, welche Ereignisse eine Benachrichtigung auslösen.",
+      "order": "Bestellbenachrichtigungen",
+      "orderSub": "Neue Bestellungen, Statusänderungen und Stornierungen.",
+      "customer": "Kundenbenachrichtigungen",
+      "customerSub": "Neue Kontoanmeldungen und Profilaktualisierungen.",
+      "inventory": "Inventarbenachrichtigungen",
+      "inventorySub": "Bestandsanpassungen und Lageränderungen.",
+      "lowStock": "Benachrichtigungen bei geringem Bestand",
+      "lowStockSub": "Wenn ein Produkt unter seinen Nachbestellungsschwellenwert fällt.",
+      "review": "Bewertungsbenachrichtigungen",
+      "reviewSub": "Neue Produktbewertungen, die auf Moderation warten.",
+      "adminLogin": "Admin-Anmeldebenachrichtigungen",
+      "adminLoginSub": "Jedes Mal, wenn sich ein Administrator anmeldet.",
+      "activityLog": "Aktivitätsprotokoll-Benachrichtigungen",
+      "activityLogSub": "Zusammenfassungen sensibler Aktionen im gesamten System.",
+      "saveButton": "Benachrichtigungseinstellungen speichern"
     },
     "appearance": {
       "theme": "Design",
