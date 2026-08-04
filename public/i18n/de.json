@@ -896,7 +896,12 @@
     "deleteConfirmTitleBulk": "{{count}} Benachrichtigungen löschen",
     "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Benachrichtigungen wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteAllButton": "Alle löschen",
-    
+    "table": { "title": "Titel", "type": "Typ", "priority": "Priorität" },
+    "toasts": {
+      "markedRead": "{{count}} Benachrichtigung(en) als gelesen markiert",
+      "deleted": "Benachrichtigung gelöscht",
+      "bulkDeleted": "{{count}} Benachrichtigung(en) gelöscht"
+    },
 
     "tabs": {
       "all": "Alle",
