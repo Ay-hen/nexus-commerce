@@ -881,7 +881,9 @@
       "title": "No se encontraron notificaciones",
       "caughtUp": "Estás al día",
       "caughtUpSub": "No hay notificaciones {{filter}}por ahora.",
-      "genericSub": "Estás al día — la nueva actividad aparecerá aquí."
+      "genericSub": "Estás al día — la nueva actividad aparecerá aquí.",
+      "caughtUpSubAll": "No hay notificaciones por ahora.",
+      "caughtUpSubUnread": "No hay notificaciones sin leer por ahora."
     },
     "viewAll": "Ver todas las notificaciones",
     "stats": {
