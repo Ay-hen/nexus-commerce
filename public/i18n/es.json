@@ -867,7 +867,12 @@
     "deleteConfirmTitleBulk": "Eliminar {{count}} notificaciones",
     "deleteConfirmBodyBulk": "¿Seguro que deseas eliminar las {{count}} notificaciones seleccionadas? Esta acción no se puede deshacer.",
     "deleteAllButton": "Eliminar todas",
-    
+    "table": { "title": "Título", "type": "Tipo", "priority": "Prioridad" },
+    "toasts": {
+      "markedRead": "{{count}} notificación(es) marcada(s) como leída(s)",
+      "deleted": "Notificación eliminada",
+      "bulkDeleted": "{{count}} notificación(es) eliminada(s)"
+    },
     "tabs": {
       "all": "Todas",
       "unread": "No leídas"
