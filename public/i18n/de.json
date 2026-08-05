@@ -940,6 +940,19 @@
     }
   },
 
+  "notificationDetailModal": {
+    "priorityWithSuffix": "Priorität {{priority}}",
+    "activityType": "Aktivitätstyp",
+    "actor": "Akteur",
+    "relatedRecords": "Zugehörige Datensätze",
+    "timeline": "Zeitverlauf",
+    "timelineCreated": "Erstellt",
+    "timelineNotYetRead": "Noch nicht gelesen",
+    "relatedOrder": "Bestellung {{id}}",
+    "relatedCustomer": "Kunde {{id}}",
+    "relatedProduct": "Produkt {{id}}"
+  },
+
   "pushNotifications": {
     "title": "Push-Benachrichtigungen",
     "subtitle": "Erstellen Sie eine Push-Benachrichtigung und sehen Sie eine Live-Vorschau vor dem Senden.",
