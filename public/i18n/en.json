@@ -938,6 +938,19 @@
     }
   },
 
+  "notificationDetailModal": {
+  "priorityWithSuffix": "{{priority}} priority",
+  "activityType": "Activity Type",
+  "actor": "Actor",
+  "relatedRecords": "Related Records",
+  "timeline": "Timeline",
+  "timelineCreated": "Created",
+  "timelineNotYetRead": "Not yet read",
+  "relatedOrder": "Order {{id}}",
+  "relatedCustomer": "Customer {{id}}",
+  "relatedProduct": "Product {{id}}"
+},
+
   "pushNotifications": {
     "title": "Push Notifications",
     "subtitle": "Compose a push notification and preview it live before sending.",
