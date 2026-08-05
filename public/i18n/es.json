@@ -910,6 +910,19 @@
     }
   },
 
+  "notificationDetailModal": {
+    "priorityWithSuffix": "Prioridad {{priority}}",
+    "activityType": "Tipo de actividad",
+    "actor": "Actor",
+    "relatedRecords": "Registros relacionados",
+    "timeline": "Cronología",
+    "timelineCreated": "Creada",
+    "timelineNotYetRead": "Aún no leída",
+    "relatedOrder": "Pedido {{id}}",
+    "relatedCustomer": "Cliente {{id}}",
+    "relatedProduct": "Producto {{id}}"
+  },  
+
   "pushNotifications": {
     "title": "Notificaciones push",
     "subtitle": "Redacta una notificación push y previsualízala en directo antes de enviarla.",
