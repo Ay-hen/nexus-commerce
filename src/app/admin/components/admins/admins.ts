@@ -10,8 +10,8 @@ import { ViewAdminModal } from '../../model/view-admin-modal/view-admin-modal';
 import { AddAdminModal } from '../../model/add-admin-modal/add-admin-modal';
 import { EditAdminModal } from '../../model/edit-admin-modal/edit-admin-modal';
 import { DeleteAdminModal } from '../../model/delete-admin-modal/delete-admin-modal';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 export type RoleFilter = 'all' | AdminRole;
 export type StatusFilter = 'all' | AdminStatus;
