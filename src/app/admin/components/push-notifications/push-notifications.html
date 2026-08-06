@@ -17,8 +17,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Push Notifications</h1>
-        <p class="page-sub">Compose a push notification and preview it live before sending.</p>
+        <h1 class="page-title">{{ 'pushNotifications.title' | translate }}</h1>
+        <p class="page-sub">{{ 'pushNotifications.subtitle' | translate }}</p>
       </div>
     </div>
   </div>
@@ -31,35 +31,35 @@
       <div class="cn-form">
 
         <section class="form-section">
-          <h3 class="form-section__title">Basic Information</h3>
+          <h3 class="form-section__title">{{ 'categories.basicInfo' | translate }}</h3>
           <div class="form-field">
-            <label class="form-label">Notification Title</label>
-            <input class="form-input" type="text" [ngModel]="form().title" (ngModelChange)="updateForm('title', $event)" placeholder="Your order has shipped! 📦" [class.form-input--error]="formTouched() && !form().title.trim()" />
+            <label class="form-label">{{ 'pushNotifications.notificationTitle' | translate }}</label>
+            <input class="form-input" type="text" [ngModel]="form().title" (ngModelChange)="updateForm('title', $event)" [placeholder]="'pushNotifications.titleFieldPlaceholder' | translate" [class.form-input--error]="formTouched() && !form().title.trim()" />
           </div>
           <div class="form-field">
-            <label class="form-label">Message Body</label>
-            <textarea class="form-textarea" rows="3" [ngModel]="form().body" (ngModelChange)="updateForm('body', $event)" placeholder="Track your package and see the estimated delivery date." [class.form-input--error]="formTouched() && !form().body.trim()"></textarea>
+            <label class="form-label">{{ 'pushNotifications.messageBody' | translate }}</label>
+            <textarea class="form-textarea" rows="3" [ngModel]="form().body" (ngModelChange)="updateForm('body', $event)" [placeholder]="'pushNotifications.bodyFieldPlaceholder' | translate" [class.form-input--error]="formTouched() && !form().body.trim()"></textarea>
           </div>
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label">Campaign Name</label>
-              <input class="form-input" type="text" [ngModel]="form().campaignName" (ngModelChange)="updateForm('campaignName', $event)" placeholder="Summer Sale Blast" [class.form-input--error]="formTouched() && !form().campaignName.trim()" />
+              <label class="form-label">{{ 'pushNotifications.campaignName' | translate }}</label>
+              <input class="form-input" type="text" [ngModel]="form().campaignName" (ngModelChange)="updateForm('campaignName', $event)" [placeholder]="'pushNotifications.campaignNamePlaceholder' | translate" [class.form-input--error]="formTouched() && !form().campaignName.trim()" />
             </div>
             <div class="form-field">
-              <label class="form-label">Image URL (optional)</label>
+              <label class="form-label">{{ 'pushNotifications.imageUrl' | translate }}</label>
               <input class="form-input" type="text" [ngModel]="form().imageUrl" (ngModelChange)="updateForm('imageUrl', $event)" placeholder="https://…/image.png" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label">Deep Link</label>
+              <label class="form-label">{{ 'pushNotifications.deepLink' | translate }}</label>
               <input class="form-input" type="text" [ngModel]="form().deepLink" (ngModelChange)="updateForm('deepLink', $event)" placeholder="app://orders/10291" />
             </div>
             <div class="form-field">
-              <label class="form-label">Target Screen</label>
+              <label class="form-label">{{ 'pushNotifications.targetScreen' | translate }}</label>
               <div class="select-wrap select-wrap--block">
                 <select class="form-select" [ngModel]="form().targetScreen" (ngModelChange)="updateForm('targetScreen', $event)">
-                  @for (s of formTargetScreens; track s) { <option [value]="s">{{ s }}</option> }
+                  @for (s of formTargetScreens; track s) { <option [value]="s">{{ targetScreenLabel(s) }}</option> }
                 </select>
                 <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
@@ -68,79 +68,79 @@
         </section>
 
         <section class="form-section">
-          <h3 class="form-section__title">Audience</h3>
+          <h3 class="form-section__title">{{ 'pushNotifications.audience' | translate }}</h3>
           <div class="radio-grid">
             @for (a of formAudienceOptions; track a) {
               <label class="radio-tile" [class.radio-tile--active]="form().audience === a">
                 <input type="radio" name="audience" [value]="a" [checked]="form().audience === a" (change)="updateForm('audience', a)" />
                 <span class="radio-tile__dot"></span>
-                {{ a }}
+                {{ audienceLabel(a) }}
               </label>
             }
           </div>
           @if (form().audience === 'Custom Segment') {
             <div class="form-field" style="margin-top: 12px;">
-              <label class="form-label">Segment Description</label>
-              <textarea class="form-textarea" rows="2" [ngModel]="form().customSegmentDescription" (ngModelChange)="updateForm('customSegmentDescription', $event)" placeholder="Users who purchased in the last 30 days…"></textarea>
+              <label class="form-label">{{ 'pushNotifications.segmentDescriptionLabel' | translate }}</label>
+              <textarea class="form-textarea" rows="2" [ngModel]="form().customSegmentDescription" (ngModelChange)="updateForm('customSegmentDescription', $event)" [placeholder]="'pushNotifications.segmentDescriptionPlaceholder' | translate"></textarea>
             </div>
           }
           <p class="audience-estimate">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            Estimated recipients: <strong>{{ estimatedRecipientsFor(form().audience) | number }}</strong>
+            {{ 'pushNotifications.estimatedRecipients' | translate }}: <strong>{{ lang.formatNumber(estimatedRecipientsFor(form().audience)) }}</strong>
           </p>
         </section>
 
         <section class="form-section">
-          <h3 class="form-section__title">Schedule</h3>
+          <h3 class="form-section__title">{{ 'pushNotifications.schedule' | translate }}</h3>
           <div class="segmented">
-            <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'now'" (click)="updateForm('scheduleMode', 'now')">Send Now</button>
-            <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'later'" (click)="updateForm('scheduleMode', 'later')">Schedule Later</button>
+            <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'now'" (click)="updateForm('scheduleMode', 'now')">{{ 'pushNotifications.sendNow' | translate }}</button>
+            <button type="button" class="segmented__btn" [class.segmented__btn--active]="form().scheduleMode === 'later'" (click)="updateForm('scheduleMode', 'later')">{{ 'pushNotifications.scheduleLater' | translate }}</button>
           </div>
           @if (form().scheduleMode === 'later') {
             <div class="form-row" style="margin-top: 12px;">
               <div class="form-field">
-                <label class="form-label">Date</label>
+                <label class="form-label">{{ 'pushNotifications.dateLabel' | translate }}</label>
                 <input class="form-input" type="date" [ngModel]="form().scheduledDate" (ngModelChange)="updateForm('scheduledDate', $event)" [class.form-input--error]="formTouched() && form().scheduleMode === 'later' && !form().scheduledDate" />
               </div>
               <div class="form-field">
-                <label class="form-label">Time</label>
+                <label class="form-label">{{ 'pushNotifications.timeLabel' | translate }}</label>
                 <input class="form-input" type="time" [ngModel]="form().scheduledTime" (ngModelChange)="updateForm('scheduledTime', $event)" [class.form-input--error]="formTouched() && form().scheduleMode === 'later' && !form().scheduledTime" />
               </div>
             </div>
             <div class="form-field" style="margin-top: 12px;">
-              <label class="form-label">Timezone</label>
+              <label class="form-label">{{ 'pushNotifications.timezoneLabel' | translate }}</label>
               <input class="form-input" type="text" [ngModel]="form().timezone" (ngModelChange)="updateForm('timezone', $event)" />
             </div>
           }
         </section>
 
         <section class="form-section">
-          <h3 class="form-section__title">Advanced</h3>
+          <h3 class="form-section__title">{{ 'pushNotifications.advanced' | translate }}</h3>
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label">Priority</label>
+              <label class="form-label">{{ 'pushNotifications.priority' | translate }}</label>
               <div class="select-wrap select-wrap--block">
                 <select class="form-select" [ngModel]="form().priority" (ngModelChange)="updateForm('priority', $any($event))">
-                  @for (p of formPriorityOptions; track p) { <option [value]="p">{{ p }}</option> }
+                  @for (p of formPriorityOptions; track p) { <option [value]="p">{{ priorityLabel(p) }}</option> }
                 </select>
                 <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
             </div>
             <div class="form-field">
-              <label class="form-label">TTL (hours)</label>
+              <label class="form-label">{{ 'pushNotifications.ttl' | translate }}</label>
               <input class="form-input" type="number" min="1" max="72" [ngModel]="form().ttlHours" (ngModelChange)="updateForm('ttlHours', $event)" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-field">
-              <label class="form-label">Badge Count (optional)</label>
+              <label class="form-label">{{ 'pushNotifications.badgeCountLabel' | translate }}</label>
               <input class="form-input" type="number" min="0" [ngModel]="form().badgeCount" (ngModelChange)="updateForm('badgeCount', $event)" placeholder="—" />
             </div>
             <div class="form-field">
-              <label class="form-label">Sound</label>
+              <label class="form-label">{{ 'pushNotifications.soundLabel' | translate }}</label>
               <div class="select-wrap select-wrap--block">
                 <select class="form-select" [ngModel]="form().sound" (ngModelChange)="updateForm('sound', $event)" [disabled]="form().silent">
-                  @for (s of formSoundOptions; track s) { <option [value]="s">{{ s }}</option> }
+                  @for (s of formSoundOptions; track s) { <option [value]="s">{{ soundLabel(s) }}</option> }
                 </select>
                 <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
@@ -152,8 +152,8 @@
               <span class="switch__track"><span class="switch__thumb"></span></span>
             </span>
             <span class="switch-row__text">
-              <span class="switch-row__title">Silent Notification</span>
-              <span class="switch-row__sub">Delivers without sound or vibration.</span>
+              <span class="switch-row__title">{{ 'pushNotifications.silentNotification' | translate }}</span>
+              <span class="switch-row__sub">{{ 'pushNotifications.silentNotificationSub' | translate }}</span>
             </span>
           </label>
         </section>
@@ -162,7 +162,7 @@
 
       <!-- Preview column -->
       <div class="cn-preview">
-        <p class="cn-preview__label">Live Preview</p>
+        <p class="cn-preview__label">{{ 'pushNotifications.livePreview' | translate }}</p>
         <div class="phone-mock">
           <div class="phone-mock__notch"></div>
           <div class="phone-mock__screen">
@@ -172,7 +172,7 @@
               <div class="notif-card__body">
                 <div class="notif-card__top">
                   <span class="notif-card__app">Nexus</span>
-                  <span class="notif-card__now">now</span>
+                  <span class="notif-card__now">{{ 'pushNotifications.nowLabel' | translate }}</span>
                 </div>
                 <p class="notif-card__title">{{ previewTitle() }}</p>
                 <p class="notif-card__text">{{ previewBody() }}</p>
@@ -184,21 +184,21 @@
           </div>
         </div>
         <div class="cn-preview__meta">
-          <span class="audience-badge">{{ form().audience }}</span>
-          <span class="priority-chip" [class.priority-chip--high]="form().priority === 'High'" [class.priority-chip--critical]="form().priority === 'Critical'">{{ form().priority }} priority</span>
+          <span class="audience-badge">{{ audienceLabel(form().audience) }}</span>
+          <span class="priority-chip" [class.priority-chip--high]="form().priority === 'High'" [class.priority-chip--critical]="form().priority === 'Critical'">{{ 'notificationDetailModal.priorityWithSuffix' | translate: { priority: priorityLabel(form().priority) } }}</span>
         </div>
       </div>
 
     </div>
 
     <footer class="cn-footer">
-      <button class="btn-ghost" type="button" (click)="resetForm()" [disabled]="formSaving()">Reset</button>
-      <button class="btn-ghost" type="button" (click)="saveDraft()" [disabled]="formSaving()">Save Draft</button>
+      <button class="btn-ghost" type="button" (click)="resetForm()" [disabled]="formSaving()">{{ 'buttons.reset' | translate }}</button>
+      <button class="btn-ghost" type="button" (click)="saveDraft()" [disabled]="formSaving()">{{ 'buttons.saveDraft' | translate }}</button>
       <button class="btn-primary" type="button" (click)="submitCreate()" [disabled]="formSaving()">
         @if (formSaving()) {
-          <span class="btn-spinner"></span> {{ form().scheduleMode === 'later' ? 'Scheduling…' : 'Sending…' }}
+          <span class="btn-spinner"></span> {{ (form().scheduleMode === 'later' ? 'pushNotifications.schedulingEllipsis' : 'pushNotifications.sendingEllipsis') | translate }}
         } @else {
-          {{ form().scheduleMode === 'later' ? 'Schedule' : 'Send Now' }}
+          {{ (form().scheduleMode === 'later' ? 'pushNotifications.scheduleButton' : 'pushNotifications.sendNow') | translate }}
         }
       </button>
     </footer>
