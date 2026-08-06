@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, Output, HostListener, computed, signal,
 import { CommonModule } from '@angular/common';
 import { AdminUserDetail, AdminActivityEvent, ActivityKind } from '../admin-detail.model';
 import { AdminRole, AdminStatus } from '../admin.model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 interface ActivityGroup {
   label: string;
