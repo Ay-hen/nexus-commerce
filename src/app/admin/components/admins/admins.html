@@ -52,14 +52,11 @@
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <h2 class="modal__title">Reset Password</h2>
-        <p class="modal__body">
-          Send a password reset link to <strong>{{ ra.fullName }}</strong> at {{ ra.email }}?
-          They will be required to set a new password on next sign-in.
-        </p>
+        <h2 class="modal__title">{{ 'admins.actions.resetPassword' | translate }}</h2>
+        <p class="modal__body" [innerHTML]="'admins.resetConfirmBody' | translate: { name: ra.fullName, email: ra.email }"></p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelReset()">Cancel</button>
-          <button class="btn-primary" (click)="confirmReset()">Send Reset Link</button>
+          <button class="btn-ghost" (click)="cancelReset()">{{ 'buttons.cancel' | translate }}</button>
+          <button class="btn-primary" (click)="confirmReset()">{{ 'admins.sendResetLinkButton' | translate }}</button>
         </div>
       </div>
     </div>
@@ -74,14 +71,11 @@
             <circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/>
           </svg>
         </div>
-        <h2 class="modal__title">Disable Account</h2>
-        <p class="modal__body">
-          <strong>{{ da.fullName }}</strong> will lose access to the admin dashboard immediately.
-          You can re-enable their account at any time.
-        </p>
+        <h2 class="modal__title">{{ 'admins.actions.disableAccount' | translate }}</h2>
+        <p class="modal__body" [innerHTML]="'admins.disableConfirmBody' | translate: { name: da.fullName }"></p>
         <div class="modal__actions">
-          <button class="btn-ghost" (click)="cancelDisable()">Cancel</button>
-          <button class="btn-danger" (click)="confirmDisable()">Disable Account</button>
+          <button class="btn-ghost" (click)="cancelDisable()">{{ 'buttons.cancel' | translate }}</button>
+          <button class="btn-danger" (click)="confirmDisable()">{{ 'admins.actions.disableAccount' | translate }}</button>
         </div>
       </div>
     </div>
@@ -96,8 +90,8 @@
         </svg>
       </div>
       <div>
-        <h1 class="page-title">Admin Users</h1>
-        <p class="page-sub">Manage administrator accounts, permissions and activity.</p>
+        <h1 class="page-title">{{ 'admins.title' | translate }}</h1>
+        <p class="page-sub">{{ 'admins.subtitle' | translate }}</p>
       </div>
     </div>
 
@@ -105,18 +99,18 @@
       <div class="export-wrap" (click)="$event.stopPropagation()">
         <button class="btn-ghost" (click)="exportMenuOpen = !exportMenuOpen">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export
+          {{ 'buttons.export' | translate }}
         </button>
         @if (exportMenuOpen) {
           <div class="export-menu">
-            <button class="export-menu__item" (click)="exportCsv(); exportMenuOpen = false">Export as CSV</button>
-            <button class="export-menu__item" (click)="exportPdf(); exportMenuOpen = false">Export as PDF</button>
+            <button class="export-menu__item" (click)="exportCsv(); exportMenuOpen = false">{{ 'buttons.exportCsv' | translate }}</button>
+            <button class="export-menu__item" (click)="exportPdf(); exportMenuOpen = false">{{ 'buttons.exportPdf' | translate }}</button>
           </div>
         }
       </div>
       <button class="btn-primary" (click)="openAdd()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Admin
+        {{ 'admins.addAdmin' | translate }}
       </button>
     </div>
   </div>
@@ -131,36 +125,36 @@
       <div class="stat-card stat-card--blue">
         <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <div class="stat-body">
-          <p class="stat-label">Total Admins</p>
-          <p class="stat-value">{{ totalAdmins() }}</p>
-          <p class="stat-sub">registered accounts</p>
+          <p class="stat-label">{{ 'admins.stats.totalAdmins' | translate }}</p>
+          <p class="stat-value">{{ lang.formatNumber(totalAdmins()) }}</p>
+          <p class="stat-sub">{{ 'admins.stats.registeredAccounts' | translate }}</p>
         </div>
       </div>
 
       <div class="stat-card stat-card--navy">
         <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="stat-body">
-          <p class="stat-label">Super Admins</p>
-          <p class="stat-value">{{ superAdminCount() }}</p>
-          <p class="stat-sub">full access accounts</p>
+          <p class="stat-label">{{ 'admins.stats.superAdmins' | translate }}</p>
+          <p class="stat-value">{{ lang.formatNumber(superAdminCount()) }}</p>
+          <p class="stat-sub">{{ 'admins.stats.fullAccessAccounts' | translate }}</p>
         </div>
       </div>
 
       <div class="stat-card stat-card--green">
         <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
         <div class="stat-body">
-          <p class="stat-label">Currently Online</p>
-          <p class="stat-value">{{ onlineCount() }}</p>
-          <p class="stat-sub">active right now</p>
+          <p class="stat-label">{{ 'admins.stats.currentlyOnline' | translate }}</p>
+          <p class="stat-value">{{ lang.formatNumber(onlineCount()) }}</p>
+          <p class="stat-sub">{{ 'admins.stats.activeRightNow' | translate }}</p>
         </div>
       </div>
 
       <div class="stat-card stat-card--amber">
         <div class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <div class="stat-body">
-          <p class="stat-label">2FA Enabled</p>
-          <p class="stat-value">{{ twoFaEnabledCount() }}</p>
-          <p class="stat-sub">secured accounts</p>
+          <p class="stat-label">{{ 'admins.stats.twoFaEnabled' | translate }}</p>
+          <p class="stat-value">{{ lang.formatNumber(twoFaEnabledCount()) }}</p>
+          <p class="stat-sub">{{ 'admins.stats.securedAccounts' | translate }}</p>
         </div>
       </div>
     </div>
@@ -172,9 +166,9 @@
 
       <div class="search-wrap">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input class="search-input" type="search" placeholder="Search by name, email, phone, role…" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
+        <input class="search-input" type="search" [placeholder]="'admins.searchPlaceholder' | translate" [value]="searchQuery()" (input)="onSearch($any($event.target).value)" />
         @if (searchQuery()) {
-          <button class="search-clear" (click)="onSearch('')" aria-label="Clear search">
+          <button class="search-clear" (click)="onSearch('')" [attr.aria-label]="'notifications.clearSearchAria' | translate">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
         }
@@ -182,21 +176,21 @@
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="roleFilter()" (ngModelChange)="setRoleFilter($any($event))">
-          @for (opt of roleOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of roleOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="statusFilter()" (ngModelChange)="setStatusFilter($any($event))">
-          @for (opt of statusOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of statusOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="twoFaFilter()" (ngModelChange)="setTwoFaFilter($any($event))">
-          @for (opt of twoFaOptions; track opt.key) { <option [value]="opt.key">{{ opt.label }}</option> }
+          @for (opt of twoFaOptions; track opt.key) { <option [value]="opt.key">{{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -207,16 +201,16 @@
 
       <div class="select-wrap">
         <select class="toolbar-select" [ngModel]="sortKey()" (ngModelChange)="setSort($any($event))">
-          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">Sort: {{ opt.label }}</option> }
+          @for (opt of sortOptions; track opt.key) { <option [value]="opt.key">{{ 'common.sortBy' | translate }}: {{ opt.label | translate }}</option> }
         </select>
         <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
-      <div class="view-toggle" role="group" aria-label="View mode">
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" aria-label="Table view">
+      <div class="view-toggle" role="group" [attr.aria-label]="'products.viewModeLabel' | translate">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'table'" (click)="setViewMode('table')" [attr.aria-label]="'common.viewTable' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
         </button>
-        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+        <button class="view-btn" [class.view-btn--active]="viewMode() === 'grid'" (click)="setViewMode('grid')" [attr.aria-label]="'common.viewGrid' | translate">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </button>
       </div>
@@ -226,26 +220,26 @@
   <!-- ── BULK TOOLBAR ──────────────────────────────────────────────────────── -->
   @if (selectedCount() > 0) {
     <div class="bulk-toolbar" (click)="$event.stopPropagation()">
-      <span class="bulk-toolbar__count">{{ selectedCount() }} selected</span>
+      <span class="bulk-toolbar__count">{{ selectedCount() }} {{ 'common.selected' | translate }}</span>
       <div class="bulk-toolbar__actions">
         <button class="bulk-btn" (click)="bulkEnable()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"/></svg>
-          Enable
+          {{ 'admins.actions.enable' | translate }}
         </button>
         <button class="bulk-btn" (click)="bulkDisable()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
-          Disable
+          {{ 'admins.actions.disable' | translate }}
         </button>
         <button class="bulk-btn" (click)="bulkExport()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export
+          {{ 'buttons.export' | translate }}
         </button>
         <button class="bulk-btn bulk-btn--danger" (click)="bulkDelete()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          Delete
+          {{ 'buttons.delete' | translate }}
         </button>
       </div>
-      <button class="bulk-toolbar__clear" (click)="clearSelection()">Clear</button>
+      <button class="bulk-toolbar__clear" (click)="clearSelection()">{{ 'common.clear' | translate }}</button>
     </div>
   }
 
@@ -267,14 +261,14 @@
         <div class="empty-state__orb">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         </div>
-        <h3 class="empty-state__title">No administrators found</h3>
-        <p class="empty-state__sub">Try adjusting your search or filters.</p>
+        <h3 class="empty-state__title">{{ 'admins.empty.title' | translate }}</h3>
+        <p class="empty-state__sub">{{ 'admins.empty.subtitle' | translate }}</p>
         @if (hasActiveFilters()) {
-          <button class="btn-ghost" (click)="clearFilters()">Clear Filters</button>
+          <button class="btn-ghost" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
         } @else {
           <button class="btn-primary" (click)="openAdd()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Admin
+            {{ 'admins.addAdmin' | translate }}
           </button>
         }
       </div>
@@ -288,34 +282,34 @@
             <thead>
               <tr>
                 <th class="th--check">
-                  <button class="checkbox" [class.checkbox--checked]="allOnPageSelected()" (click)="toggleSelectAllOnPage()" aria-label="Select all on page">
+                  <button class="checkbox" [class.checkbox--checked]="allOnPageSelected()" (click)="toggleSelectAllOnPage()" [attr.aria-label]="'products.selectAllAria' | translate">
                     @if (allOnPageSelected()) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
                   </button>
                 </th>
                 <th class="th--avatar"></th>
                 <th>
                   <button class="th-sort" (click)="setSort('name')">
-                    Name
+                    {{ 'admins.table.name' | translate }}
                     <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'name'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </button>
                 </th>
-                <th>Email</th>
+                <th>{{ 'admins.table.email' | translate }}</th>
                 <th>
                   <button class="th-sort" (click)="setSort('role')">
-                    Role
+                    {{ 'admins.table.role' | translate }}
                     <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'role'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </button>
                 </th>
-                <th>Status</th>
+                <th>{{ 'common.status' | translate }}</th>
                 <th>
                   <button class="th-sort" (click)="setSort('last-online')">
-                    Last Online
+                    {{ 'admins.table.lastOnline' | translate }}
                     <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'last-online'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </button>
                 </th>
                 <th>
                   <button class="th-sort" (click)="setSort('newest')">
-                    Created
+                    {{ 'admins.table.created' | translate }}
                     <span class="sort-icon" [class.sort-icon--active]="sortKey() === 'newest' || sortKey() === 'oldest'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </button>
                 </th>
@@ -327,7 +321,7 @@
                 <tr class="table-row" [class.table-row--selected]="isSelected(a)" [style.animation-delay]="($index * 0.03) + 's'">
 
                   <td class="td--check">
-                    <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" aria-label="Select admin">
+                    <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" [attr.aria-label]="'products.selectProductAria' | translate: { name: a.fullName }">
                       @if (isSelected(a)) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
                     </button>
                   </td>
@@ -346,7 +340,7 @@
                   <td class="text-mid td-email">{{ a.email }}</td>
 
                   <td>
-                    <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ a.role }}</span>
+                    <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ roleLabel(a.role) }}</span>
                   </td>
 
                   <td>
@@ -361,7 +355,7 @@
 
                   <td class="td--actions">
                     <div class="action-menu-wrap">
-                      <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" aria-label="Admin actions">
+                      <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" [attr.aria-label]="'common.actions' | translate">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
                       </button>
 
@@ -369,24 +363,24 @@
                         <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
                           <a class="action-item" (click)="showDetails(a)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            View Details
+                            {{ 'orders.actions.viewDetails' | translate }}
                           </a>
                           <a class="action-item" (click)="editAdmin(a)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            Edit Admin
+                            {{ 'admins.editAdmin' | translate }}
                           </a>
                           <a class="action-item" (click)="requestReset(a, $event)" role="menuitem">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            Reset Password
+                            {{ 'admins.actions.resetPassword' | translate }}
                           </a>
                           <div class="action-divider"></div>
                           <button class="action-item" role="menuitem" (click)="requestDisable(a, $event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
-                            Disable Account
+                            {{ 'admins.actions.disableAccount' | translate }}
                           </button>
                           <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(a, $event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-                            Delete Admin
+                            {{ 'admins.actions.deleteAdmin' | translate }}
                           </button>
                         </div>
                       }
@@ -406,21 +400,21 @@
         @for (a of pagedAdmins(); track trackById($index, a)) {
           <div class="admin-card" [class.admin-card--selected]="isSelected(a)">
             <div class="admin-card__top">
-              <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" aria-label="Select admin">
+              <button class="checkbox" [class.checkbox--checked]="isSelected(a)" (click)="toggleSelect(a, $event)" [attr.aria-label]="'products.selectProductAria' | translate: { name: a.fullName }">
                 @if (isSelected(a)) { <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg> }
               </button>
               <div class="action-menu-wrap">
-                <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" aria-label="Admin actions">
+                <button class="action-trigger" (click)="toggleMenu(a, $event)" [attr.aria-expanded]="openMenuId() === a.id" [attr.aria-label]="'common.actions' | translate">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
                 </button>
                 @if (openMenuId() === a.id) {
                   <div class="action-menu" role="menu" (click)="$event.stopPropagation()">
-                    <a class="action-item" (click)="showDetails(a)" role="menuitem">View Details</a>
-                    <a class="action-item" (click)="editAdmin(a)" role="menuitem">Edit Admin</a>
-                    <a class="action-item" (click)="requestReset(a, $event)" role="menuitem">Reset Password</a>
+                    <a class="action-item" (click)="showDetails(a)" role="menuitem">{{ 'orders.actions.viewDetails' | translate }}</a>
+                    <a class="action-item" (click)="editAdmin(a)" role="menuitem">{{ 'admins.editAdmin' | translate }}</a>
+                    <a class="action-item" (click)="requestReset(a, $event)" role="menuitem">{{ 'admins.actions.resetPassword' | translate }}</a>
                     <div class="action-divider"></div>
-                    <button class="action-item" role="menuitem" (click)="requestDisable(a, $event)">Disable Account</button>
-                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(a, $event)">Delete Admin</button>
+                    <button class="action-item" role="menuitem" (click)="requestDisable(a, $event)">{{ 'admins.actions.disableAccount' | translate }}</button>
+                    <button class="action-item action-item--danger" role="menuitem" (click)="requestDelete(a, $event)">{{ 'admins.actions.deleteAdmin' | translate }}</button>
                   </div>
                 }
               </div>
@@ -433,19 +427,19 @@
               </div>
               <a class="admin-name-link admin-name-link--card" (click)="showDetails(a, $event)">{{ a.fullName }}</a>
               <p class="admin-card__email">{{ a.email }}</p>
-              <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ a.role }}</span>
+              <span class="role-badge" [ngClass]="roleBadgeClass(a.role)">{{ roleLabel(a.role) }}</span>
             </div>
 
             <div class="admin-card__footer">
               <div class="admin-card__stat">
-                <span class="admin-card__stat-label">Status</span>
+                <span class="admin-card__stat-label">{{ 'common.status' | translate }}</span>
                 <span class="status-pill status-pill--{{ a.status }} status-pill--sm">
                   <span class="status-dot" [class.status-dot--pulse]="a.status === 'online'"></span>
                   {{ statusLabel(a.status) }}
                 </span>
               </div>
               <div class="admin-card__stat">
-                <span class="admin-card__stat-label">Last Online</span>
+                <span class="admin-card__stat-label">{{ 'admins.table.lastOnline' | translate }}</span>
                 <span class="admin-card__stat-value">{{ formatLastOnline(a.lastOnline, a.status) }}</span>
               </div>
             </div>
@@ -459,7 +453,7 @@
       <div class="pagination">
         <span class="pagination__label">{{ pageRangeLabel() }}</span>
         <div class="pagination__controls">
-          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" [attr.aria-label]="'common.previousPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
           @if (currentPage() > 2) {
@@ -473,7 +467,7 @@
             @if (currentPage() < totalPages() - 2) { <span class="page-ellipsis">…</span> }
             <button class="page-btn" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
           }
-          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" [attr.aria-label]="'common.nextPage' | translate">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
