@@ -1,10 +1,12 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import {
   NotificationAudience, NotificationPriority, AdminUser,
 } from '../../model/push-notification.model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 interface CreateFormState {
   title: string;
@@ -50,13 +52,30 @@ function emptyForm(): CreateFormState {
   };
 }
 
+// Maps data values (stored/compared as-is) -> translation key segments, for display only.
+const AUDIENCE_KEY_MAP: Record<NotificationAudience, string> = {
+  'All Users': 'allUsers', 'Customers': 'customers', 'Admins': 'admins',
+  'Subscribers': 'subscribers', 'VIP': 'vip', 'Custom Segment': 'customSegment',
+};
+const PRIORITY_KEY_MAP: Record<NotificationPriority, string> = {
+  'Normal': 'normal', 'High': 'high', 'Critical': 'critical',
+};
+const SOUND_KEY_MAP: Record<string, string> = {
+  'Default': 'default', 'Chime': 'chime', 'Bell': 'bell', 'Silent': 'silent',
+};
+const TARGET_SCREEN_KEY_MAP: Record<string, string> = {
+  'Home': 'home', 'Product Detail': 'productDetail', 'Order Detail': 'orderDetail',
+  'Cart': 'cart', 'Wishlist': 'wishlist', 'Promotions': 'promotions', 'Profile': 'profile',
+};
+
 @Component({
   selector: 'app-push-notifications',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './push-notifications.html',
   styleUrl: './push-notifications.scss',
 })
 export class PushNotifications {
+  protected lang = inject(LanguageService);
 
   // ── Toast ──────────────────────────────────────────────────────────────
   toastMsg = signal<string | null>(null);
@@ -74,8 +93,8 @@ export class PushNotifications {
   formTargetScreens = ['Home', 'Product Detail', 'Order Detail', 'Cart', 'Wishlist', 'Promotions', 'Profile'];
 
   // ── Live preview ───────────────────────────────────────────────────────
-  previewTitle = computed(() => this.form().title.trim() || 'Notification title');
-  previewBody = computed(() => this.form().body.trim() || 'Your message body will appear here as you type.');
+  previewTitle = computed(() => this.form().title.trim() || this.lang.translate('pushNotifications.titlePlaceholder'));
+  previewBody = computed(() => this.form().body.trim() || this.lang.translate('pushNotifications.bodyPlaceholderPreview'));
 
   isFormValid = computed(() => {
     const f = this.form();
@@ -85,6 +104,22 @@ export class PushNotifications {
 
   updateForm<K extends keyof CreateFormState>(key: K, value: CreateFormState[K]): void {
     this.form.update(f => ({ ...f, [key]: value }));
+  }
+
+  audienceLabel(a: NotificationAudience): string {
+    return this.lang.translate('pushNotifications.audienceOptions.' + AUDIENCE_KEY_MAP[a]);
+  }
+
+  priorityLabel(p: NotificationPriority): string {
+    return this.lang.translate('pushNotifications.priorityOptions.' + PRIORITY_KEY_MAP[p]);
+  }
+
+  soundLabel(s: string): string {
+    return this.lang.translate('pushNotifications.soundOptions.' + SOUND_KEY_MAP[s]);
+  }
+
+  targetScreenLabel(s: string): string {
+    return this.lang.translate('pushNotifications.targetScreens.' + TARGET_SCREEN_KEY_MAP[s]);
   }
 
   estimatedRecipientsFor(audience: NotificationAudience): number {
@@ -109,7 +144,7 @@ export class PushNotifications {
     if (!this.form().title.trim()) return;
 
     // TODO: replace with actual API call (createdBy: CURRENT_ADMIN)
-    this.showToast('Notification saved as draft');
+    this.showToast(this.lang.translate('pushNotifications.toasts.savedDraft'));
     this.resetForm();
   }
 
@@ -123,7 +158,9 @@ export class PushNotifications {
     // TODO: replace with actual API call (createdBy: CURRENT_ADMIN)
     setTimeout(() => {
       this.formSaving.set(false);
-      this.showToast(scheduled ? 'Notification scheduled successfully' : 'Notification is being sent');
+      this.showToast(scheduled
+        ? this.lang.translate('pushNotifications.toasts.scheduledSuccess')
+        : this.lang.translate('pushNotifications.toasts.beingSent'));
       this.resetForm();
     }, 800);
   }
