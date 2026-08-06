@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import {
   NotificationAudience, NotificationPriority, AdminUser,
 } from '../../model/push-notification.model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 interface CreateFormState {
   title: string;
