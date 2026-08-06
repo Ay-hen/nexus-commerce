@@ -1,21 +1,29 @@
 // view-admin-modal.ts
-import { Component, EventEmitter, Input, Output, HostListener, computed, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminUserDetail, AdminActivityEvent, ActivityKind } from '../admin-detail.model';
 import { AdminRole, AdminStatus } from '../admin.model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 interface ActivityGroup {
   label: string;
   events: AdminActivityEvent[];
 }
 
+const ROLE_KEY_MAP: Record<AdminRole, string> = {
+  'Super Admin': 'superAdmin', 'Admin': 'admin', 'Manager': 'manager', 'Support': 'support',
+};
+
 @Component({
   selector: 'app-view-admin-modal',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './view-admin-modal.html',
   styleUrl: './view-admin-modal.scss',
 })
 export class ViewAdminModal {
+  protected lang = inject(LanguageService);
+
   @Input({ required: true }) admin!: AdminUserDetail;
   @Output() closed = new EventEmitter<void>();
   @Output() editRequested = new EventEmitter<AdminUserDetail>();
@@ -37,9 +45,9 @@ export class ViewAdminModal {
     const dayLabel = (iso: string): string => {
       const d = new Date(iso);
       const diffDays = Math.floor((this.stripTime(now).getTime() - this.stripTime(d).getTime()) / 86400000);
-      if (diffDays <= 0) return 'Today';
-      if (diffDays === 1) return 'Yesterday';
-      return `${diffDays} days ago`;
+      if (diffDays <= 0) return this.lang.translate('common.today');
+      if (diffDays === 1) return this.lang.translate('common.yesterday');
+      return this.lang.translate('common.daysAgo', { count: diffDays });
     };
 
     for (const ev of events) {
@@ -69,9 +77,12 @@ export class ViewAdminModal {
     return map[role];
   }
 
+  roleLabel(role: AdminRole): string {
+    return this.lang.translate('admins.roles.' + ROLE_KEY_MAP[role]);
+  }
+
   statusLabel(status: AdminStatus): string {
-    const map: Record<AdminStatus, string> = { online: 'Online', offline: 'Offline', busy: 'Busy' };
-    return map[status];
+    return this.lang.translate('admins.status.' + status);
   }
 
   activityIconClass(kind: ActivityKind): string {
@@ -79,22 +90,22 @@ export class ViewAdminModal {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatTime(iso: string): string {
-    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return this.lang.formatDate(iso, { hour: 'numeric', minute: '2-digit' });
   }
 
   formatLastOnline(iso: string, status: AdminStatus): string {
-    if (status === 'online') return 'Online now';
+    if (status === 'online') return this.lang.translate('common.onlineNow');
     const diffMin = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+    if (diffMin < 1) return this.lang.translate('common.justNow');
+    if (diffMin < 60) return this.lang.translate('common.minutesAgo', { count: diffMin });
     const diffHours = Math.round(diffMin / 60);
-    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    if (diffHours < 24) return this.lang.translate('common.hoursAgo', { count: diffHours });
     const diffDays = Math.round(diffHours / 24);
-    if (diffDays === 1) return 'Yesterday';
-    return `${diffDays} days ago`;
+    if (diffDays === 1) return this.lang.translate('common.yesterday');
+    return this.lang.translate('common.daysAgo', { count: diffDays });
   }
 }
