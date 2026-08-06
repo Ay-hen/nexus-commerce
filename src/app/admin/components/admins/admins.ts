@@ -1,5 +1,5 @@
 // admins.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,6 +10,8 @@ import { ViewAdminModal } from '../../model/view-admin-modal/view-admin-modal';
 import { AddAdminModal } from '../../model/add-admin-modal/add-admin-modal';
 import { EditAdminModal } from '../../model/edit-admin-modal/edit-admin-modal';
 import { DeleteAdminModal } from '../../model/delete-admin-modal/delete-admin-modal';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
 
 export type RoleFilter = 'all' | AdminRole;
 export type StatusFilter = 'all' | AdminStatus;
@@ -17,13 +19,19 @@ export type TwoFaFilter = 'all' | 'enabled' | 'disabled';
 export type SortKey = 'newest' | 'oldest' | 'name' | 'role' | 'last-online' | 'most-active';
 export type ViewMode = 'table' | 'grid';
 
+// Maps AdminRole (data value) -> translation key segment, for display only.
+const ROLE_KEY_MAP: Record<AdminRole, string> = {
+  'Super Admin': 'superAdmin', 'Admin': 'admin', 'Manager': 'manager', 'Support': 'support',
+};
+
 @Component({
   selector: 'app-admins',
-  imports: [CommonModule, FormsModule, ViewAdminModal, AddAdminModal, EditAdminModal, DeleteAdminModal],
+  imports: [CommonModule, FormsModule, ViewAdminModal, AddAdminModal, EditAdminModal, DeleteAdminModal, TranslatePipe],
   templateUrl: './admins.html',
   styleUrl: './admins.scss',
 })
 export class Admins {
+  protected lang = inject(LanguageService);
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -71,35 +79,35 @@ export class Admins {
   pendingReset = signal<AdminUser | null>(null);
   pendingDisable = signal<AdminUser | null>(null);
 
-  // ── Option lists ───────────────────────────────────────────────────────
+  // ── Option lists — labels are translation keys resolved via `| translate` ──
   roleOptions: { key: RoleFilter; label: string }[] = [
-    { key: 'all', label: 'All Roles' },
-    { key: 'Super Admin', label: 'Super Admin' },
-    { key: 'Admin', label: 'Admin' },
-    { key: 'Manager', label: 'Manager' },
-    { key: 'Support', label: 'Support' },
+    { key: 'all', label: 'common.allRoles' },
+    { key: 'Super Admin', label: 'admins.roles.superAdmin' },
+    { key: 'Admin', label: 'admins.roles.admin' },
+    { key: 'Manager', label: 'admins.roles.manager' },
+    { key: 'Support', label: 'admins.roles.support' },
   ];
 
   statusOptions: { key: StatusFilter; label: string }[] = [
-    { key: 'all', label: 'All Statuses' },
-    { key: 'online', label: 'Online' },
-    { key: 'offline', label: 'Offline' },
-    { key: 'busy', label: 'Busy' },
+    { key: 'all', label: 'common.allStatuses' },
+    { key: 'online', label: 'admins.status.online' },
+    { key: 'offline', label: 'admins.status.offline' },
+    { key: 'busy', label: 'admins.status.busy' },
   ];
 
   twoFaOptions: { key: TwoFaFilter; label: string }[] = [
-    { key: 'all', label: 'All 2FA' },
-    { key: 'enabled', label: 'Enabled' },
-    { key: 'disabled', label: 'Disabled' },
+    { key: 'all', label: 'admins.allTwoFa' },
+    { key: 'enabled', label: 'common.enabled' },
+    { key: 'disabled', label: 'common.disabled' },
   ];
 
   sortOptions: { key: SortKey; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'name', label: 'Name' },
-    { key: 'role', label: 'Role' },
-    { key: 'last-online', label: 'Last Online' },
-    { key: 'most-active', label: 'Most Active' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'name', label: 'admins.sort.name' },
+    { key: 'role', label: 'admins.sort.role' },
+    { key: 'last-online', label: 'admins.sort.lastOnline' },
+    { key: 'most-active', label: 'admins.sort.mostActive' },
   ];
 
   // ── Computed: filtered + sorted list ─────────────────────────────────
@@ -161,10 +169,10 @@ export class Admins {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedAdmins().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   // ── Stats ──────────────────────────────────────────────────────────────
@@ -266,26 +274,26 @@ export class Admins {
   bulkDisable(): void {
     const ids = this.selectedIds();
     this.admins.update(list => list.map(a => ids.has(a.id) ? { ...a, status: 'offline' as AdminStatus } : a));
-    this.showToast(`${ids.size} admin${ids.size === 1 ? '' : 's'} disabled`);
+    this.showToast(this.lang.translate('admins.toasts.bulkDisabled', { count: ids.size }));
     this.clearSelection();
   }
 
   bulkEnable(): void {
     const ids = this.selectedIds();
     this.admins.update(list => list.map(a => ids.has(a.id) ? { ...a, status: 'online' as AdminStatus } : a));
-    this.showToast(`${ids.size} admin${ids.size === 1 ? '' : 's'} enabled`);
+    this.showToast(this.lang.translate('admins.toasts.bulkEnabled', { count: ids.size }));
     this.clearSelection();
   }
 
   bulkDelete(): void {
     const ids = this.selectedIds();
     this.admins.update(list => list.filter(a => !ids.has(a.id)));
-    this.showToast(`${ids.size} admin${ids.size === 1 ? '' : 's'} deleted`);
+    this.showToast(this.lang.translate('admins.toasts.bulkDeleted', { count: ids.size }));
     this.clearSelection();
   }
 
   bulkExport(): void {
-    this.showToast(`Exporting ${this.selectedIds().size} admin${this.selectedIds().size === 1 ? '' : 's'}…`);
+    this.showToast(this.lang.translate('admins.toasts.bulkExporting', { count: this.selectedIds().size }));
   }
 
   // ── View modal ─────────────────────────────────────────────────────────
@@ -307,7 +315,7 @@ export class Admins {
 
   onAdminCreated(admin: AdminUser): void {
     this.admins.update(list => [admin, ...list]);
-    this.showToast(`${admin.fullName} added as ${admin.role}`);
+    this.showToast(this.lang.translate('admins.toasts.added', { name: admin.fullName, role: this.roleLabel(admin.role) }));
     this.addingAdmin.set(false);
   }
 
@@ -321,7 +329,7 @@ export class Admins {
 
   onAdminSaved(updated: AdminUser): void {
     this.admins.update(list => list.map(a => a.id === updated.id ? { ...a, ...updated } : a));
-    this.showToast(`${updated.fullName} updated successfully`);
+    this.showToast(this.lang.translate('admins.toasts.updated', { name: updated.fullName }));
     this.editingAdmin.set(null);
   }
 
@@ -336,7 +344,7 @@ export class Admins {
     const target = this.pendingDelete();
     if (!target) return;
     this.admins.update(list => list.filter(a => a.id !== target.id));
-    this.showToast(`${target.fullName} deleted`);
+    this.showToast(this.lang.translate('admins.toasts.deleted', { name: target.fullName }));
     this.pendingDelete.set(null);
   }
 
@@ -350,7 +358,7 @@ export class Admins {
   confirmReset(): void {
     const target = this.pendingReset();
     if (!target) return;
-    this.showToast(`Password reset link sent to ${target.email}`);
+    this.showToast(this.lang.translate('admins.toasts.resetLinkSent', { email: target.email }));
     this.pendingReset.set(null);
   }
 
@@ -365,13 +373,13 @@ export class Admins {
     const target = this.pendingDisable();
     if (!target) return;
     this.admins.update(list => list.map(a => a.id === target.id ? { ...a, status: 'offline' as AdminStatus } : a));
-    this.showToast(`${target.fullName}'s account disabled`);
+    this.showToast(this.lang.translate('admins.toasts.accountDisabled', { name: target.fullName }));
     this.pendingDisable.set(null);
   }
 
   // ── Export ─────────────────────────────────────────────────────────────
-  exportCsv(): void { this.showToast('Exporting admins to CSV…'); }
-  exportPdf(): void { this.showToast('Exporting admins to PDF…'); }
+  exportCsv(): void { this.showToast(this.lang.translate('admins.toasts.exportingCsv')); }
+  exportPdf(): void { this.showToast(this.lang.translate('admins.toasts.exportingPdf')); }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   trackById(_: number, item: AdminUser): string { return item.id; }
@@ -386,30 +394,33 @@ export class Admins {
     return map[role];
   }
 
+  roleLabel(role: AdminRole): string {
+    return this.lang.translate('admins.roles.' + ROLE_KEY_MAP[role]);
+  }
+
   statusLabel(status: AdminStatus): string {
-    const map: Record<AdminStatus, string> = { online: 'Online', offline: 'Offline', busy: 'Busy' };
-    return map[status];
+    return this.lang.translate('admins.status.' + status);
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatLastOnline(iso: string, status: AdminStatus): string {
-    if (status === 'online') return 'Online now';
+    if (status === 'online') return this.lang.translate('common.onlineNow');
     const now = Date.now();
     const then = new Date(iso).getTime();
     const diffMin = Math.round((now - then) / 60000);
 
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+    if (diffMin < 1) return this.lang.translate('common.justNow');
+    if (diffMin < 60) return this.lang.translate('common.minutesAgo', { count: diffMin });
 
     const diffHours = Math.round(diffMin / 60);
-    if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    if (diffHours < 24) return this.lang.translate('common.hoursAgo', { count: diffHours });
 
     const diffDays = Math.round(diffHours / 24);
-    if (diffDays === 1) return 'Yesterday';
-    return `${diffDays} days ago`;
+    if (diffDays === 1) return this.lang.translate('common.yesterday');
+    return this.lang.translate('common.daysAgo', { count: diffDays });
   }
 
   private showToast(msg: string): void {
