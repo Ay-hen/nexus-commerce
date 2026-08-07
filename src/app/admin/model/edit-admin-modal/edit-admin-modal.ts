@@ -1,17 +1,31 @@
 // edit-admin-modal.ts
-import { Component, EventEmitter, Input, Output, HostListener, signal, computed, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener, signal, computed, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminUser, AdminRole, ALL_PERMISSIONS } from '../admin.model';
 import { AdminUserDetail } from '../admin-detail.model';
+import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../localization/language.service';
+
+const ROLE_KEY_MAP: Record<AdminRole, string> = {
+  'Super Admin': 'superAdmin', 'Admin': 'admin', 'Manager': 'manager', 'Support': 'support',
+};
+
+const PERMISSION_KEY_MAP: Record<string, string> = {
+  'Manage Products': 'manageProducts', 'Manage Orders': 'manageOrders', 'Manage Reviews': 'manageReviews',
+  'Manage Customers': 'manageCustomers', 'Manage Inventory': 'manageInventory', 'Manage Categories': 'manageCategories',
+  'Manage Admins': 'manageAdmins', 'Manage Settings': 'manageSettings', 'View Reports': 'viewReports',
+};
 
 @Component({
   selector: 'app-edit-admin-modal',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './edit-admin-modal.html',
   styleUrl: './edit-admin-modal.scss',
 })
 export class EditAdminModal implements OnInit {
+  protected lang = inject(LanguageService);
+
   @Input({ required: true }) admin!: AdminUserDetail;
   @Output() cancelled = new EventEmitter<void>();
   @Output() saved = new EventEmitter<AdminUser>();
@@ -68,10 +82,18 @@ export class EditAdminModal implements OnInit {
     return this.selectedPermissions().has(p);
   }
 
+  roleLabel(role: AdminRole): string {
+    return this.lang.translate('admins.roles.' + ROLE_KEY_MAP[role]);
+  }
+
+  permissionLabel(p: string): string {
+    return this.lang.translate('admins.permissionLabels.' + PERMISSION_KEY_MAP[p]);
+  }
+
   setRole(role: AdminRole): void { this.role.set(role); }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   save(): void {
