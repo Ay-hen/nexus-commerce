@@ -86,7 +86,16 @@
         </div>
       </div>
 
-      
+      <label class="switch-row">
+        <span class="switch">
+          <input type="checkbox" [checked]="twoFactorEnabled()" (change)="twoFactorEnabled.set($any($event.target).checked)" />
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+        </span>
+        <span class="switch-row__text">
+          <span class="switch-row__title">{{ 'addAdminModal.enable2faTitle' | translate }}</span>
+          <span class="switch-row__sub">{{ 'addAdminModal.enable2faSub' | translate }}</span>
+        </span>
+      </label>
 
     </div>
 
