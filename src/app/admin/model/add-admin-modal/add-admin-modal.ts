@@ -3,8 +3,8 @@ import { Component, EventEmitter, Output, HostListener, signal, computed, inject
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminUser, AdminRole, ALL_PERMISSIONS } from '../admin.model';
-import { TranslatePipe } from '../../localization/translate.pipe';
-import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
 
 const ROLE_KEY_MAP: Record<AdminRole, string> = {
   'Super Admin': 'superAdmin', 'Admin': 'admin', 'Manager': 'manager', 'Support': 'support',
