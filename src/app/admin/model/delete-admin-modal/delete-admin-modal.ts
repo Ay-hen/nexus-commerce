@@ -17,6 +17,8 @@ const ROLE_KEY_MAP: Record<AdminRole, string> = {
   styleUrl: './delete-admin-modal.scss',
 })
 export class DeleteAdminModal {
+  protected lang = inject(LanguageService);
+
   @Input({ required: true }) admin!: AdminUser;
   @Output() cancelled = new EventEmitter<void>();
   @Output() confirmed = new EventEmitter<AdminUser>();
@@ -35,5 +37,9 @@ export class DeleteAdminModal {
       'Support': 'role-badge--support',
     };
     return map[role] ?? 'role-badge--admin';
+  }
+
+  roleLabel(role: AdminRole): string {
+    return this.lang.translate('admins.roles.' + (ROLE_KEY_MAP[role] ?? 'admin'));
   }
 }
