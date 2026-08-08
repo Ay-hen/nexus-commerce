@@ -12,7 +12,13 @@
 
     <h2 class="modal__title" id="delete-admin-title">{{ 'admins.actions.deleteAdmin' | translate }}</h2>
 
-    
+    <div class="admin-preview">
+      <div class="admin-preview__avatar">{{ admin.avatar }}</div>
+      <div class="admin-preview__info">
+        <p class="admin-preview__name">{{ admin.fullName }}</p>
+        <span class="role-badge" [ngClass]="roleBadgeClass(admin.role)">{{ roleLabel(admin.role) }}</span>
+      </div>
+    </div>
 
     <p class="modal__body" [innerHTML]="'admins.deleteConfirmBody' | translate: { name: admin.fullName }"></p>
 
