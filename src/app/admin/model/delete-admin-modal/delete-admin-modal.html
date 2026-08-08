@@ -10,31 +10,13 @@
       </svg>
     </div>
 
-    <h2 class="modal__title" id="delete-admin-title">Delete Admin</h2>
+    <h2 class="modal__title" id="delete-admin-title">{{ 'admins.actions.deleteAdmin' | translate }}</h2>
 
-    <div class="admin-preview">
-      <div class="admin-preview__avatar">{{ admin.avatar }}</div>
-      <div class="admin-preview__info">
-        <p class="admin-preview__name">{{ admin.fullName }}</p>
-        <span class="role-badge" [ngClass]="roleBadgeClass(admin.role)">{{ admin.role }}</span>
-      </div>
-    </div>
+    
 
-    <p class="modal__body">
-      Are you sure you want to permanently delete <strong>{{ admin.fullName }}</strong>?
-      This will revoke all access and cannot be undone.
-    </p>
+    <p class="modal__body" [innerHTML]="'admins.deleteConfirmBody' | translate: { name: admin.fullName }"></p>
 
-    <div class="modal__actions">
-      <button class="btn-ghost" (click)="cancel()">Cancel</button>
-      <button class="btn-danger" (click)="confirm()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-        </svg>
-        Delete Admin
-      </button>
-    </div>
+    
 
   </div>
 </div>
