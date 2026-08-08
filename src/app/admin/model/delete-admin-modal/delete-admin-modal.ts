@@ -3,6 +3,9 @@ import { Component, EventEmitter, Input, Output, HostListener } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { AdminUser } from '../admin.model';
 
+import { TranslatePipe } from '../../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
+
 @Component({
   selector: 'app-delete-admin-modal',
   imports: [CommonModule],
