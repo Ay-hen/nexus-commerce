@@ -1,5 +1,5 @@
 // delete-admin-modal.ts
-import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRole, AdminUser } from '../admin.model';
 
