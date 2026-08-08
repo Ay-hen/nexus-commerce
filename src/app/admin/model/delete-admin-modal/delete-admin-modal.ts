@@ -1,14 +1,18 @@
 // delete-admin-modal.ts
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminUser } from '../admin.model';
+import { AdminRole, AdminUser } from '../admin.model';
 
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageService } from '../../../localization/language.service';
 
+const ROLE_KEY_MAP: Record<AdminRole, string> = {
+  'Super Admin': 'superAdmin', 'Admin': 'admin', 'Manager': 'manager', 'Support': 'support',
+};
+
 @Component({
   selector: 'app-delete-admin-modal',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './delete-admin-modal.html',
   styleUrl: './delete-admin-modal.scss',
 })
