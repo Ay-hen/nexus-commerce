@@ -990,6 +990,16 @@
     "allTwoFa": "All 2FA",
     "sort": { "name": "Name", "role": "Role", "lastOnline": "Last Online", "mostActive": "Most Active" },
 
+    "resetConfirmBody": "Send a password reset link to {{name}} at {{email}}? They will be required to set a new password on next sign-in.",
+    "disableConfirmBody": "{{name}} will lose access to the admin dashboard immediately. You can re-enable their account at any time.",
+    "sendResetLinkButton": "Send Reset Link",
+    "deleteConfirmBody": "Are you sure you want to permanently delete {{name}}? This will revoke all access and cannot be undone.",
+    "permissionLabels": {
+      "manageProducts": "Manage Products", "manageOrders": "Manage Orders", "manageReviews": "Manage Reviews",
+      "manageCustomers": "Manage Customers", "manageInventory": "Manage Inventory", "manageCategories": "Manage Categories",
+      "manageAdmins": "Manage Admins", "manageSettings": "Manage Settings", "viewReports": "View Reports"
+    },
+
     "roles": {
       "superAdmin": "Super Admin",
       "admin": "Admin",
