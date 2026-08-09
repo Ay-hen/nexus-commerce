@@ -986,6 +986,10 @@
     "confirmPassword": "Confirm Password",
     "permissions": "Permissions",
     "twoFactor": "Two-Factor Authentication",
+    "searchPlaceholder": "Search by name, email, phone, role…",
+    "allTwoFa": "All 2FA",
+    "sort": { "name": "Name", "role": "Role", "lastOnline": "Last Online", "mostActive": "Most Active" },
+    "actions": { "enable": "Enable", "disable": "Disable" },
     "roles": {
       "superAdmin": "Super Admin",
       "admin": "Admin",
