@@ -1000,6 +1000,15 @@
       "activeRightNow": "actifs en ce moment",
       "securedAccounts": "comptes sécurisés"
     },
+    "resetConfirmBody": "Envoyer un lien de réinitialisation à {{name}} à {{email}} ? Un nouveau mot de passe leur sera demandé à la prochaine connexion.",
+    "disableConfirmBody": "{{name}} perdra immédiatement l'accès au tableau de bord administrateur. Vous pouvez réactiver ce compte à tout moment.",
+    "sendResetLinkButton": "Envoyer le lien",
+    "deleteConfirmBody": "Voulez-vous vraiment supprimer définitivement {{name}} ? Cela révoquera tous les accès et est irréversible.",
+    "permissionLabels": {
+      "manageProducts": "Gérer les produits", "manageOrders": "Gérer les commandes", "manageReviews": "Gérer les avis",
+      "manageCustomers": "Gérer les clients", "manageInventory": "Gérer l'inventaire", "manageCategories": "Gérer les catégories",
+      "manageAdmins": "Gérer les administrateurs", "manageSettings": "Gérer les paramètres", "viewReports": "Voir les rapports"
+    },
 
 
     "roles": {
