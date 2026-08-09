@@ -993,13 +993,7 @@
     "searchPlaceholder": "Rechercher par nom, e-mail, téléphone, rôle…",
     "allTwoFa": "2FA : Toutes",
     "sort": { "name": "Nom", "role": "Rôle", "lastOnline": "Dernière connexion", "mostActive": "Plus actifs" },
-    "actions": { "enable": "Activer", "disable": "Désactiver" },
-    "stats": {
-      "registeredAccounts": "comptes enregistrés",
-      "fullAccessAccounts": "comptes à accès complet",
-      "activeRightNow": "actifs en ce moment",
-      "securedAccounts": "comptes sécurisés"
-    },
+    
     "resetConfirmBody": "Envoyer un lien de réinitialisation à {{name}} à {{email}} ? Un nouveau mot de passe leur sera demandé à la prochaine connexion.",
     "disableConfirmBody": "{{name}} perdra immédiatement l'accès au tableau de bord administrateur. Vous pouvez réactiver ce compte à tout moment.",
     "sendResetLinkButton": "Envoyer le lien",
@@ -1038,7 +1032,13 @@
       "totalAdmins": "Total des administrateurs",
       "superAdmins": "Super administrateurs",
       "currentlyOnline": "Actuellement en ligne",
-      "twoFaEnabled": "2FA activée"
+      "twoFaEnabled": "2FA activée",
+      "enable": "Activer", 
+      "disable": "Désactiver",
+      "registeredAccounts": "comptes enregistrés",
+      "fullAccessAccounts": "comptes à accès complet",
+      "activeRightNow": "actifs en ce moment",
+      "securedAccounts": "comptes sécurisés" 
     },
     "table": {
       "name": "Nom",
