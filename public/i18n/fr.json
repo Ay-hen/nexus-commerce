@@ -994,6 +994,12 @@
     "allTwoFa": "2FA : Toutes",
     "sort": { "name": "Nom", "role": "Rôle", "lastOnline": "Dernière connexion", "mostActive": "Plus actifs" },
     "actions": { "enable": "Activer", "disable": "Désactiver" },
+    "stats": {
+      "registeredAccounts": "comptes enregistrés",
+      "fullAccessAccounts": "comptes à accès complet",
+      "activeRightNow": "actifs en ce moment",
+      "securedAccounts": "comptes sécurisés"
+    },
 
 
     "roles": {
