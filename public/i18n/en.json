@@ -989,7 +989,7 @@
     "searchPlaceholder": "Search by name, email, phone, role…",
     "allTwoFa": "All 2FA",
     "sort": { "name": "Name", "role": "Role", "lastOnline": "Last Online", "mostActive": "Most Active" },
-    "actions": { "enable": "Enable", "disable": "Disable" },
+
     "roles": {
       "superAdmin": "Super Admin",
       "admin": "Admin",
@@ -1005,7 +1005,11 @@
       "totalAdmins": "Total Admins",
       "superAdmins": "Super Admins",
       "currentlyOnline": "Currently Online",
-      "twoFaEnabled": "2FA Enabled"
+      "twoFaEnabled": "2FA Enabled",
+      "registeredAccounts": "registered accounts",
+      "fullAccessAccounts": "full access accounts",
+      "activeRightNow": "active right now",
+      "securedAccounts": "secured accounts"
     },
     "table": {
       "name": "Name",
@@ -1018,7 +1022,9 @@
     "actions": {
       "resetPassword": "Reset Password",
       "disableAccount": "Disable Account",
-      "deleteAdmin": "Delete Admin"
+      "deleteAdmin": "Delete Admin",
+      "enable": "Enable",
+      "disable": "Disable" 
     },
     "empty": {
       "title": "No administrators found",
