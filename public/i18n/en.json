@@ -1000,6 +1000,20 @@
       "manageAdmins": "Manage Admins", "manageSettings": "Manage Settings", "viewReports": "View Reports"
     },
 
+    "toasts": {
+      "bulkDisabled": "{{count}} admin(s) disabled",
+      "bulkEnabled": "{{count}} admin(s) enabled",
+      "bulkDeleted": "{{count}} admin(s) deleted",
+      "bulkExporting": "Exporting {{count}} admin(s)…",
+      "added": "{{name}} added as {{role}}",
+      "updated": "{{name}} updated successfully",
+      "deleted": "{{name}} deleted",
+      "resetLinkSent": "Password reset link sent to {{email}}",
+      "accountDisabled": "{{name}}'s account disabled",
+      "exportingCsv": "Exporting admins to CSV…",
+      "exportingPdf": "Exporting admins to PDF…"
+    },
+
     "roles": {
       "superAdmin": "Super Admin",
       "admin": "Admin",
