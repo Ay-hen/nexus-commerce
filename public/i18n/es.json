@@ -958,6 +958,12 @@
     "confirmPassword": "Confirmar contraseña",
     "permissions": "Permisos",
     "twoFactor": "Autenticación de dos factores",
+
+    "searchPlaceholder": "Buscar por nombre, correo, teléfono, rol…",
+    "allTwoFa": "2FA: Todas",
+    "sort": { "name": "Nombre", "role": "Rol", "lastOnline": "Última conexión", "mostActive": "Más activos" },
+    
+
     "roles": {
       "superAdmin": "Superadministrador",
       "admin": "Administrador",
