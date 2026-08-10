@@ -999,6 +999,15 @@
       "activeRightNow": "gerade aktiv",
       "securedAccounts": "gesicherte Konten"
     },
+    "resetConfirmBody": "Passwort-Reset-Link an {{name}} unter {{email}} senden? Sie müssen sich bei der nächsten Anmeldung ein neues Passwort festlegen.",
+    "disableConfirmBody": "{{name}} verliert sofort den Zugriff auf das Admin-Dashboard. Sie können das Konto jederzeit wieder aktivieren.",
+    "sendResetLinkButton": "Link senden",
+    "deleteConfirmBody": "Möchten Sie {{name}} wirklich dauerhaft löschen? Dies entzieht sämtlichen Zugriff und kann nicht rückgängig gemacht werden.",
+    "permissionLabels": {
+      "manageProducts": "Produkte verwalten", "manageOrders": "Bestellungen verwalten", "manageReviews": "Bewertungen verwalten",
+      "manageCustomers": "Kunden verwalten", "manageInventory": "Inventar verwalten", "manageCategories": "Kategorien verwalten",
+      "manageAdmins": "Administratoren verwalten", "manageSettings": "Einstellungen verwalten", "viewReports": "Berichte ansehen"
+    },
 
 
     "roles": {
