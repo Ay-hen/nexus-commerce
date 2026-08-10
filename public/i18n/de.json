@@ -1008,7 +1008,19 @@
       "manageCustomers": "Kunden verwalten", "manageInventory": "Inventar verwalten", "manageCategories": "Kategorien verwalten",
       "manageAdmins": "Administratoren verwalten", "manageSettings": "Einstellungen verwalten", "viewReports": "Berichte ansehen"
     },
-
+    "toasts": {
+      "bulkDisabled": "{{count}} Administrator(en) deaktiviert",
+      "bulkEnabled": "{{count}} Administrator(en) aktiviert",
+      "bulkDeleted": "{{count}} Administrator(en) gelöscht",
+      "bulkExporting": "{{count}} Administrator(en) werden exportiert…",
+      "added": "{{name}} als {{role}} hinzugefügt",
+      "updated": "{{name}} erfolgreich aktualisiert",
+      "deleted": "{{name}} gelöscht",
+      "resetLinkSent": "Passwort-Reset-Link an {{email}} gesendet",
+      "accountDisabled": "Konto von {{name}} deaktiviert",
+      "exportingCsv": "Administratoren werden als CSV exportiert…",
+      "exportingPdf": "Administratoren werden als PDF exportiert…"
+    },
 
     "roles": {
       "superAdmin": "Super-Administrator",
