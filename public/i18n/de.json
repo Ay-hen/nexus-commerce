@@ -992,13 +992,7 @@
     "searchPlaceholder": "Nach Name, E-Mail, Telefon, Rolle suchen…",
     "allTwoFa": "2FA: Alle",
     "sort": { "name": "Name", "role": "Rolle", "lastOnline": "Zuletzt online", "mostActive": "Aktivste" },
-    "actions": { "enable": "Aktivieren", "disable": "Deaktivieren" },
-    "stats": {
-      "registeredAccounts": "registrierte Konten",
-      "fullAccessAccounts": "Konten mit Vollzugriff",
-      "activeRightNow": "gerade aktiv",
-      "securedAccounts": "gesicherte Konten"
-    },
+
     "resetConfirmBody": "Passwort-Reset-Link an {{name}} unter {{email}} senden? Sie müssen sich bei der nächsten Anmeldung ein neues Passwort festlegen.",
     "disableConfirmBody": "{{name}} verliert sofort den Zugriff auf das Admin-Dashboard. Sie können das Konto jederzeit wieder aktivieren.",
     "sendResetLinkButton": "Link senden",
@@ -1037,7 +1031,11 @@
       "totalAdmins": "Administratoren gesamt",
       "superAdmins": "Super-Administratoren",
       "currentlyOnline": "Derzeit online",
-      "twoFaEnabled": "2FA aktiviert"
+      "twoFaEnabled": "2FA aktiviert",
+      "registeredAccounts": "registrierte Konten",
+      "fullAccessAccounts": "Konten mit Vollzugriff",
+      "activeRightNow": "gerade aktiv",
+      "securedAccounts": "gesicherte Konten"
     },
     "table": {
       "name": "Name",
@@ -1050,7 +1048,9 @@
     "actions": {
       "resetPassword": "Passwort zurücksetzen",
       "disableAccount": "Konto deaktivieren",
-      "deleteAdmin": "Administrator löschen"
+      "deleteAdmin": "Administrator löschen",
+      "enable": "Aktivieren", 
+      "disable": "Deaktivieren"
     },
     "empty": {
       "title": "Keine Administratoren gefunden",
