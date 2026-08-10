@@ -962,6 +962,13 @@
     "searchPlaceholder": "Buscar por nombre, correo, teléfono, rol…",
     "allTwoFa": "2FA: Todas",
     "sort": { "name": "Nombre", "role": "Rol", "lastOnline": "Última conexión", "mostActive": "Más activos" },
+    "actions": { "enable": "Activar", "disable": "Desactivar" },
+    "stats": {
+      "registeredAccounts": "cuentas registradas",
+      "fullAccessAccounts": "cuentas con acceso total",
+      "activeRightNow": "activos ahora mismo",
+      "securedAccounts": "cuentas protegidas"
+    },
     
 
     "roles": {
