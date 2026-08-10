@@ -969,7 +969,15 @@
       "activeRightNow": "activos ahora mismo",
       "securedAccounts": "cuentas protegidas"
     },
-    
+    "resetConfirmBody": "¿Enviar un enlace de restablecimiento a {{name}} a {{email}}? Deberán establecer una nueva contraseña en el próximo inicio de sesión.",
+    "disableConfirmBody": "{{name}} perderá el acceso al panel de administración de inmediato. Puedes reactivar su cuenta en cualquier momento.",
+    "sendResetLinkButton": "Enviar enlace",
+    "deleteConfirmBody": "¿Seguro que deseas eliminar permanentemente a {{name}}? Esto revocará todo el acceso y no se puede deshacer.",
+    "permissionLabels": {
+      "manageProducts": "Gestionar productos", "manageOrders": "Gestionar pedidos", "manageReviews": "Gestionar reseñas",
+      "manageCustomers": "Gestionar clientes", "manageInventory": "Gestionar inventario", "manageCategories": "Gestionar categorías",
+      "manageAdmins": "Gestionar administradores", "manageSettings": "Gestionar configuración", "viewReports": "Ver informes"
+    },
 
     "roles": {
       "superAdmin": "Superadministrador",
