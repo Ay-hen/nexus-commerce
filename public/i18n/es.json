@@ -978,6 +978,19 @@
       "manageCustomers": "Gestionar clientes", "manageInventory": "Gestionar inventario", "manageCategories": "Gestionar categorías",
       "manageAdmins": "Gestionar administradores", "manageSettings": "Gestionar configuración", "viewReports": "Ver informes"
     },
+    "toasts": {
+      "bulkDisabled": "{{count}} administrador(es) desactivado(s)",
+      "bulkEnabled": "{{count}} administrador(es) activado(s)",
+      "bulkDeleted": "{{count}} administrador(es) eliminado(s)",
+      "bulkExporting": "Exportando {{count}} administrador(es)…",
+      "added": "{{name}} añadido como {{role}}",
+      "updated": "{{name}} actualizado correctamente",
+      "deleted": "{{name}} eliminado",
+      "resetLinkSent": "Enlace de restablecimiento enviado a {{email}}",
+      "accountDisabled": "Cuenta de {{name}} desactivada",
+      "exportingCsv": "Exportando administradores a CSV…",
+      "exportingPdf": "Exportando administradores a PDF…"
+    },
 
     "roles": {
       "superAdmin": "Superadministrador",
