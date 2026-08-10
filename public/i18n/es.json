@@ -963,12 +963,7 @@
     "allTwoFa": "2FA: Todas",
     "sort": { "name": "Nombre", "role": "Rol", "lastOnline": "Última conexión", "mostActive": "Más activos" },
     "actions": { "enable": "Activar", "disable": "Desactivar" },
-    "stats": {
-      "registeredAccounts": "cuentas registradas",
-      "fullAccessAccounts": "cuentas con acceso total",
-      "activeRightNow": "activos ahora mismo",
-      "securedAccounts": "cuentas protegidas"
-    },
+    
     "resetConfirmBody": "¿Enviar un enlace de restablecimiento a {{name}} a {{email}}? Deberán establecer una nueva contraseña en el próximo inicio de sesión.",
     "disableConfirmBody": "{{name}} perderá el acceso al panel de administración de inmediato. Puedes reactivar su cuenta en cualquier momento.",
     "sendResetLinkButton": "Enviar enlace",
@@ -1007,7 +1002,11 @@
       "totalAdmins": "Administradores totales",
       "superAdmins": "Superadministradores",
       "currentlyOnline": "Actualmente en línea",
-      "twoFaEnabled": "2FA activado"
+      "twoFaEnabled": "2FA activado",
+      "registeredAccounts": "cuentas registradas",
+      "fullAccessAccounts": "cuentas con acceso total",
+      "activeRightNow": "activos ahora mismo",
+      "securedAccounts": "cuentas protegidas"
     },
     "table": {
       "name": "Nombre",
