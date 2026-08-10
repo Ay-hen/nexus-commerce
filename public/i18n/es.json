@@ -962,7 +962,6 @@
     "searchPlaceholder": "Buscar por nombre, correo, teléfono, rol…",
     "allTwoFa": "2FA: Todas",
     "sort": { "name": "Nombre", "role": "Rol", "lastOnline": "Última conexión", "mostActive": "Más activos" },
-    "actions": { "enable": "Activar", "disable": "Desactivar" },
     
     "resetConfirmBody": "¿Enviar un enlace de restablecimiento a {{name}} a {{email}}? Deberán establecer una nueva contraseña en el próximo inicio de sesión.",
     "disableConfirmBody": "{{name}} perderá el acceso al panel de administración de inmediato. Puedes reactivar su cuenta en cualquier momento.",
@@ -1019,7 +1018,9 @@
     "actions": {
       "resetPassword": "Restablecer contraseña",
       "disableAccount": "Desactivar cuenta",
-      "deleteAdmin": "Eliminar administrador"
+      "deleteAdmin": "Eliminar administrador",
+      "enable": "Activar", 
+      "disable": "Desactivar" 
     },
     "empty": {
       "title": "No se encontraron administradores",
