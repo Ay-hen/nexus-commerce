@@ -1062,7 +1062,10 @@
   "viewAdminModal": {
     "informationTab": "Information",
     "activityTab": "Activity Timeline",
-    "accountDetailsTitle": "Account Details"
+    "accountDetailsTitle": "Account Details",
+    "createdDateLabel": "Created Date",
+    "loginCountLabel": "Login Count",
+    "noRecentActivity": "No recent activity."
   },
 
   "activityLogs": {
