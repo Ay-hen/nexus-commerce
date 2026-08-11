@@ -1064,7 +1064,10 @@
   "viewAdminModal": {
     "informationTab": "Informationen",
     "activityTab": "Aktivitätsverlauf",
-    "accountDetailsTitle": "Kontodetails"
+    "accountDetailsTitle": "Kontodetails",
+    "createdDateLabel": "Erstellungsdatum",
+    "loginCountLabel": "Anmeldungen",
+    "noRecentActivity": "Keine kürzliche Aktivität."
   },
 
   "activityLogs": {
