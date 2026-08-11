@@ -1059,6 +1059,12 @@
     "deleteConfirmTitle": "Delete Admin"
   },
 
+  "viewAdminModal": {
+    "informationTab": "Information",
+    "activityTab": "Activity Timeline",
+    "accountDetailsTitle": "Account Details"
+  },
+
   "activityLogs": {
     "title": "Activity Logs",
     "subtitle": "Track every important action performed throughout the administration system.",
