@@ -1061,6 +1061,12 @@
     "deleteConfirmTitle": "Administrator löschen"
   },
 
+  "viewAdminModal": {
+    "informationTab": "Informationen",
+    "activityTab": "Aktivitätsverlauf",
+    "accountDetailsTitle": "Kontodetails"
+  },
+
   "activityLogs": {
     "title": "Aktivitätsprotokolle",
     "subtitle": "Verfolgen Sie jede wichtige Aktion im Verwaltungssystem.",
