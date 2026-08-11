@@ -1062,6 +1062,12 @@
     "deleteConfirmTitle": "Supprimer l'administrateur"
   },
 
+  "viewAdminModal": {
+    "informationTab": "Informations",
+    "activityTab": "Chronologie d'activité",
+    "accountDetailsTitle": "Détails du compte"
+  },
+
   "activityLogs": {
     "title": "Journaux d'activité",
     "subtitle": "Suivez chaque action importante effectuée dans le système d'administration.",
