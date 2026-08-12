@@ -1044,7 +1044,12 @@
     "subtitle": "Crea una nueva cuenta de administrador con acceso basado en roles.",
     "profileAvatarTitle": "Avatar de perfil",
     "profileAvatarSub": "Generado automáticamente a partir de las iniciales del administrador.",
-    "passwordPlaceholder": "Mínimo 8 caracteres"
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "confirmPasswordPlaceholder": "Vuelve a introducir la contraseña",
+    "enable2faTitle": "Activar autenticación de dos factores",
+    "enable2faSub": "Requerir un código de verificación en cada inicio de sesión.",
+    "creatingEllipsis": "Creando…",
+    "createAdminButton": "Crear administrador"
   },
 
   "activityLogs": {
