@@ -1040,6 +1040,13 @@
     "noRecentActivity": "Sin actividad reciente."
   },
 
+  "addAdminModal": {
+    "subtitle": "Crea una nueva cuenta de administrador con acceso basado en roles.",
+    "profileAvatarTitle": "Avatar de perfil",
+    "profileAvatarSub": "Generado automáticamente a partir de las iniciales del administrador.",
+    "passwordPlaceholder": "Mínimo 8 caracteres"
+  },
+
   "activityLogs": {
     "title": "Registros de actividad",
     "subtitle": "Registra cada acción importante realizada en el sistema de administración.",
