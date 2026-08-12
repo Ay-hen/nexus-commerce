@@ -1074,7 +1074,12 @@
     "subtitle": "Erstellen Sie ein neues Administratorkonto mit rollenbasiertem Zugriff.",
     "profileAvatarTitle": "Profilavatar",
     "profileAvatarSub": "Wird automatisch aus den Initialen des Administrators generiert.",
-    "passwordPlaceholder": "Mindestens 8 Zeichen"
+    "passwordPlaceholder": "Mindestens 8 Zeichen",
+    "confirmPasswordPlaceholder": "Passwort erneut eingeben",
+    "enable2faTitle": "Zwei-Faktor-Authentifizierung aktivieren",
+    "enable2faSub": "Bei jeder Anmeldung einen Bestätigungscode verlangen.",
+    "creatingEllipsis": "Wird erstellt…",
+    "createAdminButton": "Administrator erstellen"
   },
 
   "activityLogs": {
