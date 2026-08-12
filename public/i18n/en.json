@@ -1068,6 +1068,13 @@
     "noRecentActivity": "No recent activity."
   },
 
+  "addAdminModal": {
+    "subtitle": "Create a new administrator account with role-based access.",
+    "profileAvatarTitle": "Profile Avatar",
+    "profileAvatarSub": "Generated automatically from the admin's initials.",
+    "passwordPlaceholder": "Minimum 8 characters"
+  },
+
   "activityLogs": {
     "title": "Activity Logs",
     "subtitle": "Track every important action performed throughout the administration system.",
