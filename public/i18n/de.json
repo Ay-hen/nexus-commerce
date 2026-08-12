@@ -1070,6 +1070,13 @@
     "noRecentActivity": "Keine kürzliche Aktivität."
   },
 
+  "addAdminModal": {
+    "subtitle": "Erstellen Sie ein neues Administratorkonto mit rollenbasiertem Zugriff.",
+    "profileAvatarTitle": "Profilavatar",
+    "profileAvatarSub": "Wird automatisch aus den Initialen des Administrators generiert.",
+    "passwordPlaceholder": "Mindestens 8 Zeichen"
+  },
+
   "activityLogs": {
     "title": "Aktivitätsprotokolle",
     "subtitle": "Verfolgen Sie jede wichtige Aktion im Verwaltungssystem.",
