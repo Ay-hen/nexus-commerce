@@ -1072,7 +1072,12 @@
     "subtitle": "Create a new administrator account with role-based access.",
     "profileAvatarTitle": "Profile Avatar",
     "profileAvatarSub": "Generated automatically from the admin's initials.",
-    "passwordPlaceholder": "Minimum 8 characters"
+    "passwordPlaceholder": "Minimum 8 characters",
+    "confirmPasswordPlaceholder": "Re-enter password",
+    "enable2faTitle": "Enable Two-Factor Authentication",
+    "enable2faSub": "Require a verification code on every sign-in.",
+    "creatingEllipsis": "Creating…",
+    "createAdminButton": "Create Admin"
   },
 
   "activityLogs": {
