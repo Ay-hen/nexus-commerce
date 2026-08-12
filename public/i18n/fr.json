@@ -1071,6 +1071,13 @@
     "noRecentActivity": "Aucune activité récente."
   },
 
+  "addAdminModal": {
+    "subtitle": "Créez un nouveau compte administrateur avec un accès basé sur les rôles.",
+    "profileAvatarTitle": "Avatar de profil",
+    "profileAvatarSub": "Généré automatiquement à partir des initiales de l'administrateur.",
+    "passwordPlaceholder": "8 caractères minimum"
+  },
+
   "activityLogs": {
     "title": "Journaux d'activité",
     "subtitle": "Suivez chaque action importante effectuée dans le système d'administration.",
