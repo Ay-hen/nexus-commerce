@@ -1082,6 +1082,12 @@
     "createAdminButton": "Administrator erstellen"
   },
 
+  "editAdminModal": {
+    "subtitle": "Kontodetails, Rolle und Berechtigungen aktualisieren.",
+    "createdReadonlyNote": "Erstellt am {{date}} · {{count}} Anmeldungen (schreibgeschützt)",
+    "twoFaEnabledSub": "Für dieses Konto aktiviert"
+  },
+
   "activityLogs": {
     "title": "Aktivitätsprotokolle",
     "subtitle": "Verfolgen Sie jede wichtige Aktion im Verwaltungssystem.",
