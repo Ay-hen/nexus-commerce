@@ -1083,6 +1083,12 @@
     "createAdminButton": "Créer l'administrateur"
   },
 
+  "editAdminModal": {
+    "subtitle": "Mettez à jour les détails du compte, le rôle et les permissions.",
+    "createdReadonlyNote": "Créé le {{date}} · {{count}} connexions (lecture seule)",
+    "twoFaEnabledSub": "Activée pour ce compte"
+  },
+
   "activityLogs": {
     "title": "Journaux d'activité",
     "subtitle": "Suivez chaque action importante effectuée dans le système d'administration.",
