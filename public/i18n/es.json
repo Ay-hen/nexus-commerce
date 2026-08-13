@@ -1055,7 +1055,9 @@
   "editAdminModal": {
     "subtitle": "Actualiza los detalles de la cuenta, el rol y los permisos.",
     "createdReadonlyNote": "Creado el {{date}} · {{count}} inicios de sesión (solo lectura)",
-    "twoFaEnabledSub": "Activada para esta cuenta"
+    "twoFaEnabledSub": "Activada para esta cuenta",
+    "twoFaDisabledSub": "Desactivada para esta cuenta",
+    "readonlyHistoryNote": "El historial de inicio de sesión y la cronología de actividad no se pueden editar."
   },
 
   "activityLogs": {
