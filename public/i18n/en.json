@@ -1080,6 +1080,12 @@
     "createAdminButton": "Create Admin"
   },
 
+  "editAdminModal": {
+    "subtitle": "Update account details, role and permissions.",
+    "createdReadonlyNote": "Created {{date}} · {{count}} logins (read-only)",
+    "twoFaEnabledSub": "Enabled for this account"
+  },
+
   "activityLogs": {
     "title": "Activity Logs",
     "subtitle": "Track every important action performed throughout the administration system.",

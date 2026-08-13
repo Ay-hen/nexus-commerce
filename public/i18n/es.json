@@ -1052,6 +1052,8 @@
     "createAdminButton": "Crear administrador"
   },
 
+  
+
   "activityLogs": {
     "title": "Registros de actividad",
     "subtitle": "Registra cada acción importante realizada en el sistema de administración.",
