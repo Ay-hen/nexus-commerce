@@ -1083,7 +1083,9 @@
   "editAdminModal": {
     "subtitle": "Update account details, role and permissions.",
     "createdReadonlyNote": "Created {{date}} · {{count}} logins (read-only)",
-    "twoFaEnabledSub": "Enabled for this account"
+    "twoFaEnabledSub": "Enabled for this account",
+    "twoFaDisabledSub": "Disabled for this account",
+    "readonlyHistoryNote": "Login history and activity timeline cannot be edited."
   },
 
   "activityLogs": {
