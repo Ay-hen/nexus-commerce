@@ -1085,7 +1085,9 @@
   "editAdminModal": {
     "subtitle": "Kontodetails, Rolle und Berechtigungen aktualisieren.",
     "createdReadonlyNote": "Erstellt am {{date}} · {{count}} Anmeldungen (schreibgeschützt)",
-    "twoFaEnabledSub": "Für dieses Konto aktiviert"
+    "twoFaEnabledSub": "Für dieses Konto aktiviert", 
+    "twoFaDisabledSub": "Für dieses Konto deaktiviert",
+    "readonlyHistoryNote": "Anmeldeverlauf und Aktivitätsverlauf können nicht bearbeitet werden." 
   },
 
   "activityLogs": {
