@@ -1086,7 +1086,9 @@
   "editAdminModal": {
     "subtitle": "Mettez à jour les détails du compte, le rôle et les permissions.",
     "createdReadonlyNote": "Créé le {{date}} · {{count}} connexions (lecture seule)",
-    "twoFaEnabledSub": "Activée pour ce compte"
+    "twoFaEnabledSub": "Activée pour ce compte",
+    "twoFaDisabledSub": "Désactivée pour ce compte",
+    "readonlyHistoryNote": "L'historique de connexion et la chronologie d'activité ne peuvent pas être modifiés."
   },
 
   "activityLogs": {
