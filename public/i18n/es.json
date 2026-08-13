@@ -1052,7 +1052,11 @@
     "createAdminButton": "Crear administrador"
   },
 
-  
+  "editAdminModal": {
+    "subtitle": "Actualiza los detalles de la cuenta, el rol y los permisos.",
+    "createdReadonlyNote": "Creado el {{date}} · {{count}} inicios de sesión (solo lectura)",
+    "twoFaEnabledSub": "Activada para esta cuenta"
+  },
 
   "activityLogs": {
     "title": "Registros de actividad",
