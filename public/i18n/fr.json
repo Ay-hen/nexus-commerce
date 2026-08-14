@@ -1000,6 +1000,11 @@
     "targetScreens": {
       "home": "Accueil", "productDetail": "Détail produit", "orderDetail": "Détail commande",
       "cart": "Panier", "wishlist": "Liste de souhaits", "promotions": "Promotions", "profile": "Profil"
+    },
+    "toasts": {
+      "savedDraft": "Notification enregistrée comme brouillon",
+      "scheduledSuccess": "Notification planifiée avec succès",
+      "beingSent": "La notification est en cours d'envoi"
     }
   },
 
