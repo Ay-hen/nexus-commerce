@@ -978,6 +978,8 @@
       "subscribers": "Subscribers", "vip": "VIP", "customSegment": "Custom Segment"
     },
 
+    
+
     "toasts": {
       "savedDraft": "Notification saved as draft",
       "scheduledSuccess": "Notification scheduled successfully",
