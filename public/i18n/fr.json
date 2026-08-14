@@ -990,7 +990,13 @@
     "nowLabel": "à l'instant",
     "scheduleButton": "Planifier",
     "sendingEllipsis": "Envoi en cours…",
-    "schedulingEllipsis": "Planification…"
+    "schedulingEllipsis": "Planification…",
+    "audienceOptions": {
+      "allUsers": "Tous les utilisateurs", "customers": "Clients", "admins": "Administrateurs",
+      "subscribers": "Abonnés", "vip": "VIP", "customSegment": "Segment personnalisé"
+    },
+    "priorityOptions": { "normal": "Normale", "high": "Haute", "critical": "Critique" },
+    "soundOptions": { "default": "Par défaut", "chime": "Carillon", "bell": "Cloche", "silent": "Silencieux" }
     
   },
 
