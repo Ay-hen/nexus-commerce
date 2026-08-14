@@ -969,7 +969,14 @@
     "ttl": "TTL (hours)",
     "silentNotification": "Silent Notification",
     "livePreview": "Live Preview",
-    "estimatedRecipients": "Estimated recipients"
+    "estimatedRecipients": "Estimated recipients",
+
+    "priorityOptions": { "normal": "Normal", "high": "High", "critical": "Critical" },
+    "soundOptions": { "default": "Default", "chime": "Chime", "bell": "Bell", "silent": "Silent" },
+    "targetScreens": {
+      "home": "Home", "productDetail": "Product Detail", "orderDetail": "Order Detail",
+      "cart": "Cart", "wishlist": "Wishlist", "promotions": "Promotions", "profile": "Profile"
+    }
   },
 
   "admins": {
