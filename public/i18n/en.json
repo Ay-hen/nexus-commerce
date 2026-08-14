@@ -1011,7 +1011,10 @@
       "resetLinkSent": "Password reset link sent to {{email}}",
       "accountDisabled": "{{name}}'s account disabled",
       "exportingCsv": "Exporting admins to CSV…",
-      "exportingPdf": "Exporting admins to PDF…"
+      "exportingPdf": "Exporting admins to PDF…",
+      "savedDraft": "Notification saved as draft",
+      "scheduledSuccess": "Notification scheduled successfully",
+      "beingSent": "Notification is being sent"
     },
 
     "roles": {
@@ -1087,6 +1090,8 @@
     "twoFaDisabledSub": "Disabled for this account",
     "readonlyHistoryNote": "Login history and activity timeline cannot be edited."
   },
+
+  
 
   "activityLogs": {
     "title": "Activity Logs",
