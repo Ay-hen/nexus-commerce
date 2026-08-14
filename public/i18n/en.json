@@ -971,6 +971,19 @@
     "livePreview": "Live Preview",
     "estimatedRecipients": "Estimated recipients",
 
+    "sendingEllipsis": "Sending…",
+    "schedulingEllipsis": "Scheduling…",
+    "audienceOptions": {
+      "allUsers": "All Users", "customers": "Customers", "admins": "Admins",
+      "subscribers": "Subscribers", "vip": "VIP", "customSegment": "Custom Segment"
+    },
+
+    "toasts": {
+      "savedDraft": "Notification saved as draft",
+      "scheduledSuccess": "Notification scheduled successfully",
+      "beingSent": "Notification is being sent"
+    },
+
     "priorityOptions": { "normal": "Normal", "high": "High", "critical": "Critical" },
     "soundOptions": { "default": "Default", "chime": "Chime", "bell": "Bell", "silent": "Silent" },
     "targetScreens": {
