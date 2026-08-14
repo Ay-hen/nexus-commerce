@@ -996,8 +996,11 @@
       "subscribers": "Abonnés", "vip": "VIP", "customSegment": "Segment personnalisé"
     },
     "priorityOptions": { "normal": "Normale", "high": "Haute", "critical": "Critique" },
-    "soundOptions": { "default": "Par défaut", "chime": "Carillon", "bell": "Cloche", "silent": "Silencieux" }
-    
+    "soundOptions": { "default": "Par défaut", "chime": "Carillon", "bell": "Cloche", "silent": "Silencieux" },
+    "targetScreens": {
+      "home": "Accueil", "productDetail": "Détail produit", "orderDetail": "Détail commande",
+      "cart": "Panier", "wishlist": "Liste de souhaits", "promotions": "Promotions", "profile": "Profil"
+    }
   },
 
   "admins": {
