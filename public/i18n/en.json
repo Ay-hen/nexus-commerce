@@ -978,7 +978,21 @@
       "subscribers": "Subscribers", "vip": "VIP", "customSegment": "Custom Segment"
     },
 
-    
+    "titlePlaceholder": "Notification title",
+    "bodyPlaceholderPreview": "Your message body will appear here as you type.",
+    "titleFieldPlaceholder": "Your order has shipped! 📦",
+    "bodyFieldPlaceholder": "Track your package and see the estimated delivery date.",
+    "campaignNamePlaceholder": "Summer Sale Blast",
+    "segmentDescriptionLabel": "Segment Description",
+    "segmentDescriptionPlaceholder": "Users who purchased in the last 30 days…",
+    "dateLabel": "Date",
+    "timeLabel": "Time",
+    "timezoneLabel": "Timezone",
+    "badgeCountLabel": "Badge Count (optional)",
+    "soundLabel": "Sound",
+    "silentNotificationSub": "Delivers without sound or vibration.",
+    "nowLabel": "now",
+    "scheduleButton": "Schedule",
 
     "toasts": {
       "savedDraft": "Notification saved as draft",
