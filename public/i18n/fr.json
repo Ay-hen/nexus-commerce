@@ -972,7 +972,26 @@
     "ttl": "TTL (heures)",
     "silentNotification": "Notification silencieuse",
     "livePreview": "Aperçu en direct",
-    "estimatedRecipients": "Destinataires estimés"
+    "estimatedRecipients": "Destinataires estimés",
+
+    "titlePlaceholder": "Titre de la notification",
+    "bodyPlaceholderPreview": "Le corps de votre message apparaîtra ici au fur et à mesure.",
+    "titleFieldPlaceholder": "Votre commande a été expédiée ! 📦",
+    "bodyFieldPlaceholder": "Suivez votre colis et consultez la date de livraison estimée.",
+    "campaignNamePlaceholder": "Grande vente d'été",
+    "segmentDescriptionLabel": "Description du segment",
+    "segmentDescriptionPlaceholder": "Utilisateurs ayant acheté au cours des 30 derniers jours…",
+    "dateLabel": "Date",
+    "timeLabel": "Heure",
+    "timezoneLabel": "Fuseau horaire",
+    "badgeCountLabel": "Nombre de badge (facultatif)",
+    "soundLabel": "Son",
+    "silentNotificationSub": "Diffusée sans son ni vibration.",
+    "nowLabel": "à l'instant",
+    "scheduleButton": "Planifier",
+    "sendingEllipsis": "Envoi en cours…",
+    "schedulingEllipsis": "Planification…"
+    
   },
 
   "admins": {
