@@ -971,7 +971,15 @@
     "ttl": "TTL (Stunden)",
     "silentNotification": "Stille Benachrichtigung",
     "livePreview": "Live-Vorschau",
-    "estimatedRecipients": "Geschätzte Empfänger"
+    "estimatedRecipients": "Geschätzte Empfänger",
+
+    "titlePlaceholder": "Benachrichtigungstitel",
+    "bodyPlaceholderPreview": "Ihr Nachrichtentext erscheint hier, während Sie tippen.",
+    "titleFieldPlaceholder": "Ihre Bestellung wurde versandt! 📦",
+    "bodyFieldPlaceholder": "Verfolgen Sie Ihr Paket und sehen Sie das voraussichtliche Lieferdatum.",
+    "campaignNamePlaceholder": "Sommer-Sale",
+    "segmentDescriptionLabel": "Segmentbeschreibung",
+    "segmentDescriptionPlaceholder": "Nutzer, die in den letzten 30 Tagen gekauft haben…"
   },
 
   "admins": {
