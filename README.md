@@ -15,7 +15,7 @@
 
 ## 📸 Preview
 
-![Dashboard Preview](./docs/screenshots/dashboard.jpeg)
+![Dashboard Preview](./public/docs/screenshots/dashboard.jpeg)
 
 
 ---
