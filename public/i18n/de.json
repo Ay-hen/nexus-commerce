@@ -987,7 +987,13 @@
     "soundLabel": "Ton",
     "silentNotificationSub": "Wird ohne Ton oder Vibration zugestellt.",
     "nowLabel": "jetzt",
-    "scheduleButton": "Planen"
+    "scheduleButton": "Planen",
+    "sendingEllipsis": "Wird gesendet…",
+    "schedulingEllipsis": "Wird geplant…",
+    "audienceOptions": {
+      "allUsers": "Alle Nutzer", "customers": "Kunden", "admins": "Administratoren",
+      "subscribers": "Abonnenten", "vip": "VIP", "customSegment": "Benutzerdefiniertes Segment"
+    }
   },
 
   "admins": {
