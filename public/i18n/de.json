@@ -979,7 +979,15 @@
     "bodyFieldPlaceholder": "Verfolgen Sie Ihr Paket und sehen Sie das voraussichtliche Lieferdatum.",
     "campaignNamePlaceholder": "Sommer-Sale",
     "segmentDescriptionLabel": "Segmentbeschreibung",
-    "segmentDescriptionPlaceholder": "Nutzer, die in den letzten 30 Tagen gekauft haben…"
+    "segmentDescriptionPlaceholder": "Nutzer, die in den letzten 30 Tagen gekauft haben…",
+    "dateLabel": "Datum",
+    "timeLabel": "Uhrzeit",
+    "timezoneLabel": "Zeitzone",
+    "badgeCountLabel": "Badge-Anzahl (optional)",
+    "soundLabel": "Ton",
+    "silentNotificationSub": "Wird ohne Ton oder Vibration zugestellt.",
+    "nowLabel": "jetzt",
+    "scheduleButton": "Planen"
   },
 
   "admins": {
