@@ -999,6 +999,11 @@
     "targetScreens": {
       "home": "Startseite", "productDetail": "Produktdetail", "orderDetail": "Bestelldetail",
       "cart": "Warenkorb", "wishlist": "Wunschliste", "promotions": "Aktionen", "profile": "Profil"
+    },
+    "toasts": {
+      "savedDraft": "Benachrichtigung als Entwurf gespeichert",
+      "scheduledSuccess": "Benachrichtigung erfolgreich geplant",
+      "beingSent": "Benachrichtigung wird gesendet"
     }
   },
 
