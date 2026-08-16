@@ -947,7 +947,14 @@
     "bodyPlaceholderPreview": "El cuerpo de tu mensaje aparecerá aquí mientras escribes.",
     "titleFieldPlaceholder": "¡Tu pedido ha sido enviado! 📦",
     "bodyFieldPlaceholder": "Sigue tu paquete y consulta la fecha estimada de entrega.",
-    "campaignNamePlaceholder": "Rebajas de verano"
+    "campaignNamePlaceholder": "Rebajas de verano",
+    "segmentDescriptionLabel": "Descripción del segmento",
+    "segmentDescriptionPlaceholder": "Usuarios que compraron en los últimos 30 días…",
+    "dateLabel": "Fecha",
+    "timeLabel": "Hora",
+    "timezoneLabel": "Zona horaria",
+    "badgeCountLabel": "Recuento de insignia (opcional)",
+    "soundLabel": "Sonido"
   },
 
   "admins": {
