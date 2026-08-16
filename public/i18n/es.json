@@ -969,6 +969,11 @@
     "targetScreens": {
       "home": "Inicio", "productDetail": "Detalle de producto", "orderDetail": "Detalle de pedido",
       "cart": "Carrito", "wishlist": "Lista de deseos", "promotions": "Promociones", "profile": "Perfil"
+    },
+    "toasts": {
+      "savedDraft": "Notificación guardada como borrador",
+      "scheduledSuccess": "Notificación programada correctamente",
+      "beingSent": "La notificación se está enviando"
     }
   },
 
