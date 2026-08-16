@@ -941,7 +941,13 @@
     "ttl": "TTL (horas)",
     "silentNotification": "Notificación silenciosa",
     "livePreview": "Vista previa en directo",
-    "estimatedRecipients": "Destinatarios estimados"
+    "estimatedRecipients": "Destinatarios estimados",
+
+    "titlePlaceholder": "Título de la notificación",
+    "bodyPlaceholderPreview": "El cuerpo de tu mensaje aparecerá aquí mientras escribes.",
+    "titleFieldPlaceholder": "¡Tu pedido ha sido enviado! 📦",
+    "bodyFieldPlaceholder": "Sigue tu paquete y consulta la fecha estimada de entrega.",
+    "campaignNamePlaceholder": "Rebajas de verano"
   },
 
   "admins": {
