@@ -959,7 +959,11 @@
     "nowLabel": "ahora",
     "scheduleButton": "Programar",
     "sendingEllipsis": "Enviando…",
-    "schedulingEllipsis": "Programando…"
+    "schedulingEllipsis": "Programando…",
+    "audienceOptions": {
+      "allUsers": "Todos los usuarios", "customers": "Clientes", "admins": "Administradores",
+      "subscribers": "Suscriptores", "vip": "VIP", "customSegment": "Segmento personalizado"
+    }
   },
 
   "admins": {
