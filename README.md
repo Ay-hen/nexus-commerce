@@ -290,19 +290,26 @@ Database (MongoDB)
 
 ## 📷 Screenshots
 
-Add screenshots as the project's visuals are finalized.
 
 ### Dashboard
-![Dashboard](./docs/screenshots/dashboard.png)
+![Dashboard](./public/docs/screenshots/dashboard.jpeg)
 
 ### Products
-![Products](./docs/screenshots/products.png)
+![Products](./public/docs/screenshots/products1.jpeg)
+![Products](./public/docs/screenshots/products2.jpeg)
 
 ### Orders
-![Orders](./docs/screenshots/orders.png)
+![Orders](./public/docs/screenshots/orders.jpeg)
 
 ### Settings
-![Settings](./docs/screenshots/settings.png)
+![Settings](./public/docs/screenshots/settings1.jpeg)
+![Settings](./public/docs/screenshots/settings2.jpeg)
+![Settings](./public/docs/screenshots/settings3.jpeg)
+![Settings](./public/docs/screenshots/settings4.jpeg)
+![Settings](./public/docs/screenshots/settings5.jpeg)
+![Settings](./public/docs/screenshots/settings6.jpeg)
+![Settings](./public/docs/screenshots/settings7.jpeg)
+![Settings](./public/docs/screenshots/settings8.jpeg)
 
 ---
 
