@@ -963,6 +963,12 @@
     "audienceOptions": {
       "allUsers": "Todos los usuarios", "customers": "Clientes", "admins": "Administradores",
       "subscribers": "Suscriptores", "vip": "VIP", "customSegment": "Segmento personalizado"
+    },
+    "priorityOptions": { "normal": "Normal", "high": "Alta", "critical": "Crítica" },
+    "soundOptions": { "default": "Predeterminado", "chime": "Timbre", "bell": "Campana", "silent": "Silencioso" },
+    "targetScreens": {
+      "home": "Inicio", "productDetail": "Detalle de producto", "orderDetail": "Detalle de pedido",
+      "cart": "Carrito", "wishlist": "Lista de deseos", "promotions": "Promociones", "profile": "Perfil"
     }
   },
 
