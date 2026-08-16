@@ -954,7 +954,12 @@
     "timeLabel": "Hora",
     "timezoneLabel": "Zona horaria",
     "badgeCountLabel": "Recuento de insignia (opcional)",
-    "soundLabel": "Sonido"
+    "soundLabel": "Sonido",
+    "silentNotificationSub": "Se entrega sin sonido ni vibración.",
+    "nowLabel": "ahora",
+    "scheduleButton": "Programar",
+    "sendingEllipsis": "Enviando…",
+    "schedulingEllipsis": "Programando…"
   },
 
   "admins": {
