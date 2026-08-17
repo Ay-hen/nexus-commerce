@@ -9,8 +9,8 @@ import {
 } from '../../model/activity-log.model';
 import { ActivityLogDetail, toActivityDetail } from '../../model/activity-detail.model';
 import { ViewActivityModal } from '../../model/view-activity-modal/view-activity-modal';
-import { LanguageService } from '../../localization/language.service';
-import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 export type SearchByField = 'admin' | 'entity' | 'description' | 'module' | 'ip';
 export type ModuleFilter = 'all' | ActivityModule;
