@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, Output, HostListener, signal, inject } 
 import { CommonModule } from '@angular/common';
 import { ActivityLogDetail, TimelineStep } from '../activity-detail.model';
 import { ActivityAction, actionTranslationKey, moduleTranslationKey, roleTranslationKey } from '../activity-log.model';
-import { LanguageService } from '../../localization/language.service';
-import { TranslatePipe } from '../../localization/translate.pipe';
+import { LanguageService } from '../../../localization/language.service';
+import { TranslatePipe } from '../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-view-activity-modal',
