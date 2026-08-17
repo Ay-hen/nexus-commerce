@@ -152,3 +152,26 @@ export function osForDevice(device: string, seed: number): string {
   if (device === 'MacBook Pro') return seed % 2 === 0 ? 'macOS Sonoma' : 'macOS Sequoia';
   return seed % 2 === 0 ? 'Windows 11' : 'Ubuntu 24.04';
 }
+
+// ─── i18n helpers (new) ─────────────────────────────────────────────────
+// Pure mapping functions from enum-like display values to translation
+// keys already defined in the JSON files. Used by ActivityLogs and
+// ViewActivityModal so the mapping logic isn't duplicated in both.
+
+export function actionTranslationKey(action: ActivityAction): string {
+  return 'activityLogs.action.' + action.toLowerCase();
+}
+
+export function moduleTranslationKey(module: ActivityModule): string {
+  return 'navigation.' + module.toLowerCase();
+}
+
+export function roleTranslationKey(role: AdminRole): string {
+  const map: Record<AdminRole, string> = {
+    'Super Admin': 'superAdmin',
+    'Admin': 'admin',
+    'Manager': 'manager',
+    'Support': 'support',
+  };
+  return 'admins.roles.' + map[role];
+}
