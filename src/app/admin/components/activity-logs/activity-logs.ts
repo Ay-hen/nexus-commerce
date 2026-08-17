@@ -1,13 +1,16 @@
 // activity-logs.ts
-import { Component, signal, computed, HostListener } from '@angular/core';
+import { Component, signal, computed, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import {
   ActivityLog, AdminRole, ActivityAction, ActivityModule, generateMockActivityLogs,
+  actionTranslationKey, moduleTranslationKey, roleTranslationKey,
 } from '../../model/activity-log.model';
 import { ActivityLogDetail, toActivityDetail } from '../../model/activity-detail.model';
 import { ViewActivityModal } from '../../model/view-activity-modal/view-activity-modal';
+import { LanguageService } from '../../localization/language.service';
+import { TranslatePipe } from '../../localization/translate.pipe';
 
 export type SearchByField = 'admin' | 'entity' | 'description' | 'module' | 'ip';
 export type ModuleFilter = 'all' | ActivityModule;
@@ -20,11 +23,13 @@ export type ViewMode = 'table' | 'grid';
 
 @Component({
   selector: 'app-activity-logs',
-  imports: [CommonModule, FormsModule, ViewActivityModal],
+  imports: [CommonModule, FormsModule, ViewActivityModal, TranslatePipe],
   templateUrl: './activity-logs.html',
   styleUrl: './activity-logs.scss',
 })
 export class ActivityLogs {
+
+  lang = inject(LanguageService);
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -59,71 +64,74 @@ export class ActivityLogs {
   viewingLog = signal<ActivityLogDetail | null>(null);
 
   // ── Option lists ───────────────────────────────────────────────────────
+  // NOTE: `label` now stores a translation key (resolved with | translate
+  // in the template) instead of literal English text. `key` values are
+  // unchanged and still drive filtering logic.
   searchByOptions: { key: SearchByField; label: string }[] = [
-    { key: 'admin', label: 'Admin' },
-    { key: 'entity', label: 'Entity' },
-    { key: 'description', label: 'Description' },
-    { key: 'module', label: 'Module' },
-    { key: 'ip', label: 'IP Address' },
+    { key: 'admin', label: 'activityLogs.table.admin' },
+    { key: 'entity', label: 'activityLogs.table.entity' },
+    { key: 'description', label: 'products.description' },
+    { key: 'module', label: 'activityLogs.table.module' },
+    { key: 'ip', label: 'settings.security.table.ipAddress' },
   ];
 
   moduleOptions: { key: ModuleFilter; label: string }[] = [
-    { key: 'all', label: 'All Modules' },
-    { key: 'Products', label: 'Products' },
-    { key: 'Orders', label: 'Orders' },
-    { key: 'Categories', label: 'Categories' },
-    { key: 'Customers', label: 'Customers' },
-    { key: 'Inventory', label: 'Inventory' },
-    { key: 'Reviews', label: 'Reviews' },
-    { key: 'Notifications', label: 'Notifications' },
-    { key: 'Admins', label: 'Admins' },
-    { key: 'Reports', label: 'Reports' },
-    { key: 'Settings', label: 'Settings' },
+    { key: 'all', label: 'common.allModules' },
+    { key: 'Products', label: 'navigation.products' },
+    { key: 'Orders', label: 'navigation.orders' },
+    { key: 'Categories', label: 'navigation.categories' },
+    { key: 'Customers', label: 'navigation.customers' },
+    { key: 'Inventory', label: 'navigation.inventory' },
+    { key: 'Reviews', label: 'navigation.reviews' },
+    { key: 'Notifications', label: 'navigation.notifications' },
+    { key: 'Admins', label: 'navigation.admins' },
+    { key: 'Reports', label: 'navigation.reports' },
+    { key: 'Settings', label: 'navigation.settings' },
   ];
 
   actionOptions: { key: ActionFilter; label: string }[] = [
-    { key: 'all', label: 'All Actions' },
-    { key: 'CREATE', label: 'Create' },
-    { key: 'UPDATE', label: 'Update' },
-    { key: 'DELETE', label: 'Delete' },
-    { key: 'LOGIN', label: 'Login' },
-    { key: 'LOGOUT', label: 'Logout' },
-    { key: 'EXPORT', label: 'Export' },
-    { key: 'IMPORT', label: 'Import' },
-    { key: 'APPROVE', label: 'Approve' },
-    { key: 'REJECT', label: 'Reject' },
-    { key: 'VIEW', label: 'View' },
+    { key: 'all', label: 'common.allActions' },
+    { key: 'CREATE', label: 'activityLogs.action.create' },
+    { key: 'UPDATE', label: 'activityLogs.action.update' },
+    { key: 'DELETE', label: 'activityLogs.action.delete' },
+    { key: 'LOGIN', label: 'activityLogs.action.login' },
+    { key: 'LOGOUT', label: 'activityLogs.action.logout' },
+    { key: 'EXPORT', label: 'activityLogs.action.export' },
+    { key: 'IMPORT', label: 'activityLogs.action.import' },
+    { key: 'APPROVE', label: 'activityLogs.action.approve' },
+    { key: 'REJECT', label: 'activityLogs.action.reject' },
+    { key: 'VIEW', label: 'activityLogs.action.view' },
   ];
 
   statusOptions: { key: StatusFilter; label: string }[] = [
-    { key: 'all', label: 'All Statuses' },
-    { key: 'success', label: 'Successful' },
-    { key: 'failed', label: 'Failed' },
+    { key: 'all', label: 'common.allStatuses' },
+    { key: 'success', label: 'activityLogs.status.success' },
+    { key: 'failed', label: 'activityLogs.status.failed' },
   ];
 
   roleOptions: { key: RoleFilter; label: string }[] = [
-    { key: 'all', label: 'All Roles' },
-    { key: 'Super Admin', label: 'Super Admin' },
-    { key: 'Admin', label: 'Admin' },
-    { key: 'Manager', label: 'Manager' },
-    { key: 'Support', label: 'Support' },
+    { key: 'all', label: 'common.allRoles' },
+    { key: 'Super Admin', label: 'admins.roles.superAdmin' },
+    { key: 'Admin', label: 'admins.roles.admin' },
+    { key: 'Manager', label: 'admins.roles.manager' },
+    { key: 'Support', label: 'admins.roles.support' },
   ];
 
   dateOptions: { key: DateFilter; label: string }[] = [
-    { key: 'all', label: 'All Time' },
-    { key: 'today', label: 'Today' },
-    { key: '7d', label: 'Last 7 Days' },
-    { key: '30d', label: 'Last Month' },
-    { key: 'custom', label: 'Custom Range' },
+    { key: 'all', label: 'common.allTime' },
+    { key: 'today', label: 'common.today' },
+    { key: '7d', label: 'common.last7Days' },
+    { key: '30d', label: 'common.lastMonth' },
+    { key: 'custom', label: 'common.customRange' },
   ];
 
   sortOptions: { key: SortKey; label: string }[] = [
-    { key: 'newest', label: 'Newest' },
-    { key: 'oldest', label: 'Oldest' },
-    { key: 'admin', label: 'Admin' },
-    { key: 'module', label: 'Module' },
-    { key: 'action', label: 'Action' },
-    { key: 'status', label: 'Status' },
+    { key: 'newest', label: 'orders.sort.newest' },
+    { key: 'oldest', label: 'orders.sort.oldest' },
+    { key: 'admin', label: 'activityLogs.table.admin' },
+    { key: 'module', label: 'activityLogs.table.module' },
+    { key: 'action', label: 'activityLogs.table.action' },
+    { key: 'status', label: 'activityLogs.table.status' },
   ];
 
   // ── Computed: filtered + sorted list ─────────────────────────────────
@@ -206,10 +214,10 @@ export class ActivityLogs {
 
   pageRangeLabel = computed(() => {
     const total = this.sortedLogs().length;
-    if (total === 0) return '0 results';
+    if (total === 0) return this.lang.translate('products.pageRangeEmpty');
     const start = (this.currentPage() - 1) * this.pageSize() + 1;
     const end = Math.min(start + this.pageSize() - 1, total);
-    return `${start}–${end} of ${total}`;
+    return this.lang.translate('products.pageRange', { start, end, total });
   });
 
   // ── Stats ──────────────────────────────────────────────────────────────
@@ -297,9 +305,9 @@ export class ActivityLogs {
   closeView(): void { this.viewingLog.set(null); }
 
   // ── Export ─────────────────────────────────────────────────────────────
-  exportCsv(): void { this.showToast('Exporting activity logs to CSV…'); }
-  exportPdf(): void { this.showToast('Exporting activity logs to PDF…'); }
-  downloadReport(): void { this.showToast('Generating full activity report…'); }
+  exportCsv(): void { this.showToast(this.lang.translate('activityLogs.toasts.exportingCsv')); }
+  exportPdf(): void { this.showToast(this.lang.translate('activityLogs.toasts.exportingPdf')); }
+  downloadReport(): void { this.showToast(this.lang.translate('activityLogs.toasts.generatingReport')); }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   trackById(_: number, item: ActivityLog): string { return item.id; }
@@ -320,8 +328,12 @@ export class ActivityLogs {
     return map[action];
   }
 
+  actionTranslationKey = actionTranslationKey;
+  moduleTranslationKey = moduleTranslationKey;
+  roleTranslationKey = roleTranslationKey;
+
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(iso, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   formatTime(iso: string): string {
@@ -329,17 +341,20 @@ export class ActivityLogs {
     const d = new Date(iso);
     const diffMin = Math.round((now.getTime() - d.getTime()) / 60000);
 
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
+    if (diffMin < 1) return this.lang.translate('common.justNow');
+    if (diffMin < 60) return this.lang.translate('common.minutesAgo', { count: diffMin });
 
     const isToday = d.toDateString() === now.toDateString();
-    if (isToday) return `Today ${d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+    if (isToday) {
+      const timeStr = d.toLocaleTimeString(this.lang.locale(), { hour: '2-digit', minute: '2-digit', hour12: false });
+      return this.lang.translate('common.todayAt', { time: timeStr });
+    }
 
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
-    if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
+    if (d.toDateString() === yesterday.toDateString()) return this.lang.translate('common.yesterday');
 
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return this.lang.formatDate(d, { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   private showToast(msg: string): void {
