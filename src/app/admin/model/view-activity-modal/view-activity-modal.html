@@ -1,7 +1,7 @@
 <div class="modal-backdrop" (click)="close()" role="dialog" aria-modal="true" aria-labelledby="view-activity-title">
   <div class="modal" (click)="$event.stopPropagation()">
 
-    <button class="modal-close" (click)="close()" aria-label="Close">
+    <button class="modal-close" (click)="close()" [attr.aria-label]="'buttons.close' | translate">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
 
@@ -11,17 +11,17 @@
       <div class="ac-head__info">
         <div class="ac-head__name-row">
           <h2 class="ac-head__name" id="view-activity-title">{{ log.adminName }}</h2>
-          <span class="role-chip">{{ log.role }}</span>
+          <span class="role-chip">{{ roleTranslationKey(log.role) | translate }}</span>
         </div>
         <div class="ac-head__badges">
           <span class="action-badge" [ngClass]="actionBadgeClass(log.action)">
             <span class="action-badge__dot"></span>
-            {{ log.action }}
+            {{ actionTranslationKey(log.action) | translate }}
           </span>
-          <span class="module-pill">{{ log.module }}</span>
+          <span class="module-pill">{{ moduleTranslationKey(log.module) | translate }}</span>
           <span class="status-pill" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
             <span class="status-dot"></span>
-            {{ log.success ? 'Success' : 'Failed' }}
+            {{ (log.success ? 'activityLogs.status.success' : 'activityLogs.status.failed') | translate }}
           </span>
         </div>
         <p class="ac-head__meta">{{ formatDate(log.createdAt) }} &middot; {{ formatTime(log.createdAt) }}</p>
@@ -30,9 +30,9 @@
 
     <!-- Tabs -->
     <div class="ac-tabs">
-      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'details'" (click)="setTab('details')" type="button">Details</button>
-      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'technical'" (click)="setTab('technical')" type="button">Technical Details</button>
-      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'timeline'" (click)="setTab('timeline')" type="button">Execution Timeline</button>
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'details'" (click)="setTab('details')" type="button">{{ 'activityLogs.detail.tabDetails' | translate }}</button>
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'technical'" (click)="setTab('technical')" type="button">{{ 'activityLogs.detail.technicalDetailsTitle' | translate }}</button>
+      <button class="ac-tab" [class.ac-tab--active]="activeTab() === 'timeline'" (click)="setTab('timeline')" type="button">{{ 'activityLogs.detail.executionTimelineTitle' | translate }}</button>
     </div>
 
     <div class="ac-body">
@@ -40,27 +40,27 @@
       <!-- DETAILS TAB -->
       @if (activeTab() === 'details') {
         <section class="ac-section">
-          <h3 class="ac-section__title">Action Details</h3>
+          <h3 class="ac-section__title">{{ 'activityLogs.detail.actionDetailsTitle' | translate }}</h3>
           <div class="detail-card">
             <div class="detail-card__row">
-              <div class="detail-field"><span class="detail-label">Action</span><span class="detail-value">{{ log.action }}</span></div>
-              <div class="detail-field"><span class="detail-label">Module</span><span class="detail-value">{{ log.module }}</span></div>
-              <div class="detail-field"><span class="detail-label">Entity</span><span class="detail-value">{{ log.entityName }}</span></div>
-              <div class="detail-field"><span class="detail-label">Status</span>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.table.action' | translate }}</span><span class="detail-value">{{ actionTranslationKey(log.action) | translate }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.table.module' | translate }}</span><span class="detail-value">{{ moduleTranslationKey(log.module) | translate }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.table.entity' | translate }}</span><span class="detail-value">{{ log.entityName }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.table.status' | translate }}</span>
                 <span class="detail-value">
                   <span class="status-pill" [class.status-pill--success]="log.success" [class.status-pill--failed]="!log.success">
-                    <span class="status-dot"></span>{{ log.success ? 'Success' : 'Failed' }}
+                    <span class="status-dot"></span>{{ (log.success ? 'activityLogs.status.success' : 'activityLogs.status.failed') | translate }}
                   </span>
                 </span>
               </div>
-              <div class="detail-field"><span class="detail-label">Date</span><span class="detail-value">{{ formatDate(log.createdAt) }}</span></div>
-              <div class="detail-field"><span class="detail-label">Time</span><span class="detail-value">{{ formatTime(log.createdAt) }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'dashboard.table.date' | translate }}</span><span class="detail-value">{{ formatDate(log.createdAt) }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.table.time' | translate }}</span><span class="detail-value">{{ formatTime(log.createdAt) }}</span></div>
             </div>
           </div>
         </section>
 
         <section class="ac-section">
-          <h3 class="ac-section__title">Description</h3>
+          <h3 class="ac-section__title">{{ 'products.description' | translate }}</h3>
           <p class="ac-description">{{ log.description }}</p>
         </section>
       }
@@ -68,17 +68,17 @@
       <!-- TECHNICAL TAB -->
       @if (activeTab() === 'technical') {
         <section class="ac-section">
-          <h3 class="ac-section__title">Technical Details</h3>
+          <h3 class="ac-section__title">{{ 'activityLogs.detail.technicalDetailsTitle' | translate }}</h3>
           <div class="detail-card">
             <div class="detail-card__row">
               <div class="detail-field">
-                <span class="detail-label">IP Address</span>
+                <span class="detail-label">{{ 'settings.security.table.ipAddress' | translate }}</span>
                 <span class="detail-value detail-value--mono">{{ log.ipAddress }}</span>
               </div>
-              <div class="detail-field"><span class="detail-label">Browser</span><span class="detail-value">{{ log.browser }}</span></div>
-              <div class="detail-field"><span class="detail-label">Operating System</span><span class="detail-value">{{ log.operatingSystem }}</span></div>
-              <div class="detail-field"><span class="detail-label">Device</span><span class="detail-value">{{ log.device }}</span></div>
-              <div class="detail-field"><span class="detail-label">Location</span>
+              <div class="detail-field"><span class="detail-label">{{ 'settings.security.table.browser' | translate }}</span><span class="detail-value">{{ log.browser }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'activityLogs.detail.operatingSystem' | translate }}</span><span class="detail-value">{{ log.operatingSystem }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'settings.security.table.device' | translate }}</span><span class="detail-value">{{ log.device }}</span></div>
+              <div class="detail-field"><span class="detail-label">{{ 'settings.security.table.location' | translate }}</span>
                 <span class="detail-value">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   {{ log.location }}
@@ -89,11 +89,11 @@
 
           <div class="detail-card detail-card--ids">
             <div class="detail-field">
-              <span class="detail-label">Session ID</span>
+              <span class="detail-label">{{ 'activityLogs.detail.sessionId' | translate }}</span>
               <span class="detail-value detail-value--mono">{{ log.sessionId }}</span>
             </div>
             <div class="detail-field">
-              <span class="detail-label">Request ID</span>
+              <span class="detail-label">{{ 'activityLogs.detail.requestId' | translate }}</span>
               <span class="detail-value detail-value--mono">{{ log.requestId }}</span>
             </div>
           </div>
@@ -103,7 +103,7 @@
       <!-- TIMELINE TAB -->
       @if (activeTab() === 'timeline') {
         <section class="ac-section">
-          <h3 class="ac-section__title">Execution Timeline</h3>
+          <h3 class="ac-section__title">{{ 'activityLogs.detail.executionTimelineTitle' | translate }}</h3>
           <div class="timeline">
             @for (step of log.timeline; track step.id; let last = $last) {
               <div class="timeline-item">
@@ -120,6 +120,7 @@
                   </svg>
                 </div>
                 <div class="timeline-item__body">
+                  <!-- NOTE: step.label is still raw English from the model — see open question above -->
                   <p class="timeline-item__label">{{ step.label }}</p>
                   <p class="timeline-item__time">{{ formatTime(step.time) }}</p>
                 </div>
@@ -133,7 +134,7 @@
     </div>
 
     <footer class="ac-footer">
-      <button class="btn-ghost" (click)="close()">Close</button>
+      <button class="btn-ghost" (click)="close()">{{ 'buttons.close' | translate }}</button>
     </footer>
 
   </div>
