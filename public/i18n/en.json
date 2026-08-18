@@ -1159,7 +1159,13 @@
       "successfulActionsSub": "completed without error",
       "failedActionsSub": "need attention"
     },
-    
+
+    "toasts": {
+      "exportingCsv": "Exporting activity logs to CSV…",
+      "exportingPdf": "Exporting activity logs to PDF…",
+      "generatingReport": "Generating full activity report…"
+    },
+
     "table": {
       "admin": "Admin",
       "role": "Role",
