@@ -1135,6 +1135,10 @@
   "activityLogs": {
     "title": "Activity Logs",
     "subtitle": "Track every important action performed throughout the administration system.",
+    "searchPlaceholder": "Search by {{field}}…",
+    "exportLogs": "Export Logs",
+    "logActionsAria": "Log actions",
+    "status": { "success": "Success", "failed": "Failed" },
     "stats": {
       "totalActivities": "Total Activities",
       "todaysActivities": "Today's Activities",
