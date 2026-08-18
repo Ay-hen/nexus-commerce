@@ -1139,6 +1139,16 @@
     "exportLogs": "Export Logs",
     "logActionsAria": "Log actions",
     "status": { "success": "Success", "failed": "Failed" },
+
+    "detail": {
+      "tabDetails": "Details",
+      "technicalDetailsTitle": "Technical Details",
+      "executionTimelineTitle": "Execution Timeline",
+      "actionDetailsTitle": "Action Details",
+      "sessionId": "Session ID",
+      "requestId": "Request ID",
+      "operatingSystem": "Operating System"
+    },
     "stats": {
       "totalActivities": "Total Activities",
       "todaysActivities": "Today's Activities",
