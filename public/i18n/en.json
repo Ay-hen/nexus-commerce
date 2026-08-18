@@ -1153,8 +1153,13 @@
       "totalActivities": "Total Activities",
       "todaysActivities": "Today's Activities",
       "successfulActions": "Successful Actions",
-      "failedActions": "Failed Actions"
+      "failedActions": "Failed Actions",
+      "totalActivitiesSub": "all recorded events",
+      "todaysActivitiesSub": "since midnight",
+      "successfulActionsSub": "completed without error",
+      "failedActionsSub": "need attention"
     },
+    
     "table": {
       "admin": "Admin",
       "role": "Role",
