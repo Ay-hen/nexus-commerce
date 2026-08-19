@@ -1181,6 +1181,16 @@
     "empty": {
       "title": "Aucun journal d'activité trouvé",
       "subtitle": "Ajustez votre recherche ou vos filtres."
+    },
+
+    "detail":{
+      "tabDetails": "Détails",
+      "technicalDetailsTitle": "Détails techniques",
+      "executionTimelineTitle": "Chronologie d'exécution",
+      "actionDetailsTitle": "Détails de l'action",
+      "sessionId": "ID de session",
+      "requestId": "ID de requête",
+      "detail.operatingSystem": "Système d'exploitation"
     }
   },
 
