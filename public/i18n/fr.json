@@ -1149,6 +1149,13 @@
       "successfulActionsSub": "terminées sans erreur",
       "failedActionsSub": "nécessitent une attention"
     },
+
+    "toasts":{
+      "exportingCsv": "Exportation des journaux d'activité en CSV…",
+      "exportingPdf": "Exportation des journaux d'activité en PDF…",
+      "generatingReport": "Génération du rapport d'activité complet…"
+    },
+
     "table": {
       "admin": "Administrateur",
       "role": "Rôle",
