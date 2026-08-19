@@ -1130,6 +1130,9 @@
   "activityLogs": {
     "title": "Journaux d'activité",
     "subtitle": "Suivez chaque action importante effectuée dans le système d'administration.",
+    "searchPlaceholder": "Rechercher par {{field}}…",
+    "exportLogs": "Exporter les journaux",
+    "logActionsAria": "Actions du journal",
     "stats": {
       "totalActivities": "Total des activités",
       "todaysActivities": "Activités du jour",
