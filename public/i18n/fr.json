@@ -1133,6 +1133,12 @@
     "searchPlaceholder": "Rechercher par {{field}}…",
     "exportLogs": "Exporter les journaux",
     "logActionsAria": "Actions du journal",
+
+    "status":{
+      "success": "Réussi",
+      "failed": "Échoué"
+    },
+
     "stats": {
       "totalActivities": "Total des activités",
       "todaysActivities": "Activités du jour",
