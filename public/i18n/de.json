@@ -1139,6 +1139,12 @@
       "failed": "Fehlgeschlagen"
     },
 
+    "toasts":{
+      "exportingCsv": "Aktivitätsprotokolle werden als CSV exportiert…",
+      "exportingPdf": "Aktivitätsprotokolle werden als PDF exportiert…",
+      "generatingReport": "Vollständiger Aktivitätsbericht wird erstellt…"
+    },
+
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
