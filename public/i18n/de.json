@@ -1138,12 +1138,16 @@
       "success": "Erfolgreich",
       "failed": "Fehlgeschlagen"
     },
-    
+
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
       "successfulActions": "Erfolgreiche Aktionen",
-      "failedActions": "Fehlgeschlagene Aktionen"
+      "failedActions": "Fehlgeschlagene Aktionen",
+      "totalActivitiesSub": "alle erfassten Ereignisse",
+      "todaysActivitiesSub": "seit Mitternacht",
+      "successfulActionsSub": "ohne Fehler abgeschlossen",
+      "failedActionsSub": "erfordern Aufmerksamkeit"
     },
     "table": {
       "admin": "Administrator",
