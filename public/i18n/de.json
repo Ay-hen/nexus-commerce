@@ -1129,6 +1129,11 @@
   "activityLogs": {
     "title": "Aktivitätsprotokolle",
     "subtitle": "Verfolgen Sie jede wichtige Aktion im Verwaltungssystem.",
+
+    "searchPlaceholder": "Suche nach {{field}}…",
+    "exportLogs": "Protokolle exportieren",
+    "logActionsAria": "Protokollaktionen",
+
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
