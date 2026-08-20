@@ -1134,6 +1134,11 @@
     "exportLogs": "Protokolle exportieren",
     "logActionsAria": "Protokollaktionen",
 
+    "status":{
+      "success": "Erfolgreich",
+      "failed": "Fehlgeschlagen"
+    },
+    
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
