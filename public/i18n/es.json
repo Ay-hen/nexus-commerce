@@ -1109,11 +1109,17 @@
       "failed": "Fallido"
     },
 
+
+
     "stats": {
       "totalActivities": "Actividades totales",
       "todaysActivities": "Actividades de hoy",
       "successfulActions": "Acciones exitosas",
-      "failedActions": "Acciones fallidas"
+      "failedActions": "Acciones fallidas",
+      "totalActivitiesSub": "todos los eventos registrados",
+      "todaysActivitiesSub": "desde medianoche",
+      "successfulActionsSub": "completadas sin errores",
+      "failedActionsSub": "requieren atención"
     },
     "table": {
       "admin": "Administrador",
