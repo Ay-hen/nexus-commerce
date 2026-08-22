@@ -1099,6 +1099,11 @@
   "activityLogs": {
     "title": "Registros de actividad",
     "subtitle": "Registra cada acción importante realizada en el sistema de administración.",
+
+    "searchPlaceholder": "Buscar por {{field}}…",
+    "exportLogs": "Exportar registros",
+    "logActionsAria": "Acciones del registro",
+
     "stats": {
       "totalActivities": "Actividades totales",
       "todaysActivities": "Actividades de hoy",
