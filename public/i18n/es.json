@@ -54,7 +54,10 @@
     "secondsAgo": "hace {{count}}s",
     "weeksAgo": "hace {{count}}sem",
     "monthsAgo": "hace {{count}}me",
-    "yearsAgo": "hace {{count}}a"
+    "yearsAgo": "hace {{count}}a",
+    "allModules": "Todos los módulos",
+    "allActions": "Todas las acciones",
+    "todayAt": "Hoy {{time}}"
   },
 
   "buttons": {
