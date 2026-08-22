@@ -1109,7 +1109,11 @@
       "failed": "Fallido"
     },
 
-
+    "toasts":{
+      "exportingCsv": "Exportando registros de actividad a CSV…",
+      "exportingPdf": "Exportando registros de actividad a PDF…",
+      "generatingReport": "Generando informe completo de actividad…"
+  },
 
     "stats": {
       "totalActivities": "Actividades totales",
