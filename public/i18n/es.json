@@ -1104,6 +1104,11 @@
     "exportLogs": "Exportar registros",
     "logActionsAria": "Acciones del registro",
 
+    "status": {
+      "success": "Correcto",
+      "failed": "Fallido"
+    },
+
     "stats": {
       "totalActivities": "Actividades totales",
       "todaysActivities": "Actividades de hoy",
