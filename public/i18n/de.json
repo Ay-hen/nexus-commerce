@@ -1145,6 +1145,16 @@
       "generatingReport": "Vollständiger Aktivitätsbericht wird erstellt…"
     },
 
+    "detail":{
+      "tabDetails": "Details",
+      "technicalDetailsTitle": "Technische Details",
+      "executionTimelineTitle": "Ausführungsverlauf",
+      "actionDetailsTitle": "Aktionsdetails",
+      "sessionId": "Sitzungs-ID",
+      "detail.operatingSystem": "Betriebssystem",
+      "requestId": "Anfrage-ID"
+    },
+
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
