@@ -1113,7 +1113,17 @@
       "exportingCsv": "Exportando registros de actividad a CSV…",
       "exportingPdf": "Exportando registros de actividad a PDF…",
       "generatingReport": "Generando informe completo de actividad…"
-  },
+    },
+
+    "detail":{
+      "tabDetails": "Detalles",
+      "technicalDetailsTitle": "Detalles técnicos",
+      "executionTimelineTitle": "Cronología de ejecución",
+      "actionDetailsTitle": "Detalles de la acción",
+      "sessionId": "ID de sesión",
+      "requestId": "ID de solicitud",
+      "operatingSystem": "Sistema operativo"
+    },
 
     "stats": {
       "totalActivities": "Actividades totales",
