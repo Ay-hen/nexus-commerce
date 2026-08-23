@@ -151,96 +151,14 @@
 
         <!-- ══════════════════ GENERAL ══════════════════ -->
         @if (activeCategory() === 'general') {
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.general.title' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.general.subtitle' | translate }}</p>
-            </div>
-            <div class="form-grid">
-              <div class="form-field">
-                <label class="form-label" >{{ 'settings.general.storeName' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.storeName" (ngModelChange)="updateGeneral('storeName', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeName']" disabled />
-                @if (formTouched() && generalErrors()['storeName']) { <span class="field-error">{{ generalErrors()['storeName'] }}</span> }
-              </div>
-              <div class="form-field form-field--full">
-                <label class="form-label">{{ 'settings.general.storeDescription' | translate }}</label>
-                <textarea class="form-textarea" rows="2" [ngModel]="draft().general.storeDescription" (ngModelChange)="updateGeneral('storeDescription', $event)"></textarea>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.storeEmail' | translate }}</label>
-                <input class="form-input" type="email" [ngModel]="draft().general.storeEmail" (ngModelChange)="updateGeneral('storeEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['storeEmail']" />
-                @if (formTouched() && generalErrors()['storeEmail']) { <span class="field-error">{{ generalErrors()['storeEmail'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.supportEmail' | translate }}</label>
-                <input class="form-input" type="email" [ngModel]="draft().general.supportEmail" (ngModelChange)="updateGeneral('supportEmail', $event)" [class.form-input--error]="formTouched() && generalErrors()['supportEmail']" />
-                @if (formTouched() && generalErrors()['supportEmail']) { <span class="field-error">{{ generalErrors()['supportEmail'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.phone' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.phoneNumber" (ngModelChange)="updateGeneral('phoneNumber', $event)" [class.form-input--error]="formTouched() && generalErrors()['phoneNumber']" />
-                @if (formTouched() && generalErrors()['phoneNumber']) { <span class="field-error">{{ generalErrors()['phoneNumber'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.website' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.website" (ngModelChange)="updateGeneral('website', $event)" placeholder="https://…" [class.form-input--error]="formTouched() && generalErrors()['website']" disabled />
-                @if (formTouched() && generalErrors()['website']) { <span class="field-error">{{ generalErrors()['website'] }}</span> }
-              </div>
-              <div class="form-field form-field--full">
-                <label class="form-label">{{ 'settings.general.address' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().general.businessAddress" (ngModelChange)="updateGeneral('businessAddress', $event)" />
-              </div>
-
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.country' | translate }}</label>
-                <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.country" (ngModelChange)="updateGeneral('country', $event)">
-                    @for (c of countryOptions; track c) { <option [value]="c">{{ c }}</option> }
-                  </select>
-                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.currency' | translate }}</label>
-                <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.currency" (ngModelChange)="updateGeneral('currency', $event)">
-                    @for (c of currencyOptions; track c) { <option [value]="c">{{ c }}</option> }
-                  </select>
-                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.timezone' | translate }}</label>
-                <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.timezone" (ngModelChange)="updateGeneral('timezone', $event)">
-                    @for (t of timezoneOptions; track t) { <option [value]="t">{{ t }}</option> }
-                  </select>
-                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.language' | translate }}</label>
-                <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.language" (ngModelChange)="updateGeneralLanguage($event)">
-                    @for (l of lang.availableLanguages(); track l.code) { <option [value]="l.code">{{ l.flag }} {{ l.label }}</option> }
-                  </select>
-                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.general.dateFormat' | translate }}</label>
-                <div class="select-wrap select-wrap--block">
-                  <select class="form-select" [ngModel]="draft().general.dateFormat" (ngModelChange)="updateGeneral('dateFormat', $event)">
-                    @for (d of dateFormatOptions; track d) { <option [value]="d">{{ d }}</option> }
-                  </select>
-                  <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-            </div>
-            <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.general.saveButton' | translate }}</button>
-            </div>
-          </div>
+          <app-general-settings
+            [settings]="draft().general"
+            [formTouched]="formTouched()"
+            [errors]="generalErrors()"
+            (settingsChange)="onGeneralSettingsChange($event)"
+            (languageChange)="updateGeneralLanguage($event)"
+            (save)="saveChanges()"
+          />
         }
 
         <!-- ══════════════════ PROFILE ══════════════════ -->
