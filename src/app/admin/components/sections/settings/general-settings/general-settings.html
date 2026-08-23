@@ -1,1 +1,131 @@
-<p>general-settings works!</p>
+<!-- ══════════════════ STORE IDENTITY ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.general.sections.storeIdentity' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.general.subtitle' | translate }}</p>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field" [class.form-field--error]="hasError('storeName')">
+      <label class="form-label">{{ 'settings.general.storeName' | translate }} <span class="required">*</span></label>
+      <input class="form-input" type="text" [ngModel]="settings.storeName" (ngModelChange)="update('storeName', $event)" [class.form-input--error]="hasError('storeName')" />
+      @if (hasError('storeName')) { <span class="field-error">{{ errorMsg('storeName') }}</span> }
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.storeEmail' | translate }}</label>
+      <input class="form-input" type="email" [ngModel]="settings.storeEmail" (ngModelChange)="update('storeEmail', $event)" [class.form-input--error]="hasError('storeEmail')" />
+      @if (hasError('storeEmail')) { <span class="field-error">{{ errorMsg('storeEmail') }}</span> }
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.supportEmail' | translate }}</label>
+      <input class="form-input" type="email" [ngModel]="settings.supportEmail" (ngModelChange)="update('supportEmail', $event)" [class.form-input--error]="hasError('supportEmail')" />
+      @if (hasError('supportEmail')) { <span class="field-error">{{ errorMsg('supportEmail') }}</span> }
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.phone' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.phoneNumber" (ngModelChange)="update('phoneNumber', $event)" [class.form-input--error]="hasError('phoneNumber')" />
+      @if (hasError('phoneNumber')) { <span class="field-error">{{ errorMsg('phoneNumber') }}</span> }
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.website' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.website" (ngModelChange)="update('website', $event)" placeholder="https://…" [class.form-input--error]="hasError('website')" />
+      @if (hasError('website')) { <span class="field-error">{{ errorMsg('website') }}</span> }
+    </div>
+
+    <div class="form-field form-field--full">
+      <label class="form-label">{{ 'settings.general.storeDescription' | translate }}</label>
+      <textarea
+        class="form-textarea"
+        rows="3"
+        [maxlength]="storeDescriptionMax"
+        [ngModel]="settings.storeDescription"
+        (ngModelChange)="update('storeDescription', $event)"
+      ></textarea>
+      <span class="form-hint">{{ 'settings.general.charCount' | translate: { count: settings.storeDescription.length, max: storeDescriptionMax } }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ BUSINESS INFORMATION ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.general.sections.businessInfo' | translate }}</h2>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field form-field--full">
+      <label class="form-label">{{ 'settings.general.address' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.businessAddress" (ngModelChange)="update('businessAddress', $event)" />
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.country' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.country" (ngModelChange)="update('country', $event)">
+          @for (c of countryOptions; track c) { <option [value]="c">{{ c }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.timezone' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.timezone" (ngModelChange)="update('timezone', $event)">
+          @for (t of timezoneOptions; track t) { <option [value]="t">{{ t }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <span class="form-hint form-hint--live">{{ 'settings.general.timePreviewLabel' | translate }}: {{ timezonePreview() }}</span>
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.currency' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.currency" (ngModelChange)="update('currency', $event)">
+          @for (c of currencyOptions; track c) { <option [value]="c">{{ c }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <span class="form-hint form-hint--live">{{ 'settings.general.pricePreviewLabel' | translate }}: {{ currencyPreview() }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ LOCALIZATION ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.general.sections.localization' | translate }}</h2>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.language' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.language" (ngModelChange)="onLanguageChange($event)">
+          @for (l of lang.availableLanguages(); track l.code) { <option [value]="l.code">{{ l.flag }} {{ l.label }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.general.dateFormat' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.dateFormat" (ngModelChange)="update('dateFormat', $event)">
+          @for (d of dateFormatOptions; track d) { <option [value]="d">{{ d }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <span class="form-hint form-hint--live">{{ 'settings.general.dateFormatPreviewLabel' | translate }}: {{ dateFormatPreview() }}</span>
+    </div>
+  </div>
+
+  <div class="settings-card__footer">
+    <button class="btn-primary" type="button" (click)="save.emit()">{{ 'settings.general.saveButton' | translate }}</button>
+  </div>
+</div>
