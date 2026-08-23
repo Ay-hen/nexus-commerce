@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import {
   GeneralSettings, COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, DATE_FORMAT_OPTIONS,
 } from '../../../../model/settings.model';
-import { LanguageService } from '../../../../localization/language.service';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { LanguageService } from '../../../../../localization/language.service';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 const STORE_DESCRIPTION_MAX = 300;
 
@@ -15,7 +15,7 @@ const STORE_DESCRIPTION_MAX = 300;
   templateUrl: './general-settings.html',
   styleUrl: './general-settings.scss',
 })
-export class GeneralSettings {
+export class GeneralSettingsComponent {
   lang = inject(LanguageService);
 
   // ── Input / Output ────────────────────────────────────────────────────
