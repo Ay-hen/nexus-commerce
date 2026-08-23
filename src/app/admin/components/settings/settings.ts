@@ -8,10 +8,12 @@ import {
   StoreStatus, SmtpEncryption, ThemeMode, SidebarStyle, FontSize, Environment,
   generateMockSettings,
   COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, DATE_FORMAT_OPTIONS, WAREHOUSE_OPTIONS,
+  GeneralSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode, isSupportedLanguage } from '../../../localization/language.model';
+import { GeneralSettingsComponent } from '../sections/settings/general-settings/general-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -23,7 +25,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
@@ -242,12 +244,7 @@ export class Settings {
   // Store config field AND live admin UI language switch. Selecting a
   // language here takes effect immediately via LanguageService, same as the
   // navbar switcher — it doesn't wait for "Save Changes".
-  updateGeneralLanguage(code: string): void {
-    this.updateGeneral('language', code);
-    if (isSupportedLanguage(code)) {
-      this.lang.changeLanguage(code as LanguageCode);
-    }
-  }
+  
 
   updateProfile<K extends keyof SettingsModel['profile']>(key: K, value: SettingsModel['profile'][K]): void {
     this.draft.update(d => ({ ...d, profile: { ...d.profile, [key]: value } }));
@@ -406,6 +403,16 @@ export class Settings {
     this.toastMsg.set(msg);
     this.toastTimer = setTimeout(() => this.toastMsg.set(null), 3000);
   }
-
   
+  updateGeneralLanguage(code: string): void {
+    this.draft.update(d => ({ ...d, general: { ...d.general, language: code } }));
+    if (isSupportedLanguage(code)) {
+      this.lang.changeLanguage(code as LanguageCode);
+    }
+  }
+
+  // ADD: bridges the child's patch-style output to the draft signal.
+  onGeneralSettingsChange(patch: Partial<GeneralSettings>): void {
+    this.draft.update(d => ({ ...d, general: { ...d.general, ...patch } }));
+  }
 }
