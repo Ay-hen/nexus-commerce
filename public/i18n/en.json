@@ -1231,6 +1231,11 @@
         "localization": "Localization"
       },
 
+      "charCount": "{{count}}/{{max}}",
+      "pricePreviewLabel": "Price Preview",
+      "timePreviewLabel": "Current Time",
+      "dateFormatPreviewLabel": "Preview",
+
       "errors": {
         "storeNameRequired": "Store name is required."
       }
