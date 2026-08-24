@@ -1224,6 +1224,13 @@
       "language": "Language",
       "dateFormat": "Date Format",
       "saveButton": "Save",
+
+      "sections": {
+        "storeIdentity": "Store Identity",
+        "businessInfo": "Business Information",
+        "localization": "Localization"
+      },
+
       "errors": {
         "storeNameRequired": "Store name is required."
       }
