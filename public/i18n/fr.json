@@ -1224,6 +1224,13 @@
       "language": "Langue",
       "dateFormat": "Format de date",
       "saveButton": "Enregistrer",
+
+      "sections": {
+        "storeIdentity": "Identité de la boutique",
+        "businessInfo": "Informations sur l'entreprise",
+        "localization": "Localisation"
+      },
+
       "errors": {
         "storeNameRequired": "Le nom de la boutique est requis."
       }
