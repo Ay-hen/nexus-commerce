@@ -1200,6 +1200,11 @@
         "localization": "Localización"
       },
 
+      "charCount": "{{count}}/{{max}}",
+      "pricePreviewLabel": "Vista previa del precio",
+      "timePreviewLabel": "Hora actual",
+      "dateFormatPreviewLabel": "Vista previa",
+
       "errors": {
         "storeNameRequired": "El nombre de la tienda es obligatorio."
       }
