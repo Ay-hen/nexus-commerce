@@ -1223,6 +1223,13 @@
       "language": "Sprache",
       "dateFormat": "Datumsformat",
       "saveButton": "Speichern",
+
+      "sections": {
+        "storeIdentity": "Shop-Identität",
+        "businessInfo": "Geschäftsinformationen",
+        "localization": "Lokalisierung"
+      },
+
       "errors": {
         "storeNameRequired": "Der Shop-Name ist erforderlich."
       }
