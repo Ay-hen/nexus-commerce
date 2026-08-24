@@ -1231,6 +1231,11 @@
         "localization": "Localisation"
       },
 
+      "charCount": "{{count}}/{{max}}",
+      "pricePreviewLabel": "Aperçu du prix",
+      "timePreviewLabel": "Heure actuelle",
+      "dateFormatPreviewLabel": "Aperçu",
+
       "errors": {
         "storeNameRequired": "Le nom de la boutique est requis."
       }
