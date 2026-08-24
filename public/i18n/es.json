@@ -1193,6 +1193,13 @@
       "language": "Idioma",
       "dateFormat": "Formato de fecha",
       "saveButton": "Guardar",
+
+      "sections": {
+        "storeIdentity": "Identidad de la tienda",
+        "businessInfo": "Información comercial",
+        "localization": "Localización"
+      },
+
       "errors": {
         "storeNameRequired": "El nombre de la tienda es obligatorio."
       }
