@@ -1230,6 +1230,11 @@
         "localization": "Lokalisierung"
       },
 
+      "charCount": "{{count}}/{{max}}",
+      "pricePreviewLabel": "Preisvorschau",
+      "timePreviewLabel": "Aktuelle Uhrzeit",
+      "dateFormatPreviewLabel": "Vorschau",
+
       "errors": {
         "storeNameRequired": "Der Shop-Name ist erforderlich."
       }
