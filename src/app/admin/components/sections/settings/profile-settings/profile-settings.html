@@ -1,1 +1,63 @@
-<p>profile-settings works!</p>
+<!-- ══════════════════ AVATAR ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.profile.title' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.profile.subtitle' | translate }}</p>
+  </div>
+
+  <div class="avatar-upload">
+    <div class="avatar-upload__preview">{{ avatarInitials() }}</div>
+    <div class="avatar-upload__actions">
+      <label class="btn-ghost btn-ghost--sm" for="profile-photo-input">{{ 'settings.profile.uploadPhoto' | translate }}</label>
+      <input id="profile-photo-input" type="file" accept="image/*" class="sr-only" (change)="onPhotoSelected($event)" />
+      <p class="avatar-upload__hint">{{ 'settings.profile.uploadHint' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field" [class.form-field--error]="hasError('name')">
+      <label class="form-label">{{ 'settings.profile.name' | translate }} <span class="required">*</span></label>
+      <input class="form-input" type="text" [ngModel]="settings.name" (ngModelChange)="update('name', $event)" [class.form-input--error]="hasError('name')" />
+      @if (hasError('name')) { <span class="field-error">{{ errorMsg('name') }}</span> }
+    </div>
+
+    <div class="form-field" [class.form-field--error]="hasError('email')">
+      <label class="form-label">{{ 'admins.email' | translate }} <span class="required">*</span></label>
+      <input class="form-input" type="email" [ngModel]="settings.email" (ngModelChange)="update('email', $event)" [class.form-input--error]="hasError('email')" />
+      @if (hasError('email')) { <span class="field-error">{{ errorMsg('email') }}</span> }
+    </div>
+
+    <div class="form-field" [class.form-field--error]="hasError('username')">
+      <label class="form-label">{{ 'settings.profile.username' | translate }} <span class="required">*</span></label>
+      <input class="form-input" type="text" [ngModel]="settings.username" (ngModelChange)="update('username', $event)" [class.form-input--error]="hasError('username')" />
+      @if (hasError('username')) { <span class="field-error">{{ errorMsg('username') }}</span> }
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.profile.jobTitle' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.jobTitle" (ngModelChange)="update('jobTitle', $event)" />
+    </div>
+
+    <div class="form-field" [class.form-field--error]="hasError('phone')">
+      <label class="form-label">{{ 'admins.phone' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.phone" (ngModelChange)="update('phone', $event)" [class.form-input--error]="hasError('phone')" />
+      @if (hasError('phone')) { <span class="field-error">{{ errorMsg('phone') }}</span> }
+    </div>
+
+    <div class="form-field form-field--full">
+      <label class="form-label">{{ 'settings.profile.bio' | translate }}</label>
+      <textarea
+        class="form-textarea"
+        rows="3"
+        [maxlength]="bioMax"
+        [ngModel]="settings.bio"
+        (ngModelChange)="update('bio', $event)"
+      ></textarea>
+      <span class="form-hint">{{ 'settings.general.charCount' | translate: { count: settings.bio.length, max: bioMax } }}</span>
+    </div>
+  </div>
+
+  <div class="settings-card__footer">
+    <button class="btn-primary" type="button" (click)="save.emit()">{{ 'settings.profile.saveButton' | translate }}</button>
+  </div>
+</div>
