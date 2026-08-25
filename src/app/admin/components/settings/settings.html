@@ -163,54 +163,13 @@
 
         <!-- ══════════════════ PROFILE ══════════════════ -->
         @if (activeCategory() === 'profile') {
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.profile.title' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.profile.subtitle' | translate }}</p>
-            </div>
-
-            <div class="avatar-upload">
-              <div class="avatar-upload__preview">{{ draft().profile.avatar }}</div>
-              <div class="avatar-upload__actions">
-                <button class="btn-ghost btn-ghost--sm">{{ 'settings.profile.uploadPhoto' | translate }}</button>
-                <p class="avatar-upload__hint">{{ 'settings.profile.uploadHint' | translate }}</p>
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.profile.name' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().profile.name" (ngModelChange)="updateProfile('name', $event)" [class.form-input--error]="formTouched() && profileErrors()['name']" />
-                @if (formTouched() && profileErrors()['name']) { <span class="field-error">{{ profileErrors()['name'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'admins.email' | translate }}</label>
-                <input class="form-input" type="email" [ngModel]="draft().profile.email" (ngModelChange)="updateProfile('email', $event)" [class.form-input--error]="formTouched() && profileErrors()['email']" />
-                @if (formTouched() && profileErrors()['email']) { <span class="field-error">{{ profileErrors()['email'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.profile.username' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().profile.username" (ngModelChange)="updateProfile('username', $event)" [class.form-input--error]="formTouched() && profileErrors()['username']" />
-                @if (formTouched() && profileErrors()['username']) { <span class="field-error">{{ profileErrors()['username'] }}</span> }
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.profile.jobTitle' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().profile.jobTitle" (ngModelChange)="updateProfile('jobTitle', $event)" />
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'admins.phone' | translate }}</label>
-                <input class="form-input" type="text" [ngModel]="draft().profile.phone" (ngModelChange)="updateProfile('phone', $event)" [class.form-input--error]="formTouched() && profileErrors()['phone']" />
-                @if (formTouched() && profileErrors()['phone']) { <span class="field-error">{{ profileErrors()['phone'] }}</span> }
-              </div>
-              <div class="form-field form-field--full">
-                <label class="form-label">{{ 'settings.profile.bio' | translate }}</label>
-                <textarea class="form-textarea" rows="3" [ngModel]="draft().profile.bio" (ngModelChange)="updateProfile('bio', $event)"></textarea>
-              </div>
-            </div>
-            <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.profile.saveButton' | translate }}</button>
-            </div>
-          </div>
+          <app-profile-settings
+            [settings]="draft().profile"
+            [formTouched]="formTouched()"
+            [errors]="profileErrors()"
+            (settingsChange)="onProfileSettingsChange($event)"
+            (save)="saveChanges()"
+          />
         }
 
         <!-- ══════════════════ SECURITY ══════════════════ -->
