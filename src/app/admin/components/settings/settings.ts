@@ -9,11 +9,13 @@ import {
   generateMockSettings,
   COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, DATE_FORMAT_OPTIONS, WAREHOUSE_OPTIONS,
   GeneralSettings,
+  ProfileSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode, isSupportedLanguage } from '../../../localization/language.model';
 import { GeneralSettingsComponent } from '../sections/settings/general-settings/general-settings';
+import { ProfileSettingsComponent } from '../sections/settings/profile-settings/profile-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -25,7 +27,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent],
+  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
@@ -414,5 +416,9 @@ export class Settings {
   // ADD: bridges the child's patch-style output to the draft signal.
   onGeneralSettingsChange(patch: Partial<GeneralSettings>): void {
     this.draft.update(d => ({ ...d, general: { ...d.general, ...patch } }));
+  }
+
+  onProfileSettingsChange(patch: Partial<ProfileSettings>): void {
+    this.draft.update(d => ({ ...d, profile: { ...d.profile, ...patch } }));
   }
 }
