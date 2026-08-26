@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output, computed, inject, signal } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SecuritySettings, AdminSession } from '../../../../model/settings.model';
-import { LanguageService } from '../../../../localization/language.service';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { LanguageService } from '../../../../../localization/language.service';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-security-settings',
