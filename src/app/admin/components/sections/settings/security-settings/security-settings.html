@@ -94,7 +94,21 @@
           <th class="th--actions"></th>
         </tr>
       </thead>
-      
+      <tbody>
+        @for (s of settings.sessions; track s.id) {
+          <tr class="table-row">
+            <td class="td-strong">{{ s.device }} @if (s.current) { <span class="current-pill">{{ 'settings.security.thisDevice' | translate }}</span> }</td>
+            <td class="td-mono">{{ s.ip }}</td>
+            <td class="text-mid">{{ s.location }}</td>
+            <td class="td-light">{{ formatRelative(s.lastActivity) }}</td>
+            <td class="td--actions">
+              @if (!s.current) {
+                <button class="btn-ghost btn-ghost--sm" (click)="requestTerminateSession(s)">{{ 'settings.security.terminateSession' | translate }}</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
     </table>
   </div>
 </div>
