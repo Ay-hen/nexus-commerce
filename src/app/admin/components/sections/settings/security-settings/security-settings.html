@@ -1,1 +1,100 @@
-<p>security-settings works!</p>
+<!-- ══════════════════ CHANGE PASSWORD ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.security.changePassword' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.security.changePasswordSub' | translate }}</p>
+  </div>
+  <div class="form-grid">
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.security.newPassword' | translate }}</label>
+      <input class="form-input" type="password" [ngModel]="newPassword()" (ngModelChange)="newPassword.set($event)" [placeholder]="'settings.security.newPasswordPlaceholder' | translate" />
+      @if (newPassword()) {
+        <div class="strength-meter">
+          <div class="strength-meter__bar">
+            <div class="strength-meter__fill" [class]="'strength-meter__fill--' + passwordStrength()" [style.width.%]="passwordStrength() * 25"></div>
+          </div>
+          <span class="strength-meter__label">{{ passwordStrengthLabel() }}</span>
+        </div>
+      }
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.security.confirmPassword' | translate }}</label>
+      <input class="form-input" type="password" [ngModel]="confirmPassword()" (ngModelChange)="confirmPassword.set($event)" [placeholder]="'settings.security.confirmPasswordPlaceholder' | translate" [class.form-input--error]="!passwordsMatch()" />
+      @if (!passwordsMatch()) { <span class="field-error">{{ 'validation.passwordsDoNotMatch' | translate }}</span> }
+    </div>
+  </div>
+  <div class="settings-card__footer">
+    <button class="btn-primary" (click)="updatePassword()" [disabled]="!newPassword() || !confirmPassword()">{{ 'settings.security.updatePasswordButton' | translate }}</button>
+  </div>
+</div>
+
+<!-- ══════════════════ SECURITY PREFERENCES ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.security.preferencesTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.security.preferencesSub' | translate }}</p>
+  </div>
+  <div class="toggle-list">
+    <label class="toggle-row">
+      <span class="toggle-row__text">
+        <span class="toggle-row__title">{{ 'settings.security.twoFactor' | translate }}</span>
+        <span class="toggle-row__sub">{{ 'settings.security.twoFactorSub' | translate }}</span>
+      </span>
+      <span class="switch">
+        <input type="checkbox" [checked]="settings.twoFactorEnabled" (change)="update('twoFactorEnabled', $any($event.target).checked)" />
+        <span class="switch__track"><span class="switch__thumb"></span></span>
+      </span>
+    </label>
+    <label class="toggle-row">
+      <span class="toggle-row__text">
+        <span class="toggle-row__title">{{ 'settings.security.rememberLogin' | translate }}</span>
+        <span class="toggle-row__sub">{{ 'settings.security.rememberLoginSub' | translate }}</span>
+      </span>
+      <span class="switch">
+        <input type="checkbox" [checked]="settings.rememberLogin" (change)="update('rememberLogin', $any($event.target).checked)" />
+        <span class="switch__track"><span class="switch__thumb"></span></span>
+      </span>
+    </label>
+    <label class="toggle-row">
+      <span class="toggle-row__text">
+        <span class="toggle-row__title">{{ 'settings.security.loginAlerts' | translate }}</span>
+        <span class="toggle-row__sub">{{ 'settings.security.loginAlertsSub' | translate }}</span>
+      </span>
+      <span class="switch">
+        <input type="checkbox" [checked]="settings.loginAlerts" (change)="update('loginAlerts', $any($event.target).checked)" />
+        <span class="switch__track"><span class="switch__thumb"></span></span>
+      </span>
+    </label>
+  </div>
+  <div class="form-field" style="max-width: 260px; margin-top: 4px;">
+    <label class="form-label">{{ 'settings.security.sessionTimeout' | translate }}</label>
+    <input class="form-input" type="number" min="5" max="480" [ngModel]="settings.sessionTimeoutMinutes" (ngModelChange)="update('sessionTimeoutMinutes', $event)" />
+  </div>
+</div>
+
+<!-- ══════════════════ ACTIVE SESSIONS ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <div class="settings-card__head-row">
+      <div>
+        <h2 class="settings-card__title">{{ 'settings.security.activeSessions' | translate }}</h2>
+        <p class="settings-card__sub">{{ 'settings.security.activeSessionsSub' | translate }}</p>
+      </div>
+      <button class="btn-ghost btn-ghost--terminate" (click)="requestTerminateAll()">{{ 'settings.security.terminateAll' | translate }}</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'settings.security.table.device' | translate }}</th>
+          <th>{{ 'settings.security.table.ipAddress' | translate }}</th>
+          <th>{{ 'settings.security.table.location' | translate }}</th>
+          <th>{{ 'settings.security.table.lastActivity' | translate }}</th>
+          <th class="th--actions"></th>
+        </tr>
+      </thead>
+      
+    </table>
+  </div>
+</div>
