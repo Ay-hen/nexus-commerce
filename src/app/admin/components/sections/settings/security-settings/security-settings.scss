@@ -207,4 +207,6 @@ $ease-spring: cubic-bezier(.34,1.56,.64,1);
 
 @media (prefers-reduced-motion: reduce) {
   .settings-card { animation: none !important; transition: none !important; }
+  
+
 }
