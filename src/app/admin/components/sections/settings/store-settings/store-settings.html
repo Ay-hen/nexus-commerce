@@ -1,1 +1,101 @@
-<p>store-settings works!</p>
+<!-- ══════════════════ STORE BRANDING ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.store.brandingTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.store.brandingSub' | translate }}</p>
+  </div>
+  <div class="asset-grid">
+    <div class="asset-upload">
+      <div class="asset-upload__preview asset-upload__preview--square"><img [src]="settings.logoUrl" [alt]="'settings.store.logo' | translate" /></div>
+      <p class="asset-upload__label">{{ 'settings.store.logo' | translate }}</p>
+      <label class="btn-ghost btn-ghost--sm" for="store-logo-input">{{ 'settings.store.uploadButton' | translate }}</label>
+      <input id="store-logo-input" type="file" accept="image/*" class="sr-only" (change)="onAssetSelected($event)" />
+    </div>
+    <div class="asset-upload">
+      <div class="asset-upload__preview asset-upload__preview--square"><img [src]="settings.faviconUrl" [alt]="'settings.store.favicon' | translate" /></div>
+      <p class="asset-upload__label">{{ 'settings.store.favicon' | translate }}</p>
+      <label class="btn-ghost btn-ghost--sm" for="store-favicon-input">{{ 'settings.store.uploadButton' | translate }}</label>
+      <input id="store-favicon-input" type="file" accept="image/*" class="sr-only" (change)="onAssetSelected($event)" />
+    </div>
+    <div class="asset-upload asset-upload--wide">
+      <div class="asset-upload__preview asset-upload__preview--wide"><img [src]="settings.bannerUrl" [alt]="'settings.store.banner' | translate" /></div>
+      <p class="asset-upload__label">{{ 'settings.store.banner' | translate }}</p>
+      <label class="btn-ghost btn-ghost--sm" for="store-banner-input">{{ 'settings.store.uploadButton' | translate }}</label>
+      <input id="store-banner-input" type="file" accept="image/*" class="sr-only" (change)="onAssetSelected($event)" />
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ STORE STATUS ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.store.statusTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.store.statusSub' | translate }}</p>
+  </div>
+  <label class="toggle-row">
+    <span class="toggle-row__text">
+      <span class="toggle-row__title">{{ 'settings.store.maintenanceMode' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.store.maintenanceModeSub' | translate }}</span>
+    </span>
+    <span class="switch">
+      <input type="checkbox" [checked]="settings.maintenanceMode" (change)="update('maintenanceMode', $any($event.target).checked)" />
+      <span class="switch__track"><span class="switch__thumb"></span></span>
+    </span>
+  </label>
+  <div class="form-field" style="max-width: 340px; margin-top: 14px;">
+    <label class="form-label">{{ 'settings.store.statusTitle' | translate }}</label>
+    <div class="segmented">
+      @for (s of storeStatusOptions; track s) {
+        <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.storeStatus === s" (click)="update('storeStatus', s)">{{ storeStatusKey(s) | translate }}</button>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PRICING & SHIPPING ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.store.pricingShippingTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.store.pricingShippingSub' | translate }}</p>
+  </div>
+  <div class="form-grid">
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.store.taxPercentage' | translate }}</label>
+      <div class="input-suffix-wrap">
+        <input class="form-input field__input--suffixed" type="number" min="0" max="100" step="0.1" [ngModel]="settings.taxPercentage" (ngModelChange)="update('taxPercentage', $event)" />
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.store.shippingFee' | translate }}</label>
+      <input class="form-input" type="number" min="0" step="0.01" [ngModel]="settings.shippingFee" (ngModelChange)="update('shippingFee', $event)" />
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.store.freeShippingThreshold' | translate }}</label>
+      <input class="form-input" type="number" min="0" step="1" [ngModel]="settings.freeShippingThreshold" (ngModelChange)="update('freeShippingThreshold', $event)" />
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.store.defaultWarehouse' | translate }}</label>
+      <div class="select-wrap select-wrap--block">
+        <select class="form-select" [ngModel]="settings.defaultWarehouse" (ngModelChange)="update('defaultWarehouse', $event)">
+          @for (w of warehouseOptions; track w) { <option [value]="w">{{ w }}</option> }
+        </select>
+        <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live checkout preview -->
+  <div class="checkout-preview">
+    <p class="checkout-preview__label">{{ 'settings.store.checkoutPreviewLabel' | translate }}</p>
+    <div class="checkout-preview__row"><span>{{ 'orders.subtotal' | translate }}</span><span>{{ formatCurrency(samplePrice()) }}</span></div>
+    <div class="checkout-preview__row"><span>{{ 'orders.shippingCost' | translate }}</span><span>{{ previewShippingCost() === 0 ? ('settings.store.freeLabel' | translate) : formatCurrency(previewShippingCost()) }}</span></div>
+    <div class="checkout-preview__row"><span>{{ 'orders.tax' | translate }}</span><span>{{ formatCurrency(previewTax()) }}</span></div>
+    <div class="checkout-preview__divider"></div>
+    <div class="checkout-preview__row checkout-preview__row--total"><span>{{ 'orders.grandTotal' | translate }}</span><span>{{ formatCurrency(previewTotal()) }}</span></div>
+  </div>
+
+  <div class="settings-card__footer">
+    <button class="btn-primary" type="button" (click)="save.emit()">{{ 'settings.store.saveButton' | translate }}</button>
+  </div>
+</div>
