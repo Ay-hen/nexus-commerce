@@ -95,3 +95,111 @@ $ease-spring: cubic-bezier(.34,1.56,.64,1);
   &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
   &--sm { height: 32px; padding: 0 12px; font-size: .76rem; }
 }
+
+// ── Toggle row / switch ───────────────────────────────────────────────────
+.toggle-row {
+  display: flex; align-items: center; gap: 16px; justify-content: space-between;
+  padding: 14px 4px; cursor: pointer;
+}
+
+.toggle-row__text { display: flex; flex-direction: column; gap: 2px; }
+.toggle-row__title { font-size: .75rem; font-weight: 700; color: $text-primary; }
+.toggle-row__sub { font-size: .74rem; color: $text-light; }
+
+.switch { position: relative; flex-shrink: 0; display: inline-flex; input { position: absolute; opacity: 0; width: 0; height: 0; } }
+.switch__track { width: 40px; height: 22px; border-radius: $radius-pill; background: $border2; position: relative; transition: background .2s $ease; }
+.switch__thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,24,40,.25); transition: transform .2s $ease-spring; }
+.switch input:checked ~ .switch__track { background: $green; }
+.switch input:checked ~ .switch__track .switch__thumb { transform: translateX(18px); }
+
+// ── Segmented control ─────────────────────────────────────────────────────
+.segmented { display: inline-flex; background: $surface2; border: 1px solid $border; border-radius: $radius-sm; overflow: hidden; width: 100%; max-width: 100%; }
+.segmented__btn {
+  flex: 1;
+  height: 38px; padding: 0 16px;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent; border: none;
+  font: inherit; font-size: .8rem; font-weight: 600; color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+
+  &--active { background: $accent; color: #fff; }
+  &:hover:not(&--active) { background: $surface3; }
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 4px;
+
+  @media (max-width: 720px) { grid-template-columns: 1fr; }
+}
+
+.form-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.form-label { font-size: .75rem; font-weight: 600; color: $text-mid; }
+
+.form-input, .form-select {
+  width: 100%;
+  max-width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  background: $surface2;
+  border: 1.5px solid $border;
+  border-radius: $radius-sm;
+  font: inherit;
+  font-size: .85rem;
+  color: $text-primary;
+  transition: border-color .15s $ease, box-shadow .15s, background .15s;
+
+  &::placeholder { color: $text-light; }
+  &:focus { outline: none; background: $surface; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
+}
+
+.form-select { padding-right: 30px; appearance: none; cursor: pointer; }
+
+.input-suffix-wrap { position: relative; display: flex; align-items: center; width: 100%; }
+.input-suffix { position: absolute; right: 11px; font-size: .78rem; color: $text-light; pointer-events: none; }
+.field__input--suffixed { padding-right: 34px; }
+
+.select-wrap { position: relative; min-width: 0; }
+.select-wrap--block { display: block; width: 100%; }
+.select-chevron { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: $text-light; pointer-events: none; }
+
+// ── Checkout preview ──────────────────────────────────────────────────────
+.checkout-preview {
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 16px;
+  margin-top: 18px;
+  max-width: 320px;
+}
+
+.checkout-preview__label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: $text-light; margin: 0 0 10px; }
+.checkout-preview__row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: .8rem; color: $text-mid; }
+.checkout-preview__row--total { font-size: .92rem; font-weight: 800; color: $text-primary; padding-top: 8px; }
+.checkout-preview__divider { height: 1px; background: $border; margin: 4px 0; }
+
+.btn-primary {
+  height: 38px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 190px;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-card { animation: none !important; transition: none !important; }
+}
