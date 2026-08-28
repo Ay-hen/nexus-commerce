@@ -11,6 +11,7 @@ import {
   GeneralSettings,
   ProfileSettings,
   SecuritySettings,
+  StoreSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
@@ -427,5 +428,12 @@ export class Settings {
     this.draft.update(d => ({ ...d, security: { ...d.security, ...patch } }));
   }
 
-  
+  // ADD
+  onStoreSettingsChange(patch: Partial<StoreSettings>): void {
+    this.draft.update(d => ({ ...d, store: { ...d.store, ...patch } }));
+  }
+
+  onChildToast(msg: string): void {
+    this.showToast(msg);
+  }
 }
