@@ -421,4 +421,10 @@ export class Settings {
   onProfileSettingsChange(patch: Partial<ProfileSettings>): void {
     this.draft.update(d => ({ ...d, profile: { ...d.profile, ...patch } }));
   }
+
+  onSecuritySettingsChange(patch: Partial<SecuritySettings>): void {
+    this.draft.update(d => ({ ...d, security: { ...d.security, ...patch } }));
+  }
+
+  
 }
