@@ -10,6 +10,7 @@ import {
   COUNTRY_OPTIONS, CURRENCY_OPTIONS, TIMEZONE_OPTIONS, DATE_FORMAT_OPTIONS, WAREHOUSE_OPTIONS,
   GeneralSettings,
   ProfileSettings,
+  SecuritySettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
