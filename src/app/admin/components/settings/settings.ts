@@ -18,6 +18,7 @@ import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode, isSupportedLanguage } from '../../../localization/language.model';
 import { GeneralSettingsComponent } from '../sections/settings/general-settings/general-settings';
 import { ProfileSettingsComponent } from '../sections/settings/profile-settings/profile-settings';
+import { StoreSettingsComponent } from '../sections/settings/store-settings/store-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -29,7 +30,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent],
+  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent, StoreSettingsComponent],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
