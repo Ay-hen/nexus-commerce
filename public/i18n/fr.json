@@ -1307,10 +1307,8 @@
       "statusTitle": "Statut de la boutique",
       "statusSub": "Contrôlez si les clients peuvent naviguer et acheter en ce moment.",
       "maintenanceMode": "Mode maintenance",
-      "freeShippingThreshold": "Seuil de livraison gratuite",
       "checkoutPreviewLabel": "Aperçu du paiement",
       "freeLabel": "Gratuit",
-      "defaultWarehouse": "Entrepôt par défaut",
       "maintenanceModeSub": "Désactiver temporairement la boutique pour les clients pendant vos modifications.",
       "status": {
         "open": "Ouverte",
