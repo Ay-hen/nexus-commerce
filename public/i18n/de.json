@@ -1306,10 +1306,8 @@
       "statusTitle": "Shop-Status",
       "statusSub": "Legen Sie fest, ob Kunden gerade stöbern und einkaufen können.",
       "maintenanceMode": "Wartungsmodus",
-            "freeShippingThreshold": "Schwelle für kostenlosen Versand",
       "checkoutPreviewLabel": "Checkout-Vorschau",
       "freeLabel": "Kostenlos",
-      "defaultWarehouse": "Standardlager",
       "maintenanceModeSub": "Den Shop für Kunden vorübergehend deaktivieren, während Sie Änderungen vornehmen.",
       "status": {
         "open": "Geöffnet",
