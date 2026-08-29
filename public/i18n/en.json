@@ -1308,6 +1308,10 @@
       "statusSub": "Control whether customers can browse and purchase right now.",
       "maintenanceMode": "Maintenance Mode",
       "maintenanceModeSub": "Temporarily disable the storefront for customers while you make changes.",
+      "freeShippingThreshold": "Free Shipping Threshold",
+      "checkoutPreviewLabel": "Checkout Preview",
+      "freeLabel": "Free",
+      "defaultWarehouse": "Default Warehouse",
       "status": {
         "open": "Open",
         "closed": "Closed",
