@@ -1276,6 +1276,10 @@
       "statusTitle": "Estado de la tienda",
       "statusSub": "Controla si los clientes pueden navegar y comprar en este momento.",
       "maintenanceMode": "Modo mantenimiento",
+            "freeShippingThreshold": "Umbral de envío gratuito",
+      "checkoutPreviewLabel": "Vista previa del pago",
+      "freeLabel": "Gratis",
+      "defaultWarehouse": "Almacén predeterminado",
       "maintenanceModeSub": "Deshabilitar temporalmente la tienda para los clientes mientras realizas cambios.",
       "status": {
         "open": "Abierta",
