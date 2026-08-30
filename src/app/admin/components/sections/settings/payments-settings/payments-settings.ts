@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output, signal, inject } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentGateway, PaymentGatewayId } from '../../../../model/settings.model';
-import { LanguageService } from '../../../../localization/language.service';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { LanguageService } from '../../../../../localization/language.service';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-payments-settings',
