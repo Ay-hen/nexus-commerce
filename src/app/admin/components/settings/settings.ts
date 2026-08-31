@@ -438,4 +438,20 @@ export class Settings {
   onChildToast(msg: string): void {
     this.showToast(msg);
   }
+
+  onStoreSettingsChange(patch: Partial<StoreSettings>): void {
+    this.draft.update(d => ({ ...d, store: { ...d.store, ...patch } }));
+  }
+
+  // ADD
+  onPaymentGatewayChange(event: { id: PaymentGatewayId; patch: Partial<PaymentGateway> }): void {
+    this.draft.update(d => ({
+      ...d,
+      payments: d.payments.map(p => p.id === event.id ? { ...p, ...event.patch } : p),
+    }));
+  }
+
+  onChildToast(msg: string): void {
+    this.showToast(msg);
+  }
 }
