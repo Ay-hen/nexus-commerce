@@ -12,6 +12,7 @@ import {
   ProfileSettings,
   SecuritySettings,
   StoreSettings,
+  EmailSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
@@ -436,7 +437,12 @@ export class Settings {
     this.draft.update(d => ({ ...d, store: { ...d.store, ...patch } }));
   }
 
-  // ADD
+
+  onChildToast(msg: string): void {
+    this.showToast(msg);
+  }
+
+
   onPaymentGatewayChange(event: { id: PaymentGatewayId; patch: Partial<PaymentGateway> }): void {
     this.draft.update(d => ({
       ...d,
@@ -444,7 +450,8 @@ export class Settings {
     }));
   }
 
-  onChildToast(msg: string): void {
-    this.showToast(msg);
+  // ADD
+  onEmailSettingsChange(patch: Partial<EmailSettings>): void {
+    this.draft.update(d => ({ ...d, email: { ...d.email, ...patch } }));
   }
 }
