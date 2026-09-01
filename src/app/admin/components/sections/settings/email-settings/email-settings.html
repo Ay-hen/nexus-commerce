@@ -1,1 +1,55 @@
-<p>email-settings works!</p>
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.email.title' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.email.subtitle' | translate }}</p>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field" [class.form-field--error]="hasError('smtpHost')">
+      <label class="form-label">{{ 'settings.email.smtpHost' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.smtpHost" (ngModelChange)="update('smtpHost', $event)" [class.form-input--error]="hasError('smtpHost')" />
+      @if (hasError('smtpHost')) { <span class="field-error">{{ errorMsg('smtpHost') }}</span> }
+    </div>
+    <div class="form-field" [class.form-field--error]="hasError('smtpPort')">
+      <label class="form-label">{{ 'settings.email.smtpPort' | translate }}</label>
+      <input class="form-input" type="number" [ngModel]="settings.smtpPort" (ngModelChange)="update('smtpPort', $event)" [class.form-input--error]="hasError('smtpPort')" />
+      @if (hasError('smtpPort')) { <span class="field-error">{{ errorMsg('smtpPort') }}</span> }
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.profile.username' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.username" (ngModelChange)="update('username', $event)" />
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'admins.password' | translate }}</label>
+      <div class="masked-input">
+        <input class="form-input" [type]="isPasswordRevealed() ? 'text' : 'password'" [ngModel]="settings.password" (ngModelChange)="update('password', $event)" />
+        <button type="button" class="masked-input__toggle" (click)="togglePasswordReveal()">
+          @if (isPasswordRevealed()) { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.77 21.77 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> }
+          @else { <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> }
+        </button>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.email.encryption' | translate }}</label>
+      <div class="segmented">
+        @for (e of encryptionOptions; track e) {
+          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.encryption === e" (click)="update('encryption', e)">{{ encryptionKey(e) | translate }}</button>
+        }
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.email.senderName' | translate }}</label>
+      <input class="form-input" type="text" [ngModel]="settings.senderName" (ngModelChange)="update('senderName', $event)" />
+    </div>
+    <div class="form-field" [class.form-field--error]="hasError('senderEmail')">
+      <label class="form-label">{{ 'settings.email.senderEmail' | translate }}</label>
+      <input class="form-input" type="email" [ngModel]="settings.senderEmail" (ngModelChange)="update('senderEmail', $event)" [class.form-input--error]="hasError('senderEmail')" />
+      @if (hasError('senderEmail')) { <span class="field-error">{{ errorMsg('senderEmail') }}</span> }
+    </div>
+  </div>
+
+  <div class="settings-card__footer">
+    <button class="btn-ghost" type="button" (click)="sendTestEmail()">{{ 'settings.email.sendTestEmail' | translate }}</button>
+    <button class="btn-primary" type="button" (click)="requestSave()">{{ 'settings.email.saveButton' | translate }}</button>
+  </div>
+</div>
