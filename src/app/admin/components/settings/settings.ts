@@ -212,8 +212,7 @@ export class Settings {
   saveChanges(): void {
     this.formTouched.set(true);
     const hasErrors = Object.keys(this.generalErrors()).length > 0
-      || Object.keys(this.profileErrors()).length > 0
-      || Object.keys(this.emailErrors()).length > 0;
+      || Object.keys(this.profileErrors()).length > 0;
 
     if (hasErrors) {
       this.showToast(this.lang.translate('settings.toasts.fixFieldsBeforeSaving'));
@@ -222,13 +221,6 @@ export class Settings {
 
     this.saved.set(JSON.parse(JSON.stringify(this.draft())));
     this.showToast(this.lang.translate('toasts.savedSuccessfully'));
-
-    // Full reload so every route/component in the app re-initializes against
-    // the language currently active (already persisted to localStorage by
-    // updateGeneralLanguage() / LanguageService.changeLanguage()). This is a
-    // deliberate blunt-force guarantee that the whole app reflects the chosen
-    // language consistently, not just the components already mounted.
-    // Short delay so the "Saved successfully" toast is visible before reload.
     setTimeout(() => window.location.reload(), 500);
   }
 
