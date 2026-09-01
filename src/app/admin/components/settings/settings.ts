@@ -22,6 +22,7 @@ import { ProfileSettingsComponent } from '../sections/settings/profile-settings/
 import { StoreSettingsComponent } from '../sections/settings/store-settings/store-settings';
 import { SecuritySettingsComponent } from '../sections/settings/security-settings/security-settings';
 import { PaymentsSettingsComponent } from '../sections/settings/payments-settings/payments-settings';
+import { EmailSettingsComponent } from '../sections/settings/email-settings/email-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -33,7 +34,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent, StoreSettingsComponent, SecuritySettingsComponent, PaymentsSettingsComponent],
+  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent, StoreSettingsComponent, SecuritySettingsComponent, PaymentsSettingsComponent, EmailSettingsComponent],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
