@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output, signal, inject } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmailSettings, SmtpEncryption } from '../../../../model/settings.model';
-import { LanguageService } from '../../../../localization/language.service';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { LanguageService } from '../../../../../localization/language.service';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
