@@ -1,0 +1,101 @@
+// notifications-settings.scss — self-contained, mirrors prior sections' tokens
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$accent:        #4F46E5;
+$accent-glow:   rgba(79,70,229,.18);
+
+$green:         #10B981;
+
+$radius-sm:  8px;
+$radius-lg:  18px;
+$radius-pill: 999px;
+
+$shadow-card: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$ease: cubic-bezier(.25,.1,.25,1);
+$ease-spring: cubic-bezier(.34,1.56,.64,1);
+
+@keyframes ns-pop-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: $text-primary;
+}
+
+.settings-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 22px;
+  box-shadow: $shadow-card;
+  animation: ns-pop-in .22s $ease both;
+  min-width: 0;
+}
+
+.settings-card__head { margin-bottom: 18px; }
+.settings-card__title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 4px; letter-spacing: -.01em; }
+.settings-card__sub { font-size: .8rem; color: $text-light; }
+
+.settings-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid $border;
+}
+
+// ── Toggle rows / switches ────────────────────────────────────────────────
+.toggle-list { display: flex; flex-direction: column; gap: 4px; }
+
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 4px;
+  min-height: 68px;
+  border-bottom: 1px solid $border;
+  cursor: pointer;
+
+  &:last-child { border-bottom: none; }
+}
+
+.toggle-row__text { display: flex; flex-direction: column; gap: 2px; }
+.toggle-row__title { font-size: .75rem; font-weight: 700; color: $text-primary; }
+.toggle-row__sub { font-size: .74rem; color: $text-light; }
+
+.switch { position: relative; flex-shrink: 0; display: inline-flex; input { position: absolute; opacity: 0; width: 0; height: 0; } }
+.switch__track { width: 40px; height: 22px; border-radius: $radius-pill; background: $border2; position: relative; transition: background .2s $ease; }
+.switch__thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,24,40,.25); transition: transform .2s $ease-spring; }
+.switch input:checked ~ .switch__track { background: $green; }
+.switch input:checked ~ .switch__track .switch__thumb { transform: translateX(18px); }
+
+.btn-primary {
+  height: 38px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 220px;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-card { animation: none !important; transition: none !important; }
+}
