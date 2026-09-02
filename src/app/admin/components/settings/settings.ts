@@ -24,6 +24,7 @@ import { StoreSettingsComponent } from '../sections/settings/store-settings/stor
 import { SecuritySettingsComponent } from '../sections/settings/security-settings/security-settings';
 import { PaymentsSettingsComponent } from '../sections/settings/payments-settings/payments-settings';
 import { EmailSettingsComponent } from '../sections/settings/email-settings/email-settings';
+import { NotificationsSettingsComponent } from '../sections/settings/notifications-settings/notifications-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -35,7 +36,18 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, TranslatePipe, GeneralSettingsComponent, ProfileSettingsComponent, StoreSettingsComponent, SecuritySettingsComponent, PaymentsSettingsComponent, EmailSettingsComponent],
+  imports: [
+    CommonModule,
+    FormsModule, 
+    TranslatePipe, 
+    GeneralSettingsComponent, 
+    ProfileSettingsComponent, 
+    StoreSettingsComponent, 
+    SecuritySettingsComponent, 
+    PaymentsSettingsComponent, 
+    EmailSettingsComponent,
+    NotificationsSettingsComponent
+  ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
@@ -269,10 +281,6 @@ export class Settings {
 
   updateEmail<K extends keyof SettingsModel['email']>(key: K, value: SettingsModel['email'][K]): void {
     this.draft.update(d => ({ ...d, email: { ...d.email, [key]: value } }));
-  }
-
-  updateNotifications<K extends keyof SettingsModel['notifications']>(key: K, value: SettingsModel['notifications'][K]): void {
-    this.draft.update(d => ({ ...d, notifications: { ...d.notifications, [key]: value } }));
   }
 
   updateAppearance<K extends keyof SettingsModel['appearance']>(key: K, value: SettingsModel['appearance'][K]): void {
