@@ -13,6 +13,7 @@ import {
   SecuritySettings,
   StoreSettings,
   EmailSettings,
+  NotificationSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
@@ -443,8 +444,13 @@ export class Settings {
     }));
   }
 
-  // ADD
+
   onEmailSettingsChange(patch: Partial<EmailSettings>): void {
     this.draft.update(d => ({ ...d, email: { ...d.email, ...patch } }));
+  }
+
+  // ADD
+  onNotificationsSettingsChange(patch: Partial<NotificationSettings>): void {
+    this.draft.update(d => ({ ...d, notifications: { ...d.notifications, ...patch } }));
   }
 }
