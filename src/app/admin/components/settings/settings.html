@@ -213,66 +213,11 @@
 
         <!-- ══════════════════ NOTIFICATIONS ══════════════════ -->
         @if (activeCategory() === 'notifications') {
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.notifications.channelsTitle' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.notifications.channelsSub' | translate }}</p>
-            </div>
-            <div class="toggle-list">
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.email' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.emailSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.emailNotifications" (change)="updateNotifications('emailNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.push' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.pushSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.pushNotifications" (change)="updateNotifications('pushNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.sms' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.smsSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.smsNotifications" (change)="updateNotifications('smsNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.notifications.activityAlertsTitle' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.notifications.activityAlertsSub' | translate }}</p>
-            </div>
-            <div class="toggle-list">
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.order' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.orderSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.orderNotifications" (change)="updateNotifications('orderNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.customer' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.customerSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.customerNotifications" (change)="updateNotifications('customerNotifications', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.inventory' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.inventorySub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.inventoryAlerts" (change)="updateNotifications('inventoryAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.lowStock' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.lowStockSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.lowStockAlerts" (change)="updateNotifications('lowStockAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.review' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.reviewSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.reviewAlerts" (change)="updateNotifications('reviewAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.adminLogin' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.adminLoginSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.adminLoginAlerts" (change)="updateNotifications('adminLoginAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.notifications.activityLog' | translate }}</span><span class="toggle-row__sub">{{ 'settings.notifications.activityLogSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().notifications.activityLogAlerts" (change)="updateNotifications('activityLogAlerts', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-            </div>
-            <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.notifications.saveButton' | translate }}</button>
-            </div>
-          </div>
+          <app-notifications-settings
+            [settings]="draft().notifications"
+            (settingsChange)="onNotificationsSettingsChange($event)"
+            (save)="saveChanges()"
+          />
         }
 
         <!-- ══════════════════ APPEARANCE ══════════════════ -->
