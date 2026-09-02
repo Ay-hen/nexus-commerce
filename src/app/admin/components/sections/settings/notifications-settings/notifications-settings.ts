@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotificationSettings } from '../../../../model/settings.model';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 @Component({
   selector: 'app-notifications-settings',
