@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppearanceSettings, ThemeMode, SidebarStyle, FontSize } from '../../../../model/settings.model';
-import { TranslatePipe } from '../../../../localization/translate.pipe';
+import { TranslatePipe } from '../../../../../localization/translate.pipe';
 
 const ACCENT_SWATCHES = ['#4F46E5', '#0EA5E9', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#8B5CF6'];
 
