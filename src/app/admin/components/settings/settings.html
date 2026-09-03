@@ -222,92 +222,11 @@
 
         <!-- ══════════════════ APPEARANCE ══════════════════ -->
         @if (activeCategory() === 'appearance') {
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.appearance.theme' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.appearance.themeSub' | translate }}</p>
-            </div>
-            <div class="segmented segmented--lg">
-              @for (t of themeOptions; track t) {
-                <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.theme === t" (click)="updateAppearance('theme', t)">{{ themeKey(t) | translate }}</button>
-              }
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.appearance.primaryColor' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.appearance.primaryColorSub' | translate }}</p>
-            </div>
-            <div class="color-swatches">
-              @for (c of primaryColorSwatches; track c) {
-                <button type="button" class="color-swatch" [class.color-swatch--active]="draft().appearance.primaryColor === c" [style.background]="c" (click)="updateAppearance('primaryColor', c)" [attr.aria-label]="c"></button>
-              }
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.appearance.layoutDensityTitle' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.appearance.layoutDensitySub' | translate }}</p>
-            </div>
-            <div class="form-grid">
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.appearance.sidebarStyle' | translate }}</label>
-                <div class="segmented">
-                  @for (s of sidebarStyleOptions; track s) {
-                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.sidebarStyle === s" (click)="updateAppearance('sidebarStyle', s)">{{ sidebarStyleKey(s) | translate }}</button>
-                  }
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-label">{{ 'settings.appearance.fontSize' | translate }}</label>
-                <div class="segmented">
-                  @for (f of fontSizeOptions; track f) {
-                    <button type="button" class="segmented__btn" [class.segmented__btn--active]="draft().appearance.fontSize === f" (click)="updateAppearance('fontSize', f)">{{ fontSizeKey(f) | translate }}</button>
-                  }
-                </div>
-              </div>
-            </div>
-            <div class="toggle-list" style="margin-top: 16px;">
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.roundedCards' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.roundedCardsSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().appearance.roundedCards" (change)="updateAppearance('roundedCards', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.animations' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.animationsSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().appearance.animations" (change)="updateAppearance('animations', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-              <label class="toggle-row">
-                <span class="toggle-row__text"><span class="toggle-row__title">{{ 'settings.appearance.reducedMotion' | translate }}</span><span class="toggle-row__sub">{{ 'settings.appearance.reducedMotionSub' | translate }}</span></span>
-                <span class="switch"><input type="checkbox" [checked]="draft().appearance.reducedMotion" (change)="updateAppearance('reducedMotion', $any($event.target).checked)" /><span class="switch__track"><span class="switch__thumb"></span></span></span>
-              </label>
-            </div>
-          </div>
-
-          <div class="settings-card">
-            <div class="settings-card__head">
-              <h2 class="settings-card__title">{{ 'settings.appearance.livePreviewTitle' | translate }}</h2>
-              <p class="settings-card__sub">{{ 'settings.appearance.livePreviewSub' | translate }}</p>
-            </div>
-            <div class="appearance-preview" [class.appearance-preview--dark]="draft().appearance.theme === 'Dark'" [class.appearance-preview--compact]="draft().appearance.sidebarStyle === 'Compact'">
-              <div class="appearance-preview__sidebar" [style.background]="draft().appearance.primaryColor + '14'">
-                <div class="appearance-preview__dot" [style.background]="draft().appearance.primaryColor"></div>
-                <div class="appearance-preview__line"></div>
-                <div class="appearance-preview__line" style="width: 60%;"></div>
-                <div class="appearance-preview__line" style="width: 75%;"></div>
-              </div>
-              <div class="appearance-preview__main">
-                <div class="appearance-preview__card" [class.appearance-preview__card--rounded]="draft().appearance.roundedCards">
-                  <div class="appearance-preview__btn" [style.background]="draft().appearance.primaryColor">{{ 'settings.appearance.previewButtonLabel' | translate }}</div>
-                  <p class="appearance-preview__text" [class]="'fs-' + draft().appearance.fontSize.toLowerCase()">{{ 'settings.appearance.previewSampleText' | translate }}</p>
-                </div>
-              </div>
-            </div>
-            <div class="settings-card__footer">
-              <button class="btn-primary" (click)="saveChanges()" [disabled]="!isDirty()">{{ 'settings.appearance.saveButton' | translate }}</button>
-            </div>
-          </div>
+          <app-appearance-settings
+            [settings]="draft().appearance"
+            (settingsChange)="onAppearanceSettingsChange($event)"
+            (save)="saveChanges()"
+          />
         }
 
 
