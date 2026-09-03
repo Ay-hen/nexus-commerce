@@ -26,6 +26,7 @@ import { SecuritySettingsComponent } from '../sections/settings/security-setting
 import { PaymentsSettingsComponent } from '../sections/settings/payments-settings/payments-settings';
 import { EmailSettingsComponent } from '../sections/settings/email-settings/email-settings';
 import { NotificationsSettingsComponent } from '../sections/settings/notifications-settings/notifications-settings';
+import { AppearanceSettingsComponent } from '../sections/settings/appearance-settings/appearance-settings';
 
 interface NavItem { id: SettingsCategory; label: string; icon: string; }
 
@@ -47,7 +48,8 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
     SecuritySettingsComponent, 
     PaymentsSettingsComponent, 
     EmailSettingsComponent,
-    NotificationsSettingsComponent
+    NotificationsSettingsComponent,
+    AppearanceSettingsComponent
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
