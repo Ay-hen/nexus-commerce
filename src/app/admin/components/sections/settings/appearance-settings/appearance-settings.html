@@ -1,1 +1,93 @@
-<p>appearance-settings works!</p>
+<!-- ══════════════════ THEME ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.appearance.themeTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.themeSub' | translate }}</p>
+  </div>
+
+  <div class="theme-grid">
+    @for (t of themeOptions; track t) {
+      <button type="button" class="theme-option" [class.theme-option--active]="settings.themeMode === t" (click)="update('themeMode', t)">
+        <span class="theme-option__swatch" [class]="'theme-option__swatch--' + t.toLowerCase()">
+          <span class="theme-option__swatch-bar"></span>
+          <span class="theme-option__swatch-body"></span>
+        </span>
+        <span class="theme-option__label">{{ themeKey(t) | translate }}</span>
+        @if (settings.themeMode === t) {
+          <span class="theme-option__check">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+        }
+      </button>
+    }
+  </div>
+</div>
+
+<!-- ══════════════════ ACCENT COLOR ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.appearance.accentTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.accentSub' | translate }}</p>
+  </div>
+  <div class="swatch-row">
+    @for (c of accentSwatches; track c) {
+      <button type="button" class="swatch" [style.background]="c" [class.swatch--active]="settings.accentColor === c" (click)="update('accentColor', c)">
+        @if (settings.accentColor === c) {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        }
+      </button>
+    }
+  </div>
+</div>
+
+<!-- ══════════════════ LAYOUT ══════════════════ -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.appearance.layoutTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.layoutSub' | translate }}</p>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.appearance.sidebarStyle' | translate }}</label>
+      <div class="segmented">
+        @for (s of sidebarOptions; track s) {
+          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.sidebarStyle === s" (click)="update('sidebarStyle', s)">{{ sidebarKey(s) | translate }}</button>
+        }
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">{{ 'settings.appearance.fontSize' | translate }}</label>
+      <div class="segmented">
+        @for (f of fontSizeOptions; track f) {
+          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.fontSize === f" (click)="update('fontSize', f)" [style.fontSize]="fontSizePreviewPx(f)">{{ fontSizeKey(f) | translate }}</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <label class="toggle-row">
+    <span class="toggle-row__text">
+      <span class="toggle-row__title">{{ 'settings.appearance.compactMode' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.appearance.compactModeSub' | translate }}</span>
+    </span>
+    <span class="switch">
+      <input type="checkbox" [checked]="settings.compactMode" (change)="update('compactMode', $any($event.target).checked)" />
+      <span class="switch__track"><span class="switch__thumb"></span></span>
+    </span>
+  </label>
+  <label class="toggle-row">
+    <span class="toggle-row__text">
+      <span class="toggle-row__title">{{ 'settings.appearance.animationsEnabled' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.appearance.animationsEnabledSub' | translate }}</span>
+    </span>
+    <span class="switch">
+      <input type="checkbox" [checked]="settings.animationsEnabled" (change)="update('animationsEnabled', $any($event.target).checked)" />
+      <span class="switch__track"><span class="switch__thumb"></span></span>
+    </span>
+  </label>
+
+  <div class="settings-card__footer">
+    <button class="btn-primary" type="button" (click)="save.emit()">{{ 'settings.appearance.saveButton' | translate }}</button>
+  </div>
+</div>
