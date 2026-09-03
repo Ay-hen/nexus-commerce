@@ -24,7 +24,7 @@ export class AppearanceSettingsComponent {
   @Output() save = new EventEmitter<void>();
 
   themeOptions: ThemeMode[] = ['Light', 'Dark', 'System'];
-  sidebarOptions: SidebarStyle[] = ['Expanded', 'Collapsed'];
+  sidebarOptions: SidebarStyle[] = ['Compact', 'Normal'];
   fontSizeOptions: FontSize[] = ['Small', 'Medium', 'Large'];
   accentSwatches = ACCENT_SWATCHES;
 
@@ -38,7 +38,7 @@ export class AppearanceSettingsComponent {
   }
 
   sidebarKey(s: SidebarStyle): string {
-    const map: Record<SidebarStyle, string> = { 'Expanded': 'expanded', 'Collapsed': 'collapsed' };
+    const map: Record<SidebarStyle, string> = { 'Compact': 'compact', 'Normal': 'normal' };
     return 'settings.appearance.sidebarOptions.' + map[s];
   }
 
