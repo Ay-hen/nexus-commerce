@@ -14,6 +14,7 @@ import {
   StoreSettings,
   EmailSettings,
   NotificationSettings,
+  AppearanceSettings,
 } from '../../model/settings.model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
@@ -460,5 +461,9 @@ export class Settings {
   // ADD
   onNotificationsSettingsChange(patch: Partial<NotificationSettings>): void {
     this.draft.update(d => ({ ...d, notifications: { ...d.notifications, ...patch } }));
+  }
+
+  onAppearanceSettingsChange(patch: Partial<AppearanceSettings>): void {
+    this.draft.update(d => ({ ...d, appearance: { ...d.appearance, ...patch } }));
   }
 }
