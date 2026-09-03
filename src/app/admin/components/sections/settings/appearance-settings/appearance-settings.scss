@@ -1,0 +1,179 @@
+// appearance-settings.scss — self-contained, mirrors prior sections' tokens
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
+
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
+
+$accent:        #4F46E5;
+$accent-glow:   rgba(79,70,229,.18);
+
+$green:         #10B981;
+
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  18px;
+$radius-pill: 999px;
+
+$shadow-card: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$ease: cubic-bezier(.25,.1,.25,1);
+$ease-spring: cubic-bezier(.34,1.56,.64,1);
+
+@keyframes as-pop-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: $text-primary;
+}
+
+.settings-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 22px;
+  box-shadow: $shadow-card;
+  animation: as-pop-in .22s $ease both;
+  min-width: 0;
+}
+
+.settings-card__head { margin-bottom: 18px; }
+.settings-card__title { font-size: 1rem; font-weight: 700; color: $text-primary; margin: 0 0 4px; letter-spacing: -.01em; }
+.settings-card__sub { font-size: .8rem; color: $text-light; }
+
+.settings-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid $border;
+}
+
+// ── Theme picker ──────────────────────────────────────────────────────────
+.theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; @media (max-width: 560px) { grid-template-columns: 1fr; } }
+
+.theme-option {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 14px 10px 12px;
+  background: $surface2; border: 2px solid $border; border-radius: $radius-md;
+  cursor: pointer;
+  transition: border-color .15s $ease, background .15s;
+
+  &:hover { border-color: $text-light; }
+  &--active { border-color: $accent; background: rgba($accent, .05); }
+}
+
+.theme-option__swatch {
+  width: 100%; height: 56px; border-radius: 8px; overflow: hidden;
+  display: flex; flex-direction: column; border: 1px solid $border;
+
+  &-bar { height: 30%; }
+  &-body { flex: 1; }
+
+  &--light { .theme-option__swatch-bar { background: #E5E7EB; } .theme-option__swatch-body { background: #FAFAFA; } }
+  &--dark { .theme-option__swatch-bar { background: #0A0E1A; } .theme-option__swatch-body { background: #1E2338; } }
+  &--system { .theme-option__swatch-bar { background: linear-gradient(90deg, #E5E7EB 50%, #0A0E1A 50%); } .theme-option__swatch-body { background: linear-gradient(90deg, #FAFAFA 50%, #1E2338 50%); } }
+}
+
+.theme-option__label { font-size: .78rem; font-weight: 700; color: $text-primary; }
+
+.theme-option__check {
+  position: absolute; top: 8px; right: 8px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: $accent; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+
+// ── Accent swatches ───────────────────────────────────────────────────────
+.swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch {
+  width: 36px; height: 36px; border-radius: 50%; border: 2px solid transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform .15s $ease-spring, box-shadow .15s;
+
+  &:hover { transform: scale(1.08); }
+  &--active { border-color: $surface; box-shadow: 0 0 0 2px currentColor; }
+}
+
+// ── Form / segmented ──────────────────────────────────────────────────────
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 18px;
+
+  @media (max-width: 560px) { grid-template-columns: 1fr; }
+}
+
+.form-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.form-label { font-size: .75rem; font-weight: 600; color: $text-mid; }
+
+.segmented { display: inline-flex; background: $surface2; border: 1px solid $border; border-radius: $radius-sm; overflow: hidden; width: 100%; max-width: 100%; }
+.segmented__btn {
+  flex: 1;
+  height: 40px; padding: 0 14px;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent; border: none;
+  font-family: inherit; font-weight: 600; color: $text-mid; cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+
+  &--active { background: $accent; color: #fff; }
+  &:hover:not(&--active) { background: $surface3; }
+}
+
+// ── Toggle rows / switch ──────────────────────────────────────────────────
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 4px;
+  border-bottom: 1px solid $border;
+  cursor: pointer;
+
+  &:last-of-type { border-bottom: none; }
+}
+
+.toggle-row__text { display: flex; flex-direction: column; gap: 2px; }
+.toggle-row__title { font-size: .75rem; font-weight: 700; color: $text-primary; }
+.toggle-row__sub { font-size: .74rem; color: $text-light; }
+
+.switch { position: relative; flex-shrink: 0; display: inline-flex; input { position: absolute; opacity: 0; width: 0; height: 0; } }
+.switch__track { width: 40px; height: 22px; border-radius: $radius-pill; background: $border2; position: relative; transition: background .2s $ease; }
+.switch__thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,24,40,.25); transition: transform .2s $ease-spring; }
+.switch input:checked ~ .switch__track { background: $green; }
+.switch input:checked ~ .switch__track .switch__thumb { transform: translateX(18px); }
+
+.btn-primary {
+  height: 38px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 190px;
+  background: $accent; border: none;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background .15s $ease, box-shadow .15s;
+
+  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-card { animation: none !important; transition: none !important; }
+}
