@@ -7,13 +7,13 @@
 
   <div class="theme-grid">
     @for (t of themeOptions; track t) {
-      <button type="button" class="theme-option" [class.theme-option--active]="settings.themeMode === t" (click)="update('themeMode', t)">
+      <button type="button" class="theme-option" [class.theme-option--active]="settings.theme === t" (click)="update('theme', t)">
         <span class="theme-option__swatch" [class]="'theme-option__swatch--' + t.toLowerCase()">
           <span class="theme-option__swatch-bar"></span>
           <span class="theme-option__swatch-body"></span>
         </span>
         <span class="theme-option__label">{{ themeKey(t) | translate }}</span>
-        @if (settings.themeMode === t) {
+        @if (settings.theme === t) {
           <span class="theme-option__check">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
           </span>
@@ -31,8 +31,8 @@
   </div>
   <div class="swatch-row">
     @for (c of accentSwatches; track c) {
-      <button type="button" class="swatch" [style.background]="c" [class.swatch--active]="settings.accentColor === c" (click)="update('accentColor', c)">
-        @if (settings.accentColor === c) {
+      <button type="button" class="swatch" [style.background]="c" [class.swatch--active]="settings.primaryColor === c" (click)="update('primaryColor', c)">
+        @if (settings.primaryColor === c) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
         }
       </button>
@@ -68,21 +68,31 @@
 
   <label class="toggle-row">
     <span class="toggle-row__text">
-      <span class="toggle-row__title">{{ 'settings.appearance.compactMode' | translate }}</span>
-      <span class="toggle-row__sub">{{ 'settings.appearance.compactModeSub' | translate }}</span>
+      <span class="toggle-row__title">{{ 'settings.appearance.roundedCards' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.appearance.roundedCardsSub' | translate }}</span>
     </span>
     <span class="switch">
-      <input type="checkbox" [checked]="settings.compactMode" (change)="update('compactMode', $any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.roundedCards" (change)="update('roundedCards', $any($event.target).checked)" />
       <span class="switch__track"><span class="switch__thumb"></span></span>
     </span>
   </label>
   <label class="toggle-row">
     <span class="toggle-row__text">
-      <span class="toggle-row__title">{{ 'settings.appearance.animationsEnabled' | translate }}</span>
-      <span class="toggle-row__sub">{{ 'settings.appearance.animationsEnabledSub' | translate }}</span>
+      <span class="toggle-row__title">{{ 'settings.appearance.animations' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.appearance.animationsSub' | translate }}</span>
     </span>
     <span class="switch">
-      <input type="checkbox" [checked]="settings.animationsEnabled" (change)="update('animationsEnabled', $any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.animations" (change)="update('animations', $any($event.target).checked)" />
+      <span class="switch__track"><span class="switch__thumb"></span></span>
+    </span>
+  </label>
+  <label class="toggle-row">
+    <span class="toggle-row__text">
+      <span class="toggle-row__title">{{ 'settings.appearance.reducedMotion' | translate }}</span>
+      <span class="toggle-row__sub">{{ 'settings.appearance.reducedMotionSub' | translate }}</span>
+    </span>
+    <span class="switch">
+      <input type="checkbox" [checked]="settings.reducedMotion" (change)="update('reducedMotion', $any($event.target).checked)" />
       <span class="switch__track"><span class="switch__thumb"></span></span>
     </span>
   </label>
