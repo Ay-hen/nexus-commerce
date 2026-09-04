@@ -12,6 +12,7 @@ import { NotificationDropdownComponent } from '../notification-dropdown/notifica
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode } from '../../../localization/language.model';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -22,10 +23,13 @@ import { LanguageCode } from '../../../localization/language.model';
 export class AdminLayout {
   auth = inject(AdminAuthService);
   lang = inject(LanguageService);
+  // Single source of truth for Admin theme/appearance — the navbar's
+  // dark-mode button and Settings > Appearance both read/write this same
+  // service, so they can never fall out of sync with each other again.
+  theme = inject(ThemeService);
 
   sidebarCollapsed = signal(false);
   mobileSidebarOpen = signal(false);
-  darkMode = signal(false);
   searchQuery = signal('');
   searchOpen = signal(false);
 
@@ -47,7 +51,9 @@ export class AdminLayout {
   toggleSidebar(): void { this.sidebarCollapsed.update(v => !v); }
   toggleMobileSidebar(): void { this.mobileSidebarOpen.update(v => !v); }
   closeMobileSidebar(): void { this.mobileSidebarOpen.set(false); }
-  toggleDarkMode(): void { this.darkMode.update(v => !v); }
+  // Delegates to ThemeService (toggles Light ⇄ Dark). "System" stays an
+  // opt-in choice only available from Settings > Appearance.
+  toggleDarkMode(): void { this.theme.toggleLightDark(); }
 
   logout(): void { this.auth.logout(); }
 
