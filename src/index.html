@@ -6,6 +6,34 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.png">
+  <script>
+    // Admin theme pre-paint hint: reads the persisted Appearance settings
+    // (same localStorage key ThemeService uses) and sets data-admin-*
+    // attributes on <html> BEFORE Angular bootstraps, so if the Admin
+    // dashboard is reloaded on a Dark/custom setting there's no flash of
+    // the default light theme while the app boots. ThemeService reconciles
+    // and takes over as soon as it's constructed. These attributes never
+    // affect the public site — every Admin CSS rule that reads them is
+    // scoped under `.admin-shell`, which never exists outside /admin.
+    (function () {
+      try {
+        var raw = localStorage.getItem('admin-appearance');
+        var s = raw ? JSON.parse(raw) : null;
+        var theme = (s && s.theme) || 'Light';
+        var resolved = theme === 'System'
+          ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Dark' : 'Light')
+          : theme;
+        var root = document.documentElement;
+        root.setAttribute('data-admin-theme', resolved.toLowerCase());
+        root.setAttribute('data-admin-sidebar', ((s && s.sidebarStyle) || 'Normal').toLowerCase());
+        root.setAttribute('data-admin-font', ((s && s.fontSize) || 'Medium').toLowerCase());
+        root.setAttribute('data-admin-rounded', String(!s || s.roundedCards !== false));
+        var reducedMotion = !!(s && (s.reducedMotion || s.animations === false));
+        root.setAttribute('data-admin-motion', reducedMotion ? 'reduced' : 'full');
+        if (s && s.primaryColor) root.style.setProperty('--admin-accent', s.primaryColor);
+      } catch (e) { /* localStorage unavailable — ThemeService will apply defaults */ }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>
