@@ -1,20 +1,22 @@
 <!-- ══════════════════ THEME ══════════════════ -->
 <div class="settings-card">
   <div class="settings-card__head">
-    <h2 class="settings-card__title">{{ 'settings.appearance.themeTitle' | translate }}</h2>
+    <h2 class="settings-card__title">{{ 'settings.appearance.theme' | translate }}</h2>
     <p class="settings-card__sub">{{ 'settings.appearance.themeSub' | translate }}</p>
   </div>
 
-  <div class="theme-grid">
+  <div class="theme-grid" role="radiogroup" [attr.aria-label]="'settings.appearance.theme' | translate">
     @for (t of themeOptions; track t) {
-      <button type="button" class="theme-option" [class.theme-option--active]="settings.theme === t" (click)="update('theme', t)">
+      <button type="button" class="theme-option" [class.theme-option--active]="settings.theme === t"
+              role="radio" [attr.aria-checked]="settings.theme === t"
+              (click)="update('theme', t)">
         <span class="theme-option__swatch" [class]="'theme-option__swatch--' + t.toLowerCase()">
           <span class="theme-option__swatch-bar"></span>
           <span class="theme-option__swatch-body"></span>
         </span>
         <span class="theme-option__label">{{ themeKey(t) | translate }}</span>
         @if (settings.theme === t) {
-          <span class="theme-option__check">
+          <span class="theme-option__check" aria-hidden="true">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
           </span>
         }
@@ -26,14 +28,16 @@
 <!-- ══════════════════ ACCENT COLOR ══════════════════ -->
 <div class="settings-card">
   <div class="settings-card__head">
-    <h2 class="settings-card__title">{{ 'settings.appearance.accentTitle' | translate }}</h2>
-    <p class="settings-card__sub">{{ 'settings.appearance.accentSub' | translate }}</p>
+    <h2 class="settings-card__title">{{ 'settings.appearance.primaryColor' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.primaryColorSub' | translate }}</p>
   </div>
-  <div class="swatch-row">
+  <div class="swatch-row" role="radiogroup" [attr.aria-label]="'settings.appearance.primaryColor' | translate">
     @for (c of accentSwatches; track c) {
-      <button type="button" class="swatch" [style.background]="c" [class.swatch--active]="settings.primaryColor === c" (click)="update('primaryColor', c)">
+      <button type="button" class="swatch" [style.background]="c" [class.swatch--active]="settings.primaryColor === c"
+              role="radio" [attr.aria-checked]="settings.primaryColor === c" [attr.aria-label]="c"
+              (click)="update('primaryColor', c)">
         @if (settings.primaryColor === c) {
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         }
       </button>
     }
@@ -43,24 +47,28 @@
 <!-- ══════════════════ LAYOUT ══════════════════ -->
 <div class="settings-card">
   <div class="settings-card__head">
-    <h2 class="settings-card__title">{{ 'settings.appearance.layoutTitle' | translate }}</h2>
-    <p class="settings-card__sub">{{ 'settings.appearance.layoutSub' | translate }}</p>
+    <h2 class="settings-card__title">{{ 'settings.appearance.layoutDensityTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.layoutDensitySub' | translate }}</p>
   </div>
 
   <div class="form-grid">
     <div class="form-field">
-      <label class="form-label">{{ 'settings.appearance.sidebarStyle' | translate }}</label>
-      <div class="segmented">
+      <label class="form-label" id="as-sidebar-label">{{ 'settings.appearance.sidebarStyle' | translate }}</label>
+      <div class="segmented" role="radiogroup" aria-labelledby="as-sidebar-label">
         @for (s of sidebarOptions; track s) {
-          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.sidebarStyle === s" (click)="update('sidebarStyle', s)">{{ sidebarKey(s) | translate }}</button>
+          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.sidebarStyle === s"
+                  role="radio" [attr.aria-checked]="settings.sidebarStyle === s"
+                  (click)="update('sidebarStyle', s)">{{ sidebarKey(s) | translate }}</button>
         }
       </div>
     </div>
     <div class="form-field">
-      <label class="form-label">{{ 'settings.appearance.fontSize' | translate }}</label>
-      <div class="segmented">
+      <label class="form-label" id="as-fontsize-label">{{ 'settings.appearance.fontSize' | translate }}</label>
+      <div class="segmented" role="radiogroup" aria-labelledby="as-fontsize-label">
         @for (f of fontSizeOptions; track f) {
-          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.fontSize === f" (click)="update('fontSize', f)" [style.fontSize]="fontSizePreviewPx(f)">{{ fontSizeKey(f) | translate }}</button>
+          <button type="button" class="segmented__btn" [class.segmented__btn--active]="settings.fontSize === f"
+                  role="radio" [attr.aria-checked]="settings.fontSize === f"
+                  (click)="update('fontSize', f)" [style.fontSize]="fontSizePreviewPx(f)">{{ fontSizeKey(f) | translate }}</button>
         }
       </div>
     </div>
@@ -72,7 +80,7 @@
       <span class="toggle-row__sub">{{ 'settings.appearance.roundedCardsSub' | translate }}</span>
     </span>
     <span class="switch">
-      <input type="checkbox" [checked]="settings.roundedCards" (change)="update('roundedCards', $any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.roundedCards" (change)="update('roundedCards', $any($event.target).checked)" [attr.aria-label]="'settings.appearance.roundedCards' | translate" />
       <span class="switch__track"><span class="switch__thumb"></span></span>
     </span>
   </label>
@@ -82,7 +90,7 @@
       <span class="toggle-row__sub">{{ 'settings.appearance.animationsSub' | translate }}</span>
     </span>
     <span class="switch">
-      <input type="checkbox" [checked]="settings.animations" (change)="update('animations', $any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.animations" (change)="update('animations', $any($event.target).checked)" [attr.aria-label]="'settings.appearance.animations' | translate" />
       <span class="switch__track"><span class="switch__thumb"></span></span>
     </span>
   </label>
@@ -92,10 +100,27 @@
       <span class="toggle-row__sub">{{ 'settings.appearance.reducedMotionSub' | translate }}</span>
     </span>
     <span class="switch">
-      <input type="checkbox" [checked]="settings.reducedMotion" (change)="update('reducedMotion', $any($event.target).checked)" />
+      <input type="checkbox" [checked]="settings.reducedMotion" (change)="update('reducedMotion', $any($event.target).checked)" [attr.aria-label]="'settings.appearance.reducedMotion' | translate" />
       <span class="switch__track"><span class="switch__thumb"></span></span>
     </span>
   </label>
+</div>
+
+<!-- ══════════════════ LIVE PREVIEW ══════════════════
+     Proves the settings above actually apply — everything in this card is
+     styled purely through the same CSS variables ThemeService writes to
+     <html>, so it updates in real time as controls are touched. These
+     translation keys already existed in the JSON but were unused until now. -->
+<div class="settings-card">
+  <div class="settings-card__head">
+    <h2 class="settings-card__title">{{ 'settings.appearance.livePreviewTitle' | translate }}</h2>
+    <p class="settings-card__sub">{{ 'settings.appearance.livePreviewSub' | translate }}</p>
+  </div>
+
+  <div class="preview-box" [class.preview-box--rounded]="settings.roundedCards">
+    <button type="button" class="preview-box__button">{{ 'settings.appearance.previewButtonLabel' | translate }}</button>
+    <p class="preview-box__text">{{ 'settings.appearance.previewSampleText' | translate }}</p>
+  </div>
 
   <div class="settings-card__footer">
     <button class="btn-primary" type="button" (click)="save.emit()">{{ 'settings.appearance.saveButton' | translate }}</button>
