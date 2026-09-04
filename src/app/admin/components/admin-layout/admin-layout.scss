@@ -1,47 +1,33 @@
 // admin-layout.component.scss
-// ─── Admin Token System ─────────────────────────────────────────────────────
-// Bridges local $sass-variables to the global CSS custom properties defined
-// in src/styles.scss (under `.admin-shell`) and driven by ThemeService. This
-// is the ONLY place theme-sensitive values are declared for this file — every
-// rule below just uses these $variables as before and gets live theming for
-// free (light/dark, accent color, rounded corners, font size, sidebar width).
-$sidebar-w:     var(--sidebar-w, 240px);
-$sidebar-w-col: var(--sidebar-w-col, 64px);
+// ─── Admin Token System (Light) ────────────────────────────────────────────────
+$sidebar-w:     240px;
+$sidebar-w-col: 64px;
 $topnav-h:      60px;
 
-$bg:            var(--bg);
-$surface:       var(--surface);
-$surface2:      var(--surface-2);
-$surface3:      var(--surface-3);
-$border:        var(--border);
-$border2:       var(--border-2);
+$bg:            #F8FAFC;
+$surface:       #FFFFFF;
+$surface2:      #F5F7FA;
+$surface3:      #F1F4F8;
+$border:        #E5E7EB;
+$border2:       #D1D5DB;
 
-$text-primary:  var(--text-primary);
-$text-mid:      var(--text-mid);
-$text-light:    var(--text-light);
+$text-primary:  #111827;
+$text-mid:      #6B7280;
+$text-light:    #9CA3AF;
 
-// Accent is user-configurable (Settings > Appearance > Primary Color), so it
-// must resolve through the CSS variable. Its rgb-triple sibling variable
-// lets us build rgba() shades entirely in valid CSS (a single var() holding
-// a whole color can't be split into rgba(var, alpha) — that's not valid CSS).
-$accent:        var(--admin-accent, #4F46E5);
-$accent-light:  var(--accent-light, #6366F1);
-$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
-$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
-$accent-ring:   rgba(var(--admin-accent-rgb, 79, 70, 229), .2);
+$accent:        #4F46E5;
+$accent-light:  #6366F1;
+$accent-bg:     rgba(79,70,229,.08);
+$accent-glow:   rgba(79,70,229,.18);
 
-// Status colors are intentionally static (not user-configurable) and read
-// fine on both light and dark surfaces, so they stay literal hex.
 $red:           #EF4444;
 $amber:         #F59E0B;
 $green:         #10B981;
 
-$radius-sm:     var(--radius-sm, 8px);
-$radius-md:     var(--radius-md, 12px);
-$radius-lg:     var(--radius-lg, 18px);
-$radius-pill:   var(--radius-pill, 999px);
-
-$font-scale:    var(--font-scale, 1);
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     18px;
+$radius-pill:   999px;
 
 $ease:          cubic-bezier(.25,.1,.25,1);
 
@@ -75,7 +61,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 .mobile-backdrop {
   position: fixed;
   inset: 0;
-  background: var(--overlay-backdrop, rgba(17,24,39,.32));
+  background: rgba(17,24,39,.32);
   backdrop-filter: blur(4px);
   z-index: 300;
 }
@@ -122,7 +108,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 32px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid $accent-glow;
+  border: 1px solid rgba($accent, .18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,7 +124,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 .logo-name {
-  font-size: calc(.95rem * #{$font-scale});
+  font-size: .95rem;
   font-weight: 700;
   color: $text-primary;
   letter-spacing: .04em;
@@ -148,7 +134,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 .logo-badge {
-  font-size: calc(.6rem * #{$font-scale});
+  font-size: .6rem;
   font-weight: 600;
   color: $accent;
   background: $accent-bg;
@@ -214,7 +200,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border-radius: $radius-md;
   text-decoration: none;
   color: $text-mid;
-  font-size: calc(.83rem * #{$font-scale});
+  font-size: .83rem;
   font-weight: 500;
   position: relative;
   transition: background .12s $ease, color .12s;
@@ -264,7 +250,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   min-width: 20px;
   height: 18px;
   padding: 0 5px;
-  background: rgba(239, 68, 68, .12);
+  background: rgba($red, .12);
   color: $red;
   border-radius: $radius-pill;
   font-size: .65rem;
@@ -304,7 +290,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 34px;
   border-radius: 50%;
   background: $accent-bg;
-  border: 1.5px solid $accent-ring;
+  border: 1.5px solid rgba($accent, .2);
   color: $accent;
   font-size: .72rem;
   font-weight: 800;
@@ -319,7 +305,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 .admin-name {
-  font-size: calc(.8rem * #{$font-scale});
+  font-size: .8rem;
   font-weight: 600;
   color: $text-primary;
   overflow: hidden;
@@ -329,7 +315,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 .admin-role {
-  font-size: calc(.68rem * #{$font-scale});
+  font-size: .68rem;
   color: $text-light;
   text-transform: capitalize;
   margin: 0;
@@ -349,7 +335,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   cursor: pointer;
   transition: all .15s $ease;
 
-  &:hover { background: rgba(239, 68, 68, .08); border-color: rgba(239, 68, 68, .25); color: $red; }
+  &:hover { background: rgba($red, .08); border-color: rgba($red, .25); color: $red; }
 }
 
 // ─── Main area ─────────────────────────────────────────────────────────────────
@@ -422,7 +408,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border: 1.5px solid $border;
   border-radius: $radius-pill;
   font-family: inherit;
-  font-size: calc(.83rem * #{$font-scale});
+  font-size: .83rem;
   color: $text-primary;
   transition: border-color .15s, box-shadow .15s, background .15s;
 
@@ -491,7 +477,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 36px;
   border-radius: 50%;
   background: $accent-bg;
-  border: 1.5px solid $accent-ring;
+  border: 1.5px solid rgba($accent, .2);
   color: $accent;
   font-size: .72rem;
   font-weight: 800;
@@ -525,7 +511,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-md;
-  box-shadow: var(--shadow-pop, 0 12px 28px rgba(16,24,40,.14), 0 2px 6px rgba(16,24,40,.06));
+  box-shadow: 0 12px 28px rgba(16,24,40,.14), 0 2px 6px rgba(16,24,40,.06);
   padding: 6px;
   display: flex;
   flex-direction: column;
@@ -544,7 +530,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   border: none;
   border-radius: $radius-sm;
   font: inherit;
-  font-size: calc(.83rem * #{$font-scale});
+  font-size: .83rem;
   font-weight: 500;
   color: $text-mid;
   cursor: pointer;
