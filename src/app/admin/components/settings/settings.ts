@@ -19,6 +19,7 @@ import {
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode, isSupportedLanguage } from '../../../localization/language.model';
+import { ThemeService } from '../../services/theme.service';
 import { GeneralSettingsComponent } from '../sections/settings/general-settings/general-settings';
 import { ProfileSettingsComponent } from '../sections/settings/profile-settings/profile-settings';
 import { StoreSettingsComponent } from '../sections/settings/store-settings/store-settings';
@@ -57,6 +58,7 @@ const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+$/;
 export class Settings {
 
   lang = inject(LanguageService);
+  themeSvc = inject(ThemeService);
 
   // ── Loading ────────────────────────────────────────────────────────────
   isLoading = signal(true);
@@ -83,16 +85,23 @@ export class Settings {
   ];
 
   // ── Data: saved vs draft (for dirty tracking) ──────────────────────────
-  private saved = signal<SettingsModel>(this.syncLanguage(generateMockSettings()));
-  draft = signal<SettingsModel>(this.syncLanguage(generateMockSettings()));
+  private saved = signal<SettingsModel>(this.syncFromServices(generateMockSettings()));
+  draft = signal<SettingsModel>(this.syncFromServices(generateMockSettings()));
 
-  // generateMockSettings() always seeds general.language as 'en'. LanguageService
-  // is the real source of truth (persisted in localStorage, already resolved by
-  // APP_INITIALIZER before this component exists), so overwrite the mock's
-  // language with the actually active one. Applied to both saved and draft so
-  // isDirty() doesn't report "dirty" just because the page loaded in French.
-  private syncLanguage(model: SettingsModel): SettingsModel {
-    return { ...model, general: { ...model.general, language: this.lang.currentLanguage() } };
+  // generateMockSettings() always seeds general.language as 'en' and a
+  // hardcoded default appearance. LanguageService / ThemeService are the
+  // real sources of truth (both persisted in localStorage, both already
+  // resolved before this component exists — LanguageService via
+  // APP_INITIALIZER, ThemeService synchronously in its constructor), so
+  // overwrite the mock's values with whatever's actually active. Applied
+  // to both saved and draft so isDirty() doesn't report "dirty" just
+  // because the page loaded in French / Dark mode.
+  private syncFromServices(model: SettingsModel): SettingsModel {
+    return {
+      ...model,
+      general: { ...model.general, language: this.lang.currentLanguage() },
+      appearance: this.themeSvc.settings(),
+    };
   }
 
   isDirty = computed(() => JSON.stringify(this.saved()) !== JSON.stringify(this.draft()));
@@ -238,12 +247,22 @@ export class Settings {
 
     this.saved.set(JSON.parse(JSON.stringify(this.draft())));
     this.showToast(this.lang.translate('toasts.savedSuccessfully'));
-    setTimeout(() => window.location.reload(), 500);
+    // NOTE: this used to force a full `window.location.reload()`. Every
+    // setting that actually does anything now applies live through its own
+    // service (LanguageService, ThemeService) the moment it's changed, not
+    // just on Save — so a reload here would only hurt: it would undo the
+    // whole point of the appearance settings applying instantly, and would
+    // reload the page after saving e.g. Store or Email settings too.
   }
 
   resetChanges(): void {
     this.draft.set(JSON.parse(JSON.stringify(this.saved())));
     this.formTouched.set(false);
+    // Appearance is applied live and independently of the draft/save cycle
+    // (see AppearanceSettingsComponent), so reverting the draft alone
+    // wouldn't undo any live theme changes the admin made and then
+    // discarded — explicitly re-apply the saved appearance too.
+    this.themeSvc.applyAll(this.saved().appearance);
     this.showToast(this.lang.translate('toasts.changesReverted'));
   }
 
@@ -286,8 +305,13 @@ export class Settings {
     this.draft.update(d => ({ ...d, email: { ...d.email, [key]: value } }));
   }
 
+  // Not currently called from the template (AppearanceSettingsComponent
+  // owns its own `update()` and calls ThemeService directly — see
+  // appearance-settings.ts) but kept consistent with that same live-apply
+  // contract in case another entry point patches appearance in the future.
   updateAppearance<K extends keyof SettingsModel['appearance']>(key: K, value: SettingsModel['appearance'][K]): void {
     this.draft.update(d => ({ ...d, appearance: { ...d.appearance, [key]: value } }));
+    this.themeSvc.applyPatch({ [key]: value } as Partial<SettingsModel['appearance']>);
   }
 
   // ── Section-specific actions ───────────────────────────────────────────
@@ -368,7 +392,8 @@ export class Settings {
       'factory-reset': 'settings.toasts.factoryResetDone',
     };
     if (action === 'factory-reset') {
-      const fresh = generateMockSettings();
+      this.themeSvc.resetToDefaults();
+      const fresh = this.syncFromServices(generateMockSettings());
       this.saved.set(fresh);
       this.draft.set(JSON.parse(JSON.stringify(fresh)));
     }
