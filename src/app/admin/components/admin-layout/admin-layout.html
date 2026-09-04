@@ -1,5 +1,8 @@
 <!-- admin-layout.component.html -->
-<div class="admin-shell" [class.sidebar-collapsed]="sidebarCollapsed()" [class.dark]="darkMode()">
+<!-- Theme (light/dark/accent/font-size/rounded/motion) is applied centrally
+     by ThemeService via data-admin-* attributes on <html> + CSS variables
+     scoped to `.admin-shell` (see src/styles.scss) — no local dark-mode
+     class needed here anymore. --><div class="admin-shell" [class.sidebar-collapsed]="sidebarCollapsed()">
 
   <!-- ── MOBILE BACKDROP ──────────────────────────────────────────────────── -->
   @if (mobileSidebarOpen()) {
@@ -40,7 +43,7 @@
             <p class="nav-section-label">{{ sec.section | translate }}</p>
           }
           @for (item of sec.items; track trackById($index, item)) {
-            <a
+            
               class="nav-item"
               [routerLink]="item.route"
               routerLinkActive="nav-item--active"
@@ -181,8 +184,8 @@
       <!-- Right controls -->
       <div class="top-right">
         <!-- Dark mode toggle -->
-        <button class="top-icon-btn" (click)="toggleDarkMode()" [attr.aria-label]="(darkMode() ? 'layout.switchToLightMode' : 'layout.switchToDarkMode') | translate" [attr.title]="(darkMode() ? 'settings.appearance.light' : 'settings.appearance.dark') | translate">
-          @if (darkMode()) {
+        <button class="top-icon-btn" (click)="toggleDarkMode()" [attr.aria-label]="(theme.resolvedTheme() === 'Dark' ? 'layout.switchToLightMode' : 'layout.switchToDarkMode') | translate" [attr.title]="(theme.resolvedTheme() === 'Dark' ? 'settings.appearance.light' : 'settings.appearance.dark') | translate" [attr.aria-pressed]="theme.resolvedTheme() === 'Dark'">
+          @if (theme.resolvedTheme() === 'Dark') {
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
               <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
               <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
