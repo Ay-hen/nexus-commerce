@@ -59,7 +59,6 @@
     "allActions": "Alle Aktionen",
     "todayAt": "Heute {{time}}"
   },
-
   "buttons": {
     "save": "Speichern",
     "saveChanges": "Änderungen speichern",
@@ -101,7 +100,6 @@
     "clearSelection": "Löschen",
     "signOut": "Abmelden"
   },
-
   "dialogs": {
     "areYouSure": "Sind Sie sicher?",
     "cannotBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
@@ -111,7 +109,6 @@
     "discardBody": "Sie haben Änderungen vorgenommen, die noch nicht gespeichert wurden.",
     "unsavedChanges": "Nicht gespeicherte Änderungen"
   },
-
   "toasts": {
     "savedSuccessfully": "Erfolgreich gespeichert",
     "deletedSuccessfully": "Erfolgreich gelöscht",
@@ -121,7 +118,6 @@
     "settingsRefreshed": "Einstellungen aktualisiert",
     "exportStarted": "Export läuft…"
   },
-
   "validation": {
     "required": "Dieses Feld ist erforderlich.",
     "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
@@ -134,13 +130,11 @@
     "mustBePositive": "Muss größer als 0 sein.",
     "invalidNumber": "Geben Sie eine gültige Zahl ein."
   },
-
   "errors": {
     "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "notFound": "Nicht gefunden.",
     "loadFailed": "Laden fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
-
   "navigation": {
     "sections": {
       "overview": "Übersicht",
@@ -164,7 +158,6 @@
     "settings": "Einstellungen",
     "searchGlobalPlaceholder": "Produkte, Bestellungen, Kunden suchen…"
   },
-
   "language": {
     "label": "Sprache",
     "select": "Sprache auswählen",
@@ -173,7 +166,6 @@
     "de": "Deutsch",
     "es": "Español"
   },
-
   "layout": {
     "adminNavigation": "Admin-Navigation",
     "expandSidebar": "Seitenleiste erweitern",
@@ -184,7 +176,6 @@
     "switchToDarkMode": "Zum dunklen Modus wechseln",
     "adminMenu": "Admin-Menü"
   },
-
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Willkommen zurück — das passiert heute.",
@@ -235,7 +226,6 @@
       "date": "Datum"
     }
   },
-
   "reports": {
     "subtitle": "Erstellen Sie detaillierte Geschäftsberichte und exportieren Sie Daten",
     "types": {
@@ -297,7 +287,6 @@
       "preparingPrint": "Bericht wird für den Druck vorbereitet…"
     }
   },
-
   "products": {
     "title": "Produkte",
     "subtitle": "{{count}} Produkte insgesamt",
@@ -324,7 +313,7 @@
     "addColorVariant": "Farbvariante hinzufügen",
     "seoTitle": "SEO-Titel",
     "seoDescription": "SEO-Beschreibung",
-    "urlSlug": "URL-Slug",    
+    "urlSlug": "URL-Slug",
     "searchPlaceholder": "Nach Name, Marke, SKU suchen…",
     "searchAriaLabel": "Produkte durchsuchen",
     "categoryAllPill": "Alle",
@@ -352,7 +341,6 @@
       "salesLow": "Wenigste Verkäufe",
       "statusAsc": "Status"
     },
-
     "status": {
       "active": "Aktiv",
       "draft": "Entwurf",
@@ -402,7 +390,6 @@
       "exported": "Produkte exportiert"
     }
   },
-
   "categories": {
     "title": "Kategorien",
     "subtitle": "Verwalten Sie Ihre Produkttaxonomie",
@@ -482,17 +469,35 @@
     "closePreview": "Vorschau schließen",
     "updated": "Aktualisiert"
   },
-
   "orders": {
     "title": "Bestellungen",
     "subtitle": "Verwalten Sie Kundenbestellungen, Zahlungen, Versand und Auftragsabwicklung.",
     "createOrder": "Bestellung erstellen",
     "exportOrders": "Bestellungen exportieren",
-    "searchBy": { "orderNumber": "Bestellnummer", "customerName": "Kundenname", "email": "E-Mail", "phone": "Telefon", "productName": "Produktname", "sku": "SKU" },
+    "searchBy": {
+      "orderNumber": "Bestellnummer",
+      "customerName": "Kundenname",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "productName": "Produktname",
+      "sku": "SKU"
+    },
     "allPayments": "Alle Zahlungen",
     "allMethods": "Alle Methoden",
-    "paymentMethods": { "creditCard": "Kreditkarte", "paypal": "PayPal", "cashOnDelivery": "Nachnahme", "bankTransfer": "Banküberweisung", "wallet": "Wallet" },
-    "sort": { "newest": "Neueste", "oldest": "Älteste", "highest": "Höchster Betrag", "lowest": "Niedrigster Betrag", "customer": "Kunde" },
+    "paymentMethods": {
+      "creditCard": "Kreditkarte",
+      "paypal": "PayPal",
+      "cashOnDelivery": "Nachnahme",
+      "bankTransfer": "Banküberweisung",
+      "wallet": "Wallet"
+    },
+    "sort": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "highest": "Höchster Betrag",
+      "lowest": "Niedrigster Betrag",
+      "customer": "Kunde"
+    },
     "searchPlaceholder": "Bestellungen durchsuchen…",
     "cardViewAria": "Kartenansicht",
     "keepOrder": "Bestellung behalten",
@@ -507,9 +512,15 @@
     "estimatedDeliveryLabel": "Voraussichtliche Lieferung",
     "updateNotesPlaceholder": "Fügen Sie eine Notiz zu diesem Update hinzu…",
     "timeline": {
-      "placed": "Bestellung aufgegeben", "payment": "Zahlung erhalten", "confirmed": "Bestellung bestätigt",
-      "packed": "Bestellung verpackt", "shipped": "Bestellung versandt", "outForDelivery": "Wird zugestellt",
-      "delivered": "Bestellung geliefert", "cancelled": "Bestellung storniert", "refunded": "Bestellung erstattet",
+      "placed": "Bestellung aufgegeben",
+      "payment": "Zahlung erhalten",
+      "confirmed": "Bestellung bestätigt",
+      "packed": "Bestellung verpackt",
+      "shipped": "Bestellung versandt",
+      "outForDelivery": "Wird zugestellt",
+      "delivered": "Bestellung geliefert",
+      "cancelled": "Bestellung storniert",
+      "refunded": "Bestellung erstattet",
       "statusUpdatedTo": "Status aktualisiert auf {{status}}",
       "statusManuallyUpdated": "Status manuell aktualisiert auf {{status}}"
     },
@@ -619,7 +630,6 @@
     "tax": "Steuer",
     "grandTotal": "Gesamtsumme"
   },
-
   "customers": {
     "title": "Kunden",
     "subtitle": "Verwalten Sie Kunden, verfolgen Sie Aktivitäten und pflegen Sie langfristige Beziehungen.",
@@ -679,7 +689,6 @@
     "unblockConfirmTitle": "Kunde entsperren",
     "deleteConfirmTitle": "Kunde löschen"
   },
-
   "inventory": {
     "title": "Inventar",
     "subtitle": "Überwachen Sie Bestand, Lager, Bewegungen und die Inventargesundheit",
@@ -705,8 +714,13 @@
     },
     "recentMovementsTitle": "Neueste Bestandsbewegungen",
     "movements": {
-      "date": "Datum", "type": "Typ", "quantity": "Menge", "before": "Vorher",
-      "after": "Nachher", "user": "Benutzer", "notes": "Notizen",
+      "date": "Datum",
+      "type": "Typ",
+      "quantity": "Menge",
+      "before": "Vorher",
+      "after": "Nachher",
+      "user": "Benutzer",
+      "notes": "Notizen",
       "empty": "Bisher keine Bestandsbewegungen erfasst."
     },
     "toasts": {
@@ -752,7 +766,6 @@
     "removeConfirmTitle": "Aus Inventar entfernen",
     "removeConfirmBody": "Möchten Sie „{{name}}“ wirklich aus der Bestandsverfolgung entfernen? Dies kann nicht rückgängig gemacht werden."
   },
-
   "adjustStock": {
     "title": "Inventar anpassen",
     "subtitle": "Aktualisieren Sie Bestandsniveaus und Inventarinformationen",
@@ -784,13 +797,24 @@
     "autoFillNote": "Automatisch ausgefüllte Auffüllung basierend auf dem Mindestbestandsschwellenwert.",
     "adjustmentTitle": "Bestandsanpassung",
     "types": {
-      "increase": "Erhöhung", "decrease": "Verringerung", "correction": "Korrektur", "transfer": "Transfer",
-      "return": "Rücksendung", "damaged": "Beschädigt", "lost": "Verloren", "initial": "Anfangsbestand"
+      "increase": "Erhöhung",
+      "decrease": "Verringerung",
+      "correction": "Korrektur",
+      "transfer": "Transfer",
+      "return": "Rücksendung",
+      "damaged": "Beschädigt",
+      "lost": "Verloren",
+      "initial": "Anfangsbestand"
     },
     "reasons": {
-      "customerReturn": "Kundenrücksendung", "supplierDelivery": "Lieferantenlieferung",
-      "stockCorrection": "Bestandskorrektur", "damaged": "Beschädigt", "lost": "Verloren",
-      "warehouseTransfer": "Lagertransfer", "inventoryCount": "Inventurzählung", "other": "Sonstiges"
+      "customerReturn": "Kundenrücksendung",
+      "supplierDelivery": "Lieferantenlieferung",
+      "stockCorrection": "Bestandskorrektur",
+      "damaged": "Beschädigt",
+      "lost": "Verloren",
+      "warehouseTransfer": "Lagertransfer",
+      "inventoryCount": "Inventurzählung",
+      "other": "Sonstiges"
     },
     "adjustmentTypeLabel": "Anpassungstyp",
     "newStockCountLabel": "Neuer Bestand",
@@ -814,7 +838,6 @@
     "successTitle": "Bestand erfolgreich aktualisiert",
     "successBody": "{{name}} liegt jetzt bei {{stock}} Einheiten"
   },
-
   "addInventoryItem": {
     "subtitle": "Erstellen Sie einen neuen Produktdatensatz, um dessen Bestand zu verfolgen",
     "successTitle": "Artikel zum Inventar hinzugefügt",
@@ -841,7 +864,6 @@
       "imageSizeExceeded": "Das Bild überschreitet das 5-MB-Limit."
     }
   },
-
   "reviews": {
     "title": "Bewertungen",
     "subtitle": "Verwalten Sie Kundenbewertungen und deren Moderation.",
@@ -875,7 +897,6 @@
     "deleteConfirmBodySingle": "Möchten Sie die Bewertung von {{name}} für {{product}} wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
     "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Bewertungen wirklich löschen? Dies kann nicht rückgängig gemacht werden."
   },
-
   "notifications": {
     "title": "Benachrichtigungen",
     "subtitle": "Verfolgen Sie jede Aktivität in Ihrem Shop.",
@@ -899,13 +920,16 @@
     "deleteConfirmTitleBulk": "{{count}} Benachrichtigungen löschen",
     "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Benachrichtigungen wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteAllButton": "Alle löschen",
-    "table": { "title": "Titel", "type": "Typ", "priority": "Priorität" },
+    "table": {
+      "title": "Titel",
+      "type": "Typ",
+      "priority": "Priorität"
+    },
     "toasts": {
       "markedRead": "{{count}} Benachrichtigung(en) als gelesen markiert",
       "deleted": "Benachrichtigung gelöscht",
       "bulkDeleted": "{{count}} Benachrichtigung(en) gelöscht"
     },
-
     "tabs": {
       "all": "Alle",
       "unread": "Ungelesen"
@@ -942,7 +966,6 @@
       "info": "Info"
     }
   },
-
   "notificationDetailModal": {
     "priorityWithSuffix": "Priorität {{priority}}",
     "activityType": "Aktivitätstyp",
@@ -955,7 +978,6 @@
     "relatedCustomer": "Kunde {{id}}",
     "relatedProduct": "Produkt {{id}}"
   },
-
   "pushNotifications": {
     "title": "Push-Benachrichtigungen",
     "subtitle": "Erstellen Sie eine Push-Benachrichtigung und sehen Sie eine Live-Vorschau vor dem Senden.",
@@ -975,7 +997,6 @@
     "silentNotification": "Stille Benachrichtigung",
     "livePreview": "Live-Vorschau",
     "estimatedRecipients": "Geschätzte Empfänger",
-
     "titlePlaceholder": "Benachrichtigungstitel",
     "bodyPlaceholderPreview": "Ihr Nachrichtentext erscheint hier, während Sie tippen.",
     "titleFieldPlaceholder": "Ihre Bestellung wurde versandt! 📦",
@@ -994,14 +1015,32 @@
     "sendingEllipsis": "Wird gesendet…",
     "schedulingEllipsis": "Wird geplant…",
     "audienceOptions": {
-      "allUsers": "Alle Nutzer", "customers": "Kunden", "admins": "Administratoren",
-      "subscribers": "Abonnenten", "vip": "VIP", "customSegment": "Benutzerdefiniertes Segment"
+      "allUsers": "Alle Nutzer",
+      "customers": "Kunden",
+      "admins": "Administratoren",
+      "subscribers": "Abonnenten",
+      "vip": "VIP",
+      "customSegment": "Benutzerdefiniertes Segment"
     },
-    "priorityOptions": { "normal": "Normal", "high": "Hoch", "critical": "Kritisch" },
-    "soundOptions": { "default": "Standard", "chime": "Klingelton", "bell": "Glocke", "silent": "Stumm" },
+    "priorityOptions": {
+      "normal": "Normal",
+      "high": "Hoch",
+      "critical": "Kritisch"
+    },
+    "soundOptions": {
+      "default": "Standard",
+      "chime": "Klingelton",
+      "bell": "Glocke",
+      "silent": "Stumm"
+    },
     "targetScreens": {
-      "home": "Startseite", "productDetail": "Produktdetail", "orderDetail": "Bestelldetail",
-      "cart": "Warenkorb", "wishlist": "Wunschliste", "promotions": "Aktionen", "profile": "Profil"
+      "home": "Startseite",
+      "productDetail": "Produktdetail",
+      "orderDetail": "Bestelldetail",
+      "cart": "Warenkorb",
+      "wishlist": "Wunschliste",
+      "promotions": "Aktionen",
+      "profile": "Profil"
     },
     "toasts": {
       "savedDraft": "Benachrichtigung als Entwurf gespeichert",
@@ -1009,7 +1048,6 @@
       "beingSent": "Benachrichtigung wird gesendet"
     }
   },
-
   "admins": {
     "title": "Administratoren",
     "subtitle": "Verwalten Sie Administratorkonten, Berechtigungen und Aktivitäten.",
@@ -1024,19 +1062,28 @@
     "confirmPassword": "Passwort bestätigen",
     "permissions": "Berechtigungen",
     "twoFactor": "Zwei-Faktor-Authentifizierung",
-
     "searchPlaceholder": "Nach Name, E-Mail, Telefon, Rolle suchen…",
     "allTwoFa": "2FA: Alle",
-    "sort": { "name": "Name", "role": "Rolle", "lastOnline": "Zuletzt online", "mostActive": "Aktivste" },
-
+    "sort": {
+      "name": "Name",
+      "role": "Rolle",
+      "lastOnline": "Zuletzt online",
+      "mostActive": "Aktivste"
+    },
     "resetConfirmBody": "Passwort-Reset-Link an {{name}} unter {{email}} senden? Sie müssen sich bei der nächsten Anmeldung ein neues Passwort festlegen.",
     "disableConfirmBody": "{{name}} verliert sofort den Zugriff auf das Admin-Dashboard. Sie können das Konto jederzeit wieder aktivieren.",
     "sendResetLinkButton": "Link senden",
     "deleteConfirmBody": "Möchten Sie {{name}} wirklich dauerhaft löschen? Dies entzieht sämtlichen Zugriff und kann nicht rückgängig gemacht werden.",
     "permissionLabels": {
-      "manageProducts": "Produkte verwalten", "manageOrders": "Bestellungen verwalten", "manageReviews": "Bewertungen verwalten",
-      "manageCustomers": "Kunden verwalten", "manageInventory": "Inventar verwalten", "manageCategories": "Kategorien verwalten",
-      "manageAdmins": "Administratoren verwalten", "manageSettings": "Einstellungen verwalten", "viewReports": "Berichte ansehen"
+      "manageProducts": "Produkte verwalten",
+      "manageOrders": "Bestellungen verwalten",
+      "manageReviews": "Bewertungen verwalten",
+      "manageCustomers": "Kunden verwalten",
+      "manageInventory": "Inventar verwalten",
+      "manageCategories": "Kategorien verwalten",
+      "manageAdmins": "Administratoren verwalten",
+      "manageSettings": "Einstellungen verwalten",
+      "viewReports": "Berichte ansehen"
     },
     "toasts": {
       "bulkDisabled": "{{count}} Administrator(en) deaktiviert",
@@ -1049,9 +1096,11 @@
       "resetLinkSent": "Passwort-Reset-Link an {{email}} gesendet",
       "accountDisabled": "Konto von {{name}} deaktiviert",
       "exportingCsv": "Administratoren werden als CSV exportiert…",
-      "exportingPdf": "Administratoren werden als PDF exportiert…"
+      "exportingPdf": "Administratoren werden als PDF exportiert…",
+      "savedDraft": "Benachrichtigung als Entwurf gespeichert",
+      "scheduledSuccess": "Benachrichtigung erfolgreich geplant",
+      "beingSent": "Benachrichtigung wird gesendet"
     },
-
     "roles": {
       "superAdmin": "Super-Administrator",
       "admin": "Administrator",
@@ -1085,7 +1134,7 @@
       "resetPassword": "Passwort zurücksetzen",
       "disableAccount": "Konto deaktivieren",
       "deleteAdmin": "Administrator löschen",
-      "enable": "Aktivieren", 
+      "enable": "Aktivieren",
       "disable": "Deaktivieren"
     },
     "empty": {
@@ -1096,7 +1145,6 @@
     "disableConfirmTitle": "Konto deaktivieren",
     "deleteConfirmTitle": "Administrator löschen"
   },
-
   "viewAdminModal": {
     "informationTab": "Informationen",
     "activityTab": "Aktivitätsverlauf",
@@ -1105,7 +1153,6 @@
     "loginCountLabel": "Anmeldungen",
     "noRecentActivity": "Keine kürzliche Aktivität."
   },
-
   "addAdminModal": {
     "subtitle": "Erstellen Sie ein neues Administratorkonto mit rollenbasiertem Zugriff.",
     "profileAvatarTitle": "Profilavatar",
@@ -1117,44 +1164,37 @@
     "creatingEllipsis": "Wird erstellt…",
     "createAdminButton": "Administrator erstellen"
   },
-
   "editAdminModal": {
     "subtitle": "Kontodetails, Rolle und Berechtigungen aktualisieren.",
     "createdReadonlyNote": "Erstellt am {{date}} · {{count}} Anmeldungen (schreibgeschützt)",
-    "twoFaEnabledSub": "Für dieses Konto aktiviert", 
+    "twoFaEnabledSub": "Für dieses Konto aktiviert",
     "twoFaDisabledSub": "Für dieses Konto deaktiviert",
-    "readonlyHistoryNote": "Anmeldeverlauf und Aktivitätsverlauf können nicht bearbeitet werden." 
+    "readonlyHistoryNote": "Anmeldeverlauf und Aktivitätsverlauf können nicht bearbeitet werden."
   },
-
   "activityLogs": {
     "title": "Aktivitätsprotokolle",
     "subtitle": "Verfolgen Sie jede wichtige Aktion im Verwaltungssystem.",
-
     "searchPlaceholder": "Suche nach {{field}}…",
     "exportLogs": "Protokolle exportieren",
     "logActionsAria": "Protokollaktionen",
-
-    "status":{
+    "status": {
       "success": "Erfolgreich",
       "failed": "Fehlgeschlagen"
     },
-
-    "toasts":{
+    "toasts": {
       "exportingCsv": "Aktivitätsprotokolle werden als CSV exportiert…",
       "exportingPdf": "Aktivitätsprotokolle werden als PDF exportiert…",
       "generatingReport": "Vollständiger Aktivitätsbericht wird erstellt…"
     },
-
-    "detail":{
+    "detail": {
       "tabDetails": "Details",
       "technicalDetailsTitle": "Technische Details",
       "executionTimelineTitle": "Ausführungsverlauf",
       "actionDetailsTitle": "Aktionsdetails",
       "sessionId": "Sitzungs-ID",
-      "detail.operatingSystem": "Betriebssystem",
-      "requestId": "Anfrage-ID"
+      "requestId": "Anfrage-ID",
+      "operatingSystem": "Betriebssystem"
     },
-
     "stats": {
       "totalActivities": "Aktivitäten gesamt",
       "todaysActivities": "Heutige Aktivitäten",
@@ -1192,7 +1232,6 @@
       "subtitle": "Passen Sie Ihre Suche oder Filter an."
     }
   },
-
   "settings": {
     "title": "Einstellungen",
     "subtitle": "Verwalten Sie Ihre Shop-Konfiguration und Administratoreinstellungen.",
@@ -1223,18 +1262,15 @@
       "language": "Sprache",
       "dateFormat": "Datumsformat",
       "saveButton": "Speichern",
-
       "sections": {
         "storeIdentity": "Shop-Identität",
         "businessInfo": "Geschäftsinformationen",
         "localization": "Lokalisierung"
       },
-
       "charCount": "{{count}}/{{max}}",
       "pricePreviewLabel": "Preisvorschau",
       "timePreviewLabel": "Aktuelle Uhrzeit",
       "dateFormatPreviewLabel": "Vorschau",
-
       "errors": {
         "storeNameRequired": "Der Shop-Name ist erforderlich."
       }
@@ -1467,14 +1503,12 @@
     },
     "unsavedPill": "Nicht gespeicherte Änderungen"
   },
-
   "tables": {
     "noResults": "Keine Ergebnisse gefunden",
     "rowsPerPage": "Zeilen pro Seite",
     "showing": "Anzeige",
     "page": "Seite"
   },
-
   "forms": {
     "dragAndDrop": "Klicken oder per Drag & Drop ablegen",
     "maxFileSize": "Max. {{size}} MB",
@@ -1482,7 +1516,6 @@
     "replaceImage": "Bild ersetzen",
     "removeImage": "Bild entfernen"
   },
-
   "editProductModal": {
     "dialogAriaLabel": "{{name}} bearbeiten",
     "untitledProduct": "Unbenanntes Produkt",
