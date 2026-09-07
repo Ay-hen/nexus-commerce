@@ -81,7 +81,6 @@ export class Settings {
     { id: 'email',         label: 'settings.nav.email',         icon: 'email' },
     { id: 'notifications', label: 'settings.nav.notifications', icon: 'notifications' },
     { id: 'appearance',    label: 'settings.nav.appearance',    icon: 'appearance' },
-    { id: 'system',        label: 'settings.nav.system',        icon: 'system' },
   ];
 
   // ── Data: saved vs draft (for dirty tracking) ──────────────────────────
