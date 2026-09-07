@@ -1516,6 +1516,7 @@
     "replaceImage": "Remplacer l'image",
     "removeImage": "Supprimer l'image"
   },
+  
   "editProductModal": {
     "dialogAriaLabel": "Modifier {{name}}",
     "untitledProduct": "Produit sans titre",
@@ -1529,4 +1530,5 @@
     "imageRequiredHint": "Ajoutez au moins une image avant d'enregistrer",
     "successTitle": "Modifications enregistrées !"
   }
+
 }
