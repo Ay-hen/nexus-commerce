@@ -3,12 +3,13 @@ import {
   Component, ElementRef, HostListener, computed, inject, signal, ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterModule, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AdminAuthService } from '../../services/admin-auth';
 import { NavItem } from '../../model/admin-models.model';
 // Adjust this path to wherever notification-dropdown actually lives in your project —
 // it mirrors the same relative depth as the model imports above (two levels up to `app/`).
 import { NotificationDropdownComponent } from '../notification-dropdown/notification-dropdown';
+import { generateMockNotifications } from '../../model/notification-model';
 import { LanguageService } from '../../../localization/language.service';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageCode } from '../../../localization/language.model';
@@ -27,11 +28,18 @@ export class AdminLayout {
   // dark-mode button and Settings > Appearance both read/write this same
   // service, so they can never fall out of sync with each other again.
   theme = inject(ThemeService);
+  private router = inject(Router);
 
   sidebarCollapsed = signal(false);
   mobileSidebarOpen = signal(false);
   searchQuery = signal('');
+  // Was declared but never actually wired to anything — the search input
+  // had no value binding, no submit handler, and no mobile collapse
+  // behavior despite the layout clearly being designed for one (a bare
+  // "⌘K" hint with nothing listening for it). See onGlobalKeydown(),
+  // submitGlobalSearch(), and the mobile search toggle below.
   searchOpen = signal(false);
+  @ViewChild('globalSearchInput') globalSearchInput?: ElementRef<HTMLInputElement>;
 
   // ── Notification bell / dropdown ──────────────────────────────────────
   notificationsOpen = signal(false);
@@ -47,6 +55,25 @@ export class AdminLayout {
     const name = this.currentAdmin()?.name ?? 'Admin';
     return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
   });
+
+  // Every nav item has an optional `badge` field, and the template/CSS for
+  // showing it (a count pill, or a dot when the sidebar is collapsed) was
+  // already fully built — but nothing in `navSections` ever set a value,
+  // so it was permanently dead. The Notifications item (and the bell icon
+  // in the top navbar) now reflect the real unread count from the same
+  // mock data source the notification bell dropdown uses, so none of the
+  // three can ever disagree with each other.
+  // (Reuses the existing mock generator rather than introducing a new
+  // shared service — swap this for a live count once a NotificationService
+  // exists, same note as on NotificationDropdownComponent.)
+  unreadNotificationsCount = computed(
+    () => generateMockNotifications().filter(n => !n.read).length
+  );
+
+  badgeFor(item: NavItem): number | undefined {
+    if (item.id === 'notifications') return this.unreadNotificationsCount();
+    return item.badge;
+  }
 
   toggleSidebar(): void { this.sidebarCollapsed.update(v => !v); }
   toggleMobileSidebar(): void { this.mobileSidebarOpen.update(v => !v); }
@@ -108,6 +135,42 @@ export class AdminLayout {
     this.searchOpen.set(false);
     this.closeNotifications();
     this.closeLanguageMenu();
+  }
+
+  // ⌘K / Ctrl+K focuses the global search — matches the "⌘K" hint already
+  // shown in the search box, which previously did nothing when pressed.
+  @HostListener('document:keydown', ['$event'])
+  onGlobalKeydown(event: KeyboardEvent): void {
+    const isShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
+    if (!isShortcut) return;
+    event.preventDefault();
+    this.searchOpen.set(true);
+    // Wait a tick for the (possibly just-revealed, on mobile) input to exist.
+    setTimeout(() => this.globalSearchInput?.nativeElement.focus());
+  }
+
+  onSearchInput(value: string): void {
+    this.searchQuery.set(value);
+  }
+
+  // Global search only has one real destination right now — the Products
+  // list, which already supports filtering by name/brand/SKU and now reads
+  // a `?search=` query param on load (see products.ts ngOnInit). Widening
+  // this to search across Orders/Customers too belongs with those pages'
+  // own audit steps, not this one.
+  submitGlobalSearch(): void {
+    const query = this.searchQuery().trim();
+    if (!query) return;
+    this.router.navigate(['/admin/products'], { queryParams: { search: query } });
+    this.searchOpen.set(false);
+    this.closeMobileSidebar();
+  }
+
+  toggleMobileSearch(): void {
+    this.searchOpen.update(v => !v);
+    if (this.searchOpen()) {
+      setTimeout(() => this.globalSearchInput?.nativeElement.focus());
+    }
   }
 
   trackById(_: number, item: NavItem): string { return item.id; }
