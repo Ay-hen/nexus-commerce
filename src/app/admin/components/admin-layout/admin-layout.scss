@@ -399,6 +399,11 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 }
 
 // Search bar
+// Below 640px there is no room for this next to the menu button and the
+// icon cluster (dark toggle, language, notifications, avatar) — it used to
+// just squish/overflow with no way to actually use it. It now hides by
+// default and reappears as a focused, full-width overlay row via
+// .top-search--mobile-open (toggled by the search icon button below, or ⌘K).
 .top-search {
   flex: 1;
   max-width: 480px;
@@ -412,6 +417,57 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     color: $text-light;
     pointer-events: none;
   }
+
+  @media (max-width: 640px) {
+    display: none;
+
+    &--mobile-open {
+      display: flex;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      max-width: none;
+      z-index: 500;
+      animation: fade-in .15s $ease;
+    }
+  }
+}
+
+.search-close-btn {
+  position: absolute;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: $text-light;
+  cursor: pointer;
+  border-radius: 6px;
+
+  &:hover { color: $text-primary; background: $surface3; }
+}
+
+.mobile-search-btn {
+  display: none;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  color: $text-mid;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover { background: $surface3; color: $text-primary; }
+
+  @media (max-width: 640px) { display: flex; }
 }
 
 .top-search-input {
@@ -434,6 +490,8 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     border-color: $accent;
     box-shadow: 0 0 0 3px $accent-glow;
   }
+
+  .top-search--mobile-open & { padding-right: 40px; box-shadow: var(--shadow-pop); }
 }
 
 .search-kbd {
@@ -446,6 +504,9 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   font-size: .68rem;
   color: $text-light;
   font-family: inherit;
+
+  .top-search--mobile-open & { display: none; }
+  @media (max-width: 900px) { display: none; }
 }
 
 // Right controls
