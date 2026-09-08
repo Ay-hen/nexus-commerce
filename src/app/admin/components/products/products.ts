@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AdminProduct } from '../../model/admin-models.model';
 import { EditProductModal } from '../../model/edit-product-modal/edit-product-modal';
 import { LanguageService } from '../../../localization/language.service';
@@ -32,6 +32,7 @@ export class Products implements OnInit {
 
   protected Math = Math;
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   protected lang = inject(LanguageService);
 
   // ── Loading ──────────────────────────────────────────────────────────────
@@ -451,5 +452,11 @@ export class Products implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => this.isLoading.set(false), 600);
+    // Populated when arriving here from the Admin navbar's global search
+    // (see admin-layout.ts submitGlobalSearch()) — without this, typing a
+    // query in the navbar and pressing Enter would navigate here but the
+    // search box would stay empty and show unfiltered results.
+    const q = this.route.snapshot.queryParamMap.get('search');
+    if (q) this.onSearch(q);
   }
 }
