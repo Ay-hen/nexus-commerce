@@ -1,21 +1,25 @@
 // admin-dashboard.component.scss
-// ─── Admin Design Tokens (Light — matches layout exactly) ─────────────────────
-$bg:            #F8FAFC;
-$surface:       #FFFFFF;
-$surface2:      #F5F7FA;
-$surface3:      #F1F4F8;
-$border:        #E5E7EB;
-$border2:       #D1D5DB;
+// ─── Admin Design Tokens ──────────────────────────────────────────────────
+// Bridged to the global CSS variable theme system (src/styles.scss),
+// driven by ThemeService — see admin-layout.scss for the full pattern
+// explanation. Every rule below is unchanged and gets live theming free.
+$bg:            var(--bg);
+$surface:       var(--surface);
+$surface2:      var(--surface-2);
+$surface3:      var(--surface-3);
+$border:        var(--border);
+$border2:       var(--border-2);
 
-$text-primary:  #111827;
-$text-mid:      #6B7280;
-$text-light:    #9CA3AF;
+$text-primary:  var(--text-primary);
+$text-mid:      var(--text-mid);
+$text-light:    var(--text-light);
 
-$accent:        #4F46E5;
-$accent-light:  #6366F1;
-$accent-bg:     rgba(79,70,229,.08);
-$accent-glow:   rgba(79,70,229,.18);
+$accent:        var(--admin-accent, #4F46E5);
+$accent-light:  var(--accent-light, #6366F1);
+$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
 
+// Status/category colors are intentionally static (not user-configurable).
 $green:         #10B981;
 $green-bg:      rgba(16,185,129,.08);
 $red:           #EF4444;
@@ -24,15 +28,15 @@ $amber:         #F59E0B;
 $amber-bg:      rgba(245,158,11,.08);
 $purple:        #7C3AED;
 $purple-bg:     rgba(124,58,237,.08);
-$slate-bg:      #F1F4F8;
+$slate-bg:      var(--surface-3);
 
-$radius-sm:     8px;
-$radius-md:     12px;
-$radius-lg:     18px;
-$radius-xl:     20px;
-$radius-pill:   999px;
+$radius-sm:     var(--radius-sm, 8px);
+$radius-md:     var(--radius-md, 12px);
+$radius-lg:     var(--radius-lg, 18px);
+$radius-xl:     calc(var(--radius-lg, 18px) + 2px);
+$radius-pill:   var(--radius-pill, 999px);
 
-$shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$shadow-card:   var(--shadow-card, 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06));
 $shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
 
 $ease:          cubic-bezier(.25,.1,.25,1);
@@ -130,7 +134,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   transition: background .15s $ease, box-shadow .15s;
 
   &:hover {
-    background: darken($accent, 7%);
+    background: var(--admin-accent-hover, $accent);
     box-shadow: 0 4px 14px $accent-glow;
   }
 }
@@ -471,7 +475,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   text-decoration: none;
   font-weight: 500;
   transition: color .15s;
-  &:hover { color: darken($accent, 10%); }
+  &:hover { color: var(--admin-accent-hover, $accent); }
 }
 
 .table-wrap {
@@ -512,7 +516,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
   tr:last-child td { border-bottom: none; }
 
-  tr:hover td { background: #F9FAFB; }
+  tr:hover td { background: $surface2; }
 }
 
 .order-id-cell { font-weight: 700; color: $text-primary; font-size: .82rem; }
@@ -720,4 +724,3 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 @media (prefers-reduced-motion: reduce) {
   .dash, .stat-card, .chart-card, .table-card, .panel-card, .bar { animation: none; }
 }
-
