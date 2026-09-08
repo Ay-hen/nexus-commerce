@@ -1,19 +1,19 @@
 // reports.scss
 // ─── Admin tokens (Light — matches dashboard/products/categories exactly) ─────
-$surface:       #FFFFFF;
-$surface2:      #F5F7FA;
-$surface3:      #F1F4F8;
-$border:        #E5E7EB;
-$border2:       #D1D5DB;
+$surface:       var(--surface);
+$surface2:      var(--surface-2);
+$surface3:      var(--surface-3);
+$border:        var(--border);
+$border2:       var(--border-2);
 
-$text-primary:  #111827;
-$text-mid:      #6B7280;
-$text-light:    #9CA3AF;
+$text-primary:  var(--text-primary);
+$text-mid:      var(--text-mid);
+$text-light:    var(--text-light);
 
-$accent:        #4F46E5;
-$accent-light:  #6366F1;
-$accent-bg:     rgba(79,70,229,.08);
-$accent-glow:   rgba(79,70,229,.18);
+$accent:        var(--admin-accent, #4F46E5);
+$accent-light:  var(--accent-light, #6366F1);
+$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
 
 $green:         #10B981;
 $green-bg:      rgba(16,185,129,.08);
@@ -23,12 +23,12 @@ $amber:         #F59E0B;
 $amber-bg:      rgba(245,158,11,.08);
 $purple:        #7C3AED;
 $purple-bg:     rgba(124,58,237,.08);
-$slate-bg:      #F1F4F8;
+$slate-bg:      var(--surface-3);
 
-$radius-sm:     8px;
-$radius-md:     12px;
-$radius-lg:     18px;
-$radius-pill:   999px;
+$radius-sm:  var(--radius-sm, 8px);
+$radius-md:  var(--radius-md, 12px);
+$radius-lg:  var(--radius-lg, 18px);
+$radius-pill: var(--radius-pill, 999px);
 
 $shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 $shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
@@ -112,7 +112,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   height: 40px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid rgba($accent, .15);
+  border: 1px solid rgba(var(--admin-accent-rgb, 79, 70, 229), .15);
   color: $accent;
   display: flex;
   align-items: center;
@@ -182,7 +182,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   cursor: pointer;
   transition: background .15s $ease, box-shadow .15s;
 
-  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  &:hover { background: var(--admin-accent-hover, $accent); box-shadow: 0 4px 14px $accent-glow; }
 }
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
@@ -372,7 +372,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
 
   &--active {
     background: $accent-bg;
-    border-color: rgba($accent, .3);
+    border-color: rgba(var(--admin-accent-rgb, 79, 70, 229), .3);
     color: $accent;
     font-weight: 700;
   }
@@ -516,7 +516,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   cursor: pointer;
   transition: background .15s, box-shadow .15s;
 
-  &:hover:not(:disabled) { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  &:hover:not(:disabled) { background: var(--admin-accent-hover, $accent); box-shadow: 0 4px 14px $accent-glow; }
   &:disabled { opacity: .7; cursor: not-allowed; }
 }
 
@@ -575,7 +575,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
   }
 
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: #F9FAFB; }
+  tbody tr:hover td { background: $surface2; }
 }
 
 .th-sortable {
@@ -983,7 +983,7 @@ $ease:          cubic-bezier(.25,.1,.25,1);
     border-color: $accent;
     color: #fff;
 
-    &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+    &:hover { background: var(--admin-accent-hover, $accent); box-shadow: 0 4px 14px $accent-glow; }
   }
 }
 
