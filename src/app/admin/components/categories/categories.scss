@@ -1,20 +1,27 @@
 // categories.scss
-// ─── Admin Design Tokens (Light — matches layout/dashboard exactly) ───────────
-$bg:            #F8FAFC;
-$surface:       #FFFFFF;
-$surface2:      #F5F7FA;
-$surface3:      #F1F4F8;
-$border:        #E5E7EB;
-$border2:       #D1D5DB;
+// ─── Admin Design Tokens ───────────────────────────────────────────────────
+// Same fix as dashboard/products/inventory: these resolve through the CSS
+// custom properties ThemeService writes on `.admin-shell` instead of
+// hardcoded hex, so this page also follows Light/Dark/accent-color.
+$bg:            var(--bg, #F8FAFC);
+$surface:       var(--surface, #FFFFFF);
+$surface2:      var(--surface-2, #F5F7FA);
+$surface3:      var(--surface-3, #F1F4F8);
+$border:        var(--border, #E5E7EB);
+$border2:       var(--border-2, #D1D5DB);
 
-$text-primary:  #111827;
-$text-mid:      #6B7280;
-$text-light:    #9CA3AF;
+$text-primary:  var(--text-primary, #111827);
+$text-mid:      var(--text-mid, #6B7280);
+$text-light:    var(--text-light, #9CA3AF);
 
-$accent:        #4F46E5;
-$accent-bg:     rgba(79,70,229,.08);
-$accent-glow:   rgba(79,70,229,.18);
+// Accent is user-configurable, so it must resolve through the CSS variable.
+// Any old rgba($accent, X) / darken($accent, X%) call is replaced below —
+// those Sass functions can't operate on a CSS custom property at build time.
+$accent:        var(--admin-accent, #4F46E5);
+$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
 
+// Status colors stay literal (intentionally static / not user-configurable).
 $green:         #10B981;
 $green-bg:      rgba(16,185,129,.08);
 $red:           #EF4444;
@@ -24,10 +31,10 @@ $amber-bg:      rgba(245,158,11,.08);
 $purple:        #7C3AED;
 $purple-bg:     rgba(124,58,237,.08);
 
-$radius-sm:     8px;
-$radius-md:     12px;
-$radius-lg:     18px;
-$radius-pill:   999px;
+$radius-sm:     var(--radius-sm, 8px);
+$radius-md:     var(--radius-md, 12px);
+$radius-lg:     var(--radius-lg, 18px);
+$radius-pill:   var(--radius-pill, 999px);
 
 $shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 $shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
@@ -200,9 +207,11 @@ $z-modal:       1000;
   color: #fff;
   cursor: pointer;
   text-decoration: none;
-  transition: background .15s $ease, box-shadow .15s;
+  transition: filter .15s $ease, box-shadow .15s;
 
-  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  // Was darken($accent, 7%) — can't run at compile time on a CSS variable,
+  // so brightness() gives the same "slightly darker on hover" effect.
+  &:hover { filter: brightness(0.92); box-shadow: 0 4px 14px $accent-glow; }
 }
 
 .btn-danger {
@@ -221,6 +230,7 @@ $z-modal:       1000;
   cursor: pointer;
   transition: background .15s $ease, box-shadow .15s;
 
+  // $red is literal, so darken()/rgba() still work fine here.
   &:hover { background: darken($red, 8%); box-shadow: 0 4px 12px rgba($red, .3); }
 }
 
@@ -249,7 +259,9 @@ $z-modal:       1000;
   height: 40px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid rgba($accent, .15);
+  // Was rgba($accent, .15) — $accent is a var() now, so build the alpha
+  // shade from the rgb-triple variable directly, same pattern as $accent-bg/glow.
+  border: 1px solid rgba(var(--admin-accent-rgb, 79, 70, 229), .15);
   color: $accent;
   display: flex;
   align-items: center;
@@ -456,13 +468,15 @@ $z-modal:       1000;
 
   &:hover:not(.filter-pill--active) { background: $surface2; border-color: $border2; }
 
+  // Was rgba($accent, .3) — see .page-icon note above.
   &--active {
     background: $accent-bg;
-    border-color: rgba($accent, .3);
+    border-color: rgba(var(--admin-accent-rgb, 79, 70, 229), .3);
     color: $accent;
     font-weight: 600;
   }
 
+  // $amber is literal, so rgba($amber, ...) still works fine here.
   &--star.filter-pill--active {
     background: $amber-bg;
     border-color: rgba($amber, .3);
@@ -833,7 +847,7 @@ $z-modal:       1000;
     transition: transform .3s $ease;
   }
 
-  // star badge top-left
+  // star badge top-left ($amber is literal, rgba() still works fine)
   &__star {
     position: absolute;
     top: 8px;
@@ -947,6 +961,7 @@ $z-modal:       1000;
 
   &:hover { background: rgba(255,255,255,.32); }
 
+  // $red is literal, so rgba($red, ...) still works fine here.
   &--danger:hover {
     background: rgba($red, .75);
     border-color: rgba($red, .5);
