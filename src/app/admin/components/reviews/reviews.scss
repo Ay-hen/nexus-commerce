@@ -1,19 +1,25 @@
 // reviews.scss
-// ─── Admin Design Tokens───────────────
-$surface:       #FFFFFF;
-$surface2:      #F5F7FA;
-$surface3:      #F1F4F8;
-$border:        #E5E7EB;
-$border2:       #D1D5DB;
+// ─── Admin Design Tokens ───────────────────────────────────────────────────
+// Same fix as the other admin pages: these resolve through the CSS custom
+// properties ThemeService writes on `.admin-shell` instead of hardcoded hex.
+$surface:       var(--surface, #FFFFFF);
+$surface2:      var(--surface-2, #F5F7FA);
+$surface3:      var(--surface-3, #F1F4F8);
+$border:        var(--border, #E5E7EB);
+$border2:       var(--border-2, #D1D5DB);
 
-$text-primary:  #111827;
-$text-mid:      #6B7280;
-$text-light:    #9CA3AF;
+$text-primary:  var(--text-primary, #111827);
+$text-mid:      var(--text-mid, #6B7280);
+$text-light:    var(--text-light, #9CA3AF);
 
-$accent:        #4F46E5;
-$accent-bg:     rgba(79,70,229,.08);
-$accent-glow:   rgba(79,70,229,.18);
+// Accent is user-configurable, so it must resolve through the CSS variable.
+// Any old rgba($accent, X) call is replaced below — that Sass function
+// can't split a CSS custom property into r/g/b channels at build time.
+$accent:        var(--admin-accent, #4F46E5);
+$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
 
+// Status colors stay literal (intentionally static / not user-configurable).
 $green:         #10B981;
 $green-bg:      rgba(16,185,129,.08);
 $red:           #EF4444;
@@ -22,12 +28,12 @@ $amber:         #F59E0B;
 $amber-bg:      rgba(245,158,11,.08);
 $purple:        #7C3AED;
 $purple-bg:     rgba(124,58,237,.08);
-$slate-bg:      #F1F4F8;
+$slate-bg:      var(--surface-3, #F1F4F8);
 
-$radius-sm:     8px;
-$radius-md:     12px;
-$radius-lg:     18px;
-$radius-pill:   999px;
+$radius-sm:     var(--radius-sm, 8px);
+$radius-md:     var(--radius-md, 12px);
+$radius-lg:     var(--radius-lg, 18px);
+$radius-pill:   var(--radius-pill, 999px);
 
 $shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
 $shadow-hover:  0 8px 20px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.04);
@@ -111,7 +117,9 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   width: 40px; height: 40px;
   border-radius: $radius-md;
   background: $accent-bg;
-  border: 1px solid rgba($accent, .15);
+  // Was rgba($accent, .15) — $accent is a var() now, so build the alpha
+  // shade from the rgb-triple variable directly, same pattern as $accent-bg/glow.
+  border: 1px solid rgba(var(--admin-accent-rgb, 79, 70, 229), .15);
   color: $accent;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -141,9 +149,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .84rem; font-weight: 600;
   color: #fff; cursor: pointer;
-  transition: background .15s $ease, box-shadow .15s;
+  transition: filter .15s $ease, box-shadow .15s;
 
-  &:hover { background: darken($accent, 7%); box-shadow: 0 4px 14px $accent-glow; }
+  // Was darken($accent, 7%) — can't run at compile time on a CSS variable,
+  // so brightness() gives the same "slightly darker on hover" effect.
+  &:hover { filter: brightness(0.92); box-shadow: 0 4px 14px $accent-glow; }
 }
 
 // ─── Stat cards ───────────────────────────────────────────────────────────────
@@ -279,7 +289,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   transition: background .15s, border-color .15s, color .15s;
 
   &:hover:not(.filter-pill--active) { background: $surface2; border-color: $border2; }
-  &--active { background: $accent-bg; border-color: rgba($accent, .3); color: $accent; font-weight: 700; }
+  // Was rgba($accent, .3) — see .page-icon note above.
+  &--active { background: $accent-bg; border-color: rgba(var(--admin-accent-rgb, 79, 70, 229), .3); color: $accent; font-weight: 700; }
 }
 
 .clear-filters-btn {
@@ -291,6 +302,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   color: $red; cursor: pointer; flex-shrink: 0;
   transition: background .15s;
 
+  // $red is literal, so rgba($red, ...) still works fine here.
   &:hover { background: rgba($red, .16); }
 }
 
@@ -317,7 +329,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .bulk-bar {
   display: flex; align-items: center; gap: 14px;
   background: $accent-bg;
-  border: 1.5px solid rgba($accent, .25);
+  // Was rgba($accent, .25) — see .page-icon note above.
+  border: 1.5px solid rgba(var(--admin-accent-rgb, 79, 70, 229), .25);
   border-radius: $radius-md;
   padding: 10px 16px;
   animation: bar-in .2s $ease-spring both;
@@ -339,6 +352,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &:hover { background: $surface2; color: $text-primary; border-color: $accent; }
 
   &--danger {
+    // $red is literal, so rgba($red, ...) still works fine here.
     color: $red; border-color: rgba($red, .25);
     &:hover { background: $red-bg; border-color: $red; color: $red; }
   }
@@ -418,7 +432,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .table-row {
   animation: row-in .3s $ease both;
 
-  &--selected td { background: rgba($accent, .05); }
+  // Was rgba($accent, .05) — see .page-icon note above.
+  &--selected td { background: rgba(var(--admin-accent-rgb, 79, 70, 229), .05); }
   &:has(.action-menu) { position: relative; z-index: 5; }
 }
 
@@ -620,7 +635,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   animation: pop-in .3s $ease both;
 
   &:hover { box-shadow: $shadow-hover; transform: translateY(-2px); }
-  &--selected { border-color: rgba($accent, .4); background: rgba($accent, .03); }
+  // Was rgba($accent, .4) / rgba($accent, .03) — see .page-icon note above.
+  &--selected {
+    border-color: rgba(var(--admin-accent-rgb, 79, 70, 229), .4);
+    background: rgba(var(--admin-accent-rgb, 79, 70, 229), .03);
+  }
 }
 
 .review-card__top { display: flex; align-items: center; gap: 8px; }
@@ -776,7 +795,10 @@ body {
 }
 
 .toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
-.toolbar__left-scroll::-webkit-scrollbar-thumb { background: rgba($text-mid, .25); border-radius: 999px; }
+// Was rgba($text-mid, .25) — $text-mid is now a themed var() (a single
+// color, not an r,g,b triple), so it can't be split into rgba() channels.
+// A solid themed border color reads fine for a scrollbar thumb.
+.toolbar__left-scroll::-webkit-scrollbar-thumb { background: $border2; border-radius: 999px; }
 .toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
 
 .toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
