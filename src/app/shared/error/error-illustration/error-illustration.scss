@@ -1,0 +1,82 @@
+// error-illustration.scss
+// Uses the shared --store-* tokens defined in src/styles.scss so this stays
+// visually consistent with the rest of the storefront (and with future
+// illustrations added in later steps) without redeclaring hex values here.
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.error-illustration {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.error-illustration__backdrop {
+  fill: var(--store-accent-bg);
+  opacity: 0.6;
+}
+
+.error-illustration__route {
+  fill: none;
+  stroke: var(--store-border);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 10;
+}
+
+.error-illustration__parcel-body {
+  fill: var(--store-surface);
+  stroke: var(--store-ink);
+  stroke-width: 2.5;
+}
+
+.error-illustration__parcel-line,
+.error-illustration__parcel-flap {
+  fill: none;
+  stroke: var(--store-ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.error-illustration__search-lens {
+  fill: var(--store-surface);
+  stroke: var(--store-accent);
+  stroke-width: 3;
+}
+
+.error-illustration__search-handle {
+  stroke: var(--store-accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.error-illustration__mark {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  fill: var(--store-ink-light);
+}
+
+// Single, deliberate moment of motion — the "searching" glass gently bobs.
+// One orchestrated element, not scattered effects across the scene.
+.error-illustration__search {
+  animation: error-illustration-float 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes error-illustration-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-illustration__search {
+    animation: none;
+  }
+}
