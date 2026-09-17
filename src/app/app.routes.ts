@@ -61,4 +61,17 @@ export const routes: Routes = [
         loadChildren: () =>
         import('./admin/admin.routes').then(m => m.ADMIN_ROUTES),
     },
+    
+    {
+        path: 'error',
+        loadChildren: () =>
+        import('./shared/errors/error.routes').then(m => m.ERROR_ROUTES),
+    },
+    // Keep last: catches any URL that doesn't match a route above (typos,
+    // stale links, removed pages) and routes it to the 404 page instead of
+    // Angular's blank "cannot match" screen.
+    {
+        path: '**',
+        redirectTo: '/error/404',
+    },
 ];
