@@ -61,5 +61,7 @@ import type { ErrorCode } from '../error.model';
   styleUrl: './error-illustration.scss',
 })
 export class ErrorIllustration {
+
   readonly code = input<ErrorCode>('not-found');
+  
 }
