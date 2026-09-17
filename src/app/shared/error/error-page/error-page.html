@@ -1,0 +1,37 @@
+<main class="error-page">
+  <div class="error-page__inner">
+    <app-error-illustration [code]="entry.code" class="error-page__illustration" />
+
+    @if (entry.statusCode) {
+      <p class="error-page__code" aria-hidden="true">{{ entry.statusCode }}</p>
+    }
+
+    <h1 class="error-page__title" tabindex="-1" #heading>
+      {{ entry.i18nPrefix + '.title' | translate }}
+    </h1>
+
+    <p class="error-page__message">
+      {{ entry.i18nPrefix + '.message' | translate }}
+    </p>
+
+    <div class="error-page__actions">
+      <button
+        type="button"
+        class="error-page__btn error-page__btn--primary"
+        (click)="handleAction(entry.primaryAction)"
+      >
+        {{ entry.primaryAction.labelKey | translate }}
+      </button>
+
+      @if (entry.secondaryAction; as secondary) {
+        <button
+          type="button"
+          class="error-page__btn error-page__btn--secondary"
+          (click)="handleAction(secondary)"
+        >
+          {{ secondary.labelKey | translate }}
+        </button>
+      }
+    </div>
+  </div>
+</main>
