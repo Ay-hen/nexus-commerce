@@ -1,7 +1,6 @@
 // error-illustration.scss
-// Uses the shared --store-* tokens defined in src/styles.scss so this stays
-// visually consistent with the rest of the storefront (and with future
-// illustrations added in later steps) without redeclaring hex values here.
+// Enhanced 404 illustration: lost traveler on a broken route.
+// Uses --store-* tokens from src/styles.scss for consistency.
 
 :host {
   display: block;
@@ -16,66 +15,150 @@
   display: block;
 }
 
+// ── Backdrop ──────────────────────────────────────────────────────────────
 .error-illustration__backdrop {
   fill: var(--store-accent-bg);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
+// ── Map grid (faint background grid) ───────────────────────────────────────
+.error-illustration__map-grid {
+  stroke: var(--store-border);
+  stroke-width: 1;
+  opacity: 0.25;
+}
+
+// ── Location markers ───────────────────────────────────────────────────────
+.error-illustration__location-start {
+  .error-illustration__pin-outer {
+    fill: var(--store-accent);
+    opacity: 0.8;
+  }
+  
+  .error-illustration__pin-inner {
+    fill: var(--store-surface);
+  }
+}
+
+.error-illustration__location-missing {
+  .error-illustration__pin-empty {
+    fill: none;
+    stroke: var(--store-border);
+    stroke-width: 2;
+    opacity: 0.4;
+  }
+  
+  .error-illustration__pin-empty-inner {
+    fill: none;
+    stroke: var(--store-border);
+    stroke-width: 1.5;
+    opacity: 0.3;
+  }
+  
+  .error-illustration__missing-mark {
+    stroke: var(--store-border);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.4;
+  }
+}
+
+// ── Route paths ────────────────────────────────────────────────────────────
 .error-illustration__route {
   fill: none;
-  stroke: var(--store-border);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 2 10;
-}
-
-.error-illustration__parcel-body {
-  fill: var(--store-surface);
-  stroke: var(--store-ink);
-  stroke-width: 2.5;
-}
-
-.error-illustration__parcel-line,
-.error-illustration__parcel-flap {
-  fill: none;
-  stroke: var(--store-ink);
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+.error-illustration__route--solid {
+  stroke: var(--store-accent);
+  opacity: 1;
+  stroke-dasharray: none;
+}
+
+.error-illustration__route--dashed {
+  stroke: var(--store-accent);
+  stroke-dasharray: 4 4;
+  opacity: 0.7;
+}
+
+.error-illustration__route--broken {
+  stroke: var(--store-border);
+  stroke-dasharray: 2 4;
+  opacity: 0.4;
+}
+
+// ── Traveler (shopping bag with ?) ─────────────────────────────────────────
+.error-illustration__traveler {
+  animation: error-illustration-lost 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.error-illustration__bag-body {
+  fill: var(--store-surface);
+  stroke: var(--store-accent);
+  stroke-width: 2;
+}
+
+.error-illustration__bag-handle {
+  fill: none;
+  stroke: var(--store-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.error-illustration__bag-mark {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  fill: var(--store-accent);
+}
+
+// ── Search / compass ───────────────────────────────────────────────────────
+.error-illustration__search {
+  animation: error-illustration-float 3.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
 .error-illustration__search-lens {
   fill: var(--store-surface);
   stroke: var(--store-accent);
-  stroke-width: 3;
+  stroke-width: 2;
 }
 
 .error-illustration__search-handle {
   stroke: var(--store-accent);
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-linecap: round;
 }
 
-.error-illustration__mark {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 22px;
-  fill: var(--store-ink-light);
+.error-illustration__compass-line {
+  stroke: var(--store-accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.5;
 }
 
-// Single, deliberate moment of motion — the "searching" glass gently bobs.
-// One orchestrated element, not scattered effects across the scene.
-.error-illustration__search {
-  animation: error-illustration-float 3.2s ease-in-out infinite;
-  transform-origin: center;
+// ── Animations ─────────────────────────────────────────────────────────────
+// Traveler: gentle up-down motion (slight uncertainty)
+@keyframes error-illustration-lost {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-4px) scale(0.98); }
 }
 
+// Search glass: gentle rotation + bob (actively searching)
 @keyframes error-illustration-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-8px) rotate(-3deg); }
+  50%      { transform: translateY(0) rotate(0deg); }
+  75%      { transform: translateY(-6px) rotate(3deg); }
 }
 
+// ── Reduced motion ─────────────────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
+  .error-illustration__traveler,
   .error-illustration__search {
     animation: none;
   }
