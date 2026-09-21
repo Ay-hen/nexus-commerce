@@ -1,43 +1,62 @@
 // error-page.scss
-// Full-page error states render standalone (no navbar mounted above them),
-// so min-height: 100vh doesn't fight any existing layout chrome here.
+// Premium 404 page — full-height centered layout with generous whitespace.
+// No navbar above, so min-height: 100vh fills the viewport naturally.
 
 .error-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.5rem;
   background: var(--store-canvas);
 }
 
 .error-page__inner {
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
+// ── Illustration ──────────────────────────────────────────────────────────
 .error-page__illustration {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  
+  @media (max-width: 480px) {
+    margin-bottom: 2rem;
+  }
 }
 
+// ── Status code: small, caps, secondary text ──────────────────────────────
 .error-page__code {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--store-ink-light);
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
+// ── Main heading: premium, readable, strong hierarchy ─────────────────────
 .error-page__title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--store-ink);
-  margin-bottom: 0.625rem;
-  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 600px) {
+    font-size: 1.75rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 0.625rem;
+  }
 
   // Focused programmatically on load for screen-reader users (see
   // ErrorPage's afterNextRender); hide the ring visually since this isn't
@@ -45,48 +64,88 @@
   outline: none;
 }
 
+// ── Supporting message: readable, not overwhelming ───────────────────────
 .error-page__message {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--store-ink-mid);
   line-height: 1.6;
-  max-width: 34ch;
-  margin-bottom: 2rem;
+  max-width: 38ch;
+  margin-bottom: 2.5rem;
+  
+  @media (max-width: 480px) {
+    font-size: 0.9375rem;
+    margin-bottom: 2rem;
+  }
 }
 
+// ── Action buttons container ───────────────────────────────────────────────
 .error-page__actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  flex-direction: row;
+  gap: 1rem;
   width: 100%;
-  max-width: 260px;
+  max-width: 340px;
+  justify-content: center;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0.875rem;
+  }
 }
 
+// ── Button styling: premium, accessible, responsive ──────────────────────
 .error-page__btn {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
+  flex: 1;
+  padding: 0.8125rem 1.75rem;
   border-radius: var(--store-radius-pill);
   font-family: 'Poppins', sans-serif;
   font-size: 0.9375rem;
   font-weight: 600;
+  letter-spacing: -0.005em;
   cursor: pointer;
   border: 1.5px solid transparent;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  white-space: nowrap;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--store-accent);
     outline-offset: 2px;
   }
-}
 
-.error-page__btn--primary {
-  background: var(--store-accent);
-  color: #ffffff;
-
-  &:hover {
-    background: var(--store-accent-dark);
+  @media (max-width: 480px) {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    width: 100%;
+    flex: none;
   }
 }
 
+// ── Primary button: solid accent, white text ──────────────────────────────
+.error-page__btn--primary {
+  background: var(--store-accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.12);
+
+  &:hover {
+    background: var(--store-accent-dark);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+  }
+
+  &:active {
+    box-shadow: 0 1px 4px rgba(0, 102, 255, 0.15);
+  }
+}
+
+// ── Secondary button: transparent, border, ink text ───────────────────────
 .error-page__btn--secondary {
   background: transparent;
   border-color: var(--store-border);
@@ -96,10 +155,21 @@
     border-color: var(--store-ink-light);
     background: var(--store-border-subtle);
   }
+
+  &:active {
+    background: var(--store-border);
+  }
 }
 
-@media (min-width: 480px) {
+// ── Tablet / desktop: side-by-side buttons ────────────────────────────────
+@media (min-width: 481px) and (max-width: 768px) {
   .error-page__actions {
-    flex-direction: row;
+    gap: 0.875rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .error-page__actions {
+    gap: 1rem;
   }
 }
