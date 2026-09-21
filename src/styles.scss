@@ -9,6 +9,60 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 /* ════════════════════════════════════════════════════════════════════════
+   STORE (PUBLIC / CUSTOMER-FACING) DESIGN TOKENS
+   ════════════════════════════════════════════════════════════════════════
+   The public storefront doesn't have a theming layer like the Admin side's
+   ThemeService (see ADMIN THEME SYSTEM below) — there's no dark mode or
+   live accent-color switching here, just one fixed light palette. Every
+   customer-facing component (products.scss, notification.scss, etc.)
+   already hardcodes this exact palette as local $sass variables, by
+   convention, so components stay visually identical without a shared file.
+
+   These --store-* custom properties formalize that same palette as real
+   CSS variables, WITHOUT touching any existing component. They exist so
+   new shared UI (the error/exception system being added in
+   src/app/shared/error/, plus later toast/modal/empty-state components)
+   can reference one source of truth instead of yet another set of
+   hardcoded hex values. Existing components are untouched and keep working
+   exactly as before.
+
+   If the storefront ever gets a dark mode, this is the block to extend
+   with a `[data-store-theme="dark"]` override, mirroring the Admin
+   pattern below.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --store-canvas:        #FAFAF9;
+  --store-surface:       #FFFFFF;
+  --store-ink:           #0A0A0B;
+  --store-ink-mid:       #6B7280;
+  --store-ink-light:     #9CA3AF;
+  --store-border:        #E5E7EB;
+  --store-border-subtle: #F3F4F6;
+
+  --store-accent:        #0066FF;
+  --store-accent-dark:   #0050CC;
+  --store-accent-bg:     #EFF5FF;
+
+  --store-sale-red:      #FF3B30;
+  --store-sale-bg:       #FFF1F0;
+  --store-new-green:     #00C06B;
+  --store-new-bg:        #EDFFF5;
+  --store-success:       #16A34A;
+  --store-success-bg:    #ECFDF5;
+
+  --store-star:          #F59E0B;
+  --store-star-empty:    #E5E7EB;
+
+  --store-radius-sm:     8px;
+  --store-radius-md:     12px;
+  --store-radius-lg:     16px;
+  --store-radius-xl:     20px;
+  --store-radius-pill:   999px;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
    ADMIN THEME SYSTEM
    ════════════════════════════════════════════════════════════════════════
    Centralized design tokens for the Admin dashboard, driven by
