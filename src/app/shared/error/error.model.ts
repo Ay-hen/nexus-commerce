@@ -59,7 +59,7 @@ const ERROR_CATALOG: Partial<Record<ErrorCode, ErrorCatalogEntry>> = {
     code: 'not-found',
     statusCode: 404,
     i18nPrefix: 'errors.notFound',
-    primaryAction: { labelKey: 'errors.actions.browseProducts', route: '/products', style: 'primary' },
+    primaryAction: { labelKey: 'errors.actions.goBack', route: '/products', style: 'primary' },
     secondaryAction: { labelKey: 'errors.actions.goHome', route: '/home', style: 'secondary' },
   },
 };

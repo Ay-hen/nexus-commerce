@@ -137,8 +137,15 @@
 
   "errors": {
     "generic": "Something went wrong. Please try again.",
-    "notFound": "Not found.",
-    "loadFailed": "Failed to load. Please try again."
+    "loadFailed": "Failed to load. Please try again.",
+    "notFound": {
+      "title": "Looks like this page got lost.",
+      "message": "The page you're looking for doesn't exist or may have been moved."
+    },
+    "actions": {
+      "goHome": "Go Home",
+      "goBack": "Go Back"
+    }
   },
 
   "navigation": {
