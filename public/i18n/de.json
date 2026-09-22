@@ -138,7 +138,18 @@
       "title": "Diese Seite scheint sich verlaufen zu haben.",
       "message": "Die gesuchte Seite existiert nicht oder wurde möglicherweise verschoben."
     },
-    
+    "unauthorized": {
+      "title": "Anmeldung erforderlich",
+      "message": "Bitte melden Sie sich an, um fortzufahren."
+    },
+    "forbidden": {
+      "title": "Zugriff verweigert",
+      "message": "Sie haben keine Berechtigung, auf diesen Bereich zuzugreifen."
+    },
+    "serverError": {
+      "title": "Etwas ist schiefgelaufen",
+      "message": "Unsere Server sind auf ein unerwartetes Problem gestoßen."
+    },
     "actions": {
       "goHome": "Zur Startseite",
       "goBack": "Zurück",
