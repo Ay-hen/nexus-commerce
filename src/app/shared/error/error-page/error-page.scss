@@ -20,12 +20,171 @@
   text-align: center;
 }
 
-// ── Illustration ──────────────────────────────────────────────────────────
-.error-page__illustration {
-  margin-bottom: 2.5rem;
-  
-  @media (max-width: 480px) {
+// ── Illustration Container ─────────────────────────────────────────────────
+.error-page__illustration-container {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 380 / 280;
+  margin: 0 auto 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
     margin-bottom: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    margin-bottom: 1.75rem;
+  }
+}
+
+.error-page__illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+// ── Compass (searching animation) ───────────────────────────────────────────
+.error-page__compass {
+  position: absolute;
+  top: 8%;
+  right: 12%;
+  width: 70px;
+  height: 70px;
+  animation: error-page-compass-search 8s ease-in-out infinite;
+  transform-origin: center;
+
+  @media (max-width: 600px) {
+    width: 60px;
+    height: 60px;
+    top: 5%;
+    right: 8%;
+  }
+
+  @media (max-width: 480px) {
+    width: 52px;
+    height: 52px;
+    top: 6%;
+    right: 5%;
+  }
+}
+
+.error-page__compass-icon {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 8px rgba(0, 102, 255, 0.15));
+}
+
+.error-page__compass-outer {
+  fill: none;
+  stroke: var(--store-accent);
+  stroke-width: 2.5;
+}
+
+.error-page__compass-needle {
+  transform-origin: center;
+  animation: error-page-compass-rotate 12s linear infinite;
+}
+
+.error-page__compass-needle-upper {
+  fill: var(--store-accent);
+}
+
+.error-page__compass-needle-lower {
+  fill: var(--store-accent);
+  opacity: 0.6;
+}
+
+.error-page__compass-mark {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--store-ink-light);
+}
+
+// ── Question Mark (emphasis animation) ──────────────────────────────────────
+.error-page__question-mark {
+  position: absolute;
+  top: 42%;
+  left: 40%;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--store-accent);
+  animation: error-page-question-bob 2.2s ease-in-out infinite;
+  will-change: transform, opacity;
+
+  @media (max-width: 600px) {
+    font-size: 32px;
+    top: 44%;
+    left: 38%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    top: 45%;
+    left: 36%;
+  }
+}
+
+.error-page__question-char {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+}
+
+// ── Animations ─────────────────────────────────────────────────────────────
+
+// Compass: Slow rotation + vertical bobbing
+@keyframes error-page-compass-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes error-page-compass-search {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+    opacity: 0.85;
+  }
+  25% {
+    transform: translateY(-8px) rotate(5deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0) rotate(-5deg);
+    opacity: 0.85;
+  }
+  75% {
+    transform: translateY(-6px) rotate(5deg);
+    opacity: 1;
+  }
+}
+
+// Question mark: Bob and subtle fade
+@keyframes error-page-question-bob {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+// ── Respect user motion preferences ─────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .error-page__compass,
+  .error-page__question-mark {
+    animation: none;
+    opacity: 1;
+  }
+
+  .error-page__compass-needle {
+    animation: none;
   }
 }
 
