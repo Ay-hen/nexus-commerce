@@ -142,9 +142,23 @@
       "title": "Looks like this page got lost.",
       "message": "The page you're looking for doesn't exist or may have been moved."
     },
+    "unauthorized": {
+      "title": "Authentication required",
+      "message": "Please sign in to continue."
+    },
+    "forbidden": {
+      "title": "Access denied",
+      "message": "You don't have permission to access this area."
+    },
+    "serverError": {
+      "title": "Something went wrong",
+      "message": "Our servers encountered an unexpected problem."
+    },
     "actions": {
       "goHome": "Go Home",
-      "goBack": "Go Back"
+      "goBack": "Go Back",
+      "signIn": "Sign In",
+      "tryAgain": "Try Again"
     }
   },
 
