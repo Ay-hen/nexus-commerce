@@ -130,10 +130,21 @@
     "mustBePositive": "Muss größer als 0 sein.",
     "invalidNumber": "Geben Sie eine gültige Zahl ein."
   },
+
   "errors": {
     "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "notFound": "Nicht gefunden.",
-    "loadFailed": "Laden fehlgeschlagen. Bitte versuchen Sie es erneut."
+    "loadFailed": "Laden fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "notFound": {
+      "title": "Diese Seite scheint sich verlaufen zu haben.",
+      "message": "Die gesuchte Seite existiert nicht oder wurde möglicherweise verschoben."
+    },
+    
+    "actions": {
+      "goHome": "Zur Startseite",
+      "goBack": "Zurück",
+      "signIn": "Anmelden",
+      "tryAgain": "Erneut versuchen"
+    }
   },
   "navigation": {
     "sections": {
