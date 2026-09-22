@@ -138,12 +138,26 @@
       "title": "On dirait que cette page s'est perdue.",
       "message": "La page que vous recherchez n'existe pas ou a peut-être été déplacée."
     },
+    "unauthorized": {
+      "title": "Authentification requise",
+      "message": "Veuillez vous connecter pour continuer."
+    },
+    "forbidden": {
+      "title": "Accès refusé",
+      "message": "Vous n'avez pas la permission d'accéder à cette section."
+    },
+    "serverError": {
+      "title": "Un problème est survenu",
+      "message": "Nos serveurs ont rencontré un problème inattendu."
+    },
     "actions": {
-      "goHome": "Aller à l'accueil",
-      "goBack": "Revenir en arrière"
+      "goHome": "Retour à l'accueil",
+      "goBack": "Retour",
+      "signIn": "Se connecter",
+      "tryAgain": "Réessayer"
     }
   },
-  
+
   "navigation": {
     "sections": {
       "overview": "Aperçu",
