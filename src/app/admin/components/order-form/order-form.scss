@@ -1,0 +1,285 @@
+// order-form.scss
+// ─── Admin tokens (resolve through the CSS custom properties ThemeService writes) ───
+$surface:       var(--surface, #FFFFFF);
+$surface2:      var(--surface-2, #F5F7FA);
+$surface3:      var(--surface-3, #F1F4F8);
+$border:        var(--border, #E5E7EB);
+$border2:       var(--border-2, #D1D5DB);
+
+$text-primary:  var(--text-primary, #111827);
+$text-mid:      var(--text-mid, #6B7280);
+$text-light:    var(--text-light, #9CA3AF);
+
+$accent:        var(--admin-accent, #4F46E5);
+$accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
+
+$green:         #10B981;
+$green-bg:      rgba(16,185,129,.08);
+$red:           #EF4444;
+$amber:         #F59E0B;
+$amber-bg:      rgba(245,158,11,.08);
+$purple:        #7C3AED;
+$purple-bg:     rgba(124,58,237,.08);
+
+$radius-sm:     var(--radius-sm, 8px);
+$radius-md:     var(--radius-md, 12px);
+$radius-lg:     var(--radius-lg, 18px);
+$radius-pill:   var(--radius-pill, 999px);
+
+$shadow-card:   0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+$ease:          cubic-bezier(.25,.1,.25,1);
+
+// ─── Keyframes ───────────────────────────────────────────────────────────────
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+:host { display: block; }
+* { box-sizing: border-box; }
+
+.order-form-page {
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: $text-primary;
+  animation: pop-in .25s $ease;
+}
+
+// ─── Sticky bar ──────────────────────────────────────────────────────────────
+.sticky-bar {
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  background: rgba(var(--surface-rgb, 255, 255, 255), .92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sticky-bar__left { display: flex; align-items: center; gap: 14px; }
+.sticky-bar__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.back-link {
+  width: 34px; height: 34px;
+  background: $surface2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  display: flex; align-items: center; justify-content: center;
+  color: $text-mid; text-decoration: none;
+  transition: background .15s, color .15s, border-color .15s;
+  flex-shrink: 0;
+  &:hover { background: $surface3; color: $text-primary; border-color: $border2; }
+}
+
+.page-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; margin: 0 0 2px; }
+.page-sub { font-size: .78rem; color: $text-light; margin: 0; }
+
+.btn-ghost, .btn-save {
+  height: 38px;
+  padding: 0 18px;
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: $radius-sm;
+  font: inherit; font-size: .84rem; cursor: pointer;
+}
+.btn-ghost {
+  background: $surface; border: 1px solid $border2; font-weight: 600; color: $text-mid;
+  transition: background .15s, color .15s, border-color .15s;
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+.btn-save {
+  background: $accent; border: none; font-weight: 700; color: #fff;
+  transition: filter .15s, box-shadow .15s;
+  &:hover:not(:disabled) { filter: brightness(.92); box-shadow: 0 4px 14px $accent-glow; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+.spinner-sm {
+  width: 15px; height: 15px;
+  border: 2px solid rgba(17,24,39,.12); border-top-color: $text-mid;
+  border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
+  &--white { border-color: rgba(255,255,255,.3); border-top-color: #fff; }
+}
+
+// ─── Banners ─────────────────────────────────────────────────────────────────
+.form-banner {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: $accent-bg; color: $text-primary;
+  border: 1px solid $border; border-radius: $radius-md;
+  padding: 12px 14px; margin-bottom: 20px;
+  font-size: .8rem; line-height: 1.45;
+  svg { flex-shrink: 0; margin-top: 1px; color: $accent; }
+  &--warn { background: $amber-bg; svg { color: $amber; } }
+}
+
+// ─── Layout ──────────────────────────────────────────────────────────────────
+.form-layout {
+  display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start;
+  @media (max-width: 1100px) { grid-template-columns: 1fr 260px; }
+  @media (max-width: 900px)  { grid-template-columns: 1fr; }
+}
+.form-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.form-col--side {
+  position: sticky; top: calc(60px + 72px);
+  @media (max-width: 900px) { position: static; }
+}
+
+.form-card {
+  background: $surface; border: 1px solid $border; border-radius: $radius-lg;
+  padding: 22px; box-shadow: $shadow-card;
+}
+.card-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid $border;
+}
+.card-header__icon {
+  width: 32px; height: 32px; border-radius: $radius-sm;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  &.blue   { background: $accent-bg; color: $accent; }
+  &.green  { background: $green-bg;  color: $green; }
+  &.amber  { background: $amber-bg;  color: $amber; }
+  &.purple { background: $purple-bg; color: $purple; }
+  &.slate  { background: $surface3;  color: $text-mid; }
+}
+.card-title { font-size: .95rem; font-weight: 700; color: $text-primary; margin: 0; }
+.subsection-title { font-size: .8rem; font-weight: 700; color: $text-mid; margin: 0 0 12px; }
+
+// ─── Fields ──────────────────────────────────────────────────────────────────
+.field-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  &--top { margin-top: 20px; }
+}
+.field {
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  &--full { grid-column: 1 / -1; }
+  &--error .field__input,
+  &--error .field__textarea,
+  &--error .field__select {
+    border-color: $red;
+    &:focus { box-shadow: 0 0 0 3px rgba($red, .15); }
+  }
+}
+.field__label { font-size: .78rem; font-weight: 600; color: $text-mid; letter-spacing: .01em; }
+.required { color: $red; margin-left: 2px; }
+
+.field__input, .field__textarea, .field__select {
+  width: 100%;
+  background: $surface2; border: 1.5px solid $border; border-radius: $radius-sm;
+  font: inherit; font-size: .85rem; color: $text-primary;
+  transition: border-color .15s $ease, box-shadow .15s, background .15s;
+  &::placeholder { color: $text-light; }
+  &:focus {
+    outline: none; border-color: $accent; background: $surface;
+    box-shadow: 0 0 0 3px $accent-glow;
+  }
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+.field__input, .field__select { height: 40px; padding: 0 12px; }
+.field__textarea { padding: 10px 12px; resize: vertical; min-height: 96px; }
+
+.field__error { font-size: .74rem; color: $red; margin: 0; }
+.field__error--block { margin-bottom: 12px; }
+.field__hint { font-size: .72rem; color: $text-light; margin: 0; }
+
+// ─── Customer chip ───────────────────────────────────────────────────────────
+.customer-chip {
+  display: flex; align-items: center; gap: 12px;
+  background: $surface2; border: 1px solid $border; border-radius: $radius-md; padding: 12px 14px;
+  &--spaced { margin-top: 14px; }
+}
+.customer-chip__avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: $accent-bg; color: $accent; font-size: .8rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.customer-chip__name { font-size: .88rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px; }
+.customer-chip__meta { font-size: .76rem; color: $text-mid; margin: 2px 0 0; }
+.badge-vip {
+  font-size: .62rem; font-weight: 800; letter-spacing: .04em;
+  background: $amber-bg; color: $amber; border-radius: $radius-pill; padding: 2px 8px;
+}
+.customer-chip + .field__hint { margin-top: 8px; }
+
+// ─── Items ───────────────────────────────────────────────────────────────────
+.item-list { display: flex; flex-direction: column; gap: 12px; }
+.item-row {
+  display: flex; flex-direction: column; gap: 12px;
+  border: 1px solid $border; border-radius: $radius-md; padding: 14px; background: $surface2;
+}
+.item-row__main { display: flex; align-items: flex-start; gap: 12px; }
+.item-row__product { flex: 1; }
+.item-row__thumb {
+  width: 52px; height: 52px; border-radius: $radius-sm; background: $surface;
+  border: 1px solid $border; overflow: hidden; flex-shrink: 0; margin-top: 20px;
+  img { width: 100%; height: 100%; object-fit: contain; }
+}
+.item-row__nums {
+  display: grid; grid-template-columns: 110px 130px 1fr 36px; gap: 12px; align-items: end;
+  @media (max-width: 640px) { grid-template-columns: 1fr 1fr; }
+}
+.item-row__total {
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-end; padding-bottom: 2px;
+  strong { font-size: .95rem; }
+  @media (max-width: 640px) { align-items: flex-start; }
+}
+
+.icon-btn {
+  width: 36px; height: 36px; border-radius: $radius-sm;
+  background: $surface; border: 1px solid $border; color: $text-mid;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  &:hover:not(:disabled) { background: $surface3; color: $text-primary; }
+  &--danger:hover:not(:disabled) { color: $red; border-color: $red; }
+  &:disabled { opacity: .4; cursor: not-allowed; }
+}
+.btn-add {
+  margin-top: 14px; height: 36px; padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: transparent; border: 1.5px dashed $border2; border-radius: $radius-sm;
+  font: inherit; font-size: .8rem; font-weight: 600; color: $accent; cursor: pointer;
+  transition: background .15s, border-color .15s;
+  &:hover:not(:disabled) { background: $accent-bg; border-color: $accent; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
+}
+
+// ─── Addresses / checkbox ────────────────────────────────────────────────────
+.check-row {
+  display: flex; align-items: center; gap: 10px; margin: 18px 0;
+  font-size: .82rem; color: $text-primary; cursor: pointer;
+  input { width: 16px; height: 16px; accent-color: var(--admin-accent, #4F46E5); }
+}
+
+// ─── Summary ─────────────────────────────────────────────────────────────────
+.summary-order {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 14px 0 4px;
+}
+.summary-order__number { font-weight: 700; font-size: .85rem; }
+.status-pill {
+  font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: $radius-pill;
+  background: $surface3; color: $text-mid;
+  &--pending, &--confirmed, &--processing { background: $amber-bg; color: $amber; }
+  &--packed, &--shipped { background: $accent-bg; color: $accent; }
+  &--delivered { background: $green-bg; color: $green; }
+  &--cancelled, &--refunded { background: rgba($red, .08); color: $red; }
+}
+.summary-lines { margin: 14px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.summary-line {
+  display: flex; justify-content: space-between; gap: 8px; font-size: .82rem;
+  dt { color: $text-mid; }
+  dd { margin: 0; font-weight: 600; }
+  &--discount dd { color: $green; }
+  &--total {
+    padding-top: 12px; border-top: 1px solid $border; font-size: .95rem;
+    dt { color: $text-primary; font-weight: 700; }
+    dd { font-weight: 800; }
+  }
+}
+.summary-note { margin-top: 16px; line-height: 1.45; }
