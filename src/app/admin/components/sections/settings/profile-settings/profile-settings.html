@@ -5,14 +5,6 @@
     <p class="settings-card__sub">{{ 'settings.profile.subtitle' | translate }}</p>
   </div>
 
-  <div class="avatar-upload">
-    <div class="avatar-upload__preview">{{ avatarInitials() }}</div>
-    <div class="avatar-upload__actions">
-      <label class="btn-ghost btn-ghost--sm" for="profile-photo-input">{{ 'settings.profile.uploadPhoto' | translate }}</label>
-      <input id="profile-photo-input" type="file" accept="image/*" class="sr-only" (change)="onPhotoSelected($event)" />
-      <p class="avatar-upload__hint">{{ 'settings.profile.uploadHint' | translate }}</p>
-    </div>
-  </div>
 
   <div class="form-grid">
     <div class="form-field" [class.form-field--error]="hasError('name')">
@@ -35,7 +27,7 @@
 
     <div class="form-field">
       <label class="form-label">{{ 'settings.profile.jobTitle' | translate }}</label>
-      <input class="form-input" type="text" [ngModel]="settings.jobTitle" (ngModelChange)="update('jobTitle', $event)" />
+      <input class="form-input" type="text" [ngModel]="settings.jobTitle" readonly (ngModelChange)="update('jobTitle', $event)" />
     </div>
 
     <div class="form-field" [class.form-field--error]="hasError('phone')">

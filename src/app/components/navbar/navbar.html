@@ -5,46 +5,54 @@
   </div>
 
   <ul class="nav-links">
-  <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <a routerLink="/home">Home</a>
-  </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a routerLink="/home">Home</a>
+    </li>
 
-  <li routerLinkActive="active">
-    <a routerLink="/categories">Categories</a>
-  </li>
+    <li routerLinkActive="active">
+      <a routerLink="/categories">Categories</a>
+    </li>
 
-  <li routerLinkActive="active">
-    <a routerLink="/products">Products</a>
-  </li>
+    <li routerLinkActive="active">
+      <a routerLink="/products">Products</a>
+    </li>
 
-  <li routerLinkActive="active">
-    <a routerLink="/contact">Contact</a>
-  </li>
-</ul>
+    <li routerLinkActive="active">
+      <a routerLink="/contact">Contact</a>
+    </li>
+  </ul>
 
   <div class="right-nav">
 
-    <!-- favorite products -->
-    <div class="icon" (click)="toFavorites()" title="Favorites">
-      @if (favCount > 0) {
-        <span class="badge">{{ favCount }}</span>
-      }
-      <img class="icon-img" [class.heart-bounce]="favCount > 0" [src]="icons.like" alt="Favorites" />
-    </div>
+    @if (auth.isLoggedIn()) {
 
-    <!-- Cart -->
-    <div class="icon">
-      @if (buy > 0) {
-        <span class="badge">{{ buy }}</span>
-      }
-      <img class="icon-img" (click)="toCart()" [src]="icons.shopping" alt="shopping" />
-    </div>
-    
-    <!-- Notification -->
-    
-    <app-notification></app-notification>
+      <!-- favorite products -->
+      <div class="icon" (click)="toFavorites()" title="Favorites">
+        @if (data.favCount() > 0) {
+          <span class="badge">{{ data.favCount() }}</span>
+        }
+        <img class="icon-img" [class.heart-bounce]="data.favCount() > 0" [src]="icons.like" alt="Favorites" />
+      </div>
 
-    <!-- Sign In -->
-    <button class="sign-in-btn" (click)="signIn()">Sign In</button>
+      <!-- Cart -->
+      <div class="icon">
+        @if (data.cartCount() > 0) {
+          <span class="badge">{{ data.cartCount() }}</span>
+        }
+        <img class="icon-img" (click)="toCart()" [src]="icons.shopping" alt="shopping" />
+      </div>
+
+      <!-- Notification -->
+      <app-notification></app-notification>
+
+      <!-- Sign Out -->
+      <button class="sign-in-btn" (click)="signOut()">Sign Out</button>
+
+    } @else {
+
+      <!-- Sign In -->
+      <button class="sign-in-btn" (click)="signIn()">Sign In</button>
+
+    }
   </div>
 </div>

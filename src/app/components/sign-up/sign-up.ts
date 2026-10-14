@@ -9,6 +9,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../auth/auth';
 
 
 
@@ -100,6 +101,7 @@ export class SignUp implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private auth: Auth,
   ) {}
  
   // ─── Lifecycle ───────────────────────────────────────────────────────────────
@@ -266,8 +268,10 @@ export class SignUp implements OnInit, OnDestroy {
     this.errorMessage.set('');
  
     try {
-      // await this.authService.signUp(this.form.value);
-      await new Promise(resolve => setTimeout(resolve, 1600));
+      // Creates the account and starts the shared session (navbar icons appear).
+      // 🔁 Swap Auth.mockSignUp for the real Spring Security call later.
+      const { firstName, lastName, email, password } = this.form.value;
+      await this.auth.mockSignUp(`${firstName} ${lastName}`.trim(), email, password);
  
       this.authState.set('success');
       setTimeout(() => this.router.navigate(['/home']), 1000);

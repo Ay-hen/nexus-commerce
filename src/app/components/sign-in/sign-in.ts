@@ -2,6 +2,7 @@ import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../auth/auth';
 
 export type AuthState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -30,6 +31,7 @@ export class SignIn implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private auth: Auth,
   ) {}
 
   ngOnInit(): void {
@@ -82,10 +84,9 @@ export class SignIn implements OnInit, OnDestroy {
     this.errorMessage.set('');
 
     try {
-      // TODO: replace with real AuthService call
-      // const { token } = await this.authService.signIn(this.form.value);
-      // localStorage.setItem('nexus_token', token);
-      await new Promise(resolve => setTimeout(resolve, 1400));
+      // Starts the shared session (navbar icons appear and load their data).
+      // 🔁 Swap Auth.mockLogin for the real Spring Security call later.
+      await this.auth.mockLogin(this.form.value.email, this.form.value.password);
 
       this.authState.set('success');
       setTimeout(() => this.router.navigate(['/home']), 900);
