@@ -5,115 +5,19 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '../../../localization/translate.pipe';
 import { LanguageService } from '../../../localization/language.service';
+import { OrderService } from '../../services/order.service';
+import {
+  Order, OrderLineItem, OrderStatus, PaymentMethod, PaymentStatus,
+  ShippingStatus, TimelineEvent, TimelineKind,
+} from '../../model/order.model';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-export type OrderStatus =
-  | 'pending' | 'confirmed' | 'processing' | 'packed'
-  | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
-
-export type PaymentStatus = 'paid' | 'pending' | 'failed' | 'refunded';
-export type ShippingStatus = 'preparing' | 'ready' | 'in-transit' | 'delivered' | 'returned';
-export type PaymentMethod = 'Credit Card' | 'PayPal' | 'Cash on Delivery' | 'Bank Transfer' | 'Wallet';
-export type ShippingMethod = 'Standard' | 'Express' | 'Overnight' | 'Pickup';
-
+// Domain types (Order, OrderStatus, …) now live in the shared order model so
+// the list, create-order, update-order and OrderService all use one definition.
 export type SearchByField = 'orderNumber' | 'customerName' | 'email' | 'phone' | 'productName' | 'sku';
 export type SortByField = 'newest' | 'oldest' | 'highest' | 'lowest' | 'customer';
 export type DateRangeFilter = 'all' | 'today' | '7d' | '30d' | 'custom';
 export type ViewMode = 'table' | 'grid';
-
-export interface OrderLineItem {
-  id: string;
-  name: string;
-  sku: string;
-  image: string;
-  price: number;
-  quantity: number;
-  discount: number;
-  inventoryStatus: 'in-stock' | 'low-stock' | 'out-of-stock';
-}
-
-export interface OrderAddress {
-  name: string;
-  phone: string;
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-}
-
-export interface OrderCustomer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  customerSince: string;
-  totalOrders: number;
-  lifetimeSpend: number;
-  vip: boolean;
-}
-
-export interface OrderPayment {
-  method: PaymentMethod;
-  transactionId: string;
-  date: string;
-  status: PaymentStatus;
-  amountPaid: number;
-  refundAmount: number;
-  invoiceNumber: string;
-}
-
-export interface OrderShipping {
-  method: ShippingMethod;
-  company: string;
-  trackingNumber: string;
-  estimatedDelivery: string;
-  cost: number;
-  status: ShippingStatus;
-}
-
-export type TimelineKind =
-  | 'placed' | 'payment' | 'confirmed' | 'packed'
-  | 'shipped' | 'out-for-delivery' | 'delivered' | 'cancelled' | 'refunded';
-
-export interface TimelineEvent {
-  id: string;
-  kind: TimelineKind;
-  label: string;
-  date: string;
-  employee: string;
-  notes: string;
-}
-
-export interface Order {
-  id: string;
-  orderNumber: string;
-  customer: OrderCustomer;
-  items: OrderLineItem[];
-  orderDate: string;
-  status: OrderStatus;
-  paymentMethod: PaymentMethod;
-  paymentStatus: PaymentStatus;
-  shippingMethod: ShippingMethod;
-  shippingStatus: ShippingStatus;
-  assignedEmployee: string;
-  lastUpdated: string;
-
-  subtotal: number;
-  discount: number;
-  couponCode: string | null;
-  shippingCost: number;
-  tax: number;
-  total: number;
-
-  shippingAddress: OrderAddress;
-  billingAddress: OrderAddress;
-  payment: OrderPayment;
-  shipping: OrderShipping;
-  timeline: TimelineEvent[];
-  notes: string;
-}
 
 // Maps PaymentMethod (data value) -> translation key segment, for display only.
 const PAYMENT_METHOD_KEY_MAP: Record<PaymentMethod, string> = {
@@ -127,7 +31,7 @@ const PAYMENT_METHOD_KEY_MAP: Record<PaymentMethod, string> = {
 const TIMELINE_KEY_MAP: Record<TimelineKind, string> = {
   placed: 'placed', payment: 'payment', confirmed: 'confirmed', packed: 'packed',
   shipped: 'shipped', 'out-for-delivery': 'outForDelivery', delivered: 'delivered',
-  cancelled: 'cancelled', refunded: 'refunded',
+  cancelled: 'cancelled', refunded: 'refunded', updated: 'updated',
 };
 
 @Component({
@@ -138,6 +42,8 @@ const TIMELINE_KEY_MAP: Record<TimelineKind, string> = {
 })
 export class Orders {
   protected lang = inject(LanguageService);
+
+  private orderService = inject(OrderService);
 
   constructor(private router: Router) {}
 
@@ -241,232 +147,8 @@ export class Orders {
     { key: 'customer', label: 'orders.sort.customer' },
   ];
 
-  // ── Mock data source pools ────────────────────────────────────────────
-  private customerPool = [
-    { name: 'Ayoub Hennani', email: 'ayoub@nexus.com', phone: '+212 6 12 34 56 78' },
-    { name: 'Sara Idrissi', email: 'sara@mail.com', phone: '+212 6 22 11 44 09' },
-    { name: 'Karim Mansouri', email: 'karim@mail.com', phone: '+212 6 61 78 90 12' },
-    { name: 'Leila Boudali', email: 'leila@mail.com', phone: '+212 6 55 32 87 40' },
-    { name: 'Youssef Alami', email: 'youssef@mail.com', phone: '+212 6 44 90 21 33' },
-    { name: 'Nadia Cherkaoui', email: 'nadia@mail.com', phone: '+212 6 09 87 65 43' },
-    { name: 'Omar Fassi', email: 'omar@mail.com', phone: '+212 6 71 20 55 19' },
-    { name: 'Ines Bennis', email: 'ines@mail.com', phone: '+212 6 33 48 91 27' },
-  ];
-
-  private productPool: { name: string; sku: string; image: string; price: number }[] = [
-    { name: 'WH-XM6 Wireless ANC', sku: 'SONY-WH-XM6', image: '/products/headphones.png', price: 249 },
-    { name: 'AirPods Pro 2nd Gen', sku: 'APL-APP-2G', image: '/products/airpods pro w1.png', price: 199 },
-    { name: 'Galaxy S24 Ultra', sku: 'SAM-S24U', image: '/products/samsung galxy s24 ultra silver.png', price: 1099 },
-    { name: 'MacBook Pro M3', sku: 'APL-MBP-M3', image: '/products/macbook pro 13.png', price: 1999 },
-    { name: 'Ultra Watch Series 3', sku: 'APL-UW-S3', image: '/products/appel watch.png', price: 189 },
-  ];
-
-  private employeePool = ['Ayoub H.', 'Sara I.', 'Karim M.', 'Unassigned'];
-  private shippingCompanies = ['DHL Express', 'FedEx', 'Aramex', 'Local Courier'];
-  private cities = ['Casablanca', 'Rabat', 'Marrakesh', 'Tangier', 'Fes'];
-
-  private statusCycle: OrderStatus[] = [
-    'pending', 'confirmed', 'processing', 'packed', 'shipped', 'delivered', 'cancelled', 'refunded',
-  ];
-
-  // ── Mock data (generated once, mutable via signal) ───────────────────────
-  private orders = signal<Order[]>(this.generateMockOrders());
-
-  private orderNumberFor(i: number): string {
-    return '#ORD-' + (10450 + i * 3);
-  }
-
-  private buildTimeline(status: OrderStatus, orderDate: Date, employee: string): TimelineEvent[] {
-    const steps: { kind: TimelineKind; label: string }[] = [
-      { kind: 'placed', label: 'Order Placed' },
-      { kind: 'payment', label: 'Payment Received' },
-      { kind: 'confirmed', label: 'Order Confirmed' },
-      { kind: 'packed', label: 'Order Packed' },
-      { kind: 'shipped', label: 'Order Shipped' },
-      { kind: 'out-for-delivery', label: 'Out for Delivery' },
-      { kind: 'delivered', label: 'Order Delivered' },
-    ];
-
-    const statusIndexMap: Record<OrderStatus, number> = {
-      pending: 0, confirmed: 2, processing: 2, packed: 3,
-      shipped: 4, delivered: 6, cancelled: 1, refunded: 6,
-    };
-
-    const cutoff = statusIndexMap[status];
-    const events: TimelineEvent[] = [];
-    let cursor = new Date(orderDate);
-
-    for (let i = 0; i <= cutoff && i < steps.length; i++) {
-      cursor = new Date(cursor.getTime() + (i === 0 ? 0 : (3 + i) * 3600000));
-      events.push({
-        id: 'tl-' + i,
-        kind: steps[i].kind,
-        label: steps[i].label,
-        date: cursor.toISOString(),
-        employee: i === 0 ? 'System' : employee,
-        notes: this.timelineNoteFor(steps[i].kind),
-      });
-    }
-
-    if (status === 'cancelled') {
-      cursor = new Date(cursor.getTime() + 5 * 3600000);
-      events.push({
-        id: 'tl-cancel', kind: 'cancelled', label: 'Order Cancelled',
-        date: cursor.toISOString(), employee,
-        notes: 'Cancelled at customer request',
-      });
-    }
-    if (status === 'refunded') {
-      cursor = new Date(cursor.getTime() + 8 * 3600000);
-      events.push({
-        id: 'tl-refund', kind: 'refunded', label: 'Order Refunded',
-        date: cursor.toISOString(), employee,
-        notes: 'Refund processed to original payment method',
-      });
-    }
-
-    return events.reverse();
-  }
-
-  // NOTE: these notes simulate backend-supplied audit descriptions — treated
-  // as data, not UI copy, and left untranslated (same policy as inventory's
-  // movement notes).
-  private timelineNoteFor(kind: TimelineKind): string {
-    const map: Record<TimelineKind, string> = {
-      placed: 'Customer placed the order online',
-      payment: 'Payment captured successfully',
-      confirmed: 'Order confirmed and queued for fulfillment',
-      packed: 'Items picked and packed at warehouse',
-      shipped: 'Handed off to shipping carrier',
-      'out-for-delivery': 'Package is out for delivery',
-      delivered: 'Package delivered to customer',
-      cancelled: 'Cancelled at customer request',
-      refunded: 'Refund processed to original payment method',
-    };
-    return map[kind];
-  }
-
-  private generateMockOrders(): Order[] {
-    const methods: PaymentMethod[] = ['Credit Card', 'PayPal', 'Cash on Delivery', 'Bank Transfer', 'Wallet'];
-    const shipMethods: ShippingMethod[] = ['Standard', 'Express', 'Overnight', 'Pickup'];
-    const paymentStatuses: PaymentStatus[] = ['paid', 'pending', 'failed', 'refunded'];
-    const shippingStatuses: ShippingStatus[] = ['preparing', 'ready', 'in-transit', 'delivered', 'returned'];
-
-    const orders: Order[] = [];
-    const now = Date.now();
-
-    for (let i = 0; i < 32; i++) {
-      const customer = this.customerPool[i % this.customerPool.length];
-      const status = this.statusCycle[i % this.statusCycle.length];
-      const paymentMethod = methods[i % methods.length];
-      const shippingMethod = shipMethods[i % shipMethods.length];
-      const employee = this.employeePool[i % this.employeePool.length];
-      const daysAgo = i % 34;
-      const orderDate = new Date(now - daysAgo * 86400000 - (i * 1800000));
-
-      const itemCount = 1 + (i % 3);
-      const items: OrderLineItem[] = [];
-      for (let j = 0; j < itemCount; j++) {
-        const p = this.productPool[(i + j) % this.productPool.length];
-        const qty = 1 + ((i + j) % 3);
-        const discount = (i + j) % 4 === 0 ? Math.round(p.price * 0.1) : 0;
-        items.push({
-          id: `it-${i}-${j}`,
-          name: p.name,
-          sku: p.sku,
-          image: p.image,
-          price: p.price,
-          quantity: qty,
-          discount,
-          inventoryStatus: (i + j) % 7 === 0 ? 'out-of-stock' : (i + j) % 5 === 0 ? 'low-stock' : 'in-stock',
-        });
-      }
-
-      const subtotal = items.reduce((s, it) => s + it.price * it.quantity, 0);
-      const discount = items.reduce((s, it) => s + it.discount, 0) + (i % 6 === 0 ? 20 : 0);
-      const shippingCost = shippingMethod === 'Pickup' ? 0 : shippingMethod === 'Overnight' ? 45 : shippingMethod === 'Express' ? 25 : 12;
-      const tax = Math.round((subtotal - discount) * 0.08);
-      const total = Math.max(0, subtotal - discount + shippingCost + tax);
-
-      const city = this.cities[i % this.cities.length];
-      const address: OrderAddress = {
-        name: customer.name,
-        phone: customer.phone,
-        street: `${12 + i} Rue Al Amal`,
-        city,
-        state: city,
-        zip: `${20000 + i * 3}`,
-        country: 'Morocco',
-      };
-
-      const paymentStatus: PaymentStatus = status === 'refunded' ? 'refunded'
-        : status === 'cancelled' ? 'failed'
-        : paymentStatuses[i % paymentStatuses.length] === 'refunded' ? 'paid'
-        : paymentStatuses[i % paymentStatuses.length];
-
-      const shippingStatus: ShippingStatus = status === 'delivered' ? 'delivered'
-        : status === 'shipped' ? 'in-transit'
-        : status === 'packed' ? 'ready'
-        : status === 'refunded' ? 'returned'
-        : shippingStatuses[i % shippingStatuses.length];
-
-      orders.push({
-        id: 'ord-' + i,
-        orderNumber: this.orderNumberFor(i),
-        customer: {
-          id: 'cust-' + (i % this.customerPool.length),
-          name: customer.name,
-          email: customer.email,
-          phone: customer.phone,
-          avatar: customer.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-          customerSince: new Date(now - (400 + i * 17) * 86400000).toISOString().slice(0, 10),
-          totalOrders: 2 + (i % 12),
-          lifetimeSpend: 400 + (i * 173) % 5200,
-          vip: (i % 5 === 0),
-        },
-        items,
-        orderDate: orderDate.toISOString(),
-        status,
-        paymentMethod,
-        paymentStatus,
-        shippingMethod,
-        shippingStatus,
-        assignedEmployee: employee,
-        lastUpdated: new Date(orderDate.getTime() + (2 + i % 5) * 3600000).toISOString(),
-
-        subtotal,
-        discount,
-        couponCode: i % 6 === 0 ? 'SAVE20' : null,
-        shippingCost,
-        tax,
-        total,
-
-        shippingAddress: address,
-        billingAddress: address,
-        payment: {
-          method: paymentMethod,
-          transactionId: 'TXN-' + (900000 + i * 47),
-          date: orderDate.toISOString(),
-          status: paymentStatus,
-          amountPaid: paymentStatus === 'paid' || paymentStatus === 'refunded' ? total : 0,
-          refundAmount: paymentStatus === 'refunded' ? total : 0,
-          invoiceNumber: 'INV-' + (2200 + i),
-        },
-        shipping: {
-          method: shippingMethod,
-          company: this.shippingCompanies[i % this.shippingCompanies.length],
-          trackingNumber: shippingMethod === 'Pickup' ? '—' : 'TRK' + (5000000 + i * 91),
-          estimatedDelivery: new Date(orderDate.getTime() + 5 * 86400000).toISOString().slice(0, 10),
-          cost: shippingCost,
-          status: shippingStatus,
-        },
-        timeline: this.buildTimeline(status, orderDate, employee),
-        notes: i % 4 === 0 ? 'Customer requested gift wrapping.' : '',
-      });
-    }
-
-    return orders;
-  }
+  // ── Orders store (shared with create-order / update-order via OrderService) ──
+  private orders = this.orderService.orders;
 
   // ── Filtering ──────────────────────────────────────────────────────────
   private matchesDateRange(order: Order, range: DateRangeFilter): boolean {
@@ -626,13 +308,13 @@ export class Orders {
 
   editFromView(order: Order): void {
     this.closeView();
-    this.showToast(this.lang.translate('orders.toasts.editingOrderOpen', { order: order.orderNumber }));
+    this.router.navigate(['/admin/order', order.id, 'edit']);
   }
 
   editOrder(order: Order, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
-    this.showToast(this.lang.translate('orders.toasts.editingOrder', { order: order.orderNumber }));
+    this.router.navigate(['/admin/order', order.id, 'edit']);
   }
 
   // ── Update status modal ────────────────────────────────────────────────
@@ -694,8 +376,9 @@ export class Orders {
   assignStaff(order: Order, event?: Event): void {
     event?.stopPropagation();
     this.closeMenu();
-    const idx = this.employeePool.indexOf(order.assignedEmployee);
-    const next = this.employeePool[(idx + 1) % this.employeePool.length];
+    const pool = this.orderService.employees;
+    const idx = pool.indexOf(order.assignedEmployee);
+    const next = pool[(idx + 1) % pool.length];
     this.orders.update(list => list.map(o => o.id === order.id ? { ...o, assignedEmployee: next } : o));
     this.showToast(this.lang.translate('orders.toasts.assigned', { order: order.orderNumber, employee: next }));
   }
@@ -767,7 +450,7 @@ export class Orders {
 
   exportOrders(): void { this.showToast(this.lang.translate('orders.toasts.exporting')); }
   printAll(): void { this.showToast(this.lang.translate('orders.toasts.preparingPrint')); }
-  createOrder(): void { this.showToast(this.lang.translate('orders.toasts.openingNewOrder')); }
+  createOrder(): void { this.router.navigate(['/admin/orders/new']); }
 
   // ── Helpers ────────────────────────────────────────────────────────────
   statusLabel(status: OrderStatus): string {
