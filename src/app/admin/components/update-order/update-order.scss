@@ -1,0 +1,93 @@
+// update-order.scss
+// Page-level styles only (toast, loading skeleton, not-found/error card).
+// The form itself is styled by OrderForm.
+$surface:       var(--surface, #FFFFFF);
+$surface2:      var(--surface-2, #F5F7FA);
+$surface3:      var(--surface-3, #F1F4F8);
+$border:        var(--border, #E5E7EB);
+$border2:       var(--border-2, #D1D5DB);
+$text-primary:  var(--text-primary, #111827);
+$text-mid:      var(--text-mid, #6B7280);
+$accent:        var(--admin-accent, #4F46E5);
+$accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
+$green:         #10B981;
+$red:           #EF4444;
+$radius-sm:     var(--radius-sm, 8px);
+$radius-lg:     var(--radius-lg, 18px);
+$radius-pill:   var(--radius-pill, 999px);
+$ease:          cubic-bezier(.25,.1,.25,1);
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+:host { display: block; }
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+.admin-toast {
+  position: fixed;
+  top: 76px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: $text-primary; border: 1px solid $text-primary; color: #fff;
+  font-size: .8rem; font-weight: 600;
+  padding: 10px 18px; border-radius: $radius-pill;
+  box-shadow: 0 12px 28px rgba(16,24,40,.22);
+  white-space: nowrap;
+  animation: toast-in .2s $ease;
+
+  svg { color: $green; }
+  &--error svg { color: $red; }
+}
+
+// ─── Skeleton ────────────────────────────────────────────────────────────────
+.skeleton-page { display: flex; flex-direction: column; gap: 20px; }
+.skeleton-grid {
+  display: grid; grid-template-columns: 1fr 300px; gap: 20px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+.skeleton-col { display: flex; flex-direction: column; gap: 20px; }
+.skeleton {
+  border-radius: $radius-lg;
+  background: linear-gradient(90deg, $surface3 25%, $surface2 37%, $surface3 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+  &--title { height: 46px; max-width: 360px; }
+  &--card  { height: 150px; }
+  &--tall  { height: 260px; }
+  &--side  { height: 280px; }
+}
+
+// ─── Not found / failed ──────────────────────────────────────────────────────
+.state-card {
+  max-width: 460px; margin: 64px auto; text-align: center;
+  background: $surface; border: 1px solid $border; border-radius: $radius-lg;
+  padding: 32px 28px; animation: pop-in .25s $ease;
+}
+.state-card__title { font-size: 1.1rem; font-weight: 700; color: $text-primary; margin: 0 0 8px; }
+.state-card__body { font-size: .85rem; color: $text-mid; margin: 0 0 22px; line-height: 1.5; }
+.state-card__actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+.btn-ghost, .btn-save {
+  height: 38px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: $radius-sm; font: inherit; font-size: .84rem; cursor: pointer; text-decoration: none;
+}
+.btn-ghost {
+  background: $surface; border: 1px solid $border2; font-weight: 600; color: $text-mid;
+  &:hover { background: $surface2; color: $text-primary; }
+}
+.btn-save {
+  background: $accent; border: none; font-weight: 700; color: #fff;
+  &:hover { filter: brightness(.92); box-shadow: 0 4px 14px $accent-glow; }
+}
