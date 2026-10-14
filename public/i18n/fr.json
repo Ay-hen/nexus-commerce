@@ -1026,17 +1026,91 @@
       "markRead": "Marquer comme lu",
       "approve": "Approuver",
       "feature": "Mettre en vedette",
-      "flag": "Signaler"
+      "flag": "Signaler",
+      "delete": "Supprimer",
+      "deleteSelected": "Supprimer la sélection"
     },
     "empty": {
       "title": "Aucun avis trouvé",
-      "subtitle": "Ajustez vos filtres ou votre recherche."
+      "subtitle": "Ajustez vos filtres ou votre recherche.",
+      "clearFilters": "Effacer les filtres"
     },
     "verified": "Vérifié",
     "notVerified": "Non vérifié",
     "deleteConfirmTitle": "Supprimer l'avis",
     "deleteConfirmBodySingle": "Voulez-vous vraiment supprimer l'avis de {{name}} pour {{product}} ? Cette action est irréversible.",
-    "deleteConfirmBodyBulk": "Voulez-vous vraiment supprimer les {{count}} avis sélectionnés ? Cette action est irréversible."
+    "deleteConfirmBodyBulk": "Voulez-vous vraiment supprimer les {{count}} avis sélectionnés ? Cette action est irréversible.",
+    "acrossAllProducts": "sur tous les produits",
+    "averageAcrossAll": "moyenne de tous les avis",
+    "awaitingReview": "en attente de vérification",
+    "searchPlaceholder": "Rechercher des avis…",
+    "searchColon": "Rechercher par :",
+    "searchFields": {
+      "all": "Tous les champs",
+      "customer": "Client",
+      "email": "E-mail",
+      "product": "Produit",
+      "title": "Titre de l’avis",
+      "review": "Texte de l’avis"
+    },
+    "filterAll": "Tous",
+    "filters": {
+      "title": "Filtres",
+      "rating": "Note",
+      "status": "Statut",
+      "verifiedPurchase": "Achat vérifié",
+      "reported": "Signalé",
+      "yes": "Oui",
+      "no": "Non",
+      "clear": "Effacer les filtres",
+      "apply": "Appliquer les filtres",
+      "active": "Filtres actifs"
+    },
+    "verifiedAll": "Tous les achats",
+    "verifiedOnly": "Achats vérifiés uniquement",
+    "sort": {
+      "ratingHigh": "Meilleure note",
+      "ratingLow": "Moins bonne note",
+      "product": "Produit",
+      "helpful": "Plus utiles"
+    },
+    "view": {
+      "table": "Vue tableau",
+      "grid": "Vue grille"
+    },
+    "tableRating": "Note",
+    "reported": "Signalé",
+    "notReported": "Non signalé",
+    "rating": "{{rating}} étoiles",
+    "helpfulVotes": "{{count}} votes utiles",
+    "customer": "Client",
+    "product": "Produit",
+    "reviewTitle": "Titre de l’avis",
+    "reviewBody": "Avis",
+    "date": "Date",
+    "csv": {
+      "product": "Produit",
+      "rating": "Note",
+      "verified": "Achat vérifié",
+      "helpfulVotes": "Votes utiles",
+      "date": "Date",
+      "reviewTitle": "Titre de l’avis",
+      "reviewBody": "Avis"
+    },
+    "toasts": {
+      "markedRead": "L’avis de {{name}} a été marqué comme lu.",
+      "approved": "L’avis de {{name}} a été approuvé.",
+      "featured": "L’avis de {{name}} a été mis en avant.",
+      "flagged": "L’avis de {{name}} a été signalé.",
+      "deleted": "L’avis de {{name}} a été supprimé.",
+      "bulkDeleted": "{{count}} avis supprimés.",
+      "bulkMarkedRead": "Les avis sélectionnés ont été marqués comme lus.",
+      "bulkApproved": "Les avis sélectionnés ont été approuvés.",
+      "bulkFeatured": "Les avis sélectionnés ont été mis en avant.",
+      "bulkActionCount": "{{label}} pour {{count}} avis.",
+      "reportDownloaded": "Rapport des avis téléchargé avec succès.",
+      "csvExported": "Avis exportés en CSV avec succès."
+    }
   },
   "notifications": {
     "title": "Notifications",

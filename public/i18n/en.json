@@ -998,20 +998,94 @@
     },
     "actions": {
       "viewReview": "View Review",
-      "markRead": "Mark Read",
+      "markRead": "Mark as Read",
       "approve": "Approve",
       "feature": "Feature",
-      "flag": "Flag"
+      "flag": "Flag",
+      "delete": "Delete",
+      "deleteSelected": "Delete Selected"
+    },
+    "searchFields": {
+      "all": "All Fields",
+      "customer": "Customer",
+      "email": "Email",
+      "product": "Product",
+      "title": "Review Title",
+      "review": "Review Text"
+    },
+    "filterAll": "All",
+    "filters": {
+      "title": "Filters",
+      "rating": "Rating",
+      "status": "Status",
+      "verifiedPurchase": "Verified Purchase",
+      "reported": "Reported",
+      "yes": "Yes",
+      "no": "No",
+      "clear": "Clear Filters",
+      "apply": "Apply Filters",
+      "active": "Active Filters"
+    },
+    "sort": {
+      "ratingHigh": "Highest Rating",
+      "ratingLow": "Lowest Rating",
+      "product": "Product",
+      "helpful": "Most Helpful"
+    },
+    "view": {
+      "table": "Table View",
+      "grid": "Grid View"
     },
     "empty": {
       "title": "No reviews found",
-      "subtitle": "Try adjusting your filters or search."
+      "subtitle": "Try adjusting your filters or search.",
+      "clearFilters": "Clear Filters"
     },
     "verified": "Verified",
     "notVerified": "Not Verified",
+    "reported": "Reported",
+    "notReported": "Not Reported",
+    "rating": "{{rating}} stars",
+    "helpfulVotes": "{{count}} helpful votes",
+    "customer": "Customer",
+    "product": "Product",
+    "reviewTitle": "Review Title",
+    "reviewBody": "Review",
+    "date": "Date",
     "deleteConfirmTitle": "Delete Review",
     "deleteConfirmBodySingle": "Are you sure you want to delete the review by {{name}} for {{product}}? This action cannot be undone.",
-    "deleteConfirmBodyBulk": "Are you sure you want to delete {{count}} selected reviews? This action cannot be undone."
+    "deleteConfirmBodyBulk": "Are you sure you want to delete {{count}} selected reviews? This action cannot be undone.",
+    "csv": {
+      "product": "Product",
+      "rating": "Rating",
+      "verified": "Verified Purchase",
+      "helpfulVotes": "Helpful Votes",
+      "date": "Date",
+      "reviewTitle": "Review Title",
+      "reviewBody": "Review"
+    },
+    "toasts": {
+      "markedRead": "Review by {{name}} marked as read.",
+      "approved": "Review by {{name}} approved.",
+      "featured": "Review by {{name}} featured.",
+      "flagged": "Review by {{name}} flagged.",
+      "deleted": "Review by {{name}} deleted.",
+      "bulkDeleted": "{{count}} reviews deleted.",
+      "bulkMarkedRead": "Selected reviews marked as read.",
+      "bulkApproved": "Selected reviews approved.",
+      "bulkFeatured": "Selected reviews featured.",
+      "bulkActionCount": "{{label}} for {{count}} reviews.",
+      "reportDownloaded": "Review report downloaded successfully.",
+      "csvExported": "Reviews exported to CSV successfully."
+    },
+    "acrossAllProducts": "across all products",
+    "averageAcrossAll": "average across all reviews",
+    "awaitingReview": "awaiting review",
+    "searchPlaceholder": "Search reviews…",
+    "searchColon": "Search by:",
+    "verifiedAll": "All Purchases",
+    "verifiedOnly": "Verified Only",
+    "tableRating": "Rating"
   },
 
   "notifications": {

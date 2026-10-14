@@ -1025,17 +1025,91 @@
       "markRead": "Als gelesen markieren",
       "approve": "Genehmigen",
       "feature": "Hervorheben",
-      "flag": "Melden"
+      "flag": "Melden",
+      "delete": "Löschen",
+      "deleteSelected": "Auswahl löschen"
     },
     "empty": {
       "title": "Keine Bewertungen gefunden",
-      "subtitle": "Passen Sie Ihre Filter oder Suche an."
+      "subtitle": "Passen Sie Ihre Filter oder Suche an.",
+      "clearFilters": "Filter zurücksetzen"
     },
     "verified": "Verifiziert",
     "notVerified": "Nicht verifiziert",
     "deleteConfirmTitle": "Bewertung löschen",
     "deleteConfirmBodySingle": "Möchten Sie die Bewertung von {{name}} für {{product}} wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
-    "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Bewertungen wirklich löschen? Dies kann nicht rückgängig gemacht werden."
+    "deleteConfirmBodyBulk": "Möchten Sie die {{count}} ausgewählten Bewertungen wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+    "acrossAllProducts": "über alle Produkte",
+    "averageAcrossAll": "Durchschnitt aller Bewertungen",
+    "awaitingReview": "warten auf Prüfung",
+    "searchPlaceholder": "Bewertungen durchsuchen…",
+    "searchColon": "Suchen nach:",
+    "searchFields": {
+      "all": "Alle Felder",
+      "customer": "Kunde",
+      "email": "E-Mail",
+      "product": "Produkt",
+      "title": "Bewertungstitel",
+      "review": "Bewertungstext"
+    },
+    "filterAll": "Alle",
+    "filters": {
+      "title": "Filter",
+      "rating": "Bewertung",
+      "status": "Status",
+      "verifiedPurchase": "Verifizierter Kauf",
+      "reported": "Gemeldet",
+      "yes": "Ja",
+      "no": "Nein",
+      "clear": "Filter zurücksetzen",
+      "apply": "Filter anwenden",
+      "active": "Aktive Filter"
+    },
+    "verifiedAll": "Alle Käufe",
+    "verifiedOnly": "Nur verifizierte",
+    "sort": {
+      "ratingHigh": "Beste Bewertung",
+      "ratingLow": "Schlechteste Bewertung",
+      "product": "Produkt",
+      "helpful": "Hilfreichste"
+    },
+    "view": {
+      "table": "Tabellenansicht",
+      "grid": "Rasteransicht"
+    },
+    "tableRating": "Bewertung",
+    "reported": "Gemeldet",
+    "notReported": "Nicht gemeldet",
+    "rating": "{{rating}} Sterne",
+    "helpfulVotes": "{{count}} hilfreiche Stimmen",
+    "customer": "Kunde",
+    "product": "Produkt",
+    "reviewTitle": "Bewertungstitel",
+    "reviewBody": "Bewertung",
+    "date": "Datum",
+    "csv": {
+      "product": "Produkt",
+      "rating": "Bewertung",
+      "verified": "Verifizierter Kauf",
+      "helpfulVotes": "Hilfreiche Stimmen",
+      "date": "Datum",
+      "reviewTitle": "Bewertungstitel",
+      "reviewBody": "Bewertung"
+    },
+    "toasts": {
+      "markedRead": "Bewertung von {{name}} als gelesen markiert.",
+      "approved": "Bewertung von {{name}} genehmigt.",
+      "featured": "Bewertung von {{name}} hervorgehoben.",
+      "flagged": "Bewertung von {{name}} markiert.",
+      "deleted": "Bewertung von {{name}} gelöscht.",
+      "bulkDeleted": "{{count}} Bewertungen gelöscht.",
+      "bulkMarkedRead": "Ausgewählte Bewertungen als gelesen markiert.",
+      "bulkApproved": "Ausgewählte Bewertungen genehmigt.",
+      "bulkFeatured": "Ausgewählte Bewertungen hervorgehoben.",
+      "bulkActionCount": "{{label}} für {{count}} Bewertungen.",
+      "reportDownloaded": "Bewertungsbericht erfolgreich heruntergeladen.",
+      "csvExported": "Bewertungen erfolgreich als CSV exportiert."
+    }
   },
   "notifications": {
     "title": "Benachrichtigungen",

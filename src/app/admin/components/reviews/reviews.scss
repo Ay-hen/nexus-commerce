@@ -1,7 +1,8 @@
 // reviews.scss
 // ─── Admin Design Tokens ───────────────────────────────────────────────────
-// Same fix as the other admin pages: these resolve through the CSS custom
-// properties ThemeService writes on `.admin-shell` instead of hardcoded hex.
+// Same fix as dashboard/products/inventory/categories/orders: these resolve
+// through the CSS custom properties ThemeService writes on `.admin-shell`
+// instead of hardcoded hex.
 $surface:       var(--surface, #FFFFFF);
 $surface2:      var(--surface-2, #F5F7FA);
 $surface3:      var(--surface-3, #F1F4F8);
@@ -13,8 +14,8 @@ $text-mid:      var(--text-mid, #6B7280);
 $text-light:    var(--text-light, #9CA3AF);
 
 // Accent is user-configurable, so it must resolve through the CSS variable.
-// Any old rgba($accent, X) call is replaced below — that Sass function
-// can't split a CSS custom property into r/g/b channels at build time.
+// Any old rgba($accent, X) / darken($accent, X%) call is replaced below —
+// those Sass functions can't operate on a CSS custom property at build time.
 $accent:        var(--admin-accent, #4F46E5);
 $accent-bg:     rgba(var(--admin-accent-rgb, 79, 70, 229), .08);
 $accent-glow:   rgba(var(--admin-accent-rgb, 79, 70, 229), .18);
@@ -53,7 +54,15 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 @keyframes bar-in      { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform: translateY(0);} }
 @keyframes star-pop    { from { transform: scale(.6); opacity: .3; } to { transform: scale(1); opacity: 1; } }
 
+// ─── Reset / page ──────────────────────────────────────────────────────────────
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
 
 .reviews-page {
   display: flex;
@@ -63,15 +72,22 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   width: 100%;
   max-width: 100%;
   min-width: 0;
+
   overflow-x: hidden;
+  box-sizing: border-box;
+
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: $text-primary;
+  animation: pop-in .25s $ease;
 }
 
-.reviews-page > * {
+// The toast is position:fixed — forcing it to 100% width would push it
+// off-center, so it's excluded from the "fill the column" rule.
+.reviews-page > *:not(.admin-toast) {
   width: 100%;
   max-width: 100%;
   min-width: 0;
 }
-
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 .admin-toast {
@@ -95,9 +111,9 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   background: linear-gradient(90deg, $surface2 0%, $surface3 40%, $surface2 80%);
   background-size: 600px 100%;
   animation: shimmer 1.4s ease-in-out infinite;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
 }
-.sk-stat  { height: 100px; border-radius: $radius-lg; }
+.sk-stat  { height: 100px; }
 .sk-thead { height: 42px; border-radius: $radius-sm; margin-bottom: 6px; }
 .sk-row   { height: 56px; border-radius: $radius-sm; margin-bottom: 4px; }
 .sk-table { padding: 20px; display: flex; flex-direction: column; }
@@ -106,9 +122,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .page-header {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; flex-wrap: wrap;
-  background: $surface; border: 1px solid $border;
-  padding: 12px 16px;
-  border-radius: $radius-md;
+  background: $surface;
+  padding: 16px 20px;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
 }
 
 .page-title-group { display: flex; align-items: center; gap: 12px; }
@@ -137,14 +155,15 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-sm;
   font: inherit; font-size: .84rem; font-weight: 500;
   color: $text-mid; cursor: pointer;
-  transition: background .15s $ease, color .15s, border-color .15s;
+  transition: background .15s $ease, color .15s, border-color .15s, opacity .15s;
 
-  &:hover { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:hover:not(:disabled) { background: $surface2; color: $text-primary; border-color: $text-light; }
+  &:disabled { opacity: .5; cursor: not-allowed; }
 }
 
 .btn-primary {
   height: 38px; padding: 0 16px;
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   background: $accent; border: none;
   border-radius: $radius-sm;
   font: inherit; font-size: .84rem; font-weight: 600;
@@ -153,7 +172,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
   // Was darken($accent, 7%) — can't run at compile time on a CSS variable,
   // so brightness() gives the same "slightly darker on hover" effect.
-  &:hover { filter: brightness(0.92); box-shadow: 0 4px 14px $accent-glow; }
+  &:hover:not(:disabled) { filter: brightness(0.92); box-shadow: 0 4px 14px $accent-glow; }
+  &:disabled { opacity: .75; cursor: not-allowed; }
 }
 
 // ─── Stat cards ───────────────────────────────────────────────────────────────
@@ -200,6 +220,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   &--red    .stat-card__icon { background: $red-bg;     color: $red;     }
   &--purple .stat-card__icon { background: $purple-bg;  color: $purple;  }
 
+  &__body  { min-width: 0; }
   &__label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: $text-light; margin: 0 0 4px; }
   &__value { font-size: 1.7rem; font-weight: 800; letter-spacing: -.04em; color: $text-primary; line-height: 1; margin: 0 0 2px; }
   &__sub   { font-size: .72rem; color: $text-light; margin: 0; }
@@ -207,48 +228,50 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
 
-    background: $surface; border: 1px solid $border;
-    padding: 12px 16px;
-    border-radius: $radius-md;
+  background: $surface; border: 1px solid $border;
+  padding: 12px 16px;
+  border-radius: $radius-md;
 }
 
+// Left side scrolls horizontally on narrow screens instead of overflowing the page.
 .toolbar__left {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 
-    display: flex;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    flex-wrap: nowrap;
-    white-space: nowrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
-
-
+.toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
 
 // Search
 .search-wrap {
-    flex: 1 1 240px;
-    min-width: 180px;
-    max-width: 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 280px;
 }
 
-.search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: $text-light; pointer-events: none; }
 
 .search-input {
   width: 100%; height: 38px;
@@ -266,12 +289,16 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .select-wrap { position: relative; flex-shrink: 0; }
 
 .toolbar-select {
-  height: 38px; padding: 0 30px 0 12px;
-  appearance: none; cursor: pointer;
-  background: $surface; border: 1.5px solid $border;
+  height: 38px;
+  padding: 0 30px 0 12px;
+  appearance: none;
+  cursor: pointer;
+  background: $surface;
+  border: 1.5px solid $border;
   border-radius: $radius-sm;
   font: inherit; font-size: .8rem; color: $text-mid;
   transition: border-color .15s, background .15s;
+  max-width: 190px;
 
   &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
 }
@@ -369,13 +396,12 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 // ─── Table card ───────────────────────────────────────────────────────────────
 .table-card {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  overflow: hidden;
-  background: $surface; border: 1px solid $border;
+  width: 100%; max-width: 100%; min-width: 0;
+  background: $surface;
+  border: 1px solid $border;
   border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  overflow: hidden;
 }
 
 .table-wrap {
@@ -389,13 +415,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .data-table {
   width: 100%;
+  // Below this width the wrapper scrolls horizontally instead of crushing columns.
+  min-width: 820px;
   table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.82rem;
-
-  thead {
-    position: sticky; top: 0; z-index: 2;
-  }
+  font-size: .82rem;
 
   thead tr { border-bottom: 1px solid $border; background: $surface2; }
 
@@ -409,8 +433,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     color: $text-light;
     white-space: nowrap;
 
-    &.th--check   { width: 40px; }
-    &.th--actions { width: 48px; }
+    &.th--check   { width: 44px; }
+    &.th--actions { width: 56px; }
   }
 
   td {
@@ -418,10 +442,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     border-bottom: 1px solid $border;
     color: $text-mid;
     vertical-align: middle;
-    white-space: normal;
-    word-break: break-word;
 
-    &.td--check   { width: 40px; }
+    &.td--check   { width: 44px; }
     &.td--actions { text-align: right; }
   }
 
@@ -434,16 +456,15 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
   // Was rgba($accent, .05) — see .page-icon note above.
   &--selected td { background: rgba(var(--admin-accent-rgb, 79, 70, 229), .05); }
-  &:has(.action-menu) { position: relative; z-index: 5; }
 }
+// Lift the row that owns an open menu above the rows that follow it.
+.table-row:has(.action-menu) { position: relative; z-index: 5; }
 
-
-.td-mid   { color: $text-mid; }
-.td-light { color: $text-light; font-size: .76rem; }
-.td-email { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+.td-light { color: $text-light; font-size: .76rem; white-space: nowrap; }
 
 // ─── Checkbox ─────────────────────────────────────────────────────────────────
 .checkbox-sm {
+  position: relative;
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; user-select: none;
 
@@ -466,10 +487,13 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
     background: $accent; border-color: $accent;
     svg { opacity: 1; transform: scale(1); }
   }
+
+  input:focus-visible ~ .checkbox-sm__box { box-shadow: 0 0 0 3px $accent-glow; }
 }
 
 // ─── Customer cell ────────────────────────────────────────────────────────────
-.customer-cell { display: flex; align-items: center; gap: 10px; }
+.customer-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.customer-cell > div { min-width: 0; }
 
 .cust-avatar {
   flex-shrink: 0; width: 32px; height: 32px;
@@ -479,11 +503,11 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   display: flex; align-items: center; justify-content: center;
 }
 
-.cust-name { font-weight: 600; color: $text-primary; font-size: .8rem; margin: 0 0 1px; }
-.cust-sub  { font-size: .7rem; color: $text-light; margin: 0; }
+.cust-name { font-weight: 600; color: $text-primary; font-size: .8rem; margin: 0 0 1px; overflow-wrap: anywhere; }
+.cust-sub  { font-size: .7rem; color: $text-light; margin: 0; overflow-wrap: anywhere; }
 
 // ─── Product cell ─────────────────────────────────────────────────────────────
-.product-cell { display: flex; align-items: center; gap: 9px; }
+.product-cell { display: flex; align-items: center; gap: 9px; min-width: 0; }
 
 .product-thumb {
   flex-shrink: 0; width: 32px; height: 32px;
@@ -495,7 +519,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   img { width: 22px; height: 22px; object-fit: contain; }
 }
 
-.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; white-space: nowrap; }
+.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
 
 // ─── Star rating ──────────────────────────────────────────────────────────────
 .star-rating {
@@ -562,10 +586,16 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 }
 
 .action-menu {
-  position: absolute; top: calc(100% + 6px); right: 0; z-index: 20;
-  background: $surface; border: 1px solid $border;
-  border-radius: $radius-md; box-shadow: $shadow-menu;
-  width: 170px; overflow: hidden;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-menu;
+  width: 180px;
+  overflow: hidden;
   transform-origin: top right;
   animation: menu-in .2s $ease-menu both;
 }
@@ -584,6 +614,7 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .action-divider { height: 1px; background: $border; margin: 3px 0; }
 
+// The last two rows open their menu upward so it isn't clipped by the card.
 .table-row:nth-last-child(-n+2) .action-menu {
   top: auto; bottom: calc(100% + 6px);
   transform-origin: bottom right;
@@ -592,7 +623,8 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
 .empty-state {
-  background: $surface; border: 1px solid $border;
+  background: $surface;
+  border: 1px solid $border;
   border-radius: $radius-lg;
   padding: 72px 24px;
   display: flex; flex-direction: column; align-items: center; gap: 12px;
@@ -612,16 +644,12 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 .empty-state__sub { font-size: .84rem; color: $text-light; margin: 0 0 6px; max-width: 320px; }
 
 // ─── Grid view ────────────────────────────────────────────────────────────────
+// No inner scroll container here (it clipped the card action menus); the
+// page scrolls and pagination keeps the card count bounded.
 .review-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
-
-  &--scroll {
-    max-height: calc(340px * 2 + 16px);
-    overflow-y: auto;
-    padding-right: 4px;
-  }
 }
 
 .review-card {
@@ -630,26 +658,30 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   border-radius: $radius-lg;
   padding: 16px;
   display: flex; flex-direction: column; gap: 10px;
+  min-width: 0;
   box-shadow: $shadow-card;
   transition: box-shadow .2s $ease, transform .2s $ease, border-color .2s;
   animation: pop-in .3s $ease both;
 
-  &:hover { box-shadow: $shadow-hover; transform: translateY(-2px); }
+  &:hover { box-shadow: $shadow-hover; transform: translateY(-2px); border-color: $border2; }
   // Was rgba($accent, .4) / rgba($accent, .03) — see .page-icon note above.
   &--selected {
     border-color: rgba(var(--admin-accent-rgb, 79, 70, 229), .4);
     background: rgba(var(--admin-accent-rgb, 79, 70, 229), .03);
   }
 }
+// Lift the card that owns an open menu above its neighbours.
+.review-card:has(.action-menu) { position: relative; z-index: 5; }
 
 .review-card__top { display: flex; align-items: center; gap: 8px; }
 .review-card__menu { margin-left: auto; }
 
-.review-card__customer { display: flex; align-items: center; gap: 10px; }
+.review-card__customer { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
 .review-card__title {
   font-size: .88rem; font-weight: 700; color: $text-primary;
   cursor: pointer;
+  overflow-wrap: anywhere;
   &:hover { color: $accent; }
 }
 
@@ -657,8 +689,10 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
   font-size: .78rem; color: $text-mid; line-height: 1.55;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .review-card__product {
@@ -702,103 +736,25 @@ $ease-menu:     cubic-bezier(.16,1,.3,1);
 
 .page-ellipsis { width: 28px; text-align: center; font-size: .82rem; color: $text-light; }
 
-// ─── Responsive ───────────────────────────────────────────────────────────────
-@media (max-width: 900px) {
-  .toolbar { flex-direction: column; align-items: stretch; }
-  .toolbar__right { justify-content: space-between; }
-}
-
-@media (max-width: 600px) {
-  .page-header { align-items: flex-start; }
-  .bulk-bar { flex-wrap: wrap; }
-  .bulk-bar__clear { margin-left: 0; }
-}
-
+// ─── Reduced motion ───────────────────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
   .reviews-page, .stat-card, .table-card, .table-row, .review-card, .empty-state,
   .pagination, .action-menu, .admin-toast, .bulk-bar, .star { animation: none !important; transition: none !important; }
 }
 
-html,
-body {
-  overflow-x: hidden;
+@media print {
+  .page-header__actions, .toolbar, .bulk-bar, .pagination, .admin-toast, .action-menu-wrap { display: none !important; }
 }
 
-:host {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+// ─── Responsive tweaks ───────────────────────────────────────────────────────
+@media (max-width: 900px) {
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar__right { margin-left: 0; justify-content: space-between; }
+  .search-wrap { flex: 1 0 100%; max-width: none; }
 }
 
-.data-table td,
-.data-table th {
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+@media (max-width: 600px) {
+  .bulk-bar { flex-wrap: wrap; }
+  .bulk-bar__clear { margin-left: 0; }
 }
-
-.product-name { font-size: .8rem; color: $text-primary; font-weight: 500; } 
-
-.td-email { color: $text-mid; } 
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.search-wrap { position: relative; flex: 0 0 240px; display: flex; align-items: center; @media (max-width: 600px) { flex: 1 1 100%; } }
-
-.search-icon { position: absolute; left: 11px; color: $text-light; pointer-events: none; }
-
-.search-input {
-  width: 100%; height: 38px;
-  padding: 0 12px 0 34px;
-  background: $surface; border: 1.5px solid $border;
-  border-radius: $radius-pill;
-  font: inherit; font-size: .82rem; color: $text-primary;
-  transition: border-color .15s $ease, box-shadow .15s;
-
-  &::placeholder { color: $text-light; }
-  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
-  &::-webkit-search-cancel-button { display: none; }
-}
-
-.select-wrap { position: relative; }
-
-.toolbar-select {
-  height: 38px;
-  padding: 0 30px 0 12px;
-  appearance: none;
-  cursor: pointer;
-  background: $surface;
-  border: 1.5px solid $border;
-  border-radius: $radius-sm;
-  font: inherit; font-size: .8rem; color: $text-mid;
-  transition: border-color .15s, background .15s;
-
-  &:focus { outline: none; border-color: $accent; box-shadow: 0 0 0 3px $accent-glow; }
-}
-
-.toolbar__left-scroll {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
-}
-
-.toolbar__left-scroll::-webkit-scrollbar { height: 6px; }
-// Was rgba($text-mid, .25) — $text-mid is now a themed var() (a single
-// color, not an r,g,b triple), so it can't be split into rgba() channels.
-// A solid themed border color reads fine for a scrollbar thumb.
-.toolbar__left-scroll::-webkit-scrollbar-thumb { background: $border2; border-radius: 999px; }
-.toolbar__left-scroll::-webkit-scrollbar-track { background: transparent; }
-
-.toolbar__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }

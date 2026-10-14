@@ -1003,17 +1003,91 @@
       "markRead": "Marcar como leída",
       "approve": "Aprobar",
       "feature": "Destacar",
-      "flag": "Marcar"
+      "flag": "Marcar",
+      "delete": "Eliminar",
+      "deleteSelected": "Eliminar seleccionadas"
     },
     "empty": {
       "title": "No se encontraron reseñas",
-      "subtitle": "Ajusta tus filtros o tu búsqueda."
+      "subtitle": "Ajusta tus filtros o tu búsqueda.",
+      "clearFilters": "Borrar filtros"
     },
     "verified": "Verificada",
     "notVerified": "No verificada",
     "deleteConfirmTitle": "Eliminar reseña",
     "deleteConfirmBodySingle": "¿Seguro que deseas eliminar la reseña de {{name}} para {{product}}? Esta acción no se puede deshacer.",
-    "deleteConfirmBodyBulk": "¿Seguro que deseas eliminar las {{count}} reseñas seleccionadas? Esta acción no se puede deshacer."
+    "deleteConfirmBodyBulk": "¿Seguro que deseas eliminar las {{count}} reseñas seleccionadas? Esta acción no se puede deshacer.",
+    "acrossAllProducts": "en todos los productos",
+    "averageAcrossAll": "media de todas las reseñas",
+    "awaitingReview": "pendientes de revisión",
+    "searchPlaceholder": "Buscar reseñas…",
+    "searchColon": "Buscar por:",
+    "searchFields": {
+      "all": "Todos los campos",
+      "customer": "Cliente",
+      "email": "Correo electrónico",
+      "product": "Producto",
+      "title": "Título de la reseña",
+      "review": "Texto de la reseña"
+    },
+    "filterAll": "Todas",
+    "filters": {
+      "title": "Filtros",
+      "rating": "Valoración",
+      "status": "Estado",
+      "verifiedPurchase": "Compra verificada",
+      "reported": "Denunciada",
+      "yes": "Sí",
+      "no": "No",
+      "clear": "Borrar filtros",
+      "apply": "Aplicar filtros",
+      "active": "Filtros activos"
+    },
+    "verifiedAll": "Todas las compras",
+    "verifiedOnly": "Solo verificadas",
+    "sort": {
+      "ratingHigh": "Mayor valoración",
+      "ratingLow": "Menor valoración",
+      "product": "Producto",
+      "helpful": "Más útiles"
+    },
+    "view": {
+      "table": "Vista de tabla",
+      "grid": "Vista de cuadrícula"
+    },
+    "tableRating": "Valoración",
+    "reported": "Denunciada",
+    "notReported": "No denunciada",
+    "rating": "{{rating}} estrellas",
+    "helpfulVotes": "{{count}} votos útiles",
+    "customer": "Cliente",
+    "product": "Producto",
+    "reviewTitle": "Título de la reseña",
+    "reviewBody": "Reseña",
+    "date": "Fecha",
+    "csv": {
+      "product": "Producto",
+      "rating": "Valoración",
+      "verified": "Compra verificada",
+      "helpfulVotes": "Votos útiles",
+      "date": "Fecha",
+      "reviewTitle": "Título de la reseña",
+      "reviewBody": "Reseña"
+    },
+    "toasts": {
+      "markedRead": "La reseña de {{name}} se marcó como leída.",
+      "approved": "La reseña de {{name}} fue aprobada.",
+      "featured": "La reseña de {{name}} fue destacada.",
+      "flagged": "La reseña de {{name}} fue marcada.",
+      "deleted": "La reseña de {{name}} fue eliminada.",
+      "bulkDeleted": "{{count}} reseñas eliminadas.",
+      "bulkMarkedRead": "Las reseñas seleccionadas se marcaron como leídas.",
+      "bulkApproved": "Las reseñas seleccionadas fueron aprobadas.",
+      "bulkFeatured": "Las reseñas seleccionadas fueron destacadas.",
+      "bulkActionCount": "{{label}} para {{count}} reseñas.",
+      "reportDownloaded": "Informe de reseñas descargado correctamente.",
+      "csvExported": "Reseñas exportadas a CSV correctamente."
+    }
   },
   "notifications": {
     "title": "Notificaciones",
