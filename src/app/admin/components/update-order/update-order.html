@@ -1,1 +1,51 @@
-<p>update-order works!</p>
+<!-- update-order.html -->
+@if (toast(); as t) {
+  <div class="admin-toast" [class.admin-toast--error]="t.kind === 'error'" role="status" aria-live="polite">
+    @if (t.kind === 'success') {
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    } @else {
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    }
+    {{ t.text }}
+  </div>
+}
+
+@if (isLoading()) {
+  <!-- Skeleton while the order loads -->
+  <div class="skeleton-page" aria-busy="true">
+    <div class="skeleton skeleton--title"></div>
+    <div class="skeleton-grid">
+      <div class="skeleton-col">
+        <div class="skeleton skeleton--card"></div>
+        <div class="skeleton skeleton--card skeleton--tall"></div>
+        <div class="skeleton skeleton--card"></div>
+      </div>
+      <div class="skeleton skeleton--card skeleton--side"></div>
+    </div>
+  </div>
+} @else if (loadError(); as err) {
+  <div class="state-card" role="alert">
+    <h1 class="state-card__title">
+      {{ (err === 'notFound' ? 'orders.form.notFound.title' : 'orders.form.loadFailed.title') | translate }}
+    </h1>
+    <p class="state-card__body">
+      {{ (err === 'notFound' ? 'orders.form.notFound.body' : 'orders.form.loadFailed.body') | translate }}
+    </p>
+    <div class="state-card__actions">
+      <a routerLink="/admin/orders" class="btn-ghost">{{ 'orders.form.backToOrders' | translate }}</a>
+      @if (err === 'failed') {
+        <button type="button" class="btn-save" (click)="loadOrder()">{{ 'orders.form.retry' | translate }}</button>
+      }
+    </div>
+  </div>
+} @else if (order(); as o) {
+  <app-order-form
+    [mode]="'update'"
+    [order]="o"
+    [heading]="'orders.form.editTitle' | translate: { order: o.orderNumber }"
+    [subheading]="'orders.form.editSubtitle' | translate"
+    [saving]="saving()"
+    (submitted)="onSubmit($event)"
+    (cancelled)="onCancel()"
+  />
+}
