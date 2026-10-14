@@ -470,6 +470,123 @@
     "updated": "Actualizado"
   },
   "orders": {
+    "form": {
+      "backAria": "Volver a los pedidos",
+      "createButton": "Crear pedido",
+      "saving": "Guardando…",
+      "createSubtitle": "Añade un nuevo pedido de cliente con sus artículos, envío y pago.",
+      "editTitle": "Editar {{order}}",
+      "editSubtitle": "Actualiza artículos, envío, pago y notas. El estado se cambia desde la lista de pedidos.",
+      "sections": {
+        "customer": "Cliente",
+        "items": "Artículos del pedido",
+        "shipping": "Envío",
+        "addresses": "Direcciones",
+        "payment": "Pago",
+        "notes": "Asignación y notas"
+      },
+      "customerLabel": "Cliente",
+      "customerPlaceholder": "Selecciona un cliente…",
+      "customerLocked": "El cliente de un pedido existente no se puede cambiar.",
+      "product": "Producto",
+      "productPlaceholder": "Selecciona un producto…",
+      "quantity": "Cantidad",
+      "lineDiscount": "Descuento",
+      "lineTotal": "Total de la línea",
+      "addItem": "Añadir artículo",
+      "removeItem": "Quitar artículo",
+      "stockAvailable": "{{count}} en stock",
+      "extraDiscount": "Descuento adicional",
+      "couponCode": "Código de cupón",
+      "couponPlaceholder": "p. ej. SAVE20",
+      "shippingMethod": "Método de envío",
+      "shippingMethods": {
+        "standard": "Estándar",
+        "express": "Exprés",
+        "overnight": "Al día siguiente",
+        "pickup": "Recogida en tienda"
+      },
+      "fields": {
+        "name": "Nombre completo",
+        "phone": "Teléfono",
+        "street": "Dirección",
+        "city": "Ciudad",
+        "state": "Estado / Región",
+        "zip": "Código postal",
+        "country": "País"
+      },
+      "billingSame": "La dirección de facturación es la misma que la de envío",
+      "paymentMethod": "Método de pago",
+      "paymentStatus": "Estado del pago",
+      "assignedTo": "Asignado a",
+      "notesPlaceholder": "Añade notas internas sobre este pedido…",
+      "discountLabel": "Descuento",
+      "statusNoteCreate": "Los pedidos nuevos empiezan como Pendiente. Usa «Actualizar estado» en la lista de pedidos para avanzarlos.",
+      "statusNoteUpdate": "El estado se gestiona desde la lista de pedidos (Actualizar estado) para que cada cambio quede registrado en la cronología.",
+      "lock": {
+        "readOnly": "Este pedido está «{{status}}», así que solo se pueden editar el responsable y las notas.",
+        "pricingPaid": "El pago ya se ha recibido, por lo que los artículos, descuentos y el método de envío están bloqueados. Reembolsa el pedido desde la lista si hay que cambiar el importe.",
+        "pricingPacked": "Este pedido ya está preparado o enviado, por lo que los artículos, descuentos y el método de envío están bloqueados.",
+        "paymentSettled": "El pago ya está liquidado y no se puede editar aquí."
+      },
+      "errors": {
+        "customerRequired": "Selecciona un cliente.",
+        "itemsRequired": "Añade al menos un artículo.",
+        "productRequired": "Selecciona un producto.",
+        "productDuplicate": "Este producto ya está en el pedido.",
+        "quantityInvalid": "Introduce un número entero igual o mayor que 1.",
+        "quantityExceedsStock": "Solo hay {{stock}} en stock.",
+        "discountNegative": "El descuento no puede ser negativo.",
+        "discountTooHigh": "El descuento no puede superar el importe de la línea.",
+        "discountExceedsSubtotal": "El descuento total no puede superar el subtotal.",
+        "couponInvalid": "Usa hasta 20 letras, números, guiones o guiones bajos.",
+        "estimatedDeliveryRequired": "Elige una fecha de entrega estimada.",
+        "estimatedDeliveryPast": "La entrega no puede ser anterior a la fecha del pedido.",
+        "trackingTooLong": "El número de seguimiento es demasiado largo (máx. 40 caracteres).",
+        "shippingCompanyRequired": "Selecciona una empresa de envío.",
+        "nameRequired": "El nombre completo es obligatorio.",
+        "phoneRequired": "El teléfono es obligatorio.",
+        "phoneInvalid": "Introduce un teléfono válido.",
+        "streetRequired": "La dirección es obligatoria.",
+        "cityRequired": "La ciudad es obligatoria.",
+        "zipRequired": "El código postal es obligatorio.",
+        "zipInvalid": "El código postal es demasiado largo.",
+        "countryRequired": "El país es obligatorio.",
+        "notesTooLong": "Las notas son demasiado largas (máx. 500 caracteres)."
+      },
+      "timeline": {
+        "createdByAdmin": "Pedido creado por un administrador",
+        "paymentRecorded": "Pago registrado por un administrador",
+        "updatedFields": "Actualizado: {{fields}}"
+      },
+      "changed": {
+        "items": "artículos",
+        "pricing": "precios",
+        "shippingAddress": "dirección de envío",
+        "billingAddress": "dirección de facturación",
+        "shipment": "datos del envío",
+        "payment": "pago",
+        "assignee": "responsable",
+        "notes": "notas"
+      },
+      "toasts": {
+        "created": "{{order}} creado",
+        "createFailed": "No se pudo crear el pedido. Inténtalo de nuevo.",
+        "updated": "{{order}} actualizado",
+        "updateFailed": "No se pudieron guardar los cambios. Inténtalo de nuevo.",
+        "noChanges": "No hay cambios que guardar"
+      },
+      "notFound": {
+        "title": "Pedido no encontrado",
+        "body": "Este pedido no existe o puede haber sido eliminado."
+      },
+      "loadFailed": {
+        "title": "No se pudo cargar el pedido",
+        "body": "Algo salió mal al cargar este pedido."
+      },
+      "backToOrders": "Volver a los pedidos",
+      "retry": "Reintentar"
+    },
     "title": "Pedidos",
     "subtitle": "Gestiona pedidos, pagos, envíos y cumplimiento de clientes.",
     "createOrder": "Crear pedido",
@@ -512,6 +629,7 @@
     "estimatedDeliveryLabel": "Entrega estimada",
     "updateNotesPlaceholder": "Añade una nota sobre esta actualización…",
     "timeline": {
+      "updated": "Pedido actualizado",
       "placed": "Pedido realizado",
       "payment": "Pago recibido",
       "confirmed": "Pedido confirmado",

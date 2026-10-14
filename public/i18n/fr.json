@@ -493,6 +493,123 @@
     "updated": "Mise à jour"
   },
   "orders": {
+    "form": {
+      "backAria": "Retour aux commandes",
+      "createButton": "Créer la commande",
+      "saving": "Enregistrement…",
+      "createSubtitle": "Ajoutez une nouvelle commande client avec ses articles, sa livraison et son paiement.",
+      "editTitle": "Modifier {{order}}",
+      "editSubtitle": "Mettez à jour les articles, la livraison, le paiement et les notes. Le statut se modifie depuis la liste des commandes.",
+      "sections": {
+        "customer": "Client",
+        "items": "Articles de la commande",
+        "shipping": "Livraison",
+        "addresses": "Adresses",
+        "payment": "Paiement",
+        "notes": "Affectation et notes"
+      },
+      "customerLabel": "Client",
+      "customerPlaceholder": "Sélectionner un client…",
+      "customerLocked": "Le client d’une commande existante ne peut pas être modifié.",
+      "product": "Produit",
+      "productPlaceholder": "Sélectionner un produit…",
+      "quantity": "Quantité",
+      "lineDiscount": "Remise",
+      "lineTotal": "Total de la ligne",
+      "addItem": "Ajouter un article",
+      "removeItem": "Supprimer l’article",
+      "stockAvailable": "{{count}} en stock",
+      "extraDiscount": "Remise supplémentaire",
+      "couponCode": "Code promo",
+      "couponPlaceholder": "ex. SAVE20",
+      "shippingMethod": "Mode de livraison",
+      "shippingMethods": {
+        "standard": "Standard",
+        "express": "Express",
+        "overnight": "Livraison de nuit",
+        "pickup": "Retrait en magasin"
+      },
+      "fields": {
+        "name": "Nom complet",
+        "phone": "Téléphone",
+        "street": "Adresse",
+        "city": "Ville",
+        "state": "État / Région",
+        "zip": "Code postal",
+        "country": "Pays"
+      },
+      "billingSame": "L’adresse de facturation est identique à l’adresse de livraison",
+      "paymentMethod": "Mode de paiement",
+      "paymentStatus": "Statut du paiement",
+      "assignedTo": "Assignée à",
+      "notesPlaceholder": "Ajoutez des notes internes sur cette commande…",
+      "discountLabel": "Remise",
+      "statusNoteCreate": "Les nouvelles commandes démarrent à « En attente ». Utilisez « Mettre à jour le statut » dans la liste pour les faire avancer.",
+      "statusNoteUpdate": "Le statut se gère depuis la liste des commandes (Mettre à jour le statut) afin que chaque changement soit consigné dans l’historique.",
+      "lock": {
+        "readOnly": "Cette commande est « {{status}} » : seuls l’assignation et les notes peuvent être modifiées.",
+        "pricingPaid": "Le paiement a été reçu : les articles, remises et le mode de livraison sont verrouillés. Remboursez la commande depuis la liste si le montant doit changer.",
+        "pricingPacked": "Cette commande est déjà préparée ou expédiée : les articles, remises et le mode de livraison sont verrouillés.",
+        "paymentSettled": "Le paiement est réglé et ne peut plus être modifié ici."
+      },
+      "errors": {
+        "customerRequired": "Sélectionnez un client.",
+        "itemsRequired": "Ajoutez au moins un article.",
+        "productRequired": "Sélectionnez un produit.",
+        "productDuplicate": "Ce produit figure déjà dans la commande.",
+        "quantityInvalid": "Saisissez un nombre entier supérieur ou égal à 1.",
+        "quantityExceedsStock": "Seulement {{stock}} en stock.",
+        "discountNegative": "La remise ne peut pas être négative.",
+        "discountTooHigh": "La remise ne peut pas dépasser le montant de la ligne.",
+        "discountExceedsSubtotal": "La remise totale ne peut pas dépasser le sous-total.",
+        "couponInvalid": "Utilisez jusqu’à 20 lettres, chiffres, tirets ou tirets bas.",
+        "estimatedDeliveryRequired": "Choisissez une date de livraison estimée.",
+        "estimatedDeliveryPast": "La livraison ne peut pas précéder la date de commande.",
+        "trackingTooLong": "Le numéro de suivi est trop long (40 caractères max.).",
+        "shippingCompanyRequired": "Sélectionnez un transporteur.",
+        "nameRequired": "Le nom complet est obligatoire.",
+        "phoneRequired": "Le numéro de téléphone est obligatoire.",
+        "phoneInvalid": "Saisissez un numéro de téléphone valide.",
+        "streetRequired": "L’adresse est obligatoire.",
+        "cityRequired": "La ville est obligatoire.",
+        "zipRequired": "Le code postal est obligatoire.",
+        "zipInvalid": "Le code postal est trop long.",
+        "countryRequired": "Le pays est obligatoire.",
+        "notesTooLong": "Les notes sont trop longues (500 caractères max.)."
+      },
+      "timeline": {
+        "createdByAdmin": "Commande créée par un administrateur",
+        "paymentRecorded": "Paiement enregistré par un administrateur",
+        "updatedFields": "Modifié : {{fields}}"
+      },
+      "changed": {
+        "items": "articles",
+        "pricing": "tarification",
+        "shippingAddress": "adresse de livraison",
+        "billingAddress": "adresse de facturation",
+        "shipment": "détails d’expédition",
+        "payment": "paiement",
+        "assignee": "assignation",
+        "notes": "notes"
+      },
+      "toasts": {
+        "created": "{{order}} créée",
+        "createFailed": "Impossible de créer la commande. Veuillez réessayer.",
+        "updated": "{{order}} mise à jour",
+        "updateFailed": "Impossible d’enregistrer vos modifications. Veuillez réessayer.",
+        "noChanges": "Aucune modification à enregistrer"
+      },
+      "notFound": {
+        "title": "Commande introuvable",
+        "body": "Cette commande n’existe pas ou a peut-être été supprimée."
+      },
+      "loadFailed": {
+        "title": "Impossible de charger la commande",
+        "body": "Une erreur est survenue lors du chargement de cette commande."
+      },
+      "backToOrders": "Retour aux commandes",
+      "retry": "Réessayer"
+    },
     "title": "Commandes",
     "subtitle": "Gérez les commandes, paiements, expéditions et exécutions des clients.",
     "createOrder": "Créer une commande",
@@ -535,6 +652,7 @@
     "estimatedDeliveryLabel": "Livraison estimée",
     "updateNotesPlaceholder": "Ajoutez une note à propos de cette mise à jour…",
     "timeline": {
+      "updated": "Commande modifiée",
       "placed": "Commande passée",
       "payment": "Paiement reçu",
       "confirmed": "Commande confirmée",

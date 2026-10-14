@@ -492,6 +492,123 @@
     "updated": "Aktualisiert"
   },
   "orders": {
+    "form": {
+      "backAria": "Zurück zu den Bestellungen",
+      "createButton": "Bestellung erstellen",
+      "saving": "Wird gespeichert…",
+      "createSubtitle": "Neue Kundenbestellung mit Artikeln, Versand- und Zahlungsdetails anlegen.",
+      "editTitle": "{{order}} bearbeiten",
+      "editSubtitle": "Artikel, Versand, Zahlung und Notizen aktualisieren. Statusänderungen erfolgen in der Bestellliste.",
+      "sections": {
+        "customer": "Kunde",
+        "items": "Bestellpositionen",
+        "shipping": "Versand",
+        "addresses": "Adressen",
+        "payment": "Zahlung",
+        "notes": "Zuweisung & Notizen"
+      },
+      "customerLabel": "Kunde",
+      "customerPlaceholder": "Kunden auswählen…",
+      "customerLocked": "Der Kunde einer bestehenden Bestellung kann nicht geändert werden.",
+      "product": "Produkt",
+      "productPlaceholder": "Produkt auswählen…",
+      "quantity": "Menge",
+      "lineDiscount": "Rabatt",
+      "lineTotal": "Positionssumme",
+      "addItem": "Artikel hinzufügen",
+      "removeItem": "Artikel entfernen",
+      "stockAvailable": "{{count}} auf Lager",
+      "extraDiscount": "Zusätzlicher Rabatt",
+      "couponCode": "Gutscheincode",
+      "couponPlaceholder": "z. B. SAVE20",
+      "shippingMethod": "Versandart",
+      "shippingMethods": {
+        "standard": "Standard",
+        "express": "Express",
+        "overnight": "Über Nacht",
+        "pickup": "Abholung"
+      },
+      "fields": {
+        "name": "Vollständiger Name",
+        "phone": "Telefon",
+        "street": "Straße und Hausnummer",
+        "city": "Stadt",
+        "state": "Bundesland / Region",
+        "zip": "Postleitzahl",
+        "country": "Land"
+      },
+      "billingSame": "Rechnungsadresse ist identisch mit der Lieferadresse",
+      "paymentMethod": "Zahlungsart",
+      "paymentStatus": "Zahlungsstatus",
+      "assignedTo": "Zugewiesen an",
+      "notesPlaceholder": "Interne Notizen zu dieser Bestellung hinzufügen…",
+      "discountLabel": "Rabatt",
+      "statusNoteCreate": "Neue Bestellungen starten als „Ausstehend“. Verwenden Sie „Status aktualisieren“ in der Bestellliste, um sie voranzubringen.",
+      "statusNoteUpdate": "Der Status wird in der Bestellliste verwaltet (Status aktualisieren), damit jede Änderung im Verlauf protokolliert wird.",
+      "lock": {
+        "readOnly": "Diese Bestellung ist „{{status}}“, daher können nur Zuweisung und Notizen bearbeitet werden.",
+        "pricingPaid": "Die Zahlung ist eingegangen, daher sind Artikel, Rabatte und Versandart gesperrt. Erstatten Sie die Bestellung in der Liste, falls sich der Betrag ändern muss.",
+        "pricingPacked": "Diese Bestellung ist bereits gepackt oder versendet, daher sind Artikel, Rabatte und Versandart gesperrt.",
+        "paymentSettled": "Die Zahlung ist abgeschlossen und kann hier nicht mehr bearbeitet werden."
+      },
+      "errors": {
+        "customerRequired": "Bitte wählen Sie einen Kunden aus.",
+        "itemsRequired": "Fügen Sie mindestens einen Artikel hinzu.",
+        "productRequired": "Bitte wählen Sie ein Produkt aus.",
+        "productDuplicate": "Dieses Produkt ist bereits in der Bestellung.",
+        "quantityInvalid": "Geben Sie eine ganze Zahl ab 1 ein.",
+        "quantityExceedsStock": "Nur {{stock}} auf Lager.",
+        "discountNegative": "Der Rabatt darf nicht negativ sein.",
+        "discountTooHigh": "Der Rabatt darf den Positionsbetrag nicht übersteigen.",
+        "discountExceedsSubtotal": "Der Gesamtrabatt darf die Zwischensumme nicht übersteigen.",
+        "couponInvalid": "Bis zu 20 Buchstaben, Zahlen, Bindestriche oder Unterstriche verwenden.",
+        "estimatedDeliveryRequired": "Wählen Sie ein voraussichtliches Lieferdatum.",
+        "estimatedDeliveryPast": "Die Lieferung darf nicht vor dem Bestelldatum liegen.",
+        "trackingTooLong": "Die Sendungsnummer ist zu lang (max. 40 Zeichen).",
+        "shippingCompanyRequired": "Bitte wählen Sie ein Versandunternehmen aus.",
+        "nameRequired": "Der vollständige Name ist erforderlich.",
+        "phoneRequired": "Die Telefonnummer ist erforderlich.",
+        "phoneInvalid": "Geben Sie eine gültige Telefonnummer ein.",
+        "streetRequired": "Straße und Hausnummer sind erforderlich.",
+        "cityRequired": "Die Stadt ist erforderlich.",
+        "zipRequired": "Die Postleitzahl ist erforderlich.",
+        "zipInvalid": "Die Postleitzahl ist zu lang.",
+        "countryRequired": "Das Land ist erforderlich.",
+        "notesTooLong": "Die Notizen sind zu lang (max. 500 Zeichen)."
+      },
+      "timeline": {
+        "createdByAdmin": "Bestellung von einem Administrator erstellt",
+        "paymentRecorded": "Zahlung von einem Administrator erfasst",
+        "updatedFields": "Aktualisiert: {{fields}}"
+      },
+      "changed": {
+        "items": "Artikel",
+        "pricing": "Preise",
+        "shippingAddress": "Lieferadresse",
+        "billingAddress": "Rechnungsadresse",
+        "shipment": "Versanddetails",
+        "payment": "Zahlung",
+        "assignee": "Zuweisung",
+        "notes": "Notizen"
+      },
+      "toasts": {
+        "created": "{{order}} erstellt",
+        "createFailed": "Die Bestellung konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        "updated": "{{order}} aktualisiert",
+        "updateFailed": "Ihre Änderungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+        "noChanges": "Keine Änderungen zu speichern"
+      },
+      "notFound": {
+        "title": "Bestellung nicht gefunden",
+        "body": "Diese Bestellung existiert nicht oder wurde möglicherweise gelöscht."
+      },
+      "loadFailed": {
+        "title": "Bestellung konnte nicht geladen werden",
+        "body": "Beim Laden dieser Bestellung ist ein Fehler aufgetreten."
+      },
+      "backToOrders": "Zurück zu den Bestellungen",
+      "retry": "Erneut versuchen"
+    },
     "title": "Bestellungen",
     "subtitle": "Verwalten Sie Kundenbestellungen, Zahlungen, Versand und Auftragsabwicklung.",
     "createOrder": "Bestellung erstellen",
@@ -534,6 +651,7 @@
     "estimatedDeliveryLabel": "Voraussichtliche Lieferung",
     "updateNotesPlaceholder": "Fügen Sie eine Notiz zu diesem Update hinzu…",
     "timeline": {
+      "updated": "Bestellung aktualisiert",
       "placed": "Bestellung aufgegeben",
       "payment": "Zahlung erhalten",
       "confirmed": "Bestellung bestätigt",

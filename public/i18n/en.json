@@ -504,6 +504,123 @@
   },
 
   "orders": {
+    "form": {
+      "backAria": "Back to orders",
+      "createButton": "Create Order",
+      "saving": "Saving…",
+      "createSubtitle": "Add a new customer order with its items, shipping and payment details.",
+      "editTitle": "Edit {{order}}",
+      "editSubtitle": "Update items, shipping, payment and notes. Status changes are made from the orders list.",
+      "sections": {
+        "customer": "Customer",
+        "items": "Order Items",
+        "shipping": "Shipping",
+        "addresses": "Addresses",
+        "payment": "Payment",
+        "notes": "Assignment & Notes"
+      },
+      "customerLabel": "Customer",
+      "customerPlaceholder": "Select a customer…",
+      "customerLocked": "The customer of an existing order can't be changed.",
+      "product": "Product",
+      "productPlaceholder": "Select a product…",
+      "quantity": "Quantity",
+      "lineDiscount": "Discount",
+      "lineTotal": "Line total",
+      "addItem": "Add item",
+      "removeItem": "Remove item",
+      "stockAvailable": "{{count}} in stock",
+      "extraDiscount": "Additional discount",
+      "couponCode": "Coupon code",
+      "couponPlaceholder": "e.g. SAVE20",
+      "shippingMethod": "Shipping method",
+      "shippingMethods": {
+        "standard": "Standard",
+        "express": "Express",
+        "overnight": "Overnight",
+        "pickup": "Pickup"
+      },
+      "fields": {
+        "name": "Full name",
+        "phone": "Phone",
+        "street": "Street address",
+        "city": "City",
+        "state": "State / Region",
+        "zip": "ZIP / Postal code",
+        "country": "Country"
+      },
+      "billingSame": "Billing address is the same as shipping",
+      "paymentMethod": "Payment method",
+      "paymentStatus": "Payment status",
+      "assignedTo": "Assigned to",
+      "notesPlaceholder": "Add internal notes about this order…",
+      "discountLabel": "Discount",
+      "statusNoteCreate": "New orders start as Pending. Use “Update Status” in the orders list to move them forward.",
+      "statusNoteUpdate": "Status is managed from the orders list (Update Status) so every change is logged in the timeline.",
+      "lock": {
+        "readOnly": "This order is {{status}}, so only the assignee and notes can be edited.",
+        "pricingPaid": "Payment has been received, so items, discounts and the shipping method are locked. Refund the order from the orders list if the amount needs to change.",
+        "pricingPacked": "This order is already packed or shipped, so items, discounts and the shipping method are locked.",
+        "paymentSettled": "Payment has been settled and can no longer be edited here."
+      },
+      "errors": {
+        "customerRequired": "Select a customer.",
+        "itemsRequired": "Add at least one item.",
+        "productRequired": "Select a product.",
+        "productDuplicate": "This product is already in the order.",
+        "quantityInvalid": "Enter a whole number of 1 or more.",
+        "quantityExceedsStock": "Only {{stock}} in stock.",
+        "discountNegative": "Discount cannot be negative.",
+        "discountTooHigh": "Discount can't exceed the line amount.",
+        "discountExceedsSubtotal": "Total discount can't exceed the subtotal.",
+        "couponInvalid": "Use up to 20 letters, numbers, dashes or underscores.",
+        "estimatedDeliveryRequired": "Choose an estimated delivery date.",
+        "estimatedDeliveryPast": "Delivery can't be before the order date.",
+        "trackingTooLong": "Tracking number is too long (max 40 characters).",
+        "shippingCompanyRequired": "Select a shipping company.",
+        "nameRequired": "Full name is required.",
+        "phoneRequired": "Phone number is required.",
+        "phoneInvalid": "Enter a valid phone number.",
+        "streetRequired": "Street address is required.",
+        "cityRequired": "City is required.",
+        "zipRequired": "ZIP / postal code is required.",
+        "zipInvalid": "ZIP / postal code is too long.",
+        "countryRequired": "Country is required.",
+        "notesTooLong": "Notes are too long (max 500 characters)."
+      },
+      "timeline": {
+        "createdByAdmin": "Order created by admin",
+        "paymentRecorded": "Payment recorded by admin",
+        "updatedFields": "Updated: {{fields}}"
+      },
+      "changed": {
+        "items": "items",
+        "pricing": "pricing",
+        "shippingAddress": "shipping address",
+        "billingAddress": "billing address",
+        "shipment": "shipment details",
+        "payment": "payment",
+        "assignee": "assignee",
+        "notes": "notes"
+      },
+      "toasts": {
+        "created": "{{order}} created",
+        "createFailed": "Couldn't create the order. Please try again.",
+        "updated": "{{order}} updated",
+        "updateFailed": "Couldn't save your changes. Please try again.",
+        "noChanges": "No changes to save"
+      },
+      "notFound": {
+        "title": "Order not found",
+        "body": "This order doesn't exist or may have been deleted."
+      },
+      "loadFailed": {
+        "title": "Couldn't load the order",
+        "body": "Something went wrong while loading this order."
+      },
+      "backToOrders": "Back to orders",
+      "retry": "Try again"
+    },
     "title": "Orders",
     "subtitle": "Manage customer orders, payments, shipments, and fulfillment.",
     "createOrder": "Create Order",
@@ -527,6 +644,7 @@
     "estimatedDeliveryLabel": "Estimated Delivery",
     "updateNotesPlaceholder": "Add a note about this update…",
     "timeline": {
+      "updated": "Order Updated",
       "placed": "Order Placed", "payment": "Payment Received", "confirmed": "Order Confirmed",
       "packed": "Order Packed", "shipped": "Order Shipped", "outForDelivery": "Out for Delivery",
       "delivered": "Order Delivered", "cancelled": "Order Cancelled", "refunded": "Order Refunded",
