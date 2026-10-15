@@ -13,13 +13,12 @@ import { Component, ElementRef, afterNextRender, inject, viewChild } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { TranslatePipe } from '../../../localization/translate.pipe';
-import { ErrorIllustration } from '../error-illustration/error-illustration';
 import { ErrorPageAction, getErrorEntry } from '../error.model';
 
 @Component({
   selector: 'app-error-page',
   standalone: true,
-  imports: [TranslatePipe, ErrorIllustration],
+  imports: [TranslatePipe],
   templateUrl: './error-page.html',
   styleUrl: './error-page.scss',
 })
